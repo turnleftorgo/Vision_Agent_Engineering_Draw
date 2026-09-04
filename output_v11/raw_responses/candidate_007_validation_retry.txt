@@ -1,0 +1,30 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. Inside it, I see:
+- A section drawing (SECTION BX-BX) with hatched cross-section
+- Text "FOURTH TERRACE"
+- "4X -0.60 +0.25 -0.34"
+- A box "15" with FAI 176 circle, SPC FP circle, and a triangle with 100%
+- A box "16" with FAI 205 circle (this is the RED rectangle / selected FAI marker)
+
+Now let me look at the leader lines. The FAI markers 15 and 16 are associated with the section drawing. Let me look for leader lines and arrowheads.
+
+Looking at IMAGE 1, the section drawing shows a cross-section. The text "FOURTH TERRACE" has a leader line going left to the horizontal line of the section. The "4X -0.60..." text is below that.
+
+Now, the FAI markers 15 and 16 - do they have leader lines? In typical engineering drawings, the FAI circles are placed next to the feature they reference, sometimes with a leader line. Let me look carefully.
+
+In IMAGE 1, I see the section drawing on the left. The hatched region. There's a vertical line on the right side of the section with what looks like a break line (the zigzag). The "FOURTH TERRACE" text has a horizontal leader line pointing to the section's horizontal line.
+
+Hmm, but where are the arrowheads for FAI 15 and 16? Let me look. The FAI markers 15 and 16 are placed to the right of the section. I don't see explicit leader lines with arrowheads connecting them to the section in the visible area. Wait, but the rule says "every connected leader segment" and "every terminal arrowhead" and "a visible local portion of every component feature touched by those arrows."
+
+Let me look at the section drawing more carefully. The section shows a horizontal hatched bar (the terrace floor?) and a vertical hatched wall (the terrace wall?). The "FOURTH TERRACE" leader points to the horizontal line.
+
+Actually, looking at the bottom part of IMAGE 1 (outside the magenta rectangle), there's "SECTION BZ-BZ" with a leader line and arrowheads pointing to a hatched feature, and "3X 0.18 ±0.10" with FAI 178, SPC FR, 100%, and FAI 206. That's a separate annotation group.
+
+So the magenta rectangle contains the SECTION BX-BX group with FAI 176 and FAI 205.
+
+Now, the question is whether the crop fully contains the coherent FAI annotation group. The selected FAI marker is FAI 205 (red rectangle). The group includes FAI 176 (item 15) and FAI 205 (item 16), the parameter text "4X -0.60 +0.25 -0.34", the description "FOURTH TERRACE", and the section drawing.
+
+Let me check the boundaries. The magenta rectangle's left edge - does it cut off the section drawing? In IMAGE 1, the section drawing's left part (the hatched horizontal bar) extends to the left edge of the image (x=0). The magenta rectangle's left edge is at x=0 (it starts at the left border of the image). Actually the magenta rectangle left edge appears to be at x=0 (the very left). Let me look. The magenta rectangle top is around y=313, bottom around y=1323, left at x=0, right at x=1357.
+
+The section drawing in IMAGE 1: the hatched horizontal bar starts at x=0 (left edge of image) and the vertical wall is around x=560-750. The "FOURTH TERRACE" text starts at x=883 and goes to x=1403. Wait, the magenta rectangle right edge is at x=1357. The text "FOURTH TERRACE" - let's see. In IMAGE 1, "FOURTH TERRACE" text: "FOURTH" starts ~883, "TERRACE" ends ~1403. The magenta right edge is 1357. So the text "TERRACE" might be clipped! Let me look at IMAGE

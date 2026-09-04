@@ -1,0 +1,59 @@
+The user wants me to act as the semantic association stage. I need to look at the evidence dictionary and the images carefully.
+
+The selected marker is F0, which is the FAI marker with bbox [1150,972,1250,1071]. Looking at the image, F0 is the circle containing "FAI / 63". So the FAI number is 63.
+
+Now I need to build a complete FAI annotation group for F0.
+
+Let me look at the layout. In the image, there's a "THIRD TERRACE" title (T1). Below it is a feature control frame with a flatness symbol and "0.33" (the parallelogram symbol and 0.33). Below that is a row with "15" in a box, then the FAI 63 circle (F0), then SPC BH circle, then a triangle with 100%. Below that is "16" box and FAI 211 circle.
+
+So F0 (FAI 63) is associated with the SPC letter "BH" (the SPC BH circle next to it). The feature control frame is the flatness 0.33. The description text is "THIRD TERRACE".
+
+Wait, but I need to think about what's connected to F0's measurement annotation. The FAI marker F0 is in a row with "15" and "SPC BH" and "100%". The feature control frame (flatness 0.33) is above. The "THIRD TERRACE" is the title/description.
+
+Hmm, but the instructions say: "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation."
+
+The SPC marker IS connected to F0's measurement annotation because it's in the same row group. Actually the SPC letter is part of the FAI annotation group per requirement 2: "Associated SPC letter if present." So SPC BH should be included.
+
+Now the leader. There's a leader line going from the annotation down to a point. Looking at the image, there's a long diagonal line from the "THIRD TERRACE" area down to a dot near the bottom (around the BX area). Let's look at the line segments.
+
+The leader path: In image 2, the blue line L2/L3 goes from around (886,1093) down to (748,1877). That's the diagonal leader line. Then there's a horizontal segment at the bottom connecting to arrowheads.
+
+Let's look at the arrowheads. H0 is at [665,1810,701,1894] - that's the left arrowhead pointing up. H1 is at [1243,1810,1283,1891] - that's the right arrowhead pointing up.
+
+The leader line L2/L3 ends at around (748,1877) which is near the dot. Then there's a horizontal line L9/L10 at y~1992-1995 from x=681 to x=1268. And vertical lines L52/L53 at x~681-685 from y=1889 to 1992 (left side), and L47/L51 at x~1264-1268 from y=1889 to 1994 (right side). These form the leader path that goes from the dot, down, then horizontal, then up to the two arrowheads H0 and H1.
+
+Wait, let's look more carefully. The dot is at around (748,1877) in image 2 (the black dot). The leader L2/L3 goes from the annotation (top, around (886,1093)) down to the dot (748,1877). Then from the dot, there's a vertical line going down? Let's see. L20/L22 are at x~744-747, y from 1507/1540 to 1907/1908. Hmm those are part of the diagonal? Actually L20 points [[744,1906],[814,1507]] - that's a diagonal segment too. Hmm.
+
+Let me look at the image 2 carefully. The diagonal blue line goes from top (around the THIRD TERRACE left side, the leader start at (886,1093) which is the horizontal tick before THIRD TERRACE) down to the dot at bottom. Actually in image 1, the leader line starts at a horizontal tick to the left of "THIRD TERRACE" (around x=887, y=841 in image 1 coordinates? Let's check image 1: the leader line's top is at the horizontal line before THIRD TERRACE, around (887, 841) in image 1? In image 1 the THIRD TERRACE text is at y~841. The leader horizontal tick is at left of it. Then the diagonal goes down-left to the dot at around (748, 1877).
+
+Hmm wait, in image 1 coordinates, the dot is at around (748, 1877)? Let's look. In image 1, the dot (black filled circle) is at approximately (748, 1877). Yes. And the diagonal line goes from (887, 841) to (748, 1877). That matches L2/L3? L2 points [[748,1877],[886,1093]]. Hmm that's only part. L8 points [[813,1525],[933,841]]. L16 points [[823,1450],[930,842]]. L30 points [[884,1099],[928,847]]. So the diagonal leader is composed of multiple segments: L30 (top part from 847 to 1099), L2/L3 (middle from 1093 to 1877), and maybe L8/L16 are something else? L8 from (813,1525) to (933,841) - that's a different diagonal? Hmm.
+
+Actually wait. Let's look at image 1 again. There's the diagonal leader line. In image 1, I see one diagonal line from the THIRD TERRACE tick down to the dot. Let me trace it: top at about (887, 841), going down-left to dot at (748, 1877). That's a single straight line. The slope: dx = 748-887 = -139, dy = 1877-841 = 1036. So at y=1093, x = 887 + (-139)*(1093-841)/1036 = 887 - 139*252/1036 = 887 - 33.8 = 853. Hmm but L2 top is (886,1093). That doesn't match.
+
+Let me recompute. Maybe the leader top is not at (887,841). Let's look at image 1: the horizontal tick before THIRD TERRACE is at around x=887-934, y=841. The diagonal line in image 1 starts at the left end of that tick, around (887, 841)? Actually the tick in image 1 is from about (887,841) to (934,841) (the L33/L41/L50/L60 segments at y~841-848 from x=1280? no wait those are at x 1280-1438 which is the right side of THIRD TERRACE). Hmm.
+
+Let's look at the segments at y~841: L33 [1280,841,1438,842], L41 [1318,846,1438,847], L50 [1280,844,1383,845], L60 [1341,847,1438,848]. These are at x 1280-1438, which is the right portion of "THIRD TERRACE" text underline? Hmm but in image 2 there's a blue line over the right part of THIRD TERRACE (L38, L39 at y~824-827 x 1242-1388, and L69 at y 859 x 1423-1504). And the leader horizontal tick at left of THIRD TERRACE in image 2 is at around (886,841) to (1010,841)? In image 2 I see a blue horizontal line at the left of THIRD TERRACE around y=841 from x~886 to x~1010. That's not in the list? Hmm L? Let's see. Actually the leader start tick in image 1 is at left of THIRD TERRACE: a short horizontal line from about (887,841) to (934,841). In image 2 that's blue. Which segment? Maybe L? Not sure.
+
+This is getting too detailed. The key point: I need to select the leader segments that form the FAI leader path. The leader path goes from the annotation (THIRD TERRACE / feature control frame) via the diagonal line to the dot, then via the bottom horizontal/vertical lines to the two arrowheads H0 and H1.
+
+Let me look at the bottom structure in image 2. There's a dot at (748,1877). From the dot, a vertical line goes down? In image 2 I see a blue vertical line from the dot down to about y=1992 at x~748? Actually L20/L22 are diagonals near there. Hmm. Let's look: L20 [[744,1906],[814,1507]] - that's a diagonal from (744,1906) to (814,1507). That's part of the main diagonal leader actually! Because the main diagonal from (886,1093) to (748,1877) extended? No.
+
+Hold on. Let's look at image 2 visually. The blue diagonal line clearly goes from top (around the THIRD TERRACE left tick) straight down to the dot. The dot is at the bottom of the diagonal. Then from the dot, there's a vertical blue line going down a bit, then it connects to a horizontal blue line that goes left to H0's vertical and right to H1's vertical.
+
+Actually in image 2, I see: the dot at (748,1877). Below the dot, a vertical blue line at x~748? Hmm I see L20 and L22 which are diagonals. Wait maybe the diagonal leader continues past the dot? No, the dot is the terminal.
+
+Let me look at the bottom horizontal line. In image 2 there's a horizontal blue line at y~1992-1995 (L9, L10) from x=681 to x=1268. At the left end (x~681-685) there's a vertical blue line L52/L53 from y=1889 to 1992, going up to H0 (H0 bbox [665,1810,701,1894], so H0 bottom is ~1894, the vertical line L52/L53 top is 1889, matches). At the right end (x~1264-1268) vertical blue line L47/L51 from y=1889 to 1994, going up to H1 (H1 bbox [1243,1810,1283,1891], bottom ~1891, matches).
+
+Now how does the dot connect to this horizontal line? The dot is at (748,1877). The horizontal line is at y~1992. There must be a vertical line from the dot (748,1877) down to (748,1992). Is there such a segment? Looking at the list... L? I see L42 [793,1913,794,2074] and L66 [790,1928,791,2060] - those are at x~790-794, vertical, from y~1913 to 2074. That's the left side of the rounded rectangle (the BX box outline). Hmm.
+
+Wait, maybe the dot connects via the diagonal? Let's look at image 2 again. The diagonal blue line ends at the dot. Then from the dot, I think there's a vertical line going down to the horizontal line. But I don't see a vertical segment at x~748 in the list. Let me scan all vertical segments near x=748: L20 is diagonal, L22 diagonal. Hmm.
+
+Actually maybe the leader from the dot goes: the diagonal line L2/L3 ends at (748,1877) which is the dot. Then there's a separate short vertical from the dot? Not in list. But the horizontal line L9/L10 at y=1992 spans x 681-1268, which passes through x=748. So if there's a vertical connector at x=748 from 1877 to 1992, it's missing from evidence. But maybe the diagonal line L20/L22 actually represents the connector? L20 [[744,1906],[814,1507]] no that's diagonal going up-right.
+
+Hmm, I'm overanalyzing the exact pixel geometry. The task says: "select only line IDs that are part of the FAI leader path." And "If evidence is missing, provide a fallback box." So I should select the line IDs that clearly form the leader: the diagonal (L2, L3, and the top part L30 maybe), and the bottom horizontal + verticals (L9, L10, L47, L51, L52, L53).
+
+Let's look at the diagonal more carefully. In image 2, the diagonal blue line is one continuous line from top tick to dot. The Hough segments that lie on it: L30 [[884,1099],[928,847]] (top portion), L2 [[748,1877],[886,1093]] (middle-bottom portion), L3 [[759,1836],[876,1168]] (overlapping middle). What about L8 [[813,1525],[933,841]] and L16 [[823,1450],[930,842]]? Those have different slopes? L8 from (813,1525) to (933,841): slope dx/dy = (933-813)/(841-1525) = 120/-684 = -0.175. L2 from (748,1877) to (886,1093): dx/dy = (886-748)/(1093-1877) = 138/-784 = -0.176. Same slope! So L8 and L16 are also on the same diagonal line (just different portions / duplicate detections). L30 from (884,1099) to (928,847): dx/dy = (928-884)/(847-1099) = 44/-252 = -0.175. Same. So all of L2, L3, L8, L16, L30 are on the diagonal leader line. Good.
+
+But wait, are L8/L16 maybe a different line? In image 1, is there another diagonal line? I see only one diagonal leader line in image 1. So L8, L16, L30, L2, L3 all on it. Good.
+
+Now the bottom: the horizontal line L9/L10 at y~1992-1995. The verticals L52/L53 (left, to H0) and L47/L51 (right, to H1). Also there's L23 [698,1876,993,1877] horizontal at y~1877 from x=698 to 993. That's at the dot's y level. Hmm in image 2, is there a horizontal blue line at y~1877? Looking at image 2, at the dot level there's a horizontal blue line going right from the dot to the rounded rectangle? Actually I see in image 2 a horizontal blue line at y~1876 from x~698 to x~993 (L23). And L6/L13 at y~1873-1877 from x=0 to 672/611. And L0/L1 at y~1853-1857 from x=0 to 1015/998. These are the horizontal lines of the part outline (the terrace edge lines),

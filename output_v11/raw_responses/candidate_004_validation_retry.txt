@@ -1,0 +1,24 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle highlights the FAI 69 circle.
+
+IMAGE 2 is the proposed crop itself.
+
+Let me look at what's inside the magenta rectangle in IMAGE 1. The magenta rectangle spans from the top edge (around y=430) to the bottom edge (around y=1310) in the image coordinates. Let me look at the contents.
+
+Inside the magenta rectangle, I see:
+- "15" and "16" at top left (partially cut? Let's check. The "15" and "16" appear at the left edge. In IMAGE 1, the magenta rectangle's left edge is at x=0 (the very left of the image). Actually the magenta rectangle left edge appears to be at x=0. The "15" and "16" text is at the left, partially visible. In IMAGE 2, the left side shows "009 +0.15 -0.16" and FAI 66, SPC BJ, 100% triangle, FAI 67. So the crop in IMAGE 2 includes more left content than IMAGE 1's magenta rectangle? Wait, let me look carefully.
+
+Hmm, actually IMAGE 2 is the proposed crop. Let me compare. In IMAGE 1, the magenta rectangle's left edge is at x=0 (the image left border). But the text "15" and "16" at top left in IMAGE 1 are at x~0-70, partially cut off by the image border (we see "15" and "16" but the left part might be cut). Actually in IMAGE 1 we see "15" and "16" with the left edge of the image cutting them? The "1" of 15 is at x~10. Hmm.
+
+Wait, but IMAGE 2 shows different left content: "009 +0.15 -0.16" with FAI 66, SPC BJ, 100%, FAI 67. This content is NOT visible in IMAGE 1's magenta rectangle region. In IMAGE 1, the left side of the magenta rectangle shows "15", "16", a 100% triangle, and "K-K" text, and a section view symbol.
+
+So IMAGE 2 does NOT match the magenta rectangle in IMAGE 1! Let me look more carefully.
+
+Hold on. Let me look at IMAGE 1's magenta rectangle coordinates. The magenta rectangle top is at y~430, bottom at y~1310, left at x~0, right at x~2180.
+
+Inside that region in IMAGE 1, top-left we have "15" (y~500), "16" (y~560), a 100% triangle (y~640), then "4X 0.49 ±0.10 FAI 191 SPC GE" (y~620), then a leader arrow going down to a section symbol at y~930, "K-K" at y~1170, "SECOND TERRACE" text at y~940, "-0.21 +0.15 -0.08" at y~1030-1070, "15 FAI 69 SPC BL 100%" at y~1130, "16 FAI 204" at y~1270.
+
+Now IMAGE 2 shows: top-left "009 +0.15 -0.16 FAI 66 SPC BJ 100% FAI 67", then "4X 0.49 ±0.10 FAI 191 SPC GE", a leader arrow to a section symbol, "SECTION K-K", "SECOND TERRACE", "-0.21 +0.15 -0.08", "15 FAI 69 SPC BL 100%", "16 FAI 204", and on the right T4 (-125.75), T5 (-133.75).
+
+So IMAGE 2's left content is different from IMAGE 1's magenta rectangle left content. In IMAGE 1, the left of the magenta rectangle shows "15/16/100%/K-K"

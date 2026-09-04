@@ -1,0 +1,8 @@
+Looking at the magenta rectangle in IMAGE 1, the right edge cuts through the geometry that the 0.40 leader arrowhead points to. In IMAGE 2 the arrowhead is present, but the surface/edge line it references is truncated at the right border, and the dashed boundary circle is also sliced by the right edge. The local feature portion that the arrow touches is not fully captured within the crop, so the annotation group is not self‑contained. The right side must be expanded to bring the touched feature (and the leader's terminal context) fully inside.
+
+{
+  "valid": false,
+  "missing": ["touched feature line truncated at right border", "dashed boundary circle sliced at right border"],
+  "expand_norm": {"left": 0, "top": 0, "right": 250, "bottom": 0},
+  "confidence": 0.7
+}

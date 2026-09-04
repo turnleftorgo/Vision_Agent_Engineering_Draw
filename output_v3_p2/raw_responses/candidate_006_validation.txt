@@ -1,0 +1,234 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. The red rectangle highlights the FAI marker "112".
+
+Let me look at what's inside the magenta rectangle in IMAGE 1:
+- The FAI circle "112" (red box)
+- SPC circle "DA"
+- FAI circle "113"
+- SPC circle "DB"
+- The dimension text "Ø 2.05 ±0.05"
+- The feature control frame "⊕ 0.2 A B C"
+- The number "18" in a box
+- The leader line with arrowhead pointing to the circle feature (the arrowhead is at the top, pointing to a triangle, and another arrow pointing down-left to the circle)
+- The "PC" box at the top
+- The "B" box with leader arrow
+- The "C" box with leader arrow
+
+Now let me look at the leader lines and arrowheads. There's a leader line that goes from the dimension text area. Let me trace it.
+
+Looking at IMAGE 1, there's a leader line that starts at the top with a triangle (filled black triangle) near the "PC" box, and goes down-left to an arrowhead pointing at the circle feature (the solid circle in the lower left). Wait, let me look more carefully.
+
+Actually, there's a leader line. Let me trace from the dimension text "Ø 2.05 ±0.05". There's a line going left to a filled triangle (the arrowhead pointing at... hmm). Actually the filled triangle is at the top, and a line goes down-left to an arrowhead at the circle.
+
+Wait, let me look at the structure. There's a "PC" box at top. A line goes down from PC to a filled triangle. Then from that triangle, a line goes down-left to an arrowhead pointing at the circle (the solid circle in the lower-left detail).
+
+Hmm, but the magenta rectangle's left edge - does it cut off the arrowhead or the feature?
+
+Let me look at the magenta rectangle boundaries in IMAGE 1. The magenta rectangle left edge is at approximately x=410 (in the image coordinates). The circle feature (solid circle) center is around x=280, and the circle extends from about x=50 to x=510. The arrowhead pointing at the circle is at about x=430, y=1310. That's inside the magenta rectangle? The magenta rectangle left edge is at x=410. The arrowhead at x=430 is just inside.
+
+Wait, but the leader line from the triangle goes down-left. The triangle is at about x=575, y=1130. The arrowhead is at about x=430, y=1310. Both seem inside the magenta rectangle (left edge ~410, top edge ~1040, bottom edge ~1410, right edge ~2280).
+
+Hmm, but the leader line - does it cross the magenta border? The line from triangle (575,1130) to arrowhead (430,1310) - both inside. OK.
+
+But wait, there's also the "PC" box. The PC box is at top, around x=680, y=995. The magenta rectangle top edge is at y=1040. So the PC box is ABOVE the magenta rectangle! The line from PC goes down to the triangle. The triangle is at y=1130, inside. But the line segment from PC (y=995) to triangle (y=1130) crosses the magenta top border at y=1040.
+
+So the leader line is partially outside the crop. The "PC" box is outside. Is "PC" part of the FAI annotation group? The PC box might be a "position control" or some reference. Hmm.
+
+Actually, let's think about what the FAI annotation group is. The FAI 112 is associated with the dimension "Ø 2.05 ±0.05" and the feature control frame. The leader line connects this annotation to the feature (the hole/circle). The leader line has a triangle at one end (the "origin" or the connection point to the dimension?) and an arrowhead at the feature.
+
+Hmm, actually in these drawings, the leader line typically goes from the dimension text to the feature with an arrowhead. The triangle might be a "witness" or it's the start of the leader.
+
+Let me look at the structure again. The dimension text "Ø 2.05 ±0.05" is at the right. To its left, there's a line going to a filled triangle. Then from the triangle, a diagonal line goes down-left to an arrowhead at the circle.
+
+So the leader line is: dimension text --(horizontal line)--> triangle --(diagonal line)--> arrowhead at circle.
+
+The triangle is at (575, 1130). The horizontal line from dimension text (left edge of "Ø" at ~650) to triangle (575) is short and inside.
+
+The diagonal line from triangle (575,1130) to arrowhead (430,1310) is inside.
+
+Now the PC box: there's a line from PC box going down to the triangle? Let me look. The PC box is at (680, 995). A line goes left from PC box to about (575, 995) then down to the triangle (575, 1130)? Looking at the image, yes there's a vertical line from the PC box area down to the triangle. Actually the line from PC goes left then down to the triangle.
+
+Hmm, so the triangle is connected to both the PC box (above) and the dimension text (right) and the arrowhead (down-left).
+
+So the PC box is part of the leader/annotation structure? If the PC box is above the magenta top border, then the crop is missing the PC box and the connecting line segment.
+
+But is the PC box part of the "FAI annotation group"? The instructions say: "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+The PC box might be considered a separate annotation (a "PC" = perhaps "position control" or a note). Hmm.
+
+Actually, let's look at the leader line more carefully. The triangle is a filled triangle, which in GD&T / drawing conventions often indicates a "leader line origin" or it's actually an arrowhead pointing up? No, it's a triangle pointing up, which is unusual.
+
+Wait, maybe the triangle is the arrowhead of a leader that points UP to the PC box? No...
+
+Let me look at the second image (the crop). In IMAGE 2, we see the triangle at top-left, the dimension text, the FAI/SPC circles, the feature control frame, the "18" box, and the diagonal line going down-left to an arrowhead at the circle (partially visible at bottom-left). On the right side we see the B box with leader and C box with leader.
+
+In IMAGE 2, the top of the triangle is at the very top edge? Let's see. In IMAGE 2, the triangle is at the top, and there's a vertical line going up from the triangle that gets cut off at the top edge of the crop! Yes, in IMAGE 2, above the triangle there's a vertical line that goes to the top border and is cut off. That vertical line connects to the PC box which is outside the crop.
+
+So the leader segment from the triangle to the PC box is cut off. The PC box is missing.
+
+Now, is the PC box part of the FAI annotation group? The PC box is connected to the same leader line (the triangle). The instructions say "every connected leader segment". The vertical line from triangle to PC box is a connected leader segment. If it's cut off, the crop is invalid.
+
+But wait, maybe the PC box is a separate annotation that just happens to share the triangle? Hmm.
+
+Let's think about the semantics. In these automotive drawings (this looks like a GM or similar drawing with FAI/SPC circles), the "PC" might stand for "Position Control" or it's a "process characteristic" marker? Actually "PC" in a box with a leader to a feature often means "Position Control" or it's a datum? Hmm.
+
+Actually, looking more carefully, the triangle might be the arrowhead pointing to the PC box? No, the triangle points up, and the line goes up to PC. So the triangle is like an arrowhead pointing up at the PC box? That doesn't make sense for a leader.
+
+Let me reconsider. Perhaps the structure is: The dimension "Ø 2.05 ±0.05" has a leader line. The leader line goes left to a triangle (which is the "elbow" or a marker), then the line continues down-left to the arrowhead at the feature. Separately, the PC box has its own leader line that goes down to the same triangle? That would be weird.
+
+Alternatively, maybe the triangle is the arrowhead of the PC leader, pointing down at the feature, and the line from PC goes down to the triangle, and then... no.
+
+Let me look at the geometry in IMAGE 1 very carefully. The PC box is at top center-left. From the bottom of the PC box, a line goes down a bit, then left, then down to the triangle? Or from the left of PC box a line goes left then down to triangle.
+
+Looking at the pixels: PC box left edge ~635, right edge ~745, top ~965, bottom ~1035. There's a horizontal line from the left edge of PC box (635, 1000) going left to about (575, 1000), then a vertical line down to the triangle top (575, 1110). The triangle is filled, pointing up, with its top at ~1110 and bottom at ~1150. Then from the triangle's bottom or side, a diagonal line goes down-left to the arrowhead at the circle (430, 1310).
+
+Hmm, so the triangle is a junction. The PC leader comes down to the triangle, and the dimension leader goes from the triangle down-left to the feature.
+
+This is confusing. Let me think about what's standard. Actually, I recall that in some drawings, a filled triangle on a leader line indicates the "feature of interest" or it's a "witness line" marker. Or it could be that the triangle is actually the arrowhead of the leader pointing at the PC box (i.e., the dimension is associated with the PC box?). No.
+
+Let's step back. The key question for validity: does the crop fully contain the FAI annotation group including all connected leader segments and arrowheads and the touched feature?
+
+The touched feature is the circle (the hole). In IMAGE 2, the circle is partially visible at the bottom-left. The arrowhead at the circle is visible in IMAGE 2 (the diagonal line ends with an arrowhead at the bottom-left, partially). Let's check: in IMAGE 2, the diagonal line goes from the triangle down-left and ends with an arrowhead at the bottom-left corner area. The arrowhead appears to be at the very edge, possibly clipped. And the circle feature - in IMAGE 2 we see a small arc at the bottom-left (the dashed circle and solid circle). Is a "visible local portion" of the feature present? Yes, there's an arc.
+
+But the leader line to the PC box is cut off at the top. The PC box is missing.
+
+Now, is the PC box part of the FAI 112 annotation group? The FAI 112 is the red box. The annotation group for FAI 112 includes the dimension, the FCF, the SPC DA, the leader to the feature. The PC box might be a separate annotation (maybe FAI for something else, or a "PC" = "process characteristic" that's a separate callout).
+
+Hmm, but the leader line is shared. The triangle is shared. If the PC box's leader is the vertical line from triangle to PC, and that line is cut off, then we have a leader segment reaching the crop border (the top border). The instructions say: "Reject it if a relevant leader reaches the crop border".
+
+Is the vertical line from triangle to PC a "relevant leader"? It's connected to the triangle which is part of the dimension leader. So it's a connected leader segment. If it reaches the crop border (top), then reject.
+
+But wait, maybe the vertical line is NOT part of the FAI 112 group but part of the PC group. The PC group is a separate annotation. The instructions say "unrelated neighboring annotations dominate" is a reject condition, but also we need "every connected leader segment" of the FAI group.
+
+This is tricky. Let's look at the leader line topology. The dimension text "Ø 2.05 ±0.05" - does it have its own leader line to the feature, or does it connect via the triangle?
+
+In IMAGE 1, to the left of "Ø 2.05" there's a horizontal line segment from ~650 to ~575 (the triangle's right side). So the dimension text connects horizontally to the triangle. Then the triangle connects diagonally to the feature arrowhead. So the dimension's leader is: text - horizontal - triangle - diagonal - arrowhead. The triangle is part of this leader.
+
+Now the PC box connects to the triangle via the vertical line. So the PC box is also connected to the same triangle. This means the triangle is a shared node.
+
+Hmm, in many drawings, the "PC" box with a leader to a feature is a "Position Control" or "Process Characteristic" indicator, and it's a separate callout that points to the same feature. The triangle might be the arrowhead of the PC leader pointing at the feature? But the triangle points up, not down-left.
+
+Wait, maybe I have the triangle orientation wrong. Let me look. In IMAGE 1, the triangle at (575, 1130) - it's a filled black triangle. Its shape: it looks like it points UP (apex at top). Yes, apex up.
+
+Hmm, an upward-pointing filled triangle on a leader line... In some conventions, a filled triangle indicates the "datum" or it's a "witness" symbol. Or it could be that the leader line from the dimension goes to the triangle (which is the arrowhead pointing at the PC box, meaning the dimension applies to the PC feature?). This is too speculative.
+
+Let's look at the second image again to see what's cut. In IMAGE 2, at the top, above the triangle, there's a vertical line that goes off the top edge. So that vertical line (connecting triangle to PC box) is cut. The PC box is not in the crop.
+
+Given the ambiguity, I think the safest interpretation: The crop is missing the PC box and the leader segment connecting it. But is the PC box part of the FAI 112 group? The FAI 112 group is the dimension + FCF + SPC. The PC box is likely a separate annotation (a "PC" = perhaps "Position Control" datum or a process characteristic). However, the leader line is shared via the triangle.
+
+Actually, you know what, let me look at the leader line from the dimension more carefully. Maybe the dimension's leader does NOT go through the triangle. Maybe the dimension's leader is the horizontal line to the triangle, and the triangle is the arrowhead pointing at... no, the triangle points up.
+
+Let me look at the diagonal line. The diagonal line goes from the triangle down-left to the arrowhead at the circle. So the arrowhead at the circle is the terminal arrowhead of the leader. The leader's other end is the triangle. The triangle connects to the dimension text (horizontal) and to the PC box (vertical).
+
+So the leader line for the dimension is: dimension text - triangle - arrowhead at circle. The triangle is an intermediate node (an elbow or a marker). The PC box also connects to the triangle.
+
+Thus, the PC box's leader is the vertical line from triangle to PC. This vertical line is a "connected leader segment" to the triangle, which is part of the FAI 112 leader. So if we crop and cut the vertical line, we have a leader segment reaching the border.
+
+Hmm, but the PC box might be considered a separate annotation group (its own FAI? No, PC box has no FAI circle next to it in the crop... wait, in IMAGE 1, is there an FAI circle near PC? No. The PC box just has a leader to the triangle.)
+
+OK here's another thought. Maybe the "PC" box is actually the label for the leader line, like "PC" = "Position Control" and the triangle is the arrowhead of the PC leader pointing at the feature, and the dimension text is just placed near the leader without a direct connection. Let's look: the horizontal line from the dimension text to the triangle - is it actually connected to the dimension text or is it the leader line of the dimension? In GD&T, the dimension text is usually connected to the feature by a leader line with an arrowhead at the feature. The arrowhead at the circle is that leader's arrowhead. The line from the arrowhead goes up-right to the triangle, then... if the triangle is an elbow, then from the triangle the line goes right to the dimension text. That makes sense: leader = arrowhead at circle - diagonal - triangle (elbow) - horizontal - dimension text. Yes! The triangle is just an elbow/joint in the leader line, drawn as a filled triangle for some reason (maybe it's a "witness" or it's actually a small arrowhead indicating direction? Unusual but possible).
+
+Then the PC box: the vertical line from the triangle up to the PC box is a SEPARATE leader line for the PC box, which happens to start at the same elbow point. So the PC box is a separate annotation that points to the same feature (or to the same point).
+
+In that case, the PC box is a separate annotation group. The crop includes the FAI 112 group (dimension + FCF + SPC + leader to feature). The PC box is a neighboring annotation. The vertical line from the triangle to the PC box is the PC box's leader, which is cut off at the top.
+
+Now, the reject condition: "Reject it if a relevant leader reaches the crop border". The PC box's leader reaches the top border. Is it "relevant"? It's relevant to the PC annotation, not to the FAI 112 annotation. But it's connected to the same node (triangle) that's part of the FAI 112 leader.
+
+Hmm, the instructions also say: "unrelated neighboring annotations dominate" is a reject condition. The PC box doesn't dominate; it's just a small box outside.
+
+I think the key issue is whether the FAI 112 annotation group is fully contained. The FAI 112 group's leader is: dimension text - triangle - arrowhead at circle. All of these are inside the crop? The triangle is inside (in IMAGE 2, the triangle is fully visible, not clipped). The arrowhead at the circle - in IMAGE 2, is it fully visible? Let's look. In IMAGE 2, the diagonal line goes down-left and ends with an arrowhead. The arrowhead appears to be at the bottom-left, and it looks like it might be slightly clipped by the left/bottom border? Let's look at IMAGE 2's bottom-left. The diagonal line ends with a filled arrowhead pointing down-left. The arrowhead tip is at about (30, 320) in IMAGE 2 coordinates? The image 2 is 2337 wide, 480 tall (approx). The arrowhead at bottom-left is at around (30, 320). The left border is x=0, bottom border y=480. So the arrowhead is inside, not clipped. Good. And the circle feature arc is visible at the bottom-left (the dashed arc and solid arc). Good.
+
+So the FAI 112 group's own leader and arrowhead and feature are inside.
+
+Now the vertical line to PC: this is the PC annotation's leader, cut off. But the PC annotation is not the FAI 112 group. However, the vertical line is connected to the triangle which is inside the crop. So in the crop, we see a vertical line stub going up from the triangle and hitting the top border. This is a "leader reaching the crop border". The instructions say reject if "a relevant leader reaches the crop border". Is the PC leader "relevant"? It's connected to the FAI 112 leader's elbow. I'd argue it's part of the connected leader network. Hmm.
+
+But wait, maybe the vertical line is actually part of the FAI 112 leader? Like, maybe the FAI 112 leader goes from the dimension text up to the PC box? No, that doesn't make sense.
+
+Let me look at the original full drawing context. The PC box with a leader to a feature typically means "Position Control" or it's a "Process Characteristic" (PC) marker that indicates this feature is a process characteristic. In that case, the PC box is associated with the same feature and is part of the annotation cluster. The leader from PC to the feature would be the vertical line + diagonal line? Or the vertical line + horizontal line?
+
+Ugh, I'm overthinking. Let's look at the visual evidence in IMAGE 2: there's clearly a vertical line stub at the top going off the edge, connected to the triangle. This indicates that something above (the PC box) is connected to the triangle and is cut off.
+
+Given the strict instructions: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+The vertical line reaching the top border is a leader reaching the crop border. Whether it's "relevant" is the question. Since it's connected to the triangle (part of the FAI 112 leader), I lean towards it being relevant / part of the connected leader network. Therefore the crop should be expanded to include the PC box.
+
+Also, the PC box itself is a "description text" or annotation that's connected. The instructions list "parameter/tolerance/feature-control-frame and description text" as part of the group. The PC box could be considered description text.
+
+Thus, I think the crop is INVALID because the top is cut off (the PC box and the vertical leader segment are missing).
+
+Let me also check the right side. In IMAGE 1, the magenta rectangle right edge is at ~2280. The C box is at ~2080, with a leader arrow pointing right to the vertical line at ~2230. The vertical line at the right (the part edge) is at ~2230-2280. In IMAGE 2, the right side shows the B box, C box, and the vertical line with the C arrowhead. The C arrowhead points right and touches the vertical line. Is the vertical line (the feature) visible? In IMAGE 2, at the right edge, we see the vertical line and a small arc (the corner fillet). The C arrowhead touches it. OK that's inside.
+
+But wait, the B box leader: the B box is at ~1760 in IMAGE 1, with a vertical leader going up to an arrowhead at ~1130, and the line continues up to the dimension "213.66" at the top (y~50). In IMAGE 1, the magenta rectangle top is at y~1040. The B leader's arrowhead is at y~1130 (inside), but the line continues up from the arrowhead to y~130 (the 213.66 dimension), which is way above the magenta top border. So the B leader line is cut off at the top!
+
+In IMAGE 2, on the right side, we see the B box with a vertical line going up, an arrowhead, and the line continues up off the top edge. Yes! In IMAGE 2, the vertical line above the B arrowhead goes off the top border. So the B leader is cut off.
+
+Now, is the B box part of the FAI 112 annotation group? The B box is a datum reference (the FCF has "A B C" as datums). The B box with the leader pointing to the top dimension "213.66" is a datum feature indicator for datum B. This is a separate annotation (datum B indicator), not part of the FAI 112 group per se. But it's in the crop and its leader is cut off.
+
+Hmm, but the datum B indicator is a "neighboring annotation". The instructions say reject if "unrelated neighboring annotations dominate". The B and C datum indicators don't dominate; they're on the right side. But their leaders are cut off.
+
+Wait, but the B and C datum indicators are NOT part of the FAI 112 group. The FAI 112 group is the dimension + FCF + SPC + leader to the hole feature. The B and C boxes are datum feature indicators that point to other features (the top edge and the right edge). They are unrelated to the FAI 112 leader.
+
+So in the crop, we have the FAI 112 group (mostly complete) PLUS the B and C datum indicators (whose leaders are cut off at top and right respectively? C's leader points right to the right edge, which is inside; B's leader goes up and is cut off).
+
+Now the question: does the presence of cut-off leaders of UNRELATED annotations make the crop invalid? The instructions: "Reject it if a relevant leader reaches the crop border". The B leader is not relevant to FAI 112. So maybe it's OK for the B leader to be cut off, as long as the FAI 112 group is complete and the unrelated annotations don't "dominate".
+
+But the B and C datum indicators are quite prominent in the crop (they take up the right third). Do they "dominate"? The crop is wide (magenta rectangle is very wide, from x~410 to x~2280, width ~1870). The FAI 112 group is on the left half. The B and C are on the right half. So the unrelated annotations occupy a large portion of the crop. That might be considered "dominate" or at least the crop is too wide, including a lot of unrelated stuff.
+
+Hmm, but the instructions for validity focus on the FAI group being fully contained. The extra unrelated stuff is a separate concern ("unrelated neighboring annotations dominate").
+
+Let me re-read the validity criteria: "The crop is valid only if it fully contains one coherent FAI annotation group: [list]. Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+So the crop must fully contain the FAI group. The FAI group's relevant leaders must not reach the border. The FAI group's arrowheads must not be clipped. The touched feature must be present. And unrelated annotations must not dominate.
+
+Now, the FAI 112 group's leader: dimension - triangle - arrowhead at hole. The triangle also has the vertical line to PC. Is the vertical line to PC part of the FAI 112 group's leader? If the PC box is a "process characteristic" marker for the same feature, then yes it's part of the annotation cluster. If it's a separate thing, then no.
+
+I think in these drawings, the "PC" box is indeed a "Process Characteristic" or "Position Control" marker that is part of the same feature's annotation. Actually, I recall now: in some GM drawings, a box with "PC" and a leader to a feature indicates that the feature is a "Process Characteristic" or it's a "Position Control" note. Hmm.
+
+Alternatively, the triangle might be the arrowhead of the PC leader pointing at the feature, and the dimension's leader is separate. Let's look at the diagonal line: it goes from the triangle to the arrowhead at the hole. If the triangle is the PC arrowhead, then the PC leader is PC box - vertical - triangle (arrowhead at feature?). But the triangle points up, not at the feature. So the triangle is not an arrowhead at the feature. The arrowhead at the feature is the down-left arrow.
+
+OK let me look at the diagonal line endpoints. The diagonal line in IMAGE 1 goes from the triangle (575, 1150 bottom) to the arrowhead at the hole (430, 1310). So the diagonal line connects the triangle to the hole arrowhead. So the triangle is at one end of the diagonal line, and the hole arrowhead at the other. The triangle is NOT an arrowhead (it's a filled triangle pointing up, which is a marker). So the leader line is: hole arrowhead - diagonal - triangle - horizontal - dimension text. And separately: triangle - vertical - PC box.
+
+So the triangle is a junction of three lines: diagonal (to hole), horizontal (to dimension), vertical (to PC).
+
+Thus the PC box is connected to the same junction. The PC box is part of the annotation cluster for this feature.
+
+Therefore, the vertical line to PC is a connected leader segment of the cluster. It's cut off at the top. So the crop is missing the PC box and that leader segment. => INVALID, need to expand top.
+
+Now also the B and C datum indicators: are they connected to the FAI 112 cluster? The B box leader goes up to the 213.66 dimension (a separate dimension at the top). The C box leader goes right to the right edge. These are NOT connected to the triangle or the FAI 112 cluster. They are separate datum indicators. So they are unrelated neighboring annotations. They are cut off (B's leader at top). But since they're unrelated, their cut-off leaders don't directly violate the "relevant leader" rule. However, they might "dominate" the crop.
+
+Hmm, but the crop is very wide, including the B and C indicators which are unrelated. The FAI 112 group is only the left portion. So the crop includes a lot of unrelated content. Does it "dominate"? The B and C indicators plus the long vertical line for B take up the right half. I'd say they're significant but maybe not "dominating" the FAI group. But the instructions say "unrelated neighboring annotations dominate" as a reject condition. The presence of two full datum indicators with long leaders might be considered dominating or at least the crop is poorly chosen (too wide).
+
+But the main clear violation is the top cut-off of the PC leader (and the B leader). The PC leader is relevant (connected to the cluster). So we must expand top to include the PC box.
+
+Let's figure out the expansion. The magenta rectangle in IMAGE 1: top ~1040, bottom ~1410, left ~410, right ~2280. Height ~370, width ~1870.
+
+The PC box top is at ~965. So we need to expand top by (1040-965)=75 pixels. As a fraction of crop height (370): 75/370 ≈ 0.20 = 200 (in normalized [0,1000] where 1000 = 100%). Wait, the normalization: "Expansion values are normalized fractions [0,1000] of the current crop width or height. For example, bottom=150 means add 15% of the crop height at the bottom." So 1000 = 100% = full crop height. So 75/370 * 1000 ≈ 203. So top ≈ 200.
+
+But also the B leader goes up to the 213.66 dimension at y~50, which is way above. If we want to include the B leader fully, we'd need to expand top by (1040-50)=990 pixels, which is 990/370*1000 ≈ 2675, way more than 1000. That's not feasible and the B leader is unrelated anyway. So we should NOT try to include the B leader. Instead, we should consider whether the B and C indicators should be excluded by shrinking the right side. But the instructions only allow expansion, not shrinking. Hmm, the expand_norm can have values; can they be negative? The example shows positive. The range is [0,1000]. So we can only expand, not shrink. So we cannot remove the B and C indicators.
+
+Given that, the crop will always include the B and C indicators (since they're inside the magenta rectangle and we can only expand). So the "unrelated neighboring annotations dominate" condition - if they dominate, the crop is invalid and we can't fix it by expansion (we can only expand, which would make it worse). Hmm.
+
+Wait, but maybe the B and C indicators are actually considered part of the FAI 112 annotation group? The FCF references datums A, B, C. The B and C boxes are the datum feature indicators for those datums. In GD&T, the datum feature indicators are part of the feature control frame's annotation (they define the datums). So one could argue the B and C boxes are part of the FAI 112 annotation group (since the FCF for FAI 112 references B and C). Hmm, that's a stretch but possible. The FCF "⊕ 0.2 A B C" references datums A, B, C. The datum feature indicators B and C (and A somewhere) are the symbols that define those datums on the drawing. They are related to the FCF.
+
+But the B and C datum indicators point to features (the top edge and right edge) that are far away, and their leaders are long. Including them fully would require a huge crop. That's not reasonable.
+
+I think the intended interpretation is simpler. Let me look at the second image (the crop) and see what's "coherent". The crop shows the FAI 112 group on the left and the B, C datum indicators on the right. The crop is wide. The FAI 112 group's leader to the hole is present (arrowhead at hole visible). The PC box is missing (cut at top). The B leader is cut at top.
+
+Given the strict rule "Reject it if a relevant leader reaches the crop border", and the vertical line from the triangle (which is part of the FAI 112 leader junction) reaches the top border, I think the crop is invalid and needs top expansion to include the PC box.
+
+But what about the B leader reaching the top border? If the B indicator is considered unrelated, then its leader reaching the border is not a "relevant leader" violation. But it's still a leader reaching the border that's visible in the crop (a stub). The instructions say "a relevant leader reaches the crop border" - the B leader is not relevant to FAI 112, so maybe it's tolerated. But it looks bad.
+
+Hmm, but actually, maybe the B and C indicators ARE considered part of the annotation group because the FCF references them. In that case, their leaders must be fully contained, which is impossible without a huge crop. So the crop would be invalid and unfixable. But the task expects us to either validate or propose expansion. If unfixable, we'd set valid=false with large expansions? But expansions are capped at 1000 (100%). We can't expand top by 2675.
+
+Let me reconsider the whole thing. Maybe I'm misreading the leader topology. Let me look at IMAGE 1 once more, very carefully, focusing on the triangle and the lines.
+
+I see the PC box at top. Below it, a vertical line. To the left of the PC box, a horizontal line connecting to the vertical line? Let's look: the PC box left edge has a horizontal line going left to about x=575, then the vertical line goes down from there to the triangle. So the PC box connects via an L-shaped line (left then down) to the triangle.
+
+The triangle then has the diagonal line going down-left to the hole arrowhead, and a horizontal line going right to the dimension text.
+
+So yes, the triangle is a 3-way junction.
+
+Now, in many of these drawings, I've seen the "PC" box connected to a feature via a leader, and the dimension also connected to the same feature via a leader, and they share the arrowhead or the elbow. Here they share the triangle elbow.
+
+OK regardless of semantics, the visual fact is:

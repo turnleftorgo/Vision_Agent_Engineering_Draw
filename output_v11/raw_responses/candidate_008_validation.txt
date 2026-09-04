@@ -1,0 +1,28 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. The red rectangle highlights the FAI marker "FAI 59". Let me look at what's inside the magenta rectangle and what's outside.
+
+The magenta rectangle in IMAGE 1 spans roughly from x=340 to x=1450, y=1030 to y=1680 (in pixel coordinates of the image). Let me look at the contents.
+
+Inside the magenta rectangle, I see:
+- "SECOND TERRACE" label at top with a leader line going up to the drawing.
+- A feature control frame with "0.10"
+- "15" box, "FAI 59" circle (the red one), "SPC BF" circle, "100%" triangle
+- "16" box, "FAI 208" circle
+- "THIRD TERRACE" label with leader line going down-left
+- "2X -0.42 +0.23 -0.11"
+- "15" box, "FAI 68" circle, "SPC BK" circle, "100%" triangle
+
+Now let me check the leaders. The "SECOND TERRACE" label has a leader line. In IMAGE 1, the leader line for "SECOND TERRACE" goes up from the text. Let me trace it. The text "SECOND TERRACE" is at around y=980. The leader line goes up from the left of the text (around x=900, y=980) up to the drawing at the top (around x=900, y=830). Wait, let me look. Actually the leader line for SECOND TERRACE appears to go up vertically from the text. Let me look at the magenta rectangle top edge. The magenta rectangle top is at about y=1030. The "SECOND TERRACE" text is at y=980, which is ABOVE the magenta rectangle top edge! Let me check.
+
+Looking at IMAGE 1, the magenta rectangle's top edge is at approximately y=1030. The text "SECOND TERRACE" is at y=980, which is above the top edge. Hmm, but in IMAGE 2 (the crop), I see at the top there's the feature control frame "0.10" and the "15 FAI 59 SPC BF 100%" row, but I do NOT see the "SECOND TERRACE" text. Let me look at IMAGE 2 carefully.
+
+IMAGE 2 top shows: a partial circle on left (SPC something), a 100% triangle, then the feature control frame "0.10", then "15 FAI 59 SPC BF 100%", then "16 FAI 208", then "THIRD TERRACE" etc.
+
+Wait, in IMAGE 2, the top edge cuts off the "SECOND TERRACE" text. The "SECOND TERRACE" text is not visible in IMAGE 2. But the leader line for SECOND TERRACE... let's see. In IMAGE 1, the leader line for SECOND TERRACE goes from the text upward. The text is at y~980. The magenta top is at y~1030. So the text is outside (above) the crop. The leader line goes up from the text, so it's also outside.
+
+Hmm, but wait. Let me look more carefully at the geometry. In IMAGE 1, the magenta rectangle top edge: I need to look at the y-coordinate. The "SECOND TERRACE" text baseline is around y=980-990. The magenta top line is at around y=1030. So yes, the SECOND TERRACE text is above the magenta rectangle.
+
+But actually, look at the leader line. The leader line for SECOND TERRACE in IMAGE 1: there's a vertical line at x~900 going from y~830 (top, touching the drawing) down to y~980 (the text). So the entire leader line and the text are above the magenta rectangle. So in the crop, the SECOND TERRACE annotation is missing its text and leader.
+
+But wait, is the SECOND TERRACE annotation part of the FAI 59 group? The FAI 59 group is associated with the SECOND TERRACE feature. The feature control frame "0.10" and the "15 FAI 59 SPC BF 100%" row are the annotation group for SECOND TERRACE. The description text "SECOND

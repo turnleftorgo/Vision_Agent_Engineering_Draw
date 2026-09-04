@@ -1,0 +1,793 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    3766,
+    4578,
+    5217,
+    5488
+  ],
+  "current_crop": [
+    3766,
+    4578,
+    5972,
+    5488
+  ],
+  "best_crop": [
+    3766,
+    4578,
+    5972,
+    5488
+  ],
+  "best_score": 99.6474,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        3766,
+        4578,
+        5217,
+        5488
+      ],
+      "crop_after": [
+        3766,
+        4578,
+        5435,
+        5488
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5517,
+          "completion_tokens": 102,
+          "total_tokens": 5619,
+          "finish_reason": "stop",
+          "elapsed_seconds": 23.802583499986213,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5549,
+          "completion_tokens": 111,
+          "total_tokens": 5660,
+          "finish_reason": "stop",
+          "elapsed_seconds": 12.838558040966745,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 5549,
+          "completion_tokens": 111,
+          "total_tokens": 5660,
+          "finish_reason": "stop",
+          "elapsed_seconds": 12.895452542055864,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        }
+      ],
+      "expansion": {
+        "before": [
+          3766,
+          4578,
+          5217,
+          5488
+        ],
+        "after": [
+          3766,
+          4578,
+          5435,
+          5488
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 217.528,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 15825404.246,
+        "limited_by": []
+      },
+      "score_before": 99.6474,
+      "score_after": 99.5945,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 5456,
+            "completion_tokens": 92,
+            "total_tokens": 5548,
+            "finish_reason": "stop",
+            "elapsed_seconds": 49.1386518329964,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 5462,
+            "completion_tokens": 86,
+            "total_tokens": 5548,
+            "finish_reason": "stop",
+            "elapsed_seconds": 48.345577667001635,
+            "content_bytes": 175,
+            "content_chars": 175,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": false,
+            "missing": [
+              "leader",
+              "arrowhead",
+              "target"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 150,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "completeness_auditor"
+          }
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 5448,
+            "completion_tokens": 81,
+            "total_tokens": 5529,
+            "finish_reason": "stop",
+            "elapsed_seconds": 48.13521704199957,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 5435,
+            "completion_tokens": 114,
+            "total_tokens": 5549,
+            "finish_reason": "stop",
+            "elapsed_seconds": 22.118318666005507,
+            "content_bytes": 212,
+            "content_chars": 212,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          },
+          {
+            "attempt": 1,
+            "prompt_tokens": 5448,
+            "completion_tokens": 99,
+            "total_tokens": 5547,
+            "finish_reason": "stop",
+            "elapsed_seconds": 11.744065332983155,
+            "content_bytes": 212,
+            "content_chars": 212,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          },
+          {
+            "attempt": 2,
+            "prompt_tokens": 5448,
+            "completion_tokens": 99,
+            "total_tokens": 5547,
+            "finish_reason": "stop",
+            "elapsed_seconds": 11.81921175000025,
+            "content_bytes": 212,
+            "content_chars": 212,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          }
+        ],
+        "emergency_action": {
+          "action": "expand_crop",
+          "valid": false,
+          "candidate_valid": true,
+          "missing": [
+            "leader",
+            "arrowhead",
+            "target"
+          ],
+          "arguments": {
+            "left_norm": 0,
+            "top_norm": 0,
+            "right_norm": 150,
+            "bottom_norm": 0
+          },
+          "confidence": 0.95
+        }
+      },
+      "decision_source": "deterministic_arbitration"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        3766,
+        4578,
+        5435,
+        5488
+      ],
+      "crop_after": [
+        3766,
+        4578,
+        5685,
+        5488
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5308,
+          "completion_tokens": 103,
+          "total_tokens": 5411,
+          "finish_reason": "stop",
+          "elapsed_seconds": 23.220163417048752,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5340,
+          "completion_tokens": 67,
+          "total_tokens": 5407,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.308707291027531,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 5340,
+          "completion_tokens": 67,
+          "total_tokens": 5407,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.170490249991417,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        }
+      ],
+      "expansion": {
+        "before": [
+          3766,
+          4578,
+          5435,
+          5488
+        ],
+        "after": [
+          3766,
+          4578,
+          5685,
+          5488
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 250.157,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 15825404.246,
+        "limited_by": []
+      },
+      "score_before": 99.5945,
+      "score_after": 99.5337,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 5202,
+            "completion_tokens": 92,
+            "total_tokens": 5294,
+            "finish_reason": "stop",
+            "elapsed_seconds": 47.18077254196396,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 5208,
+            "completion_tokens": 85,
+            "total_tokens": 5293,
+            "finish_reason": "stop",
+            "elapsed_seconds": 46.25302591599757,
+            "content_bytes": 175,
+            "content_chars": 175,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": false,
+            "missing": [
+              "leader",
+              "arrowhead",
+              "target"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 150,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "completeness_auditor"
+          }
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 5194,
+            "completion_tokens": 92,
+            "total_tokens": 5286,
+            "finish_reason": "stop",
+            "elapsed_seconds": 47.17833233298734,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 5181,
+            "completion_tokens": 114,
+            "total_tokens": 5295,
+            "finish_reason": "stop",
+            "elapsed_seconds": 21.60211145802168,
+            "content_bytes": 212,
+            "content_chars": 212,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          },
+          {
+            "attempt": 1,
+            "prompt_tokens": 5194,
+            "completion_tokens": 116,
+            "total_tokens": 5310,
+            "finish_reason": "stop",
+            "elapsed_seconds": 12.19712495902786,
+            "content_bytes": 214,
+            "content_chars": 214,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          },
+          {
+            "attempt": 2,
+            "prompt_tokens": 5194,
+            "completion_tokens": 116,
+            "total_tokens": 5310,
+            "finish_reason": "stop",
+            "elapsed_seconds": 33.248036584001966,
+            "content_bytes": 214,
+            "content_chars": 214,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          }
+        ],
+        "emergency_action": {
+          "action": "expand_crop",
+          "valid": false,
+          "candidate_valid": true,
+          "missing": [
+            "leader",
+            "arrowhead",
+            "target"
+          ],
+          "arguments": {
+            "left_norm": 0,
+            "top_norm": 0,
+            "right_norm": 150,
+            "bottom_norm": 0
+          },
+          "confidence": 0.95
+        }
+      },
+      "decision_source": "deterministic_arbitration"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        3766,
+        4578,
+        5685,
+        5488
+      ],
+      "crop_after": [
+        3766,
+        4578,
+        5972,
+        5488
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5202,
+          "completion_tokens": 98,
+          "total_tokens": 5300,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.86229562497465,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5234,
+          "completion_tokens": 61,
+          "total_tokens": 5295,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.156783957965672,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 5234,
+          "completion_tokens": 63,
+          "total_tokens": 5297,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.2842117919935845,
+          "content_bytes": 213,
+          "content_chars": 213,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        }
+      ],
+      "expansion": {
+        "before": [
+          3766,
+          4578,
+          5685,
+          5488
+        ],
+        "after": [
+          3766,
+          4578,
+          5972,
+          5488
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 287.681,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 15825404.246,
+        "limited_by": []
+      },
+      "score_before": 99.5337,
+      "score_after": 99.4637,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 5051,
+            "completion_tokens": 95,
+            "total_tokens": 5146,
+            "finish_reason": "stop",
+            "elapsed_seconds": 43.68642116599949,
+            "content_bytes": 177,
+            "content_chars": 177,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": false,
+            "missing": [
+              "leader",
+              "arrowhead",
+              "target"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 400,
+              "bottom": 200
+            },
+            "confidence": 0.95,
+            "role": "adversarial_verifier"
+          }
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 5057,
+            "completion_tokens": 82,
+            "total_tokens": 5139,
+            "finish_reason": "stop",
+            "elapsed_seconds": 42.88001395796891,
+            "content_bytes": 175,
+            "content_chars": 175,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": false,
+            "missing": [
+              "leader",
+              "arrowhead",
+              "target"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 150,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "completeness_auditor"
+          }
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 5043,
+            "completion_tokens": 99,
+            "total_tokens": 5142,
+            "finish_reason": "stop",
+            "elapsed_seconds": 44.09088045899989,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 5086,
+            "completion_tokens": 118,
+            "total_tokens": 5204,
+            "finish_reason": "stop",
+            "elapsed_seconds": 18.971331125008874,
+            "content_bytes": 216,
+            "content_chars": 216,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          },
+          {
+            "attempt": 1,
+            "prompt_tokens": 5099,
+            "completion_tokens": 118,
+            "total_tokens": 5217,
+            "finish_reason": "stop",
+            "elapsed_seconds": 11.6389144170098,
+            "content_bytes": 216,
+            "content_chars": 216,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          },
+          {
+            "attempt": 2,
+            "prompt_tokens": 5099,
+            "completion_tokens": 118,
+            "total_tokens": 5217,
+            "finish_reason": "stop",
+            "elapsed_seconds": 10.28258416702738,
+            "content_bytes": 216,
+            "content_chars": 216,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": "expand_crop_cross_field_violation"
+          }
+        ],
+        "emergency_action": {
+          "action": "expand_crop",
+          "valid": false,
+          "candidate_valid": true,
+          "missing": [
+            "leader",
+            "arrowhead",
+            "target"
+          ],
+          "arguments": {
+            "left_norm": 0,
+            "top_norm": 0,
+            "right_norm": 150,
+            "bottom_norm": 0
+          },
+          "confidence": 0.95
+        }
+      },
+      "decision_source": "deterministic_arbitration"
+    },
+    {
+      "turn": 4,
+      "crop_before": [
+        3766,
+        4578,
+        5972,
+        5488
+      ],
+      "crop_after": [
+        3766,
+        4578,
+        5972,
+        5488
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5124,
+          "completion_tokens": 87,
+          "total_tokens": 5211,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.655965999991167,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.4637,
+      "score_after": 99.4637,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

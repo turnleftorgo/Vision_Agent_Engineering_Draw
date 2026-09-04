@@ -1,0 +1,40 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle is around "FAI 204" which is associated with the box "16".
+
+Let me look at the structure of the FAI annotation groups in IMAGE 1.
+
+There's a "SECOND TERRACE" annotation group. It has:
+- Text "SECOND TERRACE"
+- Tolerance values: -0.21 +0.15 / -0.08
+- Box "15" with FAI 69, SPC BL, 100% triangle
+- Box "16" with FAI 204 (this is the red rectangle)
+
+There's also a "4X 0.49 ±0.10 FAI 191 SPC GE" annotation at the top with a leader line going down to a feature on the left (the K-K section feature).
+
+Now let's look at the magenta rectangle in IMAGE 1. It spans from the top (around the "15" / "16" labels on the left edge, near y=155) down to about y=1230 (the bottom magenta line). The left edge of the magenta rectangle is at x=0 (the very left edge of the image). The right edge is at about x=2030.
+
+Wait, let me look more carefully. The magenta rectangle's left edge appears to be at x=0 (cut off at the left border of the image). The top edge is at about y=360. The bottom edge is at about y=1230. The right edge is at about x=2030.
+
+Now, the proposed crop (IMAGE 2) shows what's inside this magenta rectangle. Let's look at IMAGE 2.
+
+In IMAGE 2, I see:
+- Top left: "0.15" and "0.16" (partial, cut off on left)
+- A triangle "100%" (partial, cut off on left)
+- "4X 0.49 ±0.10 FAI 191 SPC GE"
+- A leader line going down from "4X 0.49" to a feature on the left (the K-K feature with arrows)
+- "SECOND TERRACE" with tolerances
+- Box 15 with FAI 69, SPC BL, 100%
+- Box 16 with FAI 204
+- "T5 (-133.75)" on the right
+- "K-K" text on left (partial, "N K-K" visible)
+
+Now, the question is whether the crop fully contains one coherent FAI annotation group. The selected FAI marker is FAI 204 (red rectangle), which is associated with box 16.
+
+Let me think about what the coherent FAI annotation group for FAI 204 / box 16 is. Looking at the structure, box 16 with FAI 204 is part of the SECOND TERRACE group. The SECOND TERRACE group includes the description text "SECOND TERRACE", the tolerance values, box 15 (FAI 69, SPC BL, 100%), and box 16 (FAI 204).
+
+But wait, there's also the leader line. The SECOND TERRACE annotation has a leader line going from the text to the feature on the left (the hatched profile shape). Let me look. In IMAGE 1, the "SECOND TERRACE" text has a horizontal line going left to the hatched profile feature (the small shape at around x=350-700, y=800-850). That leader line connects to the feature.
+
+Now, does the magenta crop contain that leader line and the feature? In IMAGE 1, the magenta rectangle's left edge is at x=0. The hatched profile feature for SECOND TERRACE is at around x=350-700, which is inside the magenta rectangle (since left edge is 0). The leader line from "SECOND TERRACE" goes left to that feature. In IMAGE 2, I see the hatched profile feature and the leader line. Yes, it's there.
+
+But wait, there's also the "4X 0.49 ±0.10" annotation with its own leader line going down to the K-K feature on the left. That leader line has two arrowheads (one pointing down at the feature, one

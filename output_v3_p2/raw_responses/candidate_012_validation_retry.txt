@@ -1,0 +1,170 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. The red rectangle highlights the FAI marker "FAI 39" with "SPC AL" next to it.
+
+Let me look at what's inside the magenta rectangle in IMAGE 1. The magenta rectangle spans from the left edge (x=0) to about x=1350 (the vertical magenta line), and from the top (y=0) to about y=1700 (the horizontal magenta line).
+
+Inside the magenta rectangle, I see:
+- "SPC CONTROL FOR ALL HEAT STAKE POST" text (partially cut off on the right? Let's check. The text reads "SPC CONTROL FOR ALL HEA" then the magenta line cuts it, then "T STAKE POST" is outside. So the text is cut by the magenta border.)
+- "ANSI-114X ISO-114X JIS-" then cut, then "10X" outside.
+- The FAI 39 / SPC AL circle pair (the red highlighted one).
+- The dimensions on the left: 2.50 +0.19/-0.10 with FAI 76 / SPC BS; 1.62 +0.19/-0.12 with FAI 75 / SPC BR; 1.26 +0.19/-0.12 with FAI 100 / SPC CO; (0.00).
+- The dimensions on the right side of the magenta line: 2.50 +0.29/-0.07, 1.62 +0.26/-0.10, 1.26 +0.25/-0.10. These are OUTSIDE the magenta rectangle (to the right of the vertical magenta line).
+
+Wait, let me look more carefully. The vertical magenta line is at around x=1350. The "2.50 +0.29" text starts at around x=1290? Let's look. The "2" of "2.50" on the right side appears to be at x=1290-1310, which is just left of the magenta line? Hmm.
+
+Actually let's look at the layout. In IMAGE 1, the right-side dimensions "2.50 +0.29 -0.07" — the "2.50" part: the "2" is at about x=1290, the ".50" at x=1370-1430. The magenta line is at x=1350. So the "2." is inside and ".50" is outside? This is messy.
+
+Let's look at IMAGE 2, the proposed crop. In IMAGE 2, I see on the right side: "FAI 39 / SPC AL" then "2." (cut off). Then below "FAI 40 / SPC AM" then "1." (cut off). Then "FAI 41 / SPC AN" then "1." (cut off). So the right-side dimension numbers are cut off at the right border of the crop.
+
+So the crop in IMAGE 2 includes the FAI 39/SPC AL, FAI 40/SPC AM, FAI 41/SPC AN circles, but the associated dimension values (2.50, 1.62, 1.26) on the right are cut off — only "2.", "1.", "1." are visible.
+
+Now, the question is about the FAI annotation group. The red rectangle in IMAGE 1 is on FAI 39 / SPC AL. The associated dimension for FAI 39 is the right-side "2.50 +0.29/-0.07". But in the crop, that dimension is cut off (only "2." visible). Also the leader line connecting FAI 39 to the feature — let's see.
+
+Actually, wait. Let's think about how these FAI markers work. Each FAI circle is paired with an SPC circle, and they are placed next to a dimension. The dimension has a leader line pointing to a feature on the drawing.
+
+Looking at IMAGE 1, the left-side dimensions (2.50, 1.62, 1.26, 0.00) have leader lines going left to the cross-section on the left. The right-side dimensions (2.50, 1.62, 1.26) have leader lines going right to the cross-section on the right.
+
+The FAI 39 / SPC AL is positioned between the left and right dimension columns. Which dimension does it belong to? Typically the FAI/SPC pair is placed to the right of the dimension it annotates. So FAI 76/SPC BS is to the right of left "2.50". FAI 75/SPC BR to the right of left "1.62". FAI 100/SPC CO to the right of left "1.26". Then FAI 39/SPC AL is to the right of... hmm, it's positioned at the top, aligned with the right "2.50"? Or is it to the right of left "2.50" but there's already FAI 76 there?
+
+Let's look at vertical alignment. Left "2.50" is at y~1130. FAI 76/SPC BS at y~1130. FAI 39/SPC AL at y~1130 too (the red box is at y~1130). Right "2.50" at y~1130. So at the top row we have left 2.50, then FAI76/SPCBS, then FAI39/SPCAL, then right 2.50.
+
+Hmm, so FAI 39/SPC AL is between the two 2.50 dimensions. Which one does it annotate? Looking at the second row: left 1.62, FAI75/SPCBR, [gap], FAI40/SPCAM, right 1.62. Third row: left 1.26, FAI100/SPCCO, [gap], FAI41/SPCAN, right 1.26.
+
+So the pattern: left dimension has its FAI/SPC immediately to its right (FAI76, 75, 100). Right dimension has its FAI/SPC immediately to its left (FAI39, 40, 41). Yes! That makes sense. The FAI/SPC pair is placed adjacent to the dimension it controls, on the side facing the center. So FAI 39/SPC AL controls the right "2.50 +0.29/-0.07" dimension. FAI 40/SPC AM controls right "1.62". FAI 41/SPC AN controls right "1.26".
+
+Therefore, the FAI 39 annotation group requires the right "2.50 +0.29/-0.07" dimension and its leader line and the feature it points to.
+
+In the crop (IMAGE 2), the right "2.50" is cut off to just "2." and the tolerance "+0.29/-0.07" is entirely missing, and the leader line going right to the feature is missing, and the feature (the right cross-section) is missing.
+
+Thus the crop is INVALID. The relevant leader/dimension for FAI 39 reaches the crop border and is clipped; the touched feature is absent.
+
+Also, the top text "SPC CONTROL FOR ALL HEAT STAKE POST" is cut off (the "T STAKE POST" part is outside). And the second line "JIS-...10X" is cut.
+
+So the crop is missing: the right-side dimension values and tolerances for FAI 39/40/41, the leader lines to the right feature, the right cross-section feature, and the full header text.
+
+Now, the question asks to validate the crop containing "one coherent FAI annotation group". The red rectangle selects FAI 39. The crop must fully contain that group. It does not, because the dimension and leader and feature for FAI 39 are on the right and are cut off.
+
+Therefore valid = false.
+
+Now I need to provide expand_norm to fix it. The crop needs to expand to the right to include the right-side dimensions, leaders, and the right cross-section feature. Also possibly expand top to include the full header text? The header text "SPC CONTROL FOR ALL HEAT STAKE POST" — is that part of the FAI annotation group? It's a general note, not specifically tied to FAI 39. The requirement says "parameter/tolerance/feature-control-frame and description text". The header is a description text but it's a global note. Hmm. The instruction: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+The main issue is the right side. Let's figure out the expansion needed.
+
+Let me estimate coordinates in IMAGE 1. The image is 2337 wide (let's assume). Actually I don't know exact pixel dimensions. Let me look at the magenta rectangle in IMAGE 1. The magenta rectangle left edge is at x=0 (the image left edge? The magenta line on left is at x=0). The top edge at y=0. The right edge (vertical magenta line) at about x=1350. The bottom edge (horizontal magenta line) at about y=1700.
+
+Hmm, but I need normalized fractions of the current crop width/height. The current crop is IMAGE 2. Let me look at IMAGE 2 dimensions. IMAGE 2 appears to be the same aspect as the magenta region? The magenta region in IMAGE 1 is from x=0 to x=1350 (width 1350) and y=0 to y=1700 (height 1700). IMAGE 2 should be that region. Let's check IMAGE 2 content: top shows a partial feature-control frame "0.25 A B C" and "18" and a circle with crosshairs (the BM detail circle top). Then "AIL BM / ALE 20:1" (cut on left, should be "DETAIL BM / SCALE 20:1"). Then "SPC CONTROL FOR ALL HEAT / ANSI-114X ISO-114X JIS-1" (cut on right). Then the dimensions.
+
+Wait, in IMAGE 2 the left side shows "AIL BM" meaning "DETAIL BM" is cut on the left! In IMAGE 1, the magenta left edge is at x=0, but "DETAIL BM" text in IMAGE 1 is at the left? Let's look. In IMAGE 1, top-left there's "BM" and "0:1" which is the tail end of "DETAIL BM / SCALE 20:1" — actually in IMAGE 1 the left part shows "BM" at x~0-120 and "0:1" at x~0-100. So "DETAIL" is cut off in IMAGE 1 too (it's to the left of x=0). So the magenta rectangle's left edge at x=0 already cuts "DETAIL BM".
+
+Hmm wait, but in IMAGE 1, the leftmost visible text is "BM" and "0:1". So the full "DETAIL BM / SCALE 20:1" is mostly outside the magenta rectangle on the left. But that's the detail label, not part of the FAI group. The FAI group doesn't need the detail label.
+
+OK here's the thing. The crop's left edge cuts the detail label, but that's not part of the FAI 39 group, so it's not a problem per se (unrelated annotation being cut is fine, as long as it doesn't dominate). Actually the rule says reject if "unrelated neighboring annotations dominate". The detail label is small, not dominating.
+
+The real problem: the right side. The FAI 39 group's dimension (right 2.50 +0.29/-0.07) and its leader and feature are cut off.
+
+So I need to expand right significantly to include the right cross-section feature. In IMAGE 1, the right cross-section (the hatched profile) is at x from ~1680 to 2337 (right edge). The right dimension text "2.50 +0.29" is at x~1290-1660. The leader line from the dimension goes to the feature at x~1680+.
+
+So to include the right feature, the crop right edge must extend to at least x~2337 (the full right cross-section). Currently right edge at x=1350. The crop width is 1350. To extend right edge to 2337, we need to add (2337-1350)/1350 = 987/1350 ≈ 0.731 = 731 normalized.
+
+But wait, do we need the entire right cross-section? The leader for the right 2.50 dimension points to the top surface of the right profile. Let's see where the leader arrowhead is. In IMAGE 1, the right "2.50" leader line: from the dimension text, a line goes right and down to the top edge of the right profile at around x=1730, y=1270. The arrowhead/terminal is at the feature. The feature is the top horizontal line of the right profile. So we need to include at least up to x~1730-1800 to show the touched feature portion.
+
+Hmm, but the rule: "a visible local portion of every component feature touched by those arrows." So we need a visible portion of the right profile's top surface. The top surface line of the right profile starts at x~1680 (the left edge of the profile) and extends right. So we need to include x up to maybe 1800-1900 to show a portion.
+
+Let's look at the right profile in IMAGE 1. The hatched region (the cross-section) on the right: its leftmost vertical edge is at about x=2150? Let me look. Actually there are two hatched regions on the right: one upper (the step) and one lower. The upper hatched region's left edge is at about x=2150, y=1270-1380. The lower hatched region's left edge at about x=1880, y=1410-1530. Hmm.
+
+Let me look at the leader lines on the right more carefully. The right "2.50" dimension: the leader line goes from the text rightward to about x=1680 then down to y=1270 then right to x=1730? It's a zigzag leader. The terminal touches the top surface of the upper step. The upper step's top surface is at y=1270 from x=1730 to x=2150. So we need to include that.
+
+The right "1.62" dimension leader goes to the surface at y=1370 (the step down). The right "1.26" leader goes to the surface at y=1410.
+
+This is getting too detailed. The point is the crop is missing a lot on the right. The expansion needed on the right is large.
+
+Let me think about normalized values. The current crop width = 1350 (in IMAGE 1 coords, from 0 to 1350). To include the right feature, we need right edge to go to maybe x=2337 (full image width) to be safe, or at least to ~1900. Let's say we want to include the right profile's left portion. The right profile's leftmost extent (the lower hatched region left edge) is ~1880. The upper step left edge ~2150. To show "a visible local portion of every component feature touched by those arrows", we need the touched surfaces. The 2.50 leader touches the top surface at y=1270 which spans x=1730-2150. So we need x up to ~1800 to show a portion of that surface. The 1.62 leader touches surface at y=1370 spanning x=1730-2130 (the step). The 1.26 leader touches surface at y=1410 spanning x=1730-2130.
+
+Hmm, but actually the leaders' terminals: let's look. In IMAGE 1, the right "2.50" leader: I see a line from the text going right to x~1680, then down to y~1270, then right to x~1730 where it meets the top edge. Actually the top edge of the upper step in the right profile — where does it start? The right profile drawing: there's a vertical line at x~2150 (the left edge of the upper hatched block) going from y~1270 to y~1380. The top edge of that block is at y~1270 from x~1730? No wait.
+
+Let me look at the right profile shape. I'll describe what I see: There's a horizontal line at top y~1270 from x~1730 to x~2150. Then vertical line down at x~2150 from y~1270 to y~1380. Then horizontal line at y~1380 from x~2150 leftward to x~2130? Hmm there's a step. Then the hatching.
+
+Actually, I realize I'm overanalyzing the exact pixel positions. The key conclusion: the crop is invalid because the right-side dimension values, tolerances, leaders, and the right feature are all cut off. The expansion needed on the right is substantial.
+
+Let me estimate the right expansion as a fraction of crop width. Crop width = 1350. We need to add from x=1350 to maybe x=2337 (to be safe and include the whole right profile and the full dimension text). That's 987 px = 987/1350 = 0.731 → 731. But maybe we don't need the full width; we need the dimension text (which ends at ~1660) plus the leader plus a portion of the feature (to ~1900). So right edge to ~1900 means add 550 px = 550/1350 = 0.407 → 407. Hmm.
+
+But the dimension text "2.50 +0.29" — the "+0.29" ends at about x=1660. The "-0.07" ends at ~1660. The leader from there goes to the feature. The feature portion we need is the top surface, which starts at x~1730. So to show a portion of the feature, right edge to ~1900 is enough. So add ~550 px → ~407 normalized.
+
+But also, the top header text "SPC CONTROL FOR ALL HEAT STAKE POST" is cut on the right (the "T STAKE POST" is outside). Is that header part of the FAI group? It's a global note "SPC CONTROL FOR ALL HEAT STAKE POST / ANSI-114X ISO-114X JIS-...10X". This is a description text that applies to all the SPC markers. The requirement includes "description text". Hmm. But it's a global note, not specific to FAI 39. The instruction says the crop must contain "parameter/tolerance/feature-control-frame and description text". I think the description text refers to text describing the feature/parameter, like the dimension value. The global SPC note is arguably part of the annotation context. To be safe, including it would require expanding right to ~1780 (where "POST" ends) and the second line "10X" ends at ~1490. So right edge to ~1780 covers the header too. That's add 430 px = 318 normalized. Combined with feature need (~407), the feature need dominates.
+
+Hmm, but actually wait. Let's reconsider whether the header text is "unrelated neighboring annotation" that we don't need. The header is centered over the whole dimension table. It's a note. I think it's reasonable to consider it part of the annotation group context, but it's not strictly required for the FAI 39 group. The decisive missing elements are the right dimension + leader + feature.
+
+Let me also check the top: does the crop need to expand top? The top of the crop in IMAGE 1 is y=0. The header text "SPC CONTROL..." is at y~900-960, well inside. The detail circles at top are at y=0-520, inside. So top is fine. Actually the top of the magenta rectangle is at y=0 which is the image top, so we can't expand top anyway (it's at the border). The detail circle BM is partially in the crop (top-left). That's fine, it's the feature for the BM detail, not for FAI 39.
+
+Bottom: the magenta bottom is at y~1700. The dimensions end at y~1530 (the (0.00) and 1.26). The feature-control frame at the bottom (the ⊕ 0.21 A B C with FAI 202) is at y~1970, outside the crop (below). Is that part of FAI 39 group? No, that's a separate positional tolerance with its own FAI 202. Not part of FAI 39. So we don't need to expand bottom for that. But does the FAI 39 group's leader go down? No. So bottom is fine. Actually wait, the left cross-section feature for the left dimensions is at y~1380-1530, inside the crop. Good. The right cross-section feature for the right dimensions is at y~1270-1530, inside vertically but cut horizontally. So bottom is fine.
+
+Left: the magenta left is at x=0. The left dimensions' leaders go left to the left cross-section at x=0-180. In IMAGE 1, the left cross-section hatched region is at x=0-180, y=1380-1530. Is it fully inside? The left edge of the crop is x=0, and the left cross-section's left edge might be at x=0 or slightly negative (cut). In IMAGE 1, the left hatched region appears to start at x=0 (the image edge) — actually it shows hatching from x=0 to x=180. The leader terminals for left dimensions touch the left profile's right edge at x~180-320. Those are inside. So left is fine for the left dimensions. But the left dimensions (FAI 76, 75, 100) are not the selected FAI (39). The selected FAI is 39, which is on the right. So we don't even need the left feature for the selected group. But the crop includes the left dimensions and left feature anyway, which is fine (extra context, not dominating).
+
+Hmm wait, but the rule says the crop must contain "one coherent FAI annotation group". It can contain extra stuff as long as unrelated annotations don't dominate. The left dimensions are related (same table). It's fine.
+
+So the only fix needed is expand right.
+
+Let me settle on a right expansion value. I'll aim to include the right dimension text fully, the leaders, and a clear portion of the right feature. Let's look at IMAGE 1 right profile extent again. I'll guess the right profile's leftmost visible line (the lower hatched block left edge) is at about x=1880, and the upper step's top surface left end at about x=1730. To show a "visible local portion" of the touched features, including up to x~2000 would show the upper step top surface (1730-2000) and the lower block left part. That's add (2000-1350)=650 px = 650/1350 = 0.481 → 481.
+
+But to be safe and to also include the full header text and the full right dimension text and a good chunk of the feature, maybe expand right to the full image width 2337? That would be 731. But that might include too much unrelated stuff? The right side beyond the profile is empty (white). So expanding to 2337 just adds white space and the full profile. That's fine, not dominating.
+
+Hmm, but the instruction's expansion values are normalized fractions of current crop width. The current crop width in IMAGE 2 — I should think in terms of IMAGE 2's pixel width. But IMAGE 2 is the crop, so its width corresponds to the magenta width in IMAGE 1 = 1350 (in IMAGE 1 coords). The expansion is added to the crop. So expand_norm right = (additional width needed) / (current crop width) * 1000.
+
+If I want the new right edge at IMAGE1 x=2337, additional = 2337-1350 = 987. 987/1350*1000 = 731.
+
+If I want new right edge at IMAGE1 x=2000, additional = 650, 650/1350*1000 = 481.
+
+I think a reasonable value to ensure the feature is visible and the dimension text is complete is around 500-750. Let me look at where the right dimension text ends and where the feature is. The right dimension text "+0.29" right edge ~1660. The leader then goes to feature. The feature top surface from 1730 to 2150. To show a portion, say up to 1900. So new right edge 1900 → additional 550 → 407. But the leader line itself: the leader from the dimension text to the feature — in IMAGE 1, the right "2.50" leader appears as a line from x~1680 (right of text) going right a bit then down then right to the feature top at x~1730. So the leader is between 1660 and 1730, mostly inside if we go to 1900. Good.
+
+But the right "1.62" and "1.26" leaders: they go to the step surfaces. The 1.62 leader terminal at the step top y~1370, x~1730-2130. The 1.26 leader terminal at y~1410, x~1730-2130. So including to 1900 shows portions.
+
+I'll go with right expansion ~ 500 to be safe (new edge ~1350+675=2025). That shows the upper step top surface (1730-2025) and the lower block left edge (1880-2025). Good.
+
+Hmm, but I worry the grader expects a specific answer. The task is somewhat open. Let me think about what's "correct". The crop is invalid. The missing items: the right-side dimension values/tolerances for FAI 39 (and 40, 41), the leader lines to the right feature, the right feature itself, and possibly the full header text.
+
+Actually, maybe I should reconsider: maybe the FAI 39 group is meant to be associated with the LEFT dimension? Let's double check by looking at the SPC codes. Left: BS, BR, CO. Right: AL, AM, AN. The FAI numbers left: 76, 75, 100. Right: 39, 40, 41. There's no obvious pattern linking FAI 39 to left or right by number. The spatial placement is the key. FAI 39/SPC AL is at x~1130-1290 (the red box at x~1110-1200, SPC AL at x~1210-1290). The left "2.50" text is at x~330-480, with FAI76/SPCBS at x~740-940. The right "2.50" text is at x~1290-1430. So FAI39/SPCAL (x~1110-1290) is immediately to the LEFT of the right "2.50" text (x~1290). And FAI76/SPCBS (x~740-940) is immediately to the RIGHT of the left "2.50" text (x~330-480)? There's a gap 480-740. Hmm.
+
+Wait, let's look at the layout columns more carefully in IMAGE 1. I'll list x-ranges (approx) for the top row:
+- left "2.50": 330-480
+- left "+0.19/-0.10": 510-700
+- FAI76 circle: 740-830
+- SPCBS circle: 840-940
+- FAI39 circle (red): 1110-1200
+- SPCAL circle: 1210-1290
+- right "2.50": 1290-1430
+- right "+0.29/-0.07": 1480-1660
+
+So FAI39/SPCAL sits between the left SPCBS and the right "2.50". The gap between SPCBS (ends 940) and FAI39 (starts 1110) is 170. The gap between SPCAL (ends 1290) and right "2.50" (starts 1290) is 0 (touching). So FAI39/SPCAL is directly attached to the right "2.50" on its left side. Yes, that confirms FAI39 belongs to the right dimension.
+
+Similarly second row: left "1.62" 330-480, +0.19/-0.12 510-700, FAI75 740-830, SPCBR 840-940, [gap], FAI40 1110-1200, SPCAM 1210-1290, right "1.62" 1290-1430. Same pattern: FAI40/SPCAM attached to right "1.62".
+
+Third row: FAI100/SPCCO left, FAI41/SPCAN attached to right "1.26".
+
+Great, so FAI 39's dimension is the right "2.50 +0.29/-0.07", which is cut off in the crop. Confirmed invalid.
+
+Thus missing: right dimension value & tolerance for FAI 39 (and the leaders and feature). Also the header text right part.
+
+Now for the expansion, I'll provide right expansion. Let me also double check the left side: the crop's left edge at x=0 cuts the left cross-section? In IMAGE 1, the left cross-section hatched region: I see hatching lines from x=0 to x=180 at y=1380-1530, and the leader terminals for left dimensions touch at x~180-320. The left profile's left edge might be at x<0 (cut). But that's the left feature, not needed for FAI 39. So left cut is acceptable (it's a feature for the left dimensions which are extra context; but the rule says "a visible local portion of every component feature touched by those arrows" — "those arrows" refers to the arrows of the FAI annotation group being validated, i.e., FAI 39's leader. FAI 39's leader goes right, not left. So the left feature is not "touched by those arrows". So left cut is fine.)
+
+But wait, the left dimensions (FAI 76 etc.) are also in the crop. Are they "unrelated neighboring annotations" that dominate? They're part of the same table, related. They don't dominate (they're balanced with the right side which we're adding). It's fine.
+
+Hmm, but actually, if we expand right to include the right feature, then the crop will contain both left and right features and both dimension columns, which is the full coherent table. That's good and coherent.
+
+Now, do we need to expand left to include the left feature fully? The left feature is partially cut at x=0. But it's not part of FAI 39's group. The rule about "touched feature absent" applies to the validated group's arrows. Since FAI 39's arrow goes right, left feature absence is OK. However, the left dimensions' arrows (FAI 76 etc.) touch the left feature, and those dimensions are in the crop. If we consider the crop as containing multiple FAI groups, then the left groups' features should also be visible. The left feature is partially visible (the hatched region from x=0 to 180 is visible, and the leader terminals at x~180-320 are visible). So a local portion is visible. Good enough.
+
+Thus only right expansion needed.
+
+Let me also verify top: the header text top line "SPC CONTROL FOR ALL HEAT STAKE POST" — in the crop (IMAGE 2) it shows "SPC CONTROL FOR ALL HEAT" then cut. The full text ends at "POST" at x~1780 in IMAGE 1. So to include the full header, right edge must be ≥1780. That's additional 430 → 318 normalized. Our right expansion of ~500 (new edge 2025) covers this. Good.
+
+Second header line "ANSI-114X ISO-114X JIS-...10X" ends at "10X" x~1490, covered.
+
+So right expansion ~500 covers header + right dimensions + leaders + feature portion.
+
+Let me refine the right expansion number. I'll compute new right edge target = 2050 (to show a good portion of the right feature including the upper step top surface and the lower block left edge). Additional = 2050-1350 = 700. 700/1350*1000 = 518. Round to ~520.
+
+Alternatively target = 2150 (the upper step left vertical edge) to show the full upper step top surface. Additional = 800 → 593.
+
+I think a value around 500-600 is reasonable. I'll pick 550.
+
+Hmm, but I'm not confident about exact pixel coords. Let me look at IMAGE 1 dimensions. The image as displayed — I don't have exact pixel width. Let me estimate from the layout. The right profile's right edge is at the image right edge (x = W). The right profile's left edge (lower block) at maybe 0.80*W? If W=2337, 0.80*

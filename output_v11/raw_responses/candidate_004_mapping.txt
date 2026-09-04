@@ -1,0 +1,125 @@
+Let me carefully analyze the evidence and the images.
+
+The selected marker is F0, with bbox [1150,1150,1250,1250]. Looking at IMAGE 2, F0 is the red box around the FAI marker containing "FAI 69". So the FAI number is 69.
+
+Now I need to build the FAI annotation group for F0.
+
+Looking at the clean image (IMAGE 1), the FAI 69 marker is part of a group:
+- "SECOND TERRACE" description text
+- Tolerance values: -0.21, +0.15, -0.08
+- Box "15"
+- FAI 69 circle
+- SPC BL circle
+- 100% triangle
+
+So the annotation group for F0 (FAI 69) includes:
+- The FAI marker F0 (FAI 69)
+- SPC letter: BL (the SPC circle next to it)
+- Parameter/tolerance text: -0.21, +0.15, -0.08
+- Description text: SECOND TERRACE
+- Box 15 (this is a reference number, maybe part of the annotation? Actually the box 15 and 16 are reference numbers. Hmm.)
+
+Wait, let's look at the structure. In the clean image, near the SECOND TERRACE annotation we have:
+- "SECOND TERRACE"
+- "-0.21 +0.15"
+- "-0.08"
+- [15] (FAI 69) (SPC BL) (100% triangle)
+- [16] (FAI 204)
+
+So the FAI 69 marker is associated with the SECOND TERRACE measurement. The tolerance values are -0.21, +0.15, -0.08. The SPC letter is BL. The 100% triangle is a sampling indicator.
+
+Now, is there a leader line connecting this annotation to a part? Looking at the clean image, the SECOND TERRACE text has a leader line going left to the cross-section view (the hatched profile on the left). Let's look. The text "SECOND TERRACE" is at around y=980. There's a horizontal line L10/L11 at y~980 from x=478 to x=1015. That line connects the cross-section profile (the hatched shape on the left at around x=360-720) to the text "SECOND TERRACE". Actually the leader line for SECOND TERRACE goes from the text leftward to the part.
+
+Hmm, but wait. Let's look at the geometry. The cross-section profile (hatched) is at left around x=360-720, y=970-1035. The text "SECOND TERRACE" starts at x=934. The line L10 (478,980 to 1014,980) and L11 (475,983 to 914,983) connect the profile to the text. So that's the leader for the SECOND TERRACE annotation.
+
+But does that leader have an arrowhead? Looking at the clean image, the line from the profile to "SECOND TERRACE" doesn't seem to have an arrowhead at the profile end; it's just a leader line touching the part. Hmm. Actually in the clean image, the line goes from the right edge of the hatched profile (around x=720) horizontally to the text. There's no visible arrowhead.
+
+Wait, but the question says "All leader segments connected to that annotation" and "All terminal arrowheads of those leaders" and "The smallest useful local component/cross-section touched by each arrowhead."
+
+Let me look at the evidence for arrowheads. H0 is at [0,609,77,716] which is the 100% triangle on the left (the one near "15/16" at top left). H1 is at [2023,962,2055,1047] which is the arrowhead on the right pointing up (the one near the J shape). H2 is at [1351,1145,1462,1249] which is the 100% triangle next to SPC BL.
+
+Hmm, none of these arrowheads seem to be the terminal of a leader for the SECOND TERRACE annotation. Let's look more carefully.
+
+Actually, wait. Let's reconsider what F0's annotation is. F0 = FAI 69. The annotation group is the SECOND TERRACE measurement. The leader for this measurement... Let's look at the clean image again. The "SECOND TERRACE" text has a line going left to the hatched profile. That line is the leader. Does it have an arrowhead? In the clean image I don't see an arrowhead at the left end of that line. The line just touches the profile.
+
+Hmm, but maybe the leader is considered to terminate at the profile without an arrowhead. In that case arrowhead_ids would be empty, and target would be the profile (the cross-section).
+
+But wait, the evidence H2 [1351,1145,1462,1249] is the 100% triangle. That's not an arrowhead of a leader; it's a sampling triangle. The 100% triangle is part of the annotation (sampling indicator), not a leader arrowhead.
+
+Let's look at the G triangles. G8 [1255,1152,1352,1250] and G9 [1356,1152,1462,1244] are the 100% triangle (the triangle outline). Actually the 100% triangle in the clean image is at around x=1350-1460, y=1150-1250. So G9 is the 100% triangle. H2 also corresponds to that region.
+
+Hmm, this is getting complicated. Let's think about what the "leader" for the SECOND TERRACE annotation is.
+
+Actually, maybe I'm overcomplicating. Let's look at the structure of these FAI annotations in this drawing. There are two similar blocks:
+
+Block 1 (top): "4X 0.49 ±0.10 (FAI 191) (SPC GE)" with a leader going down-left to a cross-section (the K-K section arrow area). The leader is L29/L30 (vertical line at x~184 from y=651 to 926) with arrowheads? There's an arrowhead at the bottom of that vertical line in the clean image (the black arrow pointing down at around x=184, y=920). And at the top there's a horizontal line L67 (64,399 to 183,402) connecting to the "4X 0.49" text. So that leader has an arrowhead at the bottom touching the part.
+
+Block 2 (middle): "SECOND TERRACE -0.21 +0.15 -0.08 [15] (FAI 69) (SPC BL) (100%)" with a leader going left to the hatched profile. The leader is L10/L11 horizontal line. Does it have an arrowhead? In the clean image, I see the line from the profile to the text. At the profile end (left), no arrowhead visible. Hmm.
+
+Wait, actually let's look at the clean image more carefully. The hatched profile for SECOND TERRACE is at left (x=360-720, y=970-1035). The line L10/L11 goes from x=478 to x=1014 at y~980. So the line starts at x=478 which is inside the hatched profile region (the profile spans 360-720). So the line touches the profile. No arrowhead.
+
+Hmm, but the instruction says "All terminal arrowheads of those leaders." If there's no arrowhead, then arrowhead_ids is empty.
+
+But then "The smallest useful local component/cross-section touched by each arrowhead" - if no arrowhead, then target is the part touched by the leader line endpoint. The leader line endpoint at x=478 is within the hatched profile. So target would be that profile.
+
+But there's no R* (green) evidence in the dictionary! Let me check. The evidence dictionary has F0, H0, H1, H2, T*, L*, G*. No R* at all. So target_ids would be empty, and we use fallback box for target.
+
+OK here's my plan. Let's look at the evidence IDs that exist and map them.
+
+F0 = FAI 69 marker. Good.
+
+SPC letter: The SPC circle next to FAI 69 contains "BL". Is there an OCR text for "BL"? Looking at T list: T10 is "Ne (a." at [1152,1098,1467,1264] which is a garbled OCR of the region containing "-0.08 (FAI 69) (SPC BL) (100%)". Hmm. There's no clean OCR for "BL". The SPC letter is "BL" but no dedicated OCR ID. Hmm.
+
+Wait, the SPC letter is read from the SPC circle. In the clean image, the SPC circle next to FAI 69 says "SPC / BL". So spc_letter = "BL". But there's no OCR text ID for it specifically. The instruction says "Associated SPC letter if present." We can set spc_letter = "BL" as a string value (not an ID). The spc_letter field is a string, not an ID list. Good.
+
+Now annotation_ids: these are the OCR text IDs that form the annotation (parameter, tolerance, description). Let's list the relevant OCR texts:
+
+- T6 = "SECOND TERRACE" [934,963,1467,1001] - description
+- T8 = "+O.15" [1163,1034,1345,1072] - tolerance
+- T9 = "-0.21" [941,1069,1110,1107] - tolerance
+- T10 = "Ne (a." [1152,1098,1467,1264] - garbled, this is the "-0.08" line plus the circles? Actually T10 bbox covers y=1098-1264 which includes "-0.08" and the FAI/SPC circles row. The text "Ne (a." is garbage. Hmm.
+
+Wait, where is "-0.08"? In the clean image, "-0.08" is at around y=1100, x=1150-1340. T10 bbox [1152,1098,1467,1264] covers that area but the OCR text is "Ne (a." which is wrong. Hmm. Actually maybe T10 is the OCR of the whole block including the circles. This is messy.
+
+Let's look at the clean image text positions:
+- "SECOND TERRACE" at y~980
+- "-0.21" at y~1085 (left), "+0.15" at y~1050 (right)
+- "-0.08" at y~1110 (right)
+- [15] (FAI 69) (SPC BL) (100%) at y~1190
+- [16] (FAI 204) at y~1290
+
+OCR:
+- T6 "SECOND TERRACE" [934,963,1467,1001] ✓
+- T8 "+O.15" [1163,1034,1345,1072] ✓
+- T9 "-0.21" [941,1069,1110,1107] ✓
+- T10 "Ne (a." [1152,1098,1467,1264] - this is the "-0.08" + circles region, garbled.
+
+Hmm, so "-0.08" doesn't have a clean OCR. T10 is the closest but it's garbled and covers too much.
+
+This is tricky. The instruction: "Every selected ID must exist verbatim in the Evidence dictionary." So I can only use T10 if I want to represent "-0.08", but T10's text is "Ne (a." which is not "-0.08". Hmm.
+
+Actually, maybe I should think about what the "parameter_text_ids" and "description_text_ids" should contain. The parameter/tolerance values are -0.21, +0.15, -0.08. The description is "SECOND TERRACE".
+
+For parameter_text_ids, I'd include T8 (+0.15), T9 (-0.21), and for -0.08 there's no clean ID. T10 is garbled. Hmm.
+
+Let me look at the IMAGE 2 to see which OCR boxes (purple T*) are drawn. In IMAGE 2, I see purple boxes around:
+- "MOUNTS OFFSET" (T0)
+- "15" (T1)
+- "16" (T2)
+- "4x 0.49 +0." (T3)
+- "SECOND TERRACE" (T6)
+- "+O.15" (T8)
+- "-0.21" (T9)
+- "-0.08" - is there a purple box? In IMAGE 2 I see a purple box around "-0.08"? Let's look. There's a purple box at around [1152,1098,...] which is T10. Hmm, in IMAGE 2 the "-0.08" text appears to have a purple box around it? Looking carefully, T10's bbox in IMAGE 2 is the big purple rectangle covering "-0.08 (FAI 69) (SPC BL) (100%)". Actually in IMAGE 2 I see a purple rectangle around the "-0.08" line and the circles row combined? Let's look: there's a purple box at y~1098-1264 spanning x~1152-1467. Yes that's T10, the big one. And within it there's also a red box (F0) around FAI 69, a teal box (G8) around SPC, etc.
+
+Hmm wait, but in IMAGE 2 I also see a separate purple box around "-0.08"? Let's look at the coordinates. T9 is "-0.21" at [941,1069,1110,1107]. In IMAGE 2 there's a purple box around "-0.21" labeled T9. And there's a purple box around "+O.15" labeled T8. For "-0.08", I see in IMAGE 2 a purple box? The text "-0.08" is at around x=1150-1340, y=1098-1130. T10's bbox starts at y=1098. So T10's purple box top edge is at the "-0.08" line. So T10 includes "-0.08" in its box but the OCR text is wrong.
+
+This is a mess. Given the ambiguity, I think the safest approach is to include the OCR IDs that clearly correspond to the annotation's text: T6 (description), T8, T9 (tolerances). For -0.08, since T10 is garbled and covers the circles too, I might include T10 as well? But T10's text "Ne (a." is not useful. Hmm.
+
+Actually, let's reconsider. The task is to "Build exactly one complete FAI annotation group for F0." The annotation group should contain the parameter, tolerance, description text. The OCR evidence is what we have. We should select the OCR IDs that represent these texts. Even if T10 is garbled, it's the only OCR covering "-0.08". But including a garbled ID might be wrong.
+
+Let me look at the IMAGE 2 purple boxes more carefully to understand the intended grouping. In IMAGE 2, the purple boxes (T*) that are part of the SECOND TERRACE annotation block appear to be: T6 (SECOND TERRACE), T8 (+O.15), T9 (-0.21), T10 (the big one covering -0.08 and circles). Hmm but T10 also covers the FAI and SPC circles which are not text.
+
+Actually, you know, I think the OCR T10 is just a bad OCR of the line "-0.08" plus maybe the "100%"? No, 100% is in the triangle. Hmm. The bbox [1152,1098,1467,1264] is tall (166 px) which spans two lines: "-0.08" (y~1100-1130) and the circles row (y~1150-1250). So T10 is a multi-line OCR that failed.
+
+Given the difficulty, I'll make a decision: I'll include T6, T8, T9 in the annotation/parameter/description IDs, and I'll also include T10 because it's the OCR that contains the "-0.08" tolerance (even if garbled, it's the evidence for that line). Hmm, but the instruction says parameter_values should list the values. I can list parameter_values as ["-0.21

@@ -1,0 +1,16 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. Inside it, I see:
+- The text "4X 3.000 +0.15 -0.16" (partially cut at top? Let's look. The top of the magenta rectangle seems to cut through the "4X 3.000" text. Actually looking carefully, the "4X 3.000" text appears to be partially inside the magenta box but the top edge of the magenta box cuts through it. Let me look. The magenta top edge is at a certain y. The text "4X 3.000" is right at the top edge, partially clipped. The "+0.15" is above the magenta box top edge? Let's look. In IMAGE 1, the "+0.15" appears above the magenta line, and "-0.16" appears just below the magenta line. Hmm.
+
+Wait, let's look at the coordinates. The magenta rectangle top edge is around y=1043 (in the image pixel coordinates). The text "4X 3.000" is at around y=1043 too, so it's right at the boundary. The "+0.15" is at y=1003, which is above the magenta top edge. The "-0.16" is at y=1073, inside.
+
+So the tolerance text "+0.15" is partially outside the crop (above the top edge). In IMAGE 2, the top shows "4X 3.000" cut off at the very top (we see "4X 3.000" partially, the top of the digits is cut). And "-0.16" is visible. But "+0.15" is NOT visible in IMAGE 2. So the tolerance is incomplete.
+
+Also, the leader lines: There's a vertical dimension line on the left with arrowheads. In IMAGE 1, the left vertical dimension line goes from the top (above magenta? The top of that line is at the magenta top edge or above?). Let's look. The left vertical line with arrows: top arrow at around y=1293, bottom arrow at around y=1433. The line extends up to the magenta top edge at y=1043? Actually the line seems to start at the magenta top edge. Hmm, but the dimension it's measuring - the top reference line is at y=1263 (the horizontal line from the feature). The vertical line goes from y=1043 (top of magenta) down to y=1433. Wait, but the dimension arrow top is at y=1293. So the line above the arrow (from 1043 to 1293) is just an extension line? Actually it's the dimension line extending up. Hmm.
+
+Let's look at the right vertical dimension line. In IMAGE 1, the right vertical line with arrows: top at around y=1133 (a horizontal line goes right to the "4X 0.49" text), bottom arrow at y=1433 and y=1473. The line extends down to y=1553 (below the magenta bottom edge? The magenta bottom edge is at y=1553). Let's check. The magenta bottom edge is at around y=1553. The right vertical line in IMAGE 1 goes from y=1133 down to y=1553, with arrowheads at y=1433 and y=1473. So the line bottom is at the magenta edge.
+
+Now in IMAGE 2, the right vertical line: we see it from top (cut at top, the horizontal line to "4X 0.49" is cut off - we see a horizontal line at top right that's the start of the leader to the text but the text "4X 0.49 ±0.10" is NOT in IMAGE 2). The right vertical line in IMAGE 2 goes from top edge down to bottom with arrowheads. The bottom of the line in IMAGE 2 - does it get clipped? In IMAGE 2 the right line bottom arrow is at the bottom but the line continues a bit. Let's look. In IMAGE 2, the right vertical line bottom arrow is near the bottom, and the line extends slightly below. It looks like it's mostly contained.
+
+But the key issue: the dimension text "4X

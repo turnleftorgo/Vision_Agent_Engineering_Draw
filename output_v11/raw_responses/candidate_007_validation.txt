@@ -1,0 +1,36 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. Inside it, I see:
+- A section drawing (SECTION BX-BX) on the left
+- "FOURTH TERRACE" text
+- "4X -0.60 +0.26 -0.34" tolerance text
+- A box "15" with FAI 176 circle, SPC FR circle, and 100% triangle
+- A box "16" with FAI 205 circle (the red rectangle highlights this FAI 205)
+
+Now let me look at the leader lines. The FAI 205 is associated with the "16" box. But where is the leader line for FAI 205? Let me look carefully.
+
+Looking at IMAGE 1, the magenta rectangle's right edge cuts through the SPC FR circle (the one next to FAI 176). The SPC circle is partially cut off by the magenta border. In IMAGE 2, the SPC circle is also cut off at the right edge (we see "SP" and "FR" partially).
+
+Wait, but the red rectangle (selected FAI marker) is FAI 205, which is the one in row 16. Let me think about what annotation group FAI 205 belongs to.
+
+Actually, the structure here is: each FAI number corresponds to a feature. The "15" and "16" boxes are likely operation numbers or feature numbers. The FAI circles are the inspection points.
+
+Let me look at the leaders. In IMAGE 1, I see a leader line for the "3X 0.18 ±0.10" annotation below, which has arrows pointing to the section BZ-BZ drawing. That's outside the magenta rectangle (below it).
+
+For the magenta rectangle content, the "4X -0.60 +0.26 -0.34" text and the FAI 176 / FAI 205 - where do their leaders go? I need to look for leader lines.
+
+Hmm, looking at the section BX-BX drawing, there's a horizontal line going from the drawing to "FOURTH TERRACE". That's a leader for the terrace label, not for the FAI.
+
+Let me look more carefully. The FAI markers 176 and 205 - do they have leader lines? In typical drawings, the FAI circle is placed next to the dimension/feature it references, sometimes with a leader. Here, the FAI 176 and 205 are placed to the right of the "15" and "16" boxes, which are to the right of the dimension text. There's no obvious leader line from these FAI circles to a feature within the crop.
+
+Wait, but the rule says: "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+If the FAI 205 has no leader line at all (it's just a marker associated by proximity to the "16" box and the dimension), then maybe the leader is implicit. But the rule also says "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent."
+
+Let me look at the SPC circle. In the magenta rectangle, the SPC FR circle (next to FAI 176) is cut by the right border. In IMAGE 2, we see "SP" and "FR" cut off. So the SPC circle is NOT fully contained. The rule says the crop must fully contain "associated SPC letter if present". The SPC circle for FAI 176 is cut off.
+
+But wait, the selected FAI is 205 (red rectangle), which is in row 16. Row 16 only has the FAI 205 circle, no SPC circle. So for FAI 205, there's no SPC letter. Hmm.
+
+But the rule says "fully contains one coherent FAI annotation group". The group for FAI 205 includes the "16" box and the FAI 205 circle. Does it include the SPC? Row 16 has no SPC. So that's fine.
+
+But the issue is the right border cutting the SPC FR circle of row 15. Is that part of the FAI 205 group? No, that's row 15's group. The rule says "unrelated neighboring annotations dominate" - but here the SPC

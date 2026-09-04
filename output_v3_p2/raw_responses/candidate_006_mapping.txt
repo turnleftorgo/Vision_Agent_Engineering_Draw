@@ -1,0 +1,158 @@
+The user wants me to build a FAI annotation group for marker F0. Let me carefully examine the evidence.
+
+F0 is at bbox [1150,1150,1250,1250]. Looking at the image, this corresponds to the FAI marker with number "112" (the top-left circle in the cluster near the dimension "Ø 2.05 ±0.05"). Wait, let me look carefully.
+
+In IMAGE 1, near the dimension "Ø 2.05 ±0.05" there are four circles: FAI 112, SPC DA (top row), FAI 113, SPC DB (bottom row). The F0 bbox is [1150,1150,1250,1250]. Let me check coordinates. The image is 2400 wide roughly? Let's look at the OCR text positions. T6 is at [674,1151,1349,1318] which is the "Ø 2.05 ±0.05" text. The FAI circles are to the right of that text. In IMAGE 2, the red box (F0) is around the top-left circle which contains "FAI 112". Let me verify with coordinates. The red box in image 2 appears around x=1150-1250, y=1150-1250. Yes that's the FAI 112 circle.
+
+So F0 = FAI 112. The associated SPC letter is "DA" (top-right circle). The dimension annotation is "Ø 2.05 ±0.05" with feature control frame "⊕ 0.2 A B C" and the count "18".
+
+Now the leader: The dimension annotation has a leader line going from the text to the part. Looking at IMAGE 1, there's a leader from the "PC" box? Actually there's a leader arrow pointing to the circle (the hole in detail BN). Let's look. The annotation "Ø 2.05 ±0.05" has a leader line that goes down-left to the circle (the hole). In IMAGE 2, the blue lines L28, L31, L32, L53, L54 form the leader path. Let's trace.
+
+Actually, look at the leader in IMAGE 1: There's a line from the "PC" box going down to a triangle arrowhead (the black triangle at around (590,1180)), then a line from that triangle going down-left to another arrowhead at the circle (around (480,1340)). Hmm.
+
+Wait, let's look more carefully. In IMAGE 1, the "PC" box is at top. A line goes from PC box down to a black filled triangle (arrowhead) at about (590, 1180). Then from that triangle, a line goes diagonally down-left to another black filled triangle at about (480, 1340) which points at the circle (the hole in detail BN).
+
+Hmm, but actually the leader for the dimension typically points from the dimension text to the feature. Let's look at the structure. The dimension text "Ø 2.05 ±0.05" is at right. The leader line connects the text to the feature. In IMAGE 1, I see a line from the left side of the dimension text going left to the triangle at (590,1180)? Actually the triangle at (590,1180) is the arrowhead of the leader that points... hmm.
+
+Let's look at the cyan arrowhead candidates H0, H1, H2. H0 = [576,1154,627,1208] which is the triangle at (590,1180). H1 = [1812,1195,1868,1246] which is the arrowhead at the "B" datum (right side). H2 = [2285,1367,2334,1421] which is the arrowhead at "C" datum (right side).
+
+So H0 is the arrowhead near the dimension. The leader from the dimension text to the feature: In IMAGE 1, the line from the dimension text's left edge goes to the triangle H0? Actually the triangle H0 is at the left of the dimension text. Then from H0 a line goes down-left to the circle.
+
+Let's look at the blue lines in IMAGE 2 around there. L28 = [479,1202,597,1348] points [[479,1347],[596,1202]] - this is the diagonal line from the circle area up to the triangle H0. L31, L32 similar. L53 = [538,1225,623,1304] points [[538,1225],[622,1303]] - hmm that's a short diagonal. L54 = [600,1278,668,1372] points [[600,1278],[667,1371]] - diagonal.
+
+Hmm, this is getting confusing. Let's look at the actual leader in IMAGE 1. The leader line for the dimension: I see a line starting at the left of "Ø 2.05" going left a bit then there's the triangle H0 (black filled triangle pointing up-left?). Actually in IMAGE 1, the black triangle at (590,1180) is pointing up (it's the arrowhead of the leader from PC? No, PC box line goes down to it).
+
+Let me look at the PC box. PC box at about (690,1000). A line goes from PC box left side down to (608,1050) then down to (608,1158) - that's L64/L67 vertical line. Then at (608,1158) there's the triangle H0? H0 bbox [576,1154,627,1208] center ~(601,1181). Yes the vertical line L64 ends at the triangle H0. So the PC leader goes from PC box down to triangle H0.
+
+Then from triangle H0, a line goes diagonally down-left to the circle. That diagonal is L28/L31/L32 from (596,1202) to (479,1347). And at the end (479,1347) there's an arrowhead pointing at the circle. Is there a cyan arrowhead there? The cyan arrowheads are H0, H1, H2 only. Hmm. But there's also G2, G3 triangles at (584,1265) and (601,1282) which are tiny. And G0 at (708,1201).
+
+Wait, maybe the leader structure is: the dimension text has a leader that goes from the text left edge to the triangle H0 (which is the arrowhead pointing at... no).
+
+Let me look at IMAGE 1 again very carefully. I'll describe what I see in the middle-left region. There's "PC" in a box. Below-left of PC, a vertical line goes down to a black filled triangle (pointing up). From that triangle, a diagonal line goes down-left to another black filled triangle (pointing up-left) which is at the edge of the inner circle of detail BN. So the leader has two segments: vertical (from PC) and diagonal (to circle). The arrowheads: the triangle at the circle is the terminal arrowhead pointing at the feature. The triangle at the junction (590,1180) is also an arrowhead? In many drawings, the leader from a dimension has an arrowhead at the feature end only. But here the PC box is a "process characteristic" marker and its leader points to the feature too.
+
+Hmm, actually I think the structure is: The dimension annotation "Ø 2.05 ±0.05 [⊕ 0.2 A B C] 18" is associated with the PC marker. The PC marker's leader points to the hole. The leader line goes from the PC box, down, then diagonally to the hole, with an arrowhead at the hole. The triangle at (590,1180) might be the arrowhead of the PC leader pointing at the dimension? No.
+
+Let's look at the cyan H0 = [576,1154,627,1208]. That's the triangle at (590,1180). In IMAGE 2, that triangle is highlighted cyan (H0). And the diagonal line from it to the circle is L28/L31/L32. At the circle end, is there a cyan arrowhead? I don't see one in the list. The list of arrowheads (H*) is only H0, H1, H2. So the terminal arrowhead at the circle is NOT in the H* list. Hmm.
+
+Wait, maybe I mis-assigned. Let's look at the diagonal line endpoints. L28 points [[479,1347],[596,1202]]. So one end at (479,1347) which is on the circle (the inner circle of detail BN, center ~(297,1569), radius ~250, so point (479,1347) is on the upper-right of the circle). The other end (596,1202) is at the triangle H0. So the leader from the dimension goes: dimension text -> (some line) -> triangle H0 -> diagonal -> circle. But where's the arrowhead at the circle? Maybe the triangle at the circle is G2 or G3? G2 = [578,1259,590,1271] no that's near (584,1265) which is on the diagonal line, not at the circle. G3 = [596,1276,607,1288] also on diagonal. Hmm.
+
+Actually wait. Let's look at IMAGE 1's diagonal line. The diagonal line from the triangle at (590,1180) goes down-left and ends with a black filled triangle arrowhead at about (480,1340) pointing at the circle. Yes I see a black triangle there in IMAGE 1. But that triangle is not in the H* list nor G* list? Let's check G* list: G0 [689,1173,728,1229], G1 [491,1198,504,1206], G2 [578,1259,590,1271], G3 [596,1276,607,1288]. None at (480,1340). Hmm.
+
+Wait, maybe the diagonal line in IMAGE 1 actually goes from the dimension text directly to the circle, and the triangle at (590,1180) is the arrowhead of the PC leader (pointing up at the PC box? no, PC box is above).
+
+Let me reexamine IMAGE 1. The PC box is at top. A line from PC box's bottom-left goes down. Actually I see: PC box, line goes left from PC box then down to the triangle at (590,1180). The triangle at (590,1180) points up (toward the line from PC). Then from the same triangle, a line goes down-left to the circle with an arrowhead at the circle.
+
+Hmm, but in IMAGE 2, the cyan H0 is at the triangle (590,1180). The blue diagonal lines L28, L31, L32 go from (596,1202) to (479,1347). At (479,1347) I don't see a cyan marker. But maybe the arrowhead at the circle is just not detected as H* or G*. The instructions say "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box". So if the terminal arrowhead at the circle is not in evidence, I leave arrowhead_ids with whatever is present (H0) and use fallback for target.
+
+Hold on. Let's reconsider the whole leader topology. Perhaps the leader for the dimension is: from the dimension text, a horizontal line goes left to the triangle H0 (which is the arrowhead pointing at the dimension? no, arrowheads point at features).
+
+Actually, you know, in these FAI drawings, the typical layout: The dimension text is placed, and a leader line with an arrowhead points from the text to the feature. The PC box is connected to the same leader (the PC marker sits on the leader line). So the leader line is: feature (circle) --arrowhead--> ... line ... -- PC box junction ... line ... dimension text. The arrowhead is at the feature (circle). The PC box is a tag on the line.
+
+But the cyan H0 is at the PC junction triangle, not at the circle. That's odd. Unless the triangle at the PC junction is actually the arrowhead pointing at the dimension text? No.
+
+Let me look at the orientation of the triangle at (590,1180) in IMAGE 1. It looks like a filled triangle pointing up (apex up). The line from PC comes from above into its apex? Or the line from PC goes to its top and the diagonal leaves from its bottom? Hard to say.
+
+Given the ambiguity, let's think about what the pipeline expects. The selected marker F0 = FAI 112. The annotation group should include: F0, its SPC letter (DA), the parameter text (Ø 2.05 ±0.05), the feature control frame (⊕ 0.2 A B C), the count (18), the leader segments, the terminal arrowheads, and the touched part (the circle/hole in detail BN).
+
+Now which OCR text IDs correspond to these? T6 = [674,1151,1349,1318] text "2-08 05 +0.05 we" - this is the "Ø 2.05 ±0.05" line (OCR garbled). T7 = [579,1198,1401,1405] text "\ ee OS" - this is the feature control frame line "⊕ 0.2 A B C" plus maybe the 18? The bbox of T7 is [579,1198,1401,1405] which spans the FCF and the 18 box. Hmm.
+
+Actually the OCR lines: T6 covers y 1151-1318 which is the top line (Ø 2.05 ±0.05 and the FAI/SPC circles? no the circles are at x>1150). T6 x range 674-1349 includes the dimension text and the FAI/SPC circles region. T7 x range 579-1401 y 1198-1405 includes the FCF and the 18.
+
+Hmm, but the FAI/SPC circles are part of the marker, not the parameter text. The parameter text is "Ø 2.05 ±0.05". The FCF is "⊕ 0.2 A B C". The "18" is the count (number of features). The "PC" is the process characteristic tag.
+
+For parameter_text_ids, I should include the OCR text that represents the parameter (the diameter and tolerance and FCF). So T6 and T7.
+
+But wait, T6's bbox includes the FAI/SPC circles (x up to 1349). That's fine, OCR bboxes are rough.
+
+Now the leader segments: The leader path from the annotation to the feature. In IMAGE 2, the blue lines that form the leader: L28, L31, L32 (the diagonal from triangle H0 to circle), and the vertical line from PC to triangle H0 (L64, L67), and the horizontal line from PC box to the vertical line? The PC box left edge to (608,1050)? There's a line from PC box going left then down. In IMAGE 2 I see a blue vertical line at x~608 from y1050 to y1158 (L64, L67) and a blue horizontal? Actually the PC box in IMAGE 2 is not highlighted with blue lines around it; the line from PC box left goes down. Let's look: PC box at (690,1000). A line from its left side at (608,1000) goes down to (608,1158). That's L64/L67. And the horizontal segment from PC box left edge (608,1000) to (674,1000)? Not in list maybe.
+
+Hmm, but is the PC leader part of the FAI leader path? The PC marker is associated with the dimension (it's the process characteristic for this measurement). The leader that the PC sits on is the same leader that points to the feature. So yes, the leader path includes the segment from the dimension text to the feature, and the PC box is a tag on it.
+
+But actually, looking again: the dimension text is at right (x 674-1349). The leader from the dimension text to the feature would go left from the text. But the text's left edge is at x~674. The triangle H0 is at x~590. So a short horizontal line from text left (674,1180) to triangle H0 (590,1180)? Is there such a line? In IMAGE 1, I see the dimension text "Ø 2.05" starts at x~674. To its left, is there a line? I see the triangle H0 at (590,1180) and the diagonal going down-left. I don't see a horizontal line connecting the text to the triangle. Hmm.
+
+Wait, maybe the leader is: the diagonal line from the circle goes up-right to the triangle H0, and from H0 a line goes up to PC box. And the dimension text is just placed next to the leader without a connecting line (the leader's arrowhead at H0 points at the dimension? no).
+
+I'm overthinking. Let's look at the visual in IMAGE 1 one more time, focusing on the connection between the dimension text and the leader. The dimension text "Ø 2.05 ±0.05" — to the left of the "Ø" symbol, I think there's a small horizontal line connecting to the triangle H0. Actually in many CAD drawings, the leader line for a dimension with a PC tag looks like: feature --arrow--> elbow -- line -- PC box, and the dimension text is placed at the end of the line near the PC box. So the line from the feature goes to the elbow (triangle H0?), then up to PC box, and the dimension text is to the right of the PC box's line.
+
+Hmm, but the triangle H0 is at the elbow. The arrowhead should be at the feature (circle). So the terminal arrowhead is at the circle, not at H0. But H0 is detected as an arrowhead (cyan). Maybe the detector mis-detected the elbow as an arrowhead, or maybe the elbow triangle is actually the arrowhead pointing at the dimension text (some styles put arrowhead at the text end? no).
+
+Given the uncertainty, the safest is to include H0 in arrowhead_ids (it's the only arrowhead near this annotation; H1 and H2 are for the B and C datums on the right, which are NOT connected to F0's measurement — they belong to the 213.66 dimension). So arrowhead_ids = [H0].
+
+But the terminal arrowhead at the circle is missing from evidence. So I should note missing arrowhead? The instructions: "All terminal arrowheads of those leaders." If not in evidence, leave empty and use fallback. But H0 is an arrowhead candidate that is part of the leader (the elbow/terminal). I'll include H0.
+
+Now leader_ids: the segments of the leader path. The diagonal from H0 to circle: L28, L31, L32 (these are duplicate detections of the same diagonal). The vertical from PC to H0: L64, L67. The horizontal from PC box to vertical? Not clearly in list. Also maybe the line from the dimension text to H0? Not in list.
+
+Hmm wait, but actually maybe the leader is just the diagonal from the circle to the dimension text, and the PC box line is separate. Let's look at the diagonal L28 endpoints: (479,1347) to (596,1202). (596,1202) is at H0. So the diagonal connects circle to H0. Then from H0, the vertical L64/L67 goes up to PC box. So the leader path is circle - H0 - PC box. And the dimension text is placed to the right of H0/PC without a line? In IMAGE 1, the dimension text "Ø 2.05" left edge ~674, H0 right edge ~627. There's a gap. Possibly a short line not detected.
+
+OK here's another interpretation: maybe the leader for the dimension is the diagonal line that goes from the dimension text's left, through H0 (arrowhead pointing at the text? no)...
+
+I'll make a decision: leader_ids = [L28, L31, L32, L64, L67]. These form the path from the feature (circle) up through H0 to the PC box, which is the leader associated with the annotation. Actually wait, but the PC box line — is the PC box part of the FAI annotation group? The PC is a process characteristic tag, which is part of the measurement annotation (it indicates this is a process characteristic). The instructions say include "Parameter, tolerance, feature-control-frame, and description text." PC is a tag, not exactly text in the list (no OCR for PC? Actually PC is in a box, maybe not OCR'd). The leader from PC to the feature is the leader. So including L64, L67 (PC to H0) and L28/L31/L32 (H0 to feature) makes the full leader.
+
+But hold on, is the diagonal L28 etc. actually the leader, or is it the leader from the dimension text? The diagonal goes from H0 (596,1202) to (479,1347) which is the circle. Yes that's the leader to the feature. Good.
+
+Now, what about the line from the dimension text to H0? If the dimension text is at x674 and H0 at x590, there might be a horizontal line. Looking at L list, is there a horizontal line around y~1180-1200 from x590 to x674? L57 = [978,1213,1093,1216] no. L65 = [1155,1219,1263,1220] no. Hmm none. So no detected line between text and H0. That's fine; the text is just adjacent.
+
+Actually, wait. I realize the leader might be oriented differently. Let's look at IMAGE 1: The diagonal line with the arrowhead at the circle — where does its other end go? It goes up-right to the triangle H0 at (590,1180). And from H0, a line goes up to PC box. So the leader's "start" (text side) is at the PC box / H0, and the dimension text is placed to the right of H0. Yes that matches: the dimension text is to the right of the leader's top. Good. So the leader path = PC box -> H0 -> circle. The dimension text is associated by proximity (it's the label of this leader). Good.
+
+Thus leader_ids = [L28, L31, L32, L64, L67]. But L28, L31, L32 are three detections of the same diagonal; including all is fine (they're all part of the leader path). L64, L67 are two detections of the same vertical; include both.
+
+Hmm, but should I include the PC box vertical as part of the FAI leader? The PC box is the process characteristic marker for this measurement. The leader that the PC sits on is the measurement leader. I think yes.
+
+But wait, maybe the PC box line is a separate leader for the PC tag, and the dimension's leader is just the diagonal from the text to the circle. But the diagonal's top end is at H0 which is at the PC box line, not at the text. So the diagonal connects the circle to the PC box line. So the dimension text must connect to the PC box line somehow. Since no line detected, the text is just placed there.
+
+I'll go with leader_ids = [L28, L31, L32, L64, L67].
+
+Now target_ids: the touched part = the circle (hole) in detail BN. Is there a green R* candidate? The evidence list has no R* at all! The types present: F0, H0,H1,H2, T*, L*, G*. No R* (local touched-part candidate green). So target_ids = [] and use fallback box for target.
+
+The target is the inner circle of detail BN. In normalized coords [0,1000], I need to compute. The image dimensions: I need to know the ROI size. The bboxes go up to x~2400, y~2400. Let's assume the ROI is 2400x2400? The max x in evidence is 2401 (L4, L15). Max y is 2400 (T11). So image ~2400x2400. Normalized = coord/2400*1000.
+
+The inner circle of detail BN: center approx (297,1569), radius ~250 (from the drawing, the inner circle spans x from ~57 to ~537, y from ~1329 to ~1809). So bbox approx [57,1329,537,1809]. Normalized: x: 57/2400*1000=24, 537/2400*1000=224; y: 1329/2400*1000=554, 1809/2400*1000=754. So target fallback ~ [24,554,224,754]. But the arrowhead touches the upper-right of the circle at (479,1347). The "smallest useful local component" is the circle (the hole). I'll give target fallback as the circle bbox.
+
+Hmm but maybe the target should be just the touched region. The instructions: "The smallest useful local component/cross-section touched by each arrowhead." The arrowhead touches the hole (circle). So target = the circle. Good.
+
+Now annotation fallback box: the annotation = F0 + SPC + parameter text + FCF + count. That region in IMAGE 1 spans from the dimension text left (~674) to the SPC circles right (~1400), y from ~1150 to ~1410 (including the 18 box). Actually F0 is at [1150,1150,1250,1250]. The SPC DA circle is to the right of F0 at ~[1250,1150,1350,1250]. The parameter text T6 [674,1151,1349,1318]. The FCF T7 [579,1198,1401,1405]. The 18 box at ~[705,1330,820,1405]. So the annotation region overall ~ x 579-1401, y 1150-1405. Normalized: x 579/2400*1000=241, 1401/2400*1000=584; y 1150/2400*1000=479, 1405/2400*1000=585. So annotation fallback ~ [241,479,584,585].
+
+But wait, the annotation should also include F0 and SPC which are within that x range (1150-1350 -> 479-562). Yes within.
+
+complete_group fallback: includes annotation + leaders + arrowheads + target. The leaders go from the annotation (x~590-674, y~1050-1200) down-left to the circle (x~479, y~1347) and the circle spans to y~1809. The PC box is at y~1000. So the complete group spans x from ~57 (circle left) to ~1401 (annotation right), y from ~1000 (PC box top) to ~1809 (circle bottom). Normalized: x 57/2400*1000=24, 1401/2400*1000=584; y 1000/2400*1000=417, 1809/2400*1000=754. So complete_group ~ [24,417,584,754].
+
+Hmm but the PC box top is at y~960? PC box in IMAGE 1 at about (640-780, 960-1040). Let's say y 960. Normalized 960/2400*1000=400. I'll use 400.
+
+Let me refine circle bbox. In IMAGE 1, detail BN inner circle: I see center cross at about (297,1569). The circle radius looks like ~240. So left ~57, right ~537, top ~1329, bottom ~1809. Good.
+
+Now parameter_values: the parameter is diameter 2.05 with tolerance ±0.05, and position tolerance 0.2. So parameter_values could be ["2.05", "±0.05", "0.2"] or as a structured list. The schema says parameter_values: []. I'll put ["2.05", "0.05", "0.2"]? Hmm. The example format not given. I'll provide the values as strings: ["2.05", "±0.05", "0.2"]. Actually maybe better to reflect the diameter and tolerance and FCF value. I'll do ["2.05", "±0.05", "0.2"].
+
+fai_number: "112". spc_letter: "DA".
+
+measurement_description: null (no instruction sentence). is_range_measurement: false (the ±0.05 is a symmetric tolerance, not a min/max range; the FCF is not a range). So false.
+
+description_text_ids: [] (no description text).
+
+annotation_ids: which IDs are the "annotation" group? The schema has annotation_ids separate from parameter_text_ids. Hmm. Looking at the schema fields: annotation_ids, parameter_text_ids, description_text_ids, leader_ids, arrowhead_ids, target_ids. So annotation_ids probably = the FAI marker + SPC marker? Or the boxes? The marker F0 is the FAI marker. The SPC letter is part of annotation. But there's no separate ID for SPC circle (it's not in evidence as a marker; only F0 is the selected FAI marker). The SPC DA circle is not in evidence list (no F* for it, no R*). So spc_letter we set as text "DA" but no ID.
+
+What goes in annotation_ids? Possibly the FAI marker F0 itself? But marker_id is separate. Hmm. The schema: "marker_id": "F0" then "annotation_ids": []. I think annotation_ids might be the OCR/box IDs that constitute the annotation label (the FAI number box and SPC box). But those aren't in evidence as separate IDs. The only marker ID is F0. So annotation_ids could be [] or [F0]? Since marker_id already = F0, I'd leave annotation_ids = [] maybe, or include F0. The instructions: "1. F0 and its inspection number." The inspection number is the text "112" inside F0's circle, which is part of F0's bbox (no separate OCR). So no separate ID.
+
+I think annotation_ids should contain the IDs that are the annotation's graphical/text elements that are not parameter/description/leader/arrowhead/target. That would be the FAI marker and SPC marker. Since only F0 exists, annotation_ids = ["F0"]? But marker_id is F0. Hmm, redundant but maybe expected. Actually re-reading: "Build exactly one complete FAI annotation group for F0." The group contains F0. The fields break it down. I think annotation_ids is meant for the FAI marker + SPC marker boxes. I'll put ["F0"] in annotation_ids? But then marker_id also F0. That seems odd.
+
+Let me look at typical structure of these tasks. Usually marker_id is the FAI marker, and annotation_ids includes the SPC marker and the FAI marker? Or annotation_ids includes the text boxes of the annotation (the FAI number and SPC letter as OCR)? But there's no OCR for "112" or "DA" in the T list. T6 garbled includes "we" maybe. Not reliable.
+
+Given the evidence, the SPC circle and FAI circle are not separately ID'd except F0. So I'll set annotation_ids = ["F0"] to indicate the marker is part of the annotation, and spc_letter = "DA" (read from image, no ID). Hmm but the instruction "Every selected ID must exist verbatim in the Evidence dictionary." F0 exists. Good.
+
+Actually, maybe annotation_ids is for the feature-control-frame and the dimension text boxes? No, those are parameter_text_ids.
+
+Let me think about the intended semantics from the prompt: "A complete crop must contain: 1. F0 and its inspection number. 2. Associated SPC letter if present. 3. Parameter, tolerance, feature-control-frame, and description text. 4. All leader segments... 5. All terminal arrowheads... 6. The smallest useful local component..."
+
+Mapping to fields:
+- marker_id = F0
+- fai_number = "112"
+- spc_letter = "DA"
+- annotation_ids = ? maybe the IDs for items 1&2 graphical (the FAI/SPC circles). Only F0 available.
+- parameter_text_ids = item 3 parameter/tolerance/FCF = T6, T7
+- description_text_ids = item 3 description = []
+- leader_ids = item 4
+- arrowhead_ids = item 5
+- target_ids = item 6
+
+So annotation_ids = ["F0"] (the FAI marker; SPC has no ID). I'll go with that.
+
+Hmm, but maybe annotation_ids should be empty because the marker is captured by marker_id and the SPC has no ID. The phrase "F0 and its inspection number" — the inspection number is text inside F0, no separate ID. So annotation_ids might be empty.

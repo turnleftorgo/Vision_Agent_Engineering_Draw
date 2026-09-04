@@ -1,0 +1,8 @@
+Looking at IMAGE 1, the magenta crop's right edge (≈x1390) slices through the unrelated "FAI 1 / SPC A" marker pair that belongs to the 213.66 dimension (whose text lies outside the crop). In IMAGE 2 this shows up as a clipped "FAI 1" circle and a half "SPC" circle at the right border — a neighboring annotation fragment intruding into the crop. The FAI 13 group itself (FCF, 2X ⌀1.54, SPC M, both leaders, the terminal arrowhead, and the touched slot end) is fully present, but the clipped unrelated marker at the border violates the "unrelated neighboring annotation" condition, so the crop must be rejected and widened on the right to either fully include or fully exclude that marker.
+
+{
+  "valid": false,
+  "missing": ["unrelated FAI 1 / SPC A marker pair is clipped at the right border (belongs to the 213.66 dimension outside the crop)"],
+  "expand_norm": {"left": 0, "top": 0, "right": 120, "bottom": 0},
+  "confidence": 0.78
+}

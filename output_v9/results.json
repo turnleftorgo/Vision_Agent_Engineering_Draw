@@ -1,0 +1,208 @@
+{
+  "source": "/Users/macsuper/Desktop/Vision_Agent/p9.png",
+  "source_size": [
+    10200,
+    6600
+  ],
+  "coordinate_space": "absolute_pixels",
+  "models": {
+    "locate": "LocateAnything-3B-8bit",
+    "semantic_and_validation": "Qwen3.8-27B-MLX-8bit",
+    "endpoint": "http://127.0.0.1:8001/v1"
+  },
+  "pipeline": {
+    "tile_size": 1200,
+    "tile_overlap": 0.2,
+    "circle_pair_validation_enabled": true,
+    "tesseract_enabled": true,
+    "verification_enabled": true
+  },
+  "results": [
+    {
+      "fai_number": null,
+      "spc_letter": null,
+      "parameter_values": [],
+      "measurement_description": null,
+      "is_range_measurement": false,
+      "marker_bbox": [
+        1803,
+        2304,
+        1902,
+        2404
+      ],
+      "roi_bbox": [
+        652,
+        1153,
+        3053,
+        3554
+      ],
+      "initial_crop_bbox": [
+        1105,
+        1767,
+        1964,
+        3297
+      ],
+      "final_crop_bbox": [
+        1105,
+        1767,
+        2135,
+        3297
+      ],
+      "selected_evidence_ids": [
+        "F0"
+      ],
+      "mapping_complete": false,
+      "mapping_missing": [
+        "semantic_mapping_object"
+      ],
+      "mapping_confidence": 0.0,
+      "validation": {
+        "valid": false,
+        "missing": [
+          "description text right side clipped for FAI 224 group ('PLASTIC', 'DIRECTION', 'OFFSET' cut off at right border)"
+        ],
+        "expand_norm": {
+          "left": 0,
+          "top": 0,
+          "right": 320,
+          "bottom": 0
+        },
+        "confidence": 0.85,
+        "first_pass": {
+          "valid": false,
+          "missing": [
+            "SPC letter (GM) for the selected FAI 224 marker is clipped at the right crop edge (only 'SP'/'G' visible)",
+            "100% inspection triangle for the selected FAI 224 marker lies outside the right crop edge"
+          ],
+          "expand_norm": {
+            "left": 0,
+            "top": 0,
+            "right": 200,
+            "bottom": 0
+          },
+          "confidence": 0.82
+        }
+      },
+      "image_path": "/Users/macsuper/Desktop/Vision_Agent/output_v9/crops/FAIunknown_000.png"
+    },
+    {
+      "fai_number": null,
+      "spc_letter": null,
+      "parameter_values": [],
+      "measurement_description": null,
+      "is_range_measurement": false,
+      "marker_bbox": [
+        2041,
+        2614,
+        2142,
+        2718
+      ],
+      "roi_bbox": [
+        891,
+        1466,
+        3292,
+        3867
+      ],
+      "initial_crop_bbox": [
+        1099,
+        1760,
+        3249,
+        3922
+      ],
+      "final_crop_bbox": [
+        1099,
+        1760,
+        3249,
+        3922
+      ],
+      "selected_evidence_ids": [
+        "F0"
+      ],
+      "mapping_complete": false,
+      "mapping_missing": [
+        "semantic_mapping_object"
+      ],
+      "mapping_confidence": 0.0,
+      "validation": {
+        "valid": true,
+        "missing": [],
+        "expand_norm": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "confidence": 0.88
+      },
+      "image_path": "/Users/macsuper/Desktop/Vision_Agent/output_v9/crops/FAIunknown_001.png"
+    },
+    {
+      "fai_number": null,
+      "spc_letter": null,
+      "parameter_values": [],
+      "measurement_description": null,
+      "is_range_measurement": false,
+      "marker_bbox": [
+        1930,
+        4406,
+        2032,
+        4508
+      ],
+      "roi_bbox": [
+        781,
+        3256,
+        3182,
+        5657
+      ],
+      "initial_crop_bbox": [
+        1185,
+        4345,
+        2093,
+        4854
+      ],
+      "final_crop_bbox": [
+        1185,
+        4345,
+        2320,
+        4854
+      ],
+      "selected_evidence_ids": [
+        "F0"
+      ],
+      "mapping_complete": false,
+      "mapping_missing": [
+        "semantic_mapping_object"
+      ],
+      "mapping_confidence": 0.0,
+      "validation": {
+        "valid": false,
+        "missing": [
+          "dimension extension/leader lines (the two vertical lines) are clipped at the bottom crop border",
+          "touched component feature (the hatched top‑plate / plastic‑top‑case gap cross‑section in SECTION G‑G) is absent from the crop"
+        ],
+        "expand_norm": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 480
+        },
+        "confidence": 0.86,
+        "first_pass": {
+          "valid": false,
+          "missing": [
+            "SPC circle is clipped on the right (only 'SP'/'GN' visible, the 'C' and right arc are cut off)",
+            "Description text 'PLASTIC TOP CASE GAP' is clipped on the right (crop ends at 'PLASTIC TOP CAS', missing 'E GAP')"
+          ],
+          "expand_norm": {
+            "left": 0,
+            "top": 0,
+            "right": 250,
+            "bottom": 0
+          },
+          "confidence": 0.8
+        }
+      },
+      "image_path": "/Users/macsuper/Desktop/Vision_Agent/output_v9/crops/FAIunknown_002.png"
+    }
+  ]
+}

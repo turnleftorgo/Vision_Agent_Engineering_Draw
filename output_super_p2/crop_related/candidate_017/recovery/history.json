@@ -1,0 +1,91 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "validated",
+  "initial_crop": [
+    2371,
+    3852,
+    3988,
+    4772
+  ],
+  "current_crop": [
+    2371,
+    3852,
+    3988,
+    4772
+  ],
+  "best_crop": [
+    2371,
+    3852,
+    3988,
+    4772
+  ],
+  "best_score": 99.6029,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2371,
+        3852,
+        3988,
+        4772
+      ],
+      "crop_after": [
+        2371,
+        3852,
+        3988,
+        4772
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5429,
+          "completion_tokens": 137,
+          "total_tokens": 5566,
+          "finish_reason": "stop",
+          "elapsed_seconds": 24.245177083008457,
+          "content_bytes": 279,
+          "content_chars": 279,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5461,
+          "completion_tokens": 96,
+          "total_tokens": 5557,
+          "finish_reason": "stop",
+          "elapsed_seconds": 10.100894333038013,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.6029,
+      "score_after": 99.6029,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

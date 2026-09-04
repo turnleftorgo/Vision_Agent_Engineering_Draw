@@ -1,0 +1,106 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "fai_number": "63",
+    "spc_letter": null,
+    "annotation_ids": [],
+    "parameter_text_ids": [],
+    "description_text_ids": [],
+    "leader_ids": [
+      "L0"
+    ],
+    "arrowhead_ids": [
+      "H0"
+    ],
+    "target_ids": [],
+    "parameter_values": [],
+    "measurement_description": null,
+    "is_range_measurement": false,
+    "complete": true,
+    "missing": [],
+    "confidence": 0.85
+  },
+  "response_metadata": {
+    "finish_reason": "stop",
+    "elapsed_seconds": 40.949,
+    "prompt_tokens": 12653,
+    "completion_tokens": 80,
+    "total_tokens": 12733,
+    "reasoning_chars": 0,
+    "content_chars": 341,
+    "content_present": true,
+    "structured_output": "json_schema",
+    "max_tokens": 16384,
+    "mapping_valid": true,
+    "mapping_validation_errors": []
+  },
+  "selected_evidence_ids": [
+    "F0",
+    "L0",
+    "H0"
+  ],
+  "selected_evidence": [
+    {
+      "id": "F0",
+      "type": "fai_marker",
+      "bbox": [
+        1150,
+        970,
+        1250,
+        1071
+      ],
+      "source": "LocateAnything"
+    },
+    {
+      "id": "L0",
+      "type": "leader_segment",
+      "bbox": [
+        744,
+        841,
+        933,
+        1908
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          744,
+          1907
+        ],
+        [
+          932,
+          841
+        ]
+      ]
+    },
+    {
+      "id": "H0",
+      "type": "arrowhead",
+      "bbox": [
+        666,
+        1810,
+        701,
+        1893
+      ],
+      "source": "LocateAnything"
+    }
+  ],
+  "selected_exact_union_roi_bbox": [
+    666,
+    841,
+    1250,
+    1908
+  ],
+  "minimum_crop_roi_bbox": [
+    476,
+    786,
+    1305,
+    2083
+  ],
+  "minimum_crop_full_image_bbox": [
+    8639,
+    786,
+    9468,
+    2083
+  ],
+  "coordinate_owner": "Python"
+}

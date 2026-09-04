@@ -1,0 +1,164 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle is around the SPC/BR circle, which is associated with FAI 75.
+
+Let me look at the magenta rectangle's boundaries in IMAGE 1. The magenta rectangle spans roughly from x=300 to x=1250 (in pixel coordinates of the image, but let me look at the layout). Actually let me look at the coordinates more carefully.
+
+In IMAGE 1, the magenta rectangle encloses:
+- The top row partially: "2.50 +0.19 / -0.10" with FAI 76 / SPC BS circles. The top of the magenta rectangle cuts through the "2.50" row. Looking at the image, the magenta top edge is at about y=1040 (the "2.50" text is at y~1000, the "+0.19" at y~970, "-0.10" at y~1040). The magenta top edge appears to be around y=1040, which cuts the "-0.10" of the 2.50 row and the FAI 76/SPC BS circles.
+- The middle row: "1.62 +0.19 / -0.12" with FAI 75 / SPC BR circles. This is fully inside.
+- The bottom row partially: "1.26 +0.19 / -0.12" with FAI 100 / SPC CO circles. The magenta bottom edge is at about y=1250, which cuts the "+0.19" of the 1.26 row.
+
+Now the leader lines. The FAI 75 group (1.62) has a leader line that goes from the "1.62" text leftward to a feature. Let me look. In IMAGE 1, the leader for 1.62 starts at the left of "1.62" (around x=560) and goes left-down to a horizontal line at around x=520, y=1200, then continues left to the feature edge at x=0 (the left edge of the drawing). Actually the leader line for 1.62: there's a line from "1.62" going left to about x=560, then a diagonal down-left to x=520, y=1200, then horizontal left to x=0.
+
+Wait, let me look at the leader structure. The dimension lines here are like a stack of features on the left side. Each row has a leader that goes left and then to the feature.
+
+Looking at IMAGE 1, the left side has horizontal lines (the feature edges) at various y positions. The leaders connect the dimension text to these feature lines.
+
+For the 1.62 row (FAI 75), the leader goes from the text leftward. In IMAGE 1, I see a line at y~1110 going from x=0 to x=520 (horizontal), then a diagonal from (520,1110) to (560,1160)? Hmm, let me look.
+
+Actually the leader pattern: For 2.50, there's a horizontal line at y~1110 from x=0 to x=520, then diagonal up-right to (560,1000) near the 2.50 text. For 1.62, horizontal line at y~1200 from x=0 to x=520, then diagonal up-right to (560,1160) near 1.62 text. For 1.26, horizontal line at y~1290 from x=0 to x=520, then diagonal up-right to (560,1250) near 1.26 text.
+
+Hmm wait, but the magenta rectangle left edge is at about x=300. So the leader lines for these rows, which extend from x=0 to x=520, are partially cut by the magenta left edge at x=300. That means the leader segment from x=0 to x=300 is OUTSIDE the magenta rectangle (to the left).
+
+Let me check the magenta rectangle left edge. In IMAGE 1, the magenta rectangle left vertical line is at about x=300 (looking at the image, the magenta box left edge is around x=300, which is left of the "2.50" text at x=590 but right of the feature lines at x=0).
+
+So the leader lines that go from the feature (x=0) to the text are cut. The portion from x=0 to x=300 is outside the crop. The leader reaches the crop border (left edge). According to the rules: "Reject it if a relevant leader reaches the crop border."
+
+Also the terminal arrowhead / touched feature: the leader connects to the feature on the left (the horizontal lines at x=0). The feature itself (the part outline) is at the left edge of IMAGE 1, which is outside the magenta rectangle. So the touched feature is absent from the crop.
+
+Now look at IMAGE 2 (the proposed crop). It shows:
+- Top: "-0.10" partially and two circles partially cut at top.
+- Middle: "1.62 +0.19 / -0.12" with FAI 75 / SPC BR circles.
+- Bottom: "+0.19" partially and two circles partially cut.
+- Left side: I see a horizontal line at top (the leader for 2.50? at y~110 in image2) and a horizontal line at middle (y~230) and a diagonal. Let me look. In IMAGE 2, on the left there's a horizontal line at the top going from x=0 to x=430, then a diagonal up-right. And a horizontal line at y~230 from x=0 to x=430, then diagonal up-right to the 1.62 text. And at the bottom a hatched line.
+
+So in IMAGE 2, the leader for 1.62 reaches the left border of the crop (x=0). The horizontal line at y~230 starts at x=0 (the left edge of the crop). That means the leader is cut at the left border. The terminal feature (the part outline where the leader terminates) is not visible in the crop. The leader just runs off the left edge.
+
+Thus the crop is invalid: the leader reaches the crop border, and the touched feature is absent.
+
+Also the top and bottom rows (2.50 and 1.26) are partially included, which are unrelated neighboring annotations that are cut. But the main issue is the leader for the FAI 75 group.
+
+Wait, but is the leader for 1.62 actually reaching the left border in IMAGE 2? Let me look carefully. In IMAGE 2, the middle row "1.62" has a leader: I see a horizontal line at y~230 from x=0 to about x=430, then a diagonal from (430,230) to (470,180) connecting to the 1.62 text. Yes the horizontal line starts exactly at x=0 (left edge). So the leader is cut at the left border. The part of the leader that connects to the actual feature (the part outline on the left in IMAGE 1) is missing.
+
+In IMAGE 1, the leader for 1.62 horizontal line goes from x=0 to x=520. The magenta left edge is at x=300. So in the crop, we'd see the leader from x=300 to x=520 (the diagonal and part of horizontal). But the horizontal line in IMAGE 2 appears to start at x=0 of the crop, meaning the crop's left edge corresponds to x=300 of IMAGE 1, and the leader continues left beyond that to the feature at x=0 of IMAGE 1. So yes, the leader reaches the crop border and the feature is absent.
+
+Therefore the crop is invalid. We need to expand left to include the leader's terminal and the touched feature.
+
+How much to expand left? The feature in IMAGE 1 is at x=0 (the left edge of the visible drawing, but actually the part outline might be further left, off-image). Hmm. In IMAGE 1, the left edge of the image is x=0, and the horizontal feature lines start at x=0 (they go off the left edge of the image too? Let's look. The horizontal lines at y~1110, 1200, 1290 start at x=0 in IMAGE 1, meaning they also reach the image border. Hmm, but the part outline (the vertical edge of the part) might be off-image to the left.
+
+Wait, look at IMAGE 1 left side. There's a hatched region (cross-section) at the bottom left, from x=0 to x=430, y~1250-1400. The horizontal lines (feature edges) at y~1110, 1200, 1290 start at x=0. So the part's left edge is off the image (to the left of x=0). That means even expanding left within IMAGE 1 won't show the terminal feature because it's off the provided image.
+
+Hmm, but the rule says "a visible local portion of every component feature touched by those arrows." If the feature is off the image entirely, then we cannot include it. But the leader in IMAGE 1 also reaches the image border at x=0. So the leader's terminal is not visible in IMAGE 1 either.
+
+Wait, but maybe the leader doesn't terminate at x=0; maybe the horizontal line at y~1200 in IMAGE 1 is the feature line itself (the part outline), and the leader is the diagonal. Let's think about the drawing convention. Typically a dimension like "1.62" with a leader points to a feature. The leader line goes from the text to the feature. The feature here might be the horizontal line (a surface). The horizontal line at y~1200 from x=0 to x=520 might actually be the leader's horizontal segment, and the diagonal connects to the text. Then where's the feature? The feature would be the part outline which is to the left, off-image.
+
+Hmm, this is tricky. Let's look at the structure again. In IMAGE 1, on the left there are three horizontal lines (at y~1110, 1200, 1290) that all start at x=0 and end at x~520, each with a diagonal going up-right to the respective dimension text. These look like leader lines pointing to features that are off the left edge. But also there's a hatched cross-section at the bottom left.
+
+Actually, maybe the horizontal lines ARE the part's surfaces (the part outline), and the diagonals are the leaders. In a cross-section view, the part's left edge would be a vertical line, but here we see horizontal lines which would be top/bottom surfaces of a horizontal part. Hmm.
+
+Let's look at the hatched region: it's at y~1250-1400, x=0-430. The hatching indicates a cut surface. The horizontal line at y~1290 (the 1.26 leader) is just above the hatched region. The horizontal line at y~1200 (1.62 leader) is above that. The horizontal line at y~1110 (2.50 leader) is above that.
+
+This is confusing. Let's think about what the part looks like. The dimensions 2.50, 1.62, 1.26, (0.00) are likely heights/positions of features from a datum (0.00). The (0.00) is at the bottom with a horizontal line at y~1390 from x=450 to x=560 (the leader for 0.00). Hmm.
+
+Actually the (0.00) row: there's a horizontal line at y~1390 from x=450 to x=560, then the text (0.00). That line might be the datum line.
+
+OK regardless of the exact interpretation, the key point for validation: In IMAGE 2, the leader for the 1.62/FAI75 group reaches the left border of the crop (the horizontal line starts at x=0 of the crop). And the touched feature (whatever it is) is not visible within the crop. In IMAGE 1, the leader continues left to x=0 of IMAGE 1 (the image border), and the feature is not clearly visible (it's at or beyond the image border).
+
+Given the rules: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent." In IMAGE 2, the leader reaches the left crop border. So we must reject and expand left.
+
+But can we expand left enough? In IMAGE 1, the leader reaches the image border at x=0. So expanding the crop left to x=0 of IMAGE 1 would include the leader up to the image border, but the feature might still be absent (off-image). However, the rule about "visible local portion of every component feature touched by those arrows" — if the feature is off the provided image, we can't include it. But maybe the horizontal line itself is considered the feature (the surface being dimensioned). In that case, the horizontal line in IMAGE 1 from x=0 to x=520 is the feature surface, and the leader is just the diagonal. Hmm but then the horizontal line in IMAGE 2 from x=0 to x=430 would be the feature, and it's cut at the left (since in IMAGE 1 it goes to x=0 but the crop left is at x=300, so the crop shows the feature from x=300 to x=520, which in crop coordinates is x=0 to x=220). Wait I need to map coordinates.
+
+Let me set up coordinate mapping. In IMAGE 1, magenta rectangle: left edge L1, right edge R1, top edge T1, bottom edge B1. In IMAGE 2, the crop is the region [L1,R1]x[T1,B1] scaled to the crop image size.
+
+Let me estimate pixel coordinates in IMAGE 1. The image is 2337 wide (typical). Let me look at the magenta box. I'll estimate from the visual: magenta left ~ x=300, right ~ x=1255, top ~ y=1040, bottom ~ y=1255. (These are rough.)
+
+The "1.62" text in IMAGE 1 is at about x=600-740, y=1160. The FAI 75 circle at x=1050, SPC BR at x=1150. The leader diagonal for 1.62 goes from about (560,1160) down-left to (520,1200), then horizontal from (520,1200) to (0,1200). So the horizontal segment spans x=0..520 at y=1200.
+
+In the crop (magenta left=300), the horizontal segment visible is x=300..520, i.e., crop-x = 0..220 (out of crop width = 1255-300=955). So in IMAGE 2, the horizontal line for 1.62 should appear from crop-x=0 to crop-x=220, then diagonal to the text. Looking at IMAGE 2, the middle horizontal line indeed starts at x=0 and goes to about x=430 (in IMAGE 2's pixel coords). IMAGE 2 width is ~1000? Let's see IMAGE 2 dimensions. The provided IMAGE 2 looks like width ~1000, height ~330. Hmm the scaling: crop width 955 in IMAGE1 maps to IMAGE2 width. If IMAGE2 width is 1000, scale ~1.05. Then crop-x 220 maps to ~230 in IMAGE2. But I see the horizontal line in IMAGE2 going to ~430. Hmm my coordinate estimates are off.
+
+Let me re-estimate. Maybe magenta left is more like x=300 but the diagonal/horizontal junction is at x=520 in IMAGE1. The horizontal line in IMAGE2 from x=0 to x=430 would correspond to IMAGE1 x=300 to x=300+430*(955/1000)=300+410=710. That doesn't match 520. So my mapping is inconsistent. Let me not over-rely on exact pixels.
+
+The qualitative observation: In IMAGE 2, the leader horizontal line for the 1.62 row touches the left border of the crop (starts at x=0). That means in IMAGE 1, the leader continues left beyond the magenta left edge. Therefore the leader reaches the crop border → invalid, expand left.
+
+Also the top row (2.50) and bottom row (1.26) are partially cut (their circles and numbers are clipped at top and bottom of the crop). These are neighboring annotations. The rule says "Reject it if ... unrelated neighboring annotations dominate." They don't dominate, but they are clipped which is a sign the crop boundaries are wrong. However the main FAI group is 75/BR. The clipping of 76/BS and 100/CO is not directly a problem for the 75 group's coherence, but it indicates the crop is too tight vertically. But the rule for validity focuses on the selected FAI group's completeness. The selected group is FAI 75 / SPC BR with parameter 1.62.
+
+For the 75 group, what's missing? The leader path to the terminal feature and the terminal arrowhead and the target region (per semantic_missing). In IMAGE 2, the leader for 1.62 reaches the left border (the horizontal line is cut). The terminal feature (the part surface/edge) is not visible. So we need to expand left to capture the leader's full extent and the touched feature.
+
+But as noted, in IMAGE 1 the leader horizontal line goes to x=0 (image border). So even expanding left to the image border, the feature might be the horizontal line itself (the surface). If the horizontal line is the feature surface, then we need to include more of it to the left. In IMAGE 1, the horizontal line at y=1200 spans x=0..520. The crop currently includes x=300..520 of it (the part right of magenta left). To include the full visible horizontal line, we'd expand left to x=0 of IMAGE 1. That's an expansion of 300 pixels left out of crop width 955 → ~31% → left ≈ 315 in normalized [0,1000]? Wait normalized fraction of current crop width. Current crop width = R1-L1 = 955. Expansion left = L1 - 0 = 300. 300/955 = 0.314 → 314.
+
+But also we need the touched feature. If the horizontal line is the feature, then including it to x=0 gives a visible portion. But is there a vertical edge (the part's left outline) visible? In IMAGE 1 at x=0, the lines just stop at the image border; we don't see a vertical edge. So the "touched feature" might just be the horizontal surface line, which we'd include.
+
+Hmm, but actually maybe the leader's terminal arrowhead is at the left end of the horizontal line, which is off-image. We can't see it. The rule says reject if arrowhead clipped. If the arrowhead is off-image, we can't include it. But maybe there's no arrowhead; the leader just touches the feature line.
+
+This is getting too detailed. Let's think about the expected answer. The semantic_missing lists "leader path to terminal feature", "terminal arrowhead", "target region". The diagnostic says these are visual hypotheses to check. In IMAGE 2, the leader clearly is cut at the left border (the horizontal line runs off the left edge). So the leader path to the terminal feature is NOT fully contained. The target region (feature) is absent. So we must expand left.
+
+How much left? We need to expand until the leader's terminal and the touched feature are visible. In IMAGE 1, the leader horizontal line extends to the image left border (x=0). So we should expand left to at least x=0 of IMAGE 1. That's the maximum we can do. So left expansion = (L1 - 0)/crop_width.
+
+Let me get better pixel estimates by looking at the image more carefully. I'll think about the layout proportions. IMAGE 1 width let's call W. The magenta box left edge appears to be at about 13% of width? The "2.50" text starts at about 25% width. The magenta left edge is left of "2.50". The feature lines on the left start at 0% (image left). The magenta left edge looks like it's at about x=300/2337 ≈ 12.8%. Hmm.
+
+Actually, let's look at the hatched region in IMAGE 1: it spans from x=0 to about x=430 (the hatching lines). The magenta left edge at x=300 cuts through the hatched region? The hatched region top is at y~1250 which is around the magenta bottom edge. The magenta bottom edge y~1255. The hatched region in IMAGE 1 is at y~1250-1400, so it's mostly below the magenta box. In IMAGE 2, the bottom shows a hatched line at the very bottom (y~310-330). Yes IMAGE 2 bottom-left shows hatching. So the magenta bottom edge cuts the hatched region.
+
+OK here's another consideration: the magenta box left edge at x=300 — does the leader horizontal line for 1.62 (at y=1200) cross it? Yes, the horizontal line spans x=0..520, so at x=300 it's within the line. So in the crop, the horizontal line starts at the left border (x=300 in IMAGE1 = x=0 in crop). Confirmed: leader reaches crop border.
+
+Thus we must expand left. The amount: to include the full leader and the touched feature. The touched feature is the part surface. In IMAGE 1, the horizontal line (if it's the feature) extends to x=0. But also there might be a vertical part edge off-image. We can only expand to x=0. So left expansion in normalized = (300-0)/955 ≈ 314. But maybe we should expand a bit more conceptually but we can't beyond image. The instruction: expansion values are normalized fractions of current crop width/height. We can only expand within the available image presumably. So left ≈ 314.
+
+But wait, maybe the magenta left edge is not at 300. Let me look at the relative position of magenta left edge vs the "1.62" text and the diagonal. In IMAGE 1, the diagonal for 1.62 goes from the text left side (~x=560) down-left to (~x=520, y=1200). The horizontal line then from 520 leftward. The magenta left edge is to the left of the diagonal? In IMAGE 1, the magenta left vertical line appears to be at about x=300, which is left of the diagonal (520). So the diagonal is fully inside the crop. Good. The horizontal line from 520 to 300 is inside, from 300 to 0 is outside. So in the crop we see horizontal from 0(crop) to (520-300)=220 (crop coords scaled). Then diagonal. So the leader is cut at the left border. Yes.
+
+Now, is the horizontal line the feature or the leader? In many drawings, the dimension text is connected by a leader line that ends with an arrow at the feature. The horizontal line here might be the leader (a long leader) and the feature is the part outline at the far left (off-image). Or the horizontal line might be the part outline (a horizontal surface) and the diagonal is the leader pointing to it. Hard to say.
+
+Look at the (0.00) row: horizontal line at y~1390 from x=450 to x=560, then text (0.00) to the right. That horizontal line is short and is likely the datum/feature line. The 1.26 row horizontal line at y~1290 from x=0 to x=520 — that's long, likely a leader. Hmm but the (0.00) line is short. Inconsistent.
+
+Actually maybe the horizontal lines at y=1110,1200,1290 are the part's horizontal surfaces (the part is a horizontal bar with steps), and the diagonals are leaders from the dimension text to those surfaces. The part's left edge (vertical) would be off-image left. The hatched region at bottom-left is the cross-section of the part's left end? The hatching is at y=1250-1400, x=0-430. That could be the part's left end cross-section. Then the horizontal surfaces at y=1110,1200,1290 are the top surfaces of the part extending rightward. The part's left vertical edge is at x=0 (image border) or off-image.
+
+If the horizontal line is the feature surface, then the leader (diagonal) touches it at the junction (520,1200). The "touched feature" is the horizontal surface, which is visible in the crop from x=300 to 520 (a portion). So a visible local portion of the feature IS in the crop! Then maybe the leader doesn't "reach the crop border" in a problematic way because the leader is just the diagonal (inside) and the horizontal line is the feature (partially inside, which is fine as long as a portion is visible).
+
+Hmm, but the rule: "every connected leader segment" must be in the crop. If the horizontal line is part of the leader, then it's cut. If the horizontal line is the feature, then the leader is just the diagonal (fully inside) and the feature is partially visible (OK).
+
+The semantic_missing says "leader path to terminal feature" is missing. That suggests the leader path is not fully in the crop. The diagnostic is a hypothesis. We must check visually.
+
+Let's look at IMAGE 2 again. In IMAGE 2, the middle row: I see a horizontal line at the left from x=0 to ~430, then a diagonal up-right to the "1.62". If the horizontal line were the feature, then the leader is the diagonal, and the feature (horizontal line) is visible from x=0 to 430 in the crop, but it's cut at x=0 (left border). The rule says "a visible local portion of every component feature touched by those arrows" — a portion is visible, that's satisfied. But also "Reject it if a relevant leader reaches the crop border" — the leader (diagonal) does NOT reach the border; it's inside. The feature line reaches the border, but the feature line is not a leader. Hmm.
+
+But wait, is the horizontal line a leader or a feature? Look at the top row in IMAGE 2: there's a horizontal line at top from x=0 to ~430 then diagonal up-right (cut at top). That's the 2.50 leader/feature. And the bottom shows hatching.
+
+I think the convention in these drawings (looks like a semiconductor/heat stake post drawing) is that the dimension is to a horizontal surface, and the leader line is the diagonal+horizontal combination pointing to the surface edge. Ugh.
+
+Let's look at the right side of IMAGE 1 for comparison. On the right, the dimensions 2.50, 1.62, 1.26 have leaders that go right and then to the feature on the right (the part outline visible at right edge with hatching). On the right, the leader for 2.50: from text right side, a horizontal line then diagonal down-right to the feature at right (x~2000, y~1150). The feature on the right is visible (the part outline with hatching at x~2150-2337). So on the right, the leader terminates at a visible feature.
+
+By symmetry, on the left, the leader should terminate at the part's left outline, which is at the left edge of the part. In IMAGE 1, the part's left outline is off-image (x<0) because we only see the part extending from x=0 rightward with hatching at bottom-left. Actually the hatching at bottom-left (x=0-430, y=1250-1400) might be the part's left end. The horizontal surfaces at y=1110,1200,1290 start at x=0 which is the image border, meaning the part's left end is at or beyond x=0. So the leader's terminal (the left vertical edge of the part) is at x=0 or off-image.
+
+Thus the leader's terminal arrowhead is at x≈0 (image border) or off-image. In the crop (magenta left=300), the leader's terminal is far outside (to the left). So the leader path is cut and the terminal arrowhead is absent. Therefore we must expand left to include the terminal. But the terminal is at x=0 (image border) at best. So expand left to x=0.
+
+Hence left expansion = (300-0)/955 ≈ 314. But also we might want a little margin, but we can't go beyond image. So left ≈ 314, maybe round to ~320.
+
+But hold on: maybe the magenta left edge is actually at x=0? No, in IMAGE 1 the magenta left edge is clearly to the right of the image left border; there's white space and the feature lines to the left of the magenta box. Yes the magenta box left edge is at ~x=300, with the horizontal feature lines visible to its left (from x=0 to 300). So those left portions are outside the crop.
+
+Thus the crop is missing the left part of the leader/feature. So invalid, expand left.
+
+Now also vertical: the top of the crop cuts the 2.50 row (FAI 76/SPC BS) and the bottom cuts the 1.26 row (FAI 100/SPC CO). These are neighboring groups, not the selected 75 group. The selected 75 group's vertical extent (the 1.62 row) is fully inside. So vertical clipping of neighbors is not a validity issue per se (the rule about "unrelated neighboring annotations dominate" — they don't dominate; they're just clipped at edges, which is fine as long as they don't dominate the crop). Actually the rule says reject if unrelated neighboring annotations dominate. They are present but clipped; they don't dominate. So vertical is OK. But the top and bottom clipping means the crop includes partial circles of 76 and 100, which is a bit messy but not a rejection criterion by itself. The main rejection is the left leader/feature.
+
+Hmm, but wait: does the 75 group's leader also have a vertical component that's cut? No.
+
+Let me also check: in IMAGE 2, is the FAI 75 circle and SPC BR circle fully visible? Yes, both circles are fully inside IMAGE 2 (the red box in IMAGE1 around SPC BR is inside the magenta box, and in IMAGE2 the SPC BR circle is fully visible). FAI 75 circle fully visible. The numbers 1.62, +0.19, -0.12 fully visible. Good.
+
+So the only missing piece is the left leader/feature.
+
+Thus valid=false, missing = ["leader path to terminal feature", "terminal arrowhead", "target region"] (or similar), expand left.
+
+Now compute expand_norm left. I need a reasonable estimate. Let me look at the proportions in IMAGE 1 more carefully using known text positions.
+
+Let me define IMAGE 1 width = 2337 (a guess). The magenta box: I'll look at the "1.62" text. In many of these tasks the image is 2337x2337 or similar. Hard to know. Let me instead use relative fractions of the image width as seen.
+
+Visually, the magenta box left edge is at about 13% of the image width. The image left border is 0%. The crop width (magenta box width) is from 13% to about 54% (right edge near the SPC BR circle right side ~ x=1255/2337=53.7%). So crop width ≈ 40.7% of image width. The left expansion needed = 13% of image width. As a fraction of crop width = 13/40.7 ≈ 0.319 → 319.
+
+So left ≈ 320.
+
+But we also need to ensure the terminal feature is visible. If the terminal is at x=0 (image border), expanding to x=0 includes it (the line ends at border, but the arrowhead might be exactly at border or off). We can't do better. So left ≈ 320.
+
+Hmm, but maybe the part's left vertical edge is actually visible in IMAGE 1 at some x>0? Let's look at the hatched region: the hatching lines are diagonal, and the region's left boundary is at x=0 (image border). The horizontal surfaces also start at x=0. So the part's left edge is at x=0 or off. So no vertical edge visible. The "target region" might just be the horizontal surface, which after expansion to x=0 would be fully visible (the whole horizontal line from 0 to 520). Good.
+
+Thus after expanding left to ~320, the crop would include the full horizontal line and the diagonal and the text and circles. The terminal arrowhead—if it's at the left end of the horizontal line (x=0), it'd be at the new crop border, possibly clipped. But we can't expand further. The rule says reject if arrowhead clipped. If after max expansion the arrowhead is still at the border, then we can't make it valid? But the instruction expects us to request expansion toward missing items; if the item is off-image, we still request expansion to the image edge. The validity after expansion is not our concern; we just report the expansion needed. Actually we report valid=false and the expansion. The system will then re-crop. If the arrowhead is off-image, the re-crop still can't include it, but that's a limitation. Typically these tasks assume the needed content is within IMAGE 1. So presumably the terminal/feature is within IMAGE 1 (at x=0 or slightly inside). Let's assume the horizontal line's left end (x=0) is where the leader meets the feature, and there's no separate arrowhead (the leader just touches the surface). Then expanding to x=0 includes the touch point. Good.
+
+Thus left expansion to image border = ~320.
+
+Let me double check by looking at IMAGE 2's left edge: the horizontal line for 1.62 starts exactly at x=0 of IMAGE 2. So in IMAGE 1, that corresponds to magenta left edge. The line continues left in IMAGE 1 to x=0. So we need to add that left portion. The left portion length in IMAGE 1 = magenta_left - 0. In

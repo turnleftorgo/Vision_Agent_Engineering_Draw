@@ -1,0 +1,161 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker, FAI 41).
+
+The magenta rectangle in IMAGE 1 contains:
+- FAI 40 / SPC AM circle pair with "1.62 +0.26 -0.10"
+- FAI 41 / SPC AN circle pair with "1.26 +0.25 -0.10"
+- Some leader lines going to the right toward a hatched feature.
+
+Let me look at the leaders. The FAI 41 group (1.26 +0.25 -0.10) has a leader line. Let me trace it. In IMAGE 1, the leader for the 1.26 line goes from the text rightward, then up, then right, then... Let me look carefully.
+
+Looking at IMAGE 1, the right side has a hatched cross-section feature. There are leader lines connecting the dimension text to this feature.
+
+For the 1.62 line (FAI 40/AM), the leader goes from the text rightward and connects to the top edge of the hatched feature (the horizontal line at the top of the step).
+
+For the 1.26 line (FAI 41/AN), the leader goes from the text rightward, then up, then right, then... Let me trace. The leader for 1.26 appears to go right from "-0.10", then up, then right to the hatched feature's left edge (the diagonal hatching area).
+
+Now, the magenta rectangle's right edge: where is it? In IMAGE 1, the magenta rectangle's right edge is at approximately x=2160 (in some coordinate). Let me look at the pixel positions. The image is 2337 wide maybe. Let me look at the magenta rectangle boundaries.
+
+The magenta rectangle in IMAGE 1 spans roughly from x=1050 to x=2160, y=990 to y=1250 (approx). Let me look at the leaders.
+
+The leader for the 1.26 line: starting at the text "1.26 +0.25 -0.10", the leader line goes right from the right side of "-0.10"? Actually let's look. The leader line for 1.26 in IMAGE 1: I see a line starting around x=1680 (right of -0.10) going up to y~1050, then right to x~1870, then... hmm.
+
+Wait, let me look more carefully at the leader lines in IMAGE 1. There's a hatched feature on the right. The hatched feature's left boundary is a diagonal line (the hatching). The leader lines terminate at this feature.
+
+Let me look at the leader for 1.62 (FAI 40): The line goes from the text rightward at y~1010 (top of 1.62 text), then there's a horizontal line at y~1010 going right to about x=2110, then down a bit to the top edge of the hatched feature. Actually the leader for 1.62 seems to connect to the top horizontal line of the step feature.
+
+The leader for 1.26 (FAI 41): The line goes from the text rightward at y~1150 (the -0.10 line), then up to y~1050, then right to x~1870, then... it seems to terminate at the hatched feature's left edge around x=1870, y~1150? Hmm.
+
+Let me look at IMAGE 2, the proposed crop. In IMAGE 2, I see:
+- FAI 40 / SPC AM with 1.62 and -0.10 (the +0.26 is cut off at top!)
+- FAI 41 / SPC AN with 1.26 +0.25 -0.10
+- Leader lines on the right going to a hatched feature.
+
+Wait, in IMAGE 2, the top shows "1.62" with the FAI 40 circle partially cut at the top? Let me look. The top of IMAGE 2 shows the FAI 40 circle with "FAI" text cut off at the very top (the top of the circle is clipped). Actually the circle for FAI 40 in IMAGE 2 shows "FAI" at top partially and "40" below. The top edge of the circle might be slightly clipped. Hmm.
+
+Also the "+0.26" for the 1.62 line is NOT visible in IMAGE 2. In IMAGE 2, the 1.62 line only shows "-0.10" below it; the "+0.26" is above and is cut off by the top border of the crop. Let me check IMAGE 1: the 1.62 line has "+0.26" above and "-0.10" below. In the magenta rectangle, the top edge is at y~990. The "+0.26" text is at y~970 (above the magenta top edge). So in IMAGE 2, the "+0.26" is cut off. Indeed IMAGE 2 shows only "-0.10" for the 1.62 line, and the top of the FAI 40 circle is clipped.
+
+But wait, the selected FAI marker is FAI 41 (red rectangle). The crop is supposed to fully contain one coherent FAI annotation group. The selected group is FAI 41. But the crop also includes FAI 40's annotation partially (clipped). The rule says: "Reject it if ... unrelated neighboring annotations dominate." Hmm, but FAI 40 is a neighboring annotation. The crop includes FAI 40's circle and 1.62 text but clips its +0.26 and the top of the circle. That's a problem because the crop contains a partial neighboring annotation.
+
+But more importantly, we need to check the FAI 41 group's completeness: leader segments, terminal arrowhead, touched feature.
+
+Let's look at the leader for FAI 41 (1.26 line). In IMAGE 1, trace the leader. The 1.26 text is at left, then "+0.25" and "-0.10" stacked. The leader line: I see a line starting at the right of "-0.10"? Or right of the text? Let's look. In IMAGE 1, there's a leader line that goes from around x=1680, y=1150 (right of -0.10) horizontally right a tiny bit then up to y=1050, then right to x=1870, then... Actually I see a vertical line at x~1730 from y=1150 to y=1050, then horizontal to x=1870 at y=1050, then it meets the hatched feature? Hmm.
+
+Let me look at the hatched feature in IMAGE 1. The hatched feature (the cross-section with diagonal lines) is on the right, spanning roughly x=1870 to x=2337, y=1050 to y=1180. The leader for 1.26 seems to terminate at the left edge of this hatched feature around (1870, 1150)? Or at the top?
+
+Actually, let's look at the leader lines more systematically. In IMAGE 1, I see two leader lines on the right side of the magenta box:
+
+Leader A (for 1.62): horizontal line at y~1010 from x~1680 to x~2110, then a small vertical down to y~1040, then... connecting to the top edge of the step.
+
+Leader B (for 1.26): from x~1680 y~1150 horizontal to x~1730, vertical up to y~1050, horizontal right to x~1870, then... it seems to go into the hatched region? Or terminate at the left edge of hatching.
+
+Hmm, this is getting too detailed. Let's look at IMAGE 2 to see what's inside the crop. In IMAGE 2, the right side shows the hatched feature partially. The leader lines in IMAGE 2: I see a horizontal line at top (y~30 in IMAGE 2 coords) going right and then a vertical down at the right edge (x~730) — that's the leader for 1.62, and it appears to terminate at the right border? Let's look. In IMAGE 2, top right, there's a horizontal line at y~30 from x~620 to x~730, then vertical down to y~70, then horizontal left to x~620? Hmm.
+
+Actually in IMAGE 2, the leader for 1.62 (the top one) goes: horizontal line at y~30 from x~620 to x~730 (right edge of crop?), then down. The right edge of IMAGE 2 is at x~768. The hatched feature in IMAGE 2 starts at x~620 (the diagonal hatching left edge). So the leader for 1.62 in IMAGE 2: horizontal at y~30 from x~620 to x~730, then vertical down to y~70, then horizontal left to x~620? That would form a loop? That doesn't make sense.
+
+Let me look at IMAGE 1 again for the 1.62 leader. The 1.62 text right side: there's a horizontal line at y~1010 from x~1680 to x~2110. At x~2110 it goes down to y~1040 (the top edge of the step feature). Then the step feature's top edge is at y~1040 from x~1870 to x~2110. Hmm.
+
+OK here's the thing. The magenta rectangle's right edge in IMAGE 1 is at x~2160. The hatched feature extends from x~1870 to beyond 2337 (off the right of IMAGE 1? No, IMAGE 1 right edge is 2337, and the hatched feature's right part is at x~2160-2337). Actually the hatched feature in IMAGE 1 spans x~1870 to x~2337 (the right edge of the image). The magenta right edge at x~2160 cuts through the hatched feature.
+
+So in IMAGE 2 (the crop), the hatched feature is shown from its left edge (x~1870 in IMAGE 1 = some x in IMAGE 2) to the right edge of the crop (x~2160 in IMAGE 1 = right edge of IMAGE 2). So the hatched feature is partially shown, but that's fine as long as the touched feature is visible locally.
+
+Now the critical question: does the leader for FAI 41 terminate within the crop, with a visible arrowhead and visible touched feature?
+
+Let's look at the leader for 1.26 in IMAGE 1. I'll trace pixel by pixel mentally. The text "1.26" is at x~1310-1450, y~1150. "+0.25" at x~1490-1660, y~1110. "-0.10" at x~1490-1660, y~1170. The leader line: I see a line starting at x~1680, y~1150 (right of the tolerance text) going right to x~1730, then up to y~1050, then right to x~1870. At x~1870, y~1050, that's the top-left corner of the hatched feature? The hatched feature's top edge is at y~1050 from x~1870 to x~2110. So the leader terminates at the top-left corner of the hatched feature, around (1870, 1050). Is there an arrowhead? Hard to see.
+
+Hmm, but in IMAGE 2, the leader for 1.26: I see a line from x~430 (right of -0.10) at y~110 going right to x~470, then up to y~70, then right to x~620 (the left edge of hatching). So the leader terminates at the left edge of the hatched feature at the top. In IMAGE 2, the hatched feature's left edge (the diagonal line) is visible at x~620, y~70-110. So the touched feature is visible.
+
+But wait, is there an arrowhead? The semantic_missing says "terminal arrowhead for F0 leader path" and "target region for F0 leader path". This suggests the leader's terminal arrowhead and target region might be missing/clipped.
+
+Let me look at the leader for 1.26 in IMAGE 1 more carefully. The leader goes up then right to x~1870. But maybe it continues further right beyond the magenta box? Let's see. In IMAGE 1, at y~1050, there's a horizontal line from x~1870 to x~2110 (the top edge of the step). Is that the leader or the feature edge? The feature edge (top of step) would be a solid line of the part. The leader would be a thin line.
+
+Hmm, I think I'm overanalyzing. Let's look at the overall structure. The magenta box in IMAGE 1: top edge y~990, bottom edge y~1250, left edge x~1050, right edge x~2160.
+
+Now, the FAI 40 group's "+0.26" is at y~970, which is ABOVE the magenta top edge (990). So in the crop, the +0.26 is cut off. Also the top of the FAI 40 circle is at y~960, also cut off. So the crop clips the FAI 40 annotation. But FAI 40 is NOT the selected group (FAI 41 is selected). The rule: "Reject it if ... unrelated neighboring annotations dominate." Does FAI 40 dominate? It's partially included. Hmm.
+
+But the more important issue: the crop must "fully contain one coherent FAI annotation group" — the selected one (FAI 41). For FAI 41, we need its leader and arrowhead and touched feature fully inside.
+
+Let's look at the FAI 41 leader in IMAGE 1. The leader for 1.26: I'll look at where it ends. In IMAGE 1, I see the leader line for 1.26 going from the text, up, and right, ending at the hatched feature's left edge around (1870, 1050) or maybe (1870, 1150). Both x=1870 and the feature are within the magenta box (right edge 2160). So the leader and its target are inside the box. Good.
+
+But wait, the semantic_missing mentions "terminal arrowhead for F0 leader path" and "target region for F0 leader path". This is a diagnostic hypothesis. I need to check the images. In IMAGE 2, is the arrowhead visible? The leader for 1.26 in IMAGE 2 ends at the hatched feature's left edge. I don't see a clear arrowhead, but maybe it's a small tick. The target region (hatched feature) is visible in IMAGE 2 (the diagonal hatching is shown). So the target region is present.
+
+Hmm, but the leader for 1.62 (FAI 40) in IMAGE 2: its top part (+0.26) is cut, and its leader's top horizontal line at y~30 in IMAGE 2 — does it reach the right border? In IMAGE 2, the top horizontal line at y~30 goes from x~620 to x~730, then vertical down to y~70 at x~730. The right edge of IMAGE 2 is x~768. So x~730 is inside, not at the border. Then from (730,70) horizontal left to (620,70)? That would be the top edge of the step feature. Hmm, but that's the feature, not the leader.
+
+Actually, I realize the leader for 1.62 in IMAGE 1: horizontal at y~1010 from x~1680 to x~2110, then vertical down at x~2110 to y~1040. In IMAGE 2 coordinates, x~2110 in IMAGE 1 maps to... The crop left edge in IMAGE 1 is x~1050, right edge x~2160, width ~1110. IMAGE 2 width is 768. So scale = 768/1110 = 0.69. x=2110 in IMAGE 1 -> (2110-1050)*0.69 = 733 in IMAGE 2. Yes matches the vertical line at x~730 in IMAGE 2. And y: crop top in IMAGE 1 = 990, bottom = 1250, height 260. IMAGE 2 height = 232 (approx). scale_y = 232/260 = 0.89. y=1010 in IMAGE 1 -> (1010-990)*0.89 = 18 in IMAGE 2. Hmm but I estimated y~30. Close enough. y=1040 -> (1040-990)*0.89 = 45. So the vertical line at x~730 from y~18 to y~45. Then the top edge of step at y~1040 from x~1870 to x~2110 -> in IMAGE 2 from x~565 to x~733 at y~45. OK.
+
+So the leader for 1.62 terminates at (2110, 1040) which is inside the crop (right edge 2160). Good. But the +0.26 text for 1.62 is cut off (above top edge). And the top of FAI 40 circle is cut off.
+
+Now, the question is whether the crop is valid for the SELECTED group FAI 41. The presence of a clipped neighboring annotation (FAI 40) — does that invalidate? The rule says reject if "unrelated neighboring annotations dominate." FAI 40 doesn't dominate; it's partially there. But the rule also says the crop must "fully contain one coherent FAI annotation group" — it doesn't say it must NOT contain parts of others. However, clipping a neighboring annotation's text/circle might be considered a problem because the crop is "not coherent" — but the requirement is about the selected group being fully contained.
+
+Hmm, but actually the bigger issue: the FAI 40 group is the one whose +0.26 is clipped and whose circle top is clipped. The selected group is FAI 41. For FAI 41, is everything inside? FAI 41 circle fully inside (red box is well within). SPC AN circle fully inside. 1.26 +0.25 -0.10 fully inside. Leader for 1.26 fully inside? The leader goes up to y~1050 and right to x~1870. y~1050 is inside (top edge 990). x~1870 inside. The touched feature (hatched) left edge visible. So FAI 41 group seems fully inside.
+
+But wait, the leader for 1.26 in IMAGE 1 — let me look again. I see the leader line for 1.26 starting at the right of "-0.10" (x~1680, y~1150), going right to x~1730, up to y~1050, right to x~1870. But hold on, in IMAGE 1, at y~1050 there's also the horizontal line that is the top edge of the step feature from x~1870 to x~2110. And the leader for 1.62 is at y~1010. So the leader for 1.26 at y~1050 from x~1730 to x~1870 — is that a leader or part of feature? It's a leader (thin line connecting text to feature). It ends at x~1870 which is the left edge of the hatched feature. Good, inside crop.
+
+So for FAI 41, everything is inside. Then why would the crop be invalid?
+
+Let's reconsider the top clipping. The magenta top edge at y~990. The FAI 40 circle top is at y~960 (clipped). The +0.26 text at y~970 (clipped). These belong to FAI 40, not FAI 41. So they're "unrelated neighboring annotations" that are partially in the crop and clipped. The rule: "Reject it if ... unrelated neighboring annotations dominate." They don't dominate. But also the rule about leaders reaching the border: "Reject it if a relevant leader reaches the crop border." The relevant leader is for FAI 41. Does the FAI 41 leader reach the crop border? No, it ends at x~1870, well inside.
+
+Hmm, but maybe I'm misreading the leaders. Let's look at IMAGE 2 again. In IMAGE 2, the top shows the FAI 40 circle with the top clipped (the "FAI" text is at the very top, partially cut). And the 1.62 line shows only "-0.10" (the +0.26 is gone). This is a clipped neighboring annotation. The instructions say: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." And "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle."
+
+The connected evidence outside the magenta rectangle: the +0.26 for the 1.62 line is just above the top edge. Also the top of FAI 40 circle is just above. These belong to FAI 40 group, which is a different annotation group than the selected FAI 41. So per the rule: "ignore a reported missing item if the pixels show that it belongs to a different annotation group." The semantic_missing items are about "F0 leader path" arrowhead and target region. Hmm, F0? That's odd. Maybe F0 refers to a leader path ID.
+
+Wait, the semantic_missing says "terminal arrowhead for F0 leader path" and "target region for F0 leader path". This might refer to the leader of the selected FAI 41 group. If the leader's terminal arrowhead and target region are missing from the crop, then the crop is invalid and we need to expand.
+
+Let me look very carefully at the leader for 1.26 in IMAGE 1 and see if its terminal (arrowhead + target) is inside or outside the magenta box.
+
+In IMAGE 1, the magenta right edge is at x~2160. The hatched feature's left edge (the diagonal line where hatching starts) is at x~1870. The leader for 1.26 ends at... let me look. I see in IMAGE 1 a vertical line at x~1730 from y~1150 to y~1050, then horizontal at y~1050 from x~1730 to x~1870. At x~1870, the hatched feature's top-left corner. So the leader ends at (1870, 1050). That's inside the magenta box (right edge 2160, top edge 990). So the target region (the corner of the hatched feature) is inside.
+
+But maybe the leader actually continues. Let me look at the hatched feature shape. The hatched feature in IMAGE 1: there's a top horizontal line at y~1040 from x~1870 to x~2110, then a vertical down at x~2110 to y~1080, then horizontal left to x~1870? No...
+
+Ugh, I keep going back and forth. Let me think about what the expected answer is. The semantic_complete is false with missing arrowhead and target region for "F0 leader path". The diagnostic says these are visual hypotheses to check. If the arrowhead/target is visible inside IMAGE 2, don't expand. If it's visible outside the magenta box and belongs to this group, expand.
+
+Let me look at IMAGE 2's right side. The hatched feature in IMAGE 2: I see diagonal hatching lines from x~620 to x~768 (right edge). The leader for 1.26 in IMAGE 2 ends at the left edge of the hatching at around (620, 70)? Or does it end at the top edge? In IMAGE 2, I see the leader for 1.26: from x~430 y~110 right to x~470, up to y~70, right to x~620. At (620,70) is the top-left of the hatched feature. The hatched feature's top edge in IMAGE 2 is at y~70 from x~620 to x~730 (then vertical down). So the leader ends at the top-left corner (620,70). The target region (hatched feature) is visible to the right. So the target region IS visible inside IMAGE 2.
+
+But is there an arrowhead? I don't see a distinct arrowhead in IMAGE 2 at (620,70). It might just be a line ending. In engineering drawings, leaders often end with a small arrow or dot or just touch the feature. The semantic hypothesis says arrowhead missing. But maybe there's no arrowhead by design (the leader just touches the feature line). Hard to say.
+
+Hmm, let's look at the leader for 1.62 in IMAGE 1 to compare. It ends at (2110, 1040) with maybe a small arrow. In IMAGE 2, that's at (733, 45). I see the vertical line at x~730 ending at y~70 (the top edge). No clear arrowhead either.
+
+I think the leaders in this drawing don't have prominent arrowheads; they just terminate at the feature lines. So the "terminal arrowhead" missing might be a false positive of the semantic association.
+
+Now, the real problem I see: the crop clips the FAI 40 group's +0.26 and the top of its circle. But that's a different group. The selected group is FAI 41. The crop fully contains FAI 41's group (circle, SPC, text, leader, target). So by the strict rule, the crop should be valid for FAI 41.
+
+But wait, the rule also says: "The crop is valid only if it fully contains one coherent FAI annotation group: ... every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows." For FAI 41, the leader touches the hatched feature. The hatched feature's local portion is visible in IMAGE 2 (the diagonal hatching). Good.
+
+But also: "Reject it if a relevant leader reaches the crop border." The FAI 41 leader does not reach the border. Good.
+
+So is the crop valid? The only issue is the clipped FAI 40 annotation at the top. But that's a neighboring annotation, not the selected one. The rule about neighboring annotations: "unrelated neighboring annotations dominate." They don't dominate; the selected FAI 41 is the focus and is fully present. The FAI 40 is partially present but that's not "dominating."
+
+Hmm, but actually, having a clipped annotation in the crop is generally bad because the crop would show a half-circle and a half-text, which looks broken. But the validation criteria are specific. Let me re-read: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+The FAI 40 circle top being clipped — is that "an arrowhead is clipped"? No, it's a circle, not an arrowhead. Is it "unrelated neighboring annotations dominate"? The FAI 40 annotation is in the crop but clipped; does it dominate? The crop contains both FAI 40 (partial) and FAI 41 (full). The selected is FAI 41. FAI 40 doesn't dominate.
+
+Hmm, but the top clipping of FAI 40's circle and +0.26 means the crop's top border cuts through the FAI 40 annotation. The instruction: "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle." The connected evidence outside (above) the magenta rectangle is the +0.26 and top of FAI 40 circle. These belong to FAI 40, a different group. So per the rule, we ignore them for the purpose of the selected group's completeness. But they cause the crop to contain a clipped neighboring annotation.
+
+I think the intended answer here might be that the crop is INVALID because the top of the crop cuts through the FAI 40 annotation, making the crop incoherent (it includes a partial annotation that's not the selected one, and that partial annotation's missing part is just outside). But the rule for ignoring says: "ignore a reported missing item if the pixels show that it belongs to a different annotation group." The reported missing items are about F0 leader path, not about FAI 40's +0.26. So that ignore rule doesn't directly apply to the FAI 40 clipping.
+
+Let me think about the "coherent FAI annotation group" requirement. The crop should contain ONE coherent group. If it contains a partial second group (FAI 40 clipped), is it still "one coherent group"? The crop contains FAI 41 fully and FAI 40 partially. That's not "one coherent group" cleanly; it's a mix. But the requirement is "fully contains one coherent FAI annotation group" — it does fully contain FAI 41. The extra partial FAI 40 is a contaminant.
+
+I'm now leaning toward: the crop is invalid because the top edge clips the FAI 40 annotation (the +0.26 and circle top are outside), and also possibly the leader for 1.62 (which is part of FAI 40) — but that's not the selected group.
+
+Hold on. Let's look at the leaders again. Maybe the leader I think belongs to 1.26 actually belongs to 1.62 and vice versa, or maybe the leaders cross the top border.
+
+Let's look at IMAGE 1 top border of magenta (y~990). The 1.62 text baseline is at y~1010 (the "1.62" digits). The "+0.26" is at y~970 (above border). The "-0.10" at y~1030. The FAI 40 circle center at y~1000, top at y~960 (above border). So the FAI 40 circle is cut by the top border. The leader for 1.62: where does it start? It starts at the right of the 1.62 text at y~1010 (the top of the text block, near +0.26 level?). Actually the leader for 1.62 in IMAGE 1 starts at x~1680, y~1010 (right of +0.26? or right of 1.62?). The +0.26 is at y~970, the 1.62 at y~1010. The leader horizontal line is at y~1010. So the leader starts at the 1.62 level, which is inside the crop (y~1010 > 990). So the leader's start is inside. The leader's end at (2110,1040) inside. So the 1.62 leader is fully inside the crop. Only the +0.26 text and circle top are clipped.
+
+So the crop's top border clips: FAI 40 circle top, +0.26 text. Both belong to FAI 40 (neighboring group).
+
+Now, does this make the crop invalid? The criteria for invalid: (a) relevant leader reaches border — no; (b) arrowhead clipped — the FAI 41 arrowhead (if any) is inside; (c) touched feature absent — no; (d) unrelated neighboring annotations dominate — FAI 40 is partially there but does it dominate? The crop is 1110x260 px in IMAGE 1. FAI 40 occupies the top portion (circle + 1.62 + -0.10 + leader). FAI 41 occupies the bottom portion. They're roughly equal. So FAI 40 doesn't dominate, but it's a significant presence and it's clipped.
+
+Hmm, I think the spirit of the validation is: the crop should cleanly show the selected FAI group without cutting through other annotations in a way that makes the image look broken, AND without missing parts of the selected group. Here the selected group (FAI 41) is complete. The neighboring group (FAI 40) is clipped at top.
+
+Let me look at the example expansion values hint. The expected output format includes expand_norm. If the crop is invalid due to top clipping of FAI 40, we'd expand top. But FAI 40 is not the selected group, so expanding top to include FAI 40 fully would make the crop contain two full groups, which might be fine or might be "neighboring annotations dominate."
+
+Actually, wait. Let's reconsider which group is "selected." The RED rectangle is around FAI 41. So selected = FAI 41. The crop should fully contain FAI 41's group. It does. The crop also partially contains FAI 40's group. The question is whether partial inclusion of a neighboring group invalidates.
+
+Re-reading the very first lines: "The crop is valid only if it fully contains one coherent FAI annotation group: [list]. Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+So the rejection conditions are specific. Partial inclusion of a neighboring annotation is not explicitly a rejection condition unless it "dominates." Does FAI 40 dominate? I'd say no, because FAI 41 is fully present and is the focus, and FAI 40 is just at the top edge partially. But "dominate" is subjective.
+
+Hmm, but the instruction also says: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." This is a warning against superficial validation. It suggests we should look deeper. The deeper issue might be that the leader/arrowhead/target for the selected group is actually NOT fully inside.
+
+Let me look really carefully at IMAGE 2's right edge and the leaders. In IMAGE 2, the right edge is at x~768. The hatched feature's hatching lines extend to the right edge (x~768) — they're cut by the right border. That's fine (local portion visible). The leader for 1.62 vertical line at x~7

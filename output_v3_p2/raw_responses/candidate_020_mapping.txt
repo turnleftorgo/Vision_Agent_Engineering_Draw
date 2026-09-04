@@ -1,0 +1,189 @@
+The user wants me to act as the semantic association stage. I need to look at the evidence dictionary and the images carefully.
+
+The selected marker is F0, with bbox [1150,1150,1250,1250]. Let me look at the images. In IMAGE 1, the FAI markers are circles with "FAI" on top and a number below. Let me look at the positions.
+
+Looking at IMAGE 1, the FAI markers on the right side are:
+- FAI 39 / SPC AL at top right (around y=777-875)
+- FAI 40 / SPC AM (around y=1010-1108)
+- FAI 41 / SPC AN (around y=1153-1250)
+
+F0 bbox is [1150,1150,1250,1250]. That corresponds to the FAI 41 / SPC AN marker on the right side. Let me check the coordinates. In IMAGE 2, the red box F0 is around the FAI 41 / SPC AN circle. Yes, looking at IMAGE 2, the red rectangle is around the "FAI 41 / SPC AN" circle at the bottom right of the dimension table. The bbox [1150,1150,1250,1250] matches the FAI 41 circle (the left circle of that pair). Actually the FAI circle is at x~1150-1250, and the SPC circle is at x~1250-1350. Let's check T39 bbox [1152,1153,1507,1250] which is "EYED .26" - that's the OCR for the FAI 41 / SPC AN / 1.26 row.
+
+So F0 = FAI 41, SPC AN.
+
+Now I need to find the associated measurement annotation. The FAI 41 / SPC AN is associated with the dimension "1.26 +0.25 -0.10" on the right side. Let's look at the text IDs.
+
+Right side dimensions:
+- 2.50 +0.29 -0.07 (top): T10 (+O), T11 (29), T12 (EDED2.50 -> 2.50), T17 (O -> 0.07 part?), T14 (7K -> -0.07?)
+- 1.62 +0.26 -0.10 (middle): T25 (+O), T26 (26), T27 (ENED 1.62), T31 (O), T32 (10)
+- 1.26 +0.25 -0.10 (bottom): T37 (+O), T38 (25), T39 (EYED .26 -> 1.26), T41 (10)
+
+So for FAI 41 / SPC AN, the parameter is 1.26 with tolerance +0.25 / -0.10.
+
+Now the leader lines. The dimension 1.26 on the right has leader lines going to the part. Let's look at the leader segments on the right side.
+
+Looking at IMAGE 1, the right side dimension leaders: The 2.50 dimension has a leader going right then down to the part. The 1.62 has a horizontal leader. The 1.26 has a leader going right then down.
+
+Let me look at the line segments. On the right side, the leaders connect the dimension text to the part cross-section.
+
+Looking at the right side of IMAGE 1, the dimension lines/leaders:
+- For 2.50: there's a line from the text going right and down. L6 [1808,954,2401,955], L7 [1809,957,2401,958] - these are horizontal lines at y~955. Hmm.
+- For 1.62: L8 [1750,1057,2242,1058], L18 [1750,1060,2092,1061] horizontal at y~1058.
+- For 1.26: L11 [1808,1103,2206,1104], L12 [1810,1100,2206,1101] horizontal at y~1102.
+
+Wait, but these are the leaders from the dimension text to the part. Let me look at the geometry in IMAGE 1.
+
+Actually, let's look at the structure. On the right side, the dimension text "1.26 +0.25 -0.10" is at around x=1300-1730, y=1147-1256. The leader line goes from the right of the text (around x=1730) rightward and then to the part.
+
+Hmm, but the lines L11, L12 are at y~1100-1104, which is between the 1.62 row (y~1010-1114) and the 1.26 row (y~1147-1256). Let me look more carefully.
+
+Let me look at IMAGE 2 to see the blue lines (L*) on the right side. In IMAGE 2, on the right side I see blue horizontal lines at:
+- y~955 (L6, L7) - this is the leader for 2.50? Actually the 2.50 text is at y~777-875. The leader for 2.50 in IMAGE 1 goes from the text rightward at the level of the text then down. Hmm.
+
+Let me look at IMAGE 1 right side leaders more carefully. The dimension text on the right:
+- "2.50 +0.29 -0.07" at top, y around 777-881.
+- "1.62 +0.26 -0.10" middle, y around 1005-1114.
+- "1.26 +0.25 -0.10" bottom, y around 1147-1256.
+
+The leaders on the right in IMAGE 1: I see a line starting from the right of "2.50" text going right then down to the part top. A line from "1.62" going right to the part. A line from "1.26" going right then down to the part bottom.
+
+Looking at the part cross-section on the right (the hatched area), it spans y from ~957 to ~1253.
+
+The leader for 2.50: from text at y~824 (the "2.50" baseline) going right to x~1750 then down to y~957 (top of part). So horizontal segment at y~824? But I don't see a line at y~824 on the right. Hmm, L28 [1154,824,1385,825] is at x 1154-1385 which is the FAI 39 circle area, not the leader.
+
+Wait, I'm confusing left and right. Let me re-examine. The left side dimensions are at x~300-980. The right side dimensions are at x~1150-1730. The FAI/SPC circles on the right are at x~1150-1350. The dimension numbers on the right (2.50, 1.62, 1.26) are at x~1350-1500. The tolerances on the right are at x~1550-1730.
+
+So the leader for the right dimensions starts from the right of the tolerance text (x~1730) and goes to the part (x~1750+).
+
+Looking at IMAGE 1, the right side leaders:
+- 2.50: line from x~1730,y~824 going right to x~1750 then down to y~957. So a vertical-ish segment and horizontal at y~957.
+- 1.62: line from x~1730,y~1057 going right to part.
+- 1.26: line from x~1730,y~1103 going right then down to y~1252.
+
+Hmm, this is getting too detailed. Let me look at the blue lines in IMAGE 2 on the right side to identify which L* are leaders for the 1.26 dimension.
+
+In IMAGE 2, right side blue lines I can see:
+- A horizontal blue line at y~955 (L6, L7) extending from x~1808 to 2400.
+- A horizontal blue line at y~1057-1060 (L8, L18) from x~1750 to 2242.
+- A horizontal blue line at y~1100-1104 (L11, L12) from x~1808 to 2206.
+- A horizontal blue line at y~1252-1253 (L13, L15) from x~1952 to 2400.
+- A horizontal blue line at y~1214-1215 (L14) from x~1952 to 2400.
+- Diagonal blue lines L19, L20, L21 (hatching).
+
+Hmm wait. Let me look at the geometry of the part on the right. The part cross-section (hatched) on the right in IMAGE 1: top edge at y~957, then a step, then bottom edge at y~1252. The hatching is between.
+
+The leaders: For 2.50, the leader points to the top surface of the part (y~957). For 1.62, the leader points to a middle surface (y~1057?). For 1.26, the leader points to the bottom surface (y~1252).
+
+Actually, looking at IMAGE 1, the right side dimension leaders look like this: The "2.50" text has a leader that goes right from the text, then a vertical line down to the top of the part. The "1.62" text has a leader going right to a horizontal line at the middle of the part. The "1.26" text has a leader going right then down to the bottom of the part.
+
+Hmm, but the horizontal lines L6/L7 at y~955 correspond to the top of the part (the 2.50 measurement's target surface). L8/L18 at y~1057 correspond to the 1.62 target. L11/L12 at y~1102 correspond to... hmm.
+
+Wait, I think I need to look at the actual leader paths in IMAGE 1 more carefully. Let me trace.
+
+In IMAGE 1, right side, I see the following line structure (the leaders):
+- From "2.50" tolerance right edge (~1730, 824): a line goes right to about (1750, 824) then down to (1750, 957) then right along the top of the part? Actually the top of the part hatched region is at y~957. Hmm.
+
+Actually, you know, the leaders in these drawings typically go from the dimension text to a specific surface with an arrowhead or just a line ending at the surface. But here I don't see arrowheads on the right side leaders in IMAGE 1; they look like plain lines ending at the part edges.
+
+Let me look at the left side for comparison. On the left, the leaders have arrowheads? In IMAGE 1 left side, the leaders from the dimension text go left and end at the part edges with small arrowheads? Actually I see the leaders on the left are like: from "2.50" a line goes left to (300, 824) then down-left to (275, 922) then left to (0, 922). Hmm.
+
+This is too uncertain. Let me think about what the expected answer structure is. The task says: build exactly one complete FAI annotation group for F0. F0 = FAI 41 / SPC AN. The associated measurement is the 1.26 dimension on the right with tolerance +0.25/-0.10.
+
+Now, the leader segments connected to that annotation: the leader from the 1.26 text to the part. And the terminal arrowheads. And the touched part.
+
+But honestly, the evidence for the right-side leaders is messy. Let me look at which L* lines are at the y-level of the 1.26 text and connect to the part.
+
+The 1.26 text row is at y~1147-1256. The leader for 1.26 in IMAGE 1: I see a line from the right of the tolerance "-0.10" (x~1730, y~1103?) Hmm.
+
+Let me look at IMAGE 1 right side lines visually. I'll describe what I see: There's a horizontal line at the level between 1.62 and 1.26? Actually the leader for 1.26 in the image: from the text "1.26" right side, there's a line that goes right and slightly up then to the part's lower-middle surface.
+
+I'll look at the blue lines in IMAGE 2 again with their coordinates:
+- L11: [1808,1103,2206,1104] horizontal y=1103
+- L12: [1810,1100,2206,1101] horizontal y=1100
+- L13: [1952,1252,2401,1253] horizontal y=1252
+- L14: [1952,1214,2401,1215] horizontal y=1214
+- L15: [1953,1249,2401,1250] horizontal y=1249
+
+Hmm, the 1.26 dimension's leader in IMAGE 1: I think the line from the 1.26 text goes right to about x=1750 then down to y=1252 (bottom of part) — but the bottom of part line is L13/L15 at y~1250. And there's a vertical connector.
+
+Actually wait. Let me look at the left side to understand the leader pattern, because the left and right are mirror images of the same part (it's a symmetric cross-section, "2X SURFACE"). On the left, the 1.26 dimension (FAI 100 / SPC CO) leader: in IMAGE 1, from "1.26" text left side, line goes left to (300, 1092) then down-left to (275, 1173) then left to (0, 1173). The lines L51 [0,1173,185,1174], L52 [0,1185,185,1186], L55 [0,1170,183,1171] are at y~1170-1185, x 0-185. And L16 [0,1220,335,1221], L17 [0,1217,333,1218] at y~1217-1220. Hmm.
+
+This is way too detailed and uncertain. Given the difficulty, perhaps the expected answer is that the leader/arrowhead/target evidence is missing or partial, and we should provide fallback boxes.
+
+Let me reconsider the whole thing. The instruction: "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation." And "If evidence is missing, provide a fallback box."
+
+Given the messiness, maybe the right approach: F0 = FAI 41, SPC AN. The annotation (parameter + tolerance) text IDs: T39 (1.26), T37 (+0), T38 (25), T41 (10). The SPC letter = AN. The FAI number = 41.
+
+Now leaders: The leader connecting the 1.26 dimension to the part. On the right side, the leader lines for 1.26 are likely L11, L12 (the horizontal at y~1100-1103) plus a vertical? But there's no vertical line in the evidence for the right side at x~1750 between y 1100 and 1252. Hmm. Actually wait, maybe the leader for 1.26 is the line at y~1100-1103 (L11, L12) which goes from the text to the part's surface at y~1100? But the part's surface at y~1100... the part hatched region on the right: top at 957, then there's a step. Let me look at IMAGE 1 right part: I see the hatched region has a top horizontal edge at y~957 from x~1808 to 2400, then a vertical edge down at x~2242 to y~1057, then horizontal at y~1057 from x~2242 to 2400? No wait.
+
+Ugh, I really can't be precise. Let me look at the part shape on the right in IMAGE 1. The hatched region: It looks like an L-shape or step. Top edge horizontal at y~957 (x from ~1808 to 2400). Right edge vertical at x~2400 (off screen). Bottom edge horizontal at y~1252 (x from ~1952 to 2400). Left edge: from (1808,957) down to (1808,1057)? then right to (2242,1057)? then down to (2242,1103)? then right to (1952,1103)? Hmm not sure.
+
+Actually the leaders point to specific surfaces. The 2.50 measures from the bottom (0.00 reference) to the top surface. The 1.62 measures to a middle surface. The 1.26 measures to another surface.
+
+Given the reference (0.00) is at the bottom (y~1252 on left, the line L16/L17 at y~1217-1220? or the bottom of part). On the left, (0.00) text T40 at y~1185-1255, and the leader line L16/L17 at y~1217-1220 goes from x0 to 333. Hmm but the bottom of the part on left is at y~1195 (the hatched region bottom). 
+
+OK I'm spending too much time. Let me think about what's reasonable for the answer. The pipeline likely expects a best-effort association. Given the uncertainty in leaders, I'll select the leader lines that are clearly on the right side at the 1.26 level and connect text to part.
+
+Let me look at the right side leader for 1.26 in IMAGE 1 one more time, focusing on the line that emanates from the right of the "1.26 +0.25 -0.10" block. The block's right edge is at x~1730 (the "-0.10" text T41 at x1672-1732, y1218-1256; the "+0.25" T38 at x1662-1732 y1147-1185). The leader line in IMAGE 1 from this block: I see a line starting at about (1730, 1103) going right to (1750,1103) then... hmm but 1103 is above the 1.26 text (which is at 1147-1256). That doesn't match.
+
+Wait, maybe I mis-assigned rows. Let me recompute row y-centers on the right:
+- Row 1 (2.50): text T12 y777-875 center ~826. Tolerances T10/T11 y772-810, T17 y842-881.
+- Row 2 (1.62): text T27 y1010-1108 center ~1059. Tolerances T25/T26 y1005-1043, T31/T32 y1076-1114.
+- Row 3 (1.26): text T39 y1153-1250 center ~1200. Tolerances T37/T38 y1147-1185, T41 y1218-1256.
+
+Now the leaders on the right in IMAGE 1: I'll guess the leader for each row is a horizontal line at the row's center y going from the text to the part, possibly with a vertical jog.
+
+Row 1 center ~826: but the part top is at 957, so the leader must jog down. The horizontal at y~955 (L6/L7) is the part top edge, not the leader. Hmm but maybe the leader for row 1 is the vertical line from (1750,826) to (1750,957) plus the part top edge? Not in evidence as a single line.
+
+Row 2 center ~1059: horizontal L8/L18 at y~1057-1060 from x1750 to 2242. That matches! The leader for 1.62 is L8/L18 (horizontal at the row center, from text to part).
+
+Row 3 center ~1200: horizontal at y~1200? L14 at y1214-1215 from x1952 to 2400. Hmm that's at the part's lower area. And L11/L12 at y1100-1103 from x1808 to 2206.
+
+Hmm, this is inconsistent. Let me look at the left side rows to calibrate:
+Left rows:
+- Row 1 (2.50): T13 y795-840 center ~817. Tolerances T7/T8 y759-798, T15/T16 y830-868.
+- Row 2 (1.62): T22 y942-980 center ~961. Tolerances T18/T19 y907-945, T23/T24 y978-1016.
+- Row 3 (1.26): T33 y1092-1131 center ~1111. Tolerances T28/T29 y1057-1095, T35/T36 y1128-1166.
+- Row 4 (0.00): T40 y1185-1255 center ~1220.
+
+Left leaders (horizontal lines from text left edge to part):
+- Row 1: L24/L25 at y922-926 from x0 to 276. Hmm that's at y~924, not 817.
+- Row 2: L22/L23/L26/L27 at y1026-1030 and y1069-1073 from x0 to 277.
+- Row 3: L51/L52/L55 at y1170-1186 from x0 to 185.
+- Row 4: L16/L17 at y1217-1221 from x0 to 334.
+
+Hmm so on the left, the leader horizontal lines are NOT at the text center y. They're at the part surface y. So the leader goes from text (with a vertical jog) to the part surface, and the horizontal segment we see is at the part surface level (the line that the arrowhead/leader terminates on, or the part edge itself).
+
+Actually, I bet the horizontal lines L24, L22, L51, L16 etc. ARE the part edges / dimension extension lines on the left, and the leaders are the diagonal/vertical jogs.
+
+Look at left row 1: text at y~817, part top surface at y~922 (L24/L25). The leader in IMAGE 1 left row 1: from text left (300,817) a line goes left to (275,817)? then down to (275,922)? then left along part top (L24/L25)? In IMAGE 1 I see for left row 1 a line that goes from the "2.50" left, horizontal a bit, then diagonal down-left to the part top. Yes there's a diagonal segment.
+
+Hmm, the diagonal segments on left: L57 [43,1073,165,1195], L60 [41,1074,159,1192] are diagonals at x41-165 y1073-1195 — that's the hatching of the part on the left (the small hatched triangle at left middle). Not leaders.
+
+I think the leaders on the left are: for row 1, the line from (300,817) to (275,922) is a short diagonal/vertical not captured well. The horizontal L24/L25 at y922 is the part top edge which the leader touches.
+
+OK given all this confusion, I'll make a decision: The evidence for clean leader segments and arrowheads for F0's annotation is poor/missing. The arrowheads H* are all on the left side (H0 top-left, H1 left, H2 left, H3 left, H4 left) — none on the right side. So there are NO arrowhead candidates on the right side for F0's leader. Therefore arrowhead_ids = [] and we use fallback for target.
+
+Similarly, the leader segments on the right that belong to F0's 1.26 annotation: I'll pick the horizontal line at the 1.26 part-surface level. But which? The 1.26 on the right measures to the bottom surface? On the left, 1.26 (FAI 100) leader touches the part at y~1170-1186 (L51/L52/L55) which is the bottom-ish surface, and (0.00) touches at y~1217-1221 (L16/L17) the very bottom. On the right, by symmetry, 1.26 should touch at the corresponding surface. The right part bottom is at y~1252 (L13/L15). The right part's lower-middle surface at y~1214 (L14)? Hmm.
+
+Wait, on the left the part bottom (0.00 reference) is at y~1217-1221 (L16/L17) and the 1.26 surface is at y~1170-1186 (L51/L52/L55). The difference 1220-1178 = 42 px. On the right, the part bottom (0.00) would be at y~1252 (L13/L15). The 1.26 surface would be at y~1252-42 = ~1210, which matches L14 at y1214! And the 1.62 surface on left is at y~1026-1030 (L22/L23) or y~1069-1073 (L26/L27)? On left, 1.62 text center 961, the leader touches part at... hmm the part on left has surfaces at y922 (top), y1026, y1072, y1173, y1220. The 1.62 dimension from 0.00 (1220) to 1.62 surface = 1220 - 1.62*scale. The 2.50 from 0.00 to top (922) = 1220-922=298 px for 2.50 units => 119 px/unit. Then 1.62 units = 193 px => surface at 1220-193=1027. Yes! L22/L23 at y1026-1030 = 1.62 surface. And 1.26 units = 150 px => surface at 1220-150=1070. Yes! L26/L27 at y1069-1073 = 1.26 surface on left! And L51/L52/L55 at y1170-1186 is something else (maybe the hatched small feature). Good, this calibration works.
+
+So on the left: 2.50 surface = y922 (L24/L25), 1.62 surface = y1026 (L22/L23), 1.26 surface = y1070 (L26/L27), 0.00 = y1220 (L16/L17).
+
+Now on the right, by symmetry the part is mirrored vertically? The right part top is at y957 (L6/L7). The right 0.00 reference should be at the same physical level as left 0.00. But left 0.00 = y1220, right part bottom = y1252. Not equal. Hmm, maybe the right part is drawn at a different vertical position? That can't be for a symmetric cross-section. Unless the right part is offset.
+
+Wait, maybe I mis-identified left 0.00. On left, the (0.00) text T40 at y1185-1255, and the leader line for (0.00) is L16/L17 at y1217-1221. On the right, the (0.00) is not labeled (only left has (0.00)). The right part bottom edge is L13/L15 at y1249-1253. The left part bottom edge (the hatched region bottom) — let me look: left hatched region bottom is at y~1195 (the line under the hatching). Hmm but L16/L17 at y1217-1221 is below that.
+
+I'm overanalyzing. The vertical positions of left and right parts might differ because the drawing has the left part and right part at slightly different y due to the leader routing, OR the right part is just drawn lower.
+
+Given the right part top = 957 and the right 2.50 surface should be the top = 957 (L6/L7). Then 2.50 units = (0.00_y - 957). If 0.00_y = 1252 (right bottom), then 2.50 units = 295 px => 118 px/unit (consistent with left's 119!). Good. Then 1.62 surface = 1252 - 1.62*118 = 1252 - 191 = 1061. That matches L8/L18 at y1057-1060! And 1.26 surface = 1252 - 1.26*118 = 1252 - 149 = 1103. That matches L11/L12 at y1100-1104! 
+
+So on the right: 2.50 surface = L6/L7 (y955), 1.62 surface = L8/L18 (y1058), 1.26 surface = L11/L12 (y1102), 0.00 = L13/L15 (y1251).
+
+Therefore F0 (FAI 41, the 1.26 dimension on right) leader touches the part surface at L11/L12 (y1100-1104). 
+
+Now the leader path: from the 1.26 text (right side, x~1730, y~1200) to the surface at (1808,1102). So there should be a vertical/diagonal jog from (1730,1200) to (1808,1102)? In IMAGE 1, I see for the right 1.26 a line that goes from the text right, up-right to the surface. Looking at IMAGE 1, yes there's a line from the "-0.10"/"1.26" area going up-right to the part's lower-middle surface. But is that line in the evidence? The horizontal part is L11/L12. The vertical/diagonal jog from text to that horizontal — I don't see a clear line ID. Possibly it's not captured, or it's part of L11/L12's left extension? L11 starts at x1808. The text right edge is ~1732. So there's a gap 1732-1808 not covered. Hmm.
+
+Actually wait, maybe the leader for the right dimensions is drawn from the text going right at the text's y then the horizontal line we see IS at the text's y, not the surface y. Let me re-examine: For right 1.62, text center y~1059, and L8/L18 at y1057-1060 — that's basically the text center! For right 1.26, text center y~1200, but L11/L12 at y1100-1104 — that's NOT the text center. Hmm inconsistent.
+
+Hold on, maybe I mis-assigned which horizontal line is the leader vs the part edge. Let's look at the part edges on the right.

@@ -1,0 +1,201 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+In IMAGE 1, there's a RED rectangle highlighting the FAI 40 marker (with SPC AM next to it). The MAGENTA rectangle is the proposed crop boundary. Wait, I need to look carefully. The instructions say IMAGE 1 is the wider candidate context, with a MAGENTA rectangle as the proposed crop and a RED rectangle as the selected FAI marker.
+
+Looking at IMAGE 1, I see the RED rectangle around "FAI 40". I don't see an obvious magenta rectangle in IMAGE 1. Let me look more carefully. Hmm, the magenta rectangle might be very thin or overlapping. Actually, looking at the images, IMAGE 1 and IMAGE 2 look very similar. Let me compare them.
+
+In IMAGE 1, the layout shows the dimension text on left (2.50, 1.62, 1.26, (0.00)) and right (2.50, 1.62, 1.26). The FAI 40 is in the middle-right area.
+
+In IMAGE 2, the layout is similar but the crop seems to show more of the bottom - I can see the section view with circles and slots at the bottom, and "SECTION" text on the right, and "J-BJ" on the left.
+
+Wait, the task says IMAGE 2 is the proposed crop itself. So IMAGE 2 should be a cropped version of IMAGE 1. But IMAGE 2 looks like it has MORE content at the bottom (the section view with circles). That's odd. Let me look at the dimensions.
+
+Actually, maybe IMAGE 1 is the wider context and IMAGE 2 is the crop. But IMAGE 2 shows the section view at the bottom which in IMAGE 1 is partially cut off at the very bottom. Hmm.
+
+Let me look at the coordinates. In IMAGE 1, the bottom shows the feature control frame "⊕ ⌀0.21 A B C" with FAI 202 SPC GP, and "2X SURFACE" with F, and E box. Below that there's a horizontal line and some partial shapes (slots and a circle at bottom right).
+
+In IMAGE 2, the same feature control frame is present, plus "F 2X SURFACE" with the F box fully visible, plus the section view with circles and slots fully visible at the bottom, plus "SECTION" text on right and "J-BJ" on left.
+
+So IMAGE 2 actually contains MORE vertical extent at the bottom than IMAGE 1? That doesn't make sense if IMAGE 2 is a crop of IMAGE 1.
+
+Wait, maybe I'm misreading. Let me look at the top. In IMAGE 1, top shows partial circles (dashed) and "BM" / "DETAIL BN SCALE 20:1". In IMAGE 2, top shows the same partial circles but with "DETAIL BM SCALE 20:1" on left and "DETAIL BN SCALE 20:1" on right.
+
+Hmm, the two images look like they're at slightly different vertical positions or scales. Actually they look like the same drawing but IMAGE 2 is shifted down a bit (showing more of the bottom section view) and the top is cut a bit differently.
+
+This is confusing. Let me think about what the "magenta rectangle" is. The instructions mention a magenta rectangle in IMAGE 1. I don't see a clear magenta rectangle. Perhaps it's not rendered visibly in my view, or it's a thin outline. The RED rectangle is clearly around FAI 40.
+
+The key question: is the crop valid? The crop must fully contain one coherent FAI annotation group: the FAI circle (FAI 40), associated SPC letter (AM), parameter/tolerance (1.62 +0.26 -0.10), feature-control-frame and description text, every connected leader segment, every terminal arrowhead, and a visible local portion of every component feature touched by those arrows.
+
+Now, the FAI 40 / SPC AM group is associated with the dimension 1.62 +0.26 -0.10 on the right side. The leader for that dimension goes to the right and points to a feature in the section view (the hatched area on the right). Let's look at the leader lines.
+
+In IMAGE 1, the right side dimensions (2.50, 1.62, 1.26) have leader lines going to the right. The 1.62 dimension's leader goes right and then... let's trace. The dimension text "1.62 +0.26 -0.10" has a leader line on its right that goes to the right edge and connects to the hatched feature. Actually the leaders on the right side: there's a line from 2.50 going right-down to a horizontal line, a line from 1.62 going right to a horizontal line, and a line from 1.26 going right-up to a horizontal line. These horizontal lines connect to the section view feature on the right.
+
+So the FAI 40 group's leader/feature is on the right side, in the hatched section. In IMAGE 2, the right side hatched section is present (the hatched area on the right). Good.
+
+But wait, the crop validity also requires that the leader segments and arrowheads are fully contained and the touched feature is visible. Let's look at the leaders for the right-side dimensions. In IMAGE 1, the leader from 1.62 (FAI 40) goes right and the horizontal line extends to the right edge of the image? Let's look. The horizontal line at the 1.62 level on the right goes from the dimension text rightward to about x=2100 (in some coordinate) and then there's the hatched feature starting around x=2130. Actually the leader line for 1.62 on the right: I see a horizontal line at the level of "1.62" that goes from the text to the right and meets the hatched feature's left edge. Hmm.
+
+Let me look at the structure on the right. There's a stepped profile with hatching. The dimension leaders point to specific horizontal surfaces of that profile.
+
+Now, the critical issue: does the crop (IMAGE 2) contain the full leader and the touched feature? In IMAGE 2, the right side hatched feature is present but it's cut off at the right edge? Let's look. In IMAGE 2, the hatched area on the right extends to the right edge of the image (x=2337 maybe). The hatching lines go all the way to the right border. So the feature might be clipped at the right edge.
+
+Hmm, but the requirement is "a visible local portion of every component feature touched by those arrows." So we just need a visible local portion, not the whole feature. So clipping the feature at the right edge might be okay as long as a portion is visible and the arrowhead/leader is not clipped.
+
+But the requirement also says "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent."
+
+So if a leader line reaches the crop border (i.e., the leader is cut off at the border), that's a reject. Let's check the leaders in IMAGE 2.
+
+Look at the right side leaders in IMAGE 2. The leader from 2.50 goes right and down to a horizontal line that ends at the hatched feature's top-left corner (around x=1990). The leader from 1.62 goes right to a horizontal line that ends at the hatched feature (around x=2130). The leader from 1.26 goes right and up to a horizontal line that ends at the hatched feature (around x=1880). These horizontal lines appear to terminate at the feature, not at the crop border. So the leaders are contained.
+
+But wait, what about the left side? The FAI 40 group is on the right side of the dimension table. But the dimension table is shared. Hmm, actually the FAI markers are paired: left column has FAI 76/SPC BS, FAI 75/SPC BR, FAI 100/SPC CO. Right column has FAI 39/SPC AL, FAI 40/SPC AM, FAI 41/SPC AN. The selected FAI is 40 (red box). The associated SPC is AM. The associated dimension is 1.62 +0.26 -0.10 (right side).
+
+Now, the leader for that dimension is on the right. So the relevant leader is the right-side one. Good.
+
+Now, is the left side relevant? The left side dimensions (2.50, 1.62, 1.26, 0.00) have their own leaders on the left pointing to the left hatched feature. Those are associated with FAI 76, 75, 100, not 40. So they're not part of the FAI 40 group. But the crop includes them. The rule says "unrelated neighboring annotations dominate" would be a reject. But here the left annotations are present but do they "dominate"? The crop contains both left and right dimension tables plus the section view at the bottom. Hmm.
+
+Actually, wait. Let's reconsider what the crop is. The magenta rectangle in IMAGE 1 defines the crop. I can't see it clearly. But IMAGE 2 is the crop. So the crop is essentially the whole IMAGE 2 region. IMAGE 2 contains a lot: top partial circles, both detail labels, the SPC control text, the full dimension table (left and right), the feature control frame, the 2X SURFACE, and the section view at the bottom.
+
+That's a huge amount of content. The crop seems to include the entire central region of the drawing. That's not a tight crop around FAI 40. But the validity criteria are about whether it FULLY CONTAINS the FAI 40 group and doesn't have leaders reaching the border / clipped arrowheads / absent features / unrelated dominating.
+
+Hmm, but the crop includes the section view at the bottom which is touched by the feature control frame leader (the long diagonal line from the FCF going down-left to the section view). That leader's arrowhead is at the bottom-left, possibly clipped? In IMAGE 2, the diagonal line from the FCF goes down-left and ends with an arrowhead at the very bottom (around x=480, y=2337). Let's look. In IMAGE 2, I see the diagonal line going from the FCF (around x=730, y=1660) down-left to about (x=480, y=2337) where there's an arrowhead at the bottom edge. Is it clipped? The arrowhead appears to be right at the bottom border. Hmm.
+
+But that FCF (FAI 202) is a different FAI group, not the selected FAI 40. So its leader being clipped might not matter for the FAI 40 group's validity? The rule says "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent." "Relevant" likely means relevant to the selected FAI group. The FCF leader is relevant to FAI 202, not 40. So maybe not relevant.
+
+But the rule also says the crop must contain "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows" — referring to the FAI annotation group (the selected one). So we focus on FAI 40's group.
+
+For FAI 40, the group is: FAI 40 circle, SPC AM circle, dimension 1.62 +0.26 -0.10, and the leader to the right feature. Are all these in IMAGE 2? Yes, I see FAI 40, SPC AM, 1.62 +0.26 -0.10, and the leader going right to the hatched feature. The hatched feature is visible (a portion). The leader doesn't appear to reach the crop border (it terminates at the feature). The arrowhead—wait, do these dimension leaders have arrowheads? They look like they terminate with a small hook or just touch the feature line. Let's look. The right-side leaders: the line from 2.50 goes right then down then right to the feature top. The line from 1.62 goes right to the feature. The line from 1.26 goes right then up then right to the feature. These are dimension extension/leader lines that touch the feature surfaces. They don't have arrowheads per se; they're like witness lines. Hmm.
+
+Actually, looking more carefully at the right side, the leaders are like: from the dimension text, a horizontal line goes right, then a diagonal/vertical segment connects to the feature. Let me look at the shape. For 2.50: horizontal line from text at y~960 goes right to x~1660, then diagonal down-right to (1750, 1040), then horizontal right to (2150, 1040) which is the top of the hatched feature. For 1.62: horizontal line from text at y~1140 goes right to (2130, 1140) which is a step on the feature. For 1.26: horizontal line from text at y~1210 goes right to (1880, 1210), then diagonal up-right to (1750, 1140)? Hmm this is getting too detailed.
+
+The point is, in IMAGE 2, the right hatched feature is present and the leaders connect to it within the image. The right edge of IMAGE 2 cuts through the hatched feature (the hatching continues to the right border). But that's the feature being clipped, not the leader. The rule says "a visible local portion of every component feature touched by those arrows" is required, and "the touched feature is absent" is a reject. A clipped feature still has a visible local portion, so that's okay. The leader itself doesn't reach the border (it terminates at the feature's left edge which is inside the image). Good.
+
+Now, what about the left side? The left side leaders for the left dimensions point to the left hatched feature. In IMAGE 2, the left hatched feature is present (the hatched area on the left at y~1180-1280). But those leaders are for FAI 75/100, not 40. So not relevant.
+
+Hmm, but here's a subtlety: the dimension table is one block. The selected FAI 40 is in the right column. The "parameter/tolerance/feature-control-frame and description text" for FAI 40 is the right-side 1.62 dimension. The left-side dimensions are for other FAIs. So they're unrelated neighboring annotations. Do they "dominate"? The crop is large and contains both. But the rule about "unrelated neighboring annotations dominate" is a reject condition. If the crop is mostly unrelated stuff, that's bad. But here the crop contains the FAI 40 group plus a lot of other stuff. Is that "dominating"? Hard to say.
+
+Let me think about the intent of these tasks. Usually the crop is supposed to be a tight region around the selected FAI. If the crop is too wide and includes tons of unrelated content, it might be considered invalid because unrelated annotations dominate, OR it might be considered valid as long as the selected group is fully contained and nothing is clipped. The instructions say "Reject it if ... unrelated neighboring annotations dominate." So if the crop is huge and the selected FAI is just a tiny part, that could be a reject.
+
+But also, the instructions say "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle." This suggests the magenta rectangle is smaller than IMAGE 1, and we need to check if anything important is just outside it. Since I can't see the magenta rectangle clearly, I have to infer from IMAGE 2 (the crop) what's inside.
+
+Hmm, wait. Maybe IMAGE 1 and IMAGE 2 are actually the same size and the magenta rectangle is the whole image? No, the instructions say IMAGE 1 is the wider candidate context and IMAGE 2 is the proposed crop. They should differ in size. But they look the same size to me (both ~2337 wide). Let me check the aspect. Both look square-ish.
+
+Let me look at differences between IMAGE 1 and IMAGE 2 more carefully.
+
+IMAGE 1 top-left: shows "BM" and "0:1" (partial "DETAIL BM SCALE 20:1" cut off on left). Top-right: "DETAIL BN SCALE 20:1".
+
+IMAGE 2 top-left: shows "DETAIL BM SCALE 20:1" (more complete, "DETAIL" visible). Top-right: "DETAIL BN SCALE 20:1".
+
+So IMAGE 2 shows more on the left at the top (the word DETAIL). That means IMAGE 2 is shifted left relative to IMAGE 1? Or IMAGE 1 is shifted right?
+
+IMAGE 1 bottom: shows the FCF, "2X SURFACE" with F box partially cut on left (the F box is at the very left edge, partially visible), E box, and at the very bottom a horizontal line with partial slots and a circle at bottom-right.
+
+IMAGE 2 bottom: shows the FCF, "F 2X SURFACE" with F box fully visible, E box, and at the bottom a full section view with circles and slots, plus "SECTION" text on right and "J-BJ" on left.
+
+So IMAGE 2 shows MORE at the bottom and MORE at the left-top. This is inconsistent with a simple crop (which would show LESS, i.e., a sub-rectangle). Unless IMAGE 1 is the crop and IMAGE 2 is the wider? But the instructions explicitly say IMAGE 1 is wider context and IMAGE 2 is the crop.
+
+Wait, maybe I have it backwards in my perception. Let me look at the top circles. In IMAGE 1, top-left circle: I see a dashed circle with an X inside, partially cut at top and left. In IMAGE 2, top-left circle: dashed circle with X, also partially cut but the X is more centered? Hard to say.
+
+This is too uncertain. Let me step back and think about the typical structure of these validation tasks. The "magenta rectangle" is the proposed crop region drawn on IMAGE 1. The "red rectangle" is the selected FAI. IMAGE 2 is what you'd get if you cropped IMAGE 1 by the magenta rectangle. So IMAGE 2 should be a sub-image of IMAGE 1.
+
+Given that, the differences I see must be due to my misperception. Let me assume IMAGE 2 is indeed a sub-image. Then in IMAGE 2, the content at the bottom (section view) must also be present in IMAGE 1 within the magenta rectangle. In IMAGE 1, the bottom shows only a sliver of the section view (the horizontal line and partial slots). So if IMAGE 2 shows the full section view, then IMAGE 2's bottom extends below IMAGE 1's bottom, which is impossible for a crop.
+
+Therefore, my perception that IMAGE 2 shows more at the bottom must be wrong, OR the images are not aligned as I think. Let me look at the y-coordinates of the FCF in both images. In IMAGE 1, the FCF "⊕ ⌀0.21 A B C" is at roughly y=1740 (out of ~2337 height). In IMAGE 2, the FCF is at roughly y=1660. So IMAGE 2's FCF is higher up. That means IMAGE 2 is shifted up relative to IMAGE 1, OR IMAGE 2 is zoomed out.
+
+If IMAGE 2 is zoomed out (smaller scale), then it would show more content overall, which matches: IMAGE 2 shows the full section view at bottom and full DETAIL BM at top-left. And IMAGE 1 is zoomed in (larger scale) showing less vertical extent. But then IMAGE 1 would be the crop and IMAGE 2 the wider context, contradicting the instructions.
+
+Hmm, but the instructions are fixed: IMAGE 1 wider, IMAGE 2 crop. I'll trust the instructions and assume my pixel-reading is just imprecise. The key is to evaluate validity based on the content of IMAGE 2 (the crop) and the context of IMAGE 1.
+
+Let me focus on the actual validity criteria for the FAI 40 group, looking at IMAGE 2 as the crop:
+
+1. FAI circle and readable number: FAI 40 visible. Yes.
+2. Associated SPC letter: SPC AM visible. Yes.
+3. Parameter/tolerance: 1.62 +0.26 -0.10 visible. Yes.
+4. Feature-control-frame and description text: Hmm, the FCF "⊕ ⌀0.21 A B C" is for FAI 202, not 40. The FAI 40 group doesn't have its own FCF; it's a dimension. The "description text" might be the SPC CONTROL FOR ALL HEAT STAKE POST text? That's general. So no specific FCF for 40. That's fine; the criterion says "if present".
+5. Every connected leader segment: The leader from the 1.62 dimension to the right feature. In IMAGE 2, is it fully visible? The leader goes from the text rightward to the hatched feature. The hatched feature's left edge is inside the image. So the leader is fully visible. Yes.
+6. Every terminal arrowhead: The leader terminates at the feature; if there's an arrowhead, is it visible? It looks like the leader just touches the feature line without an arrowhead (it's a dimension witness line). So no arrowhead to clip. OK.
+7. Visible local portion of touched feature: The right hatched feature is visible (a portion). Yes.
+
+Now the reject conditions:
+- Relevant leader reaches crop border? The right leader terminates at the feature inside the image, not at the border. The left leaders (for other FAIs) terminate at the left feature inside the image. So no relevant leader reaches the border. But wait, what about the long diagonal leader from the FCF (FAI 202)? That's not relevant to FAI 40. So ignore.
+- Arrowhead clipped? The FCF arrowhead at bottom might be clipped, but not relevant to 40.
+- Touched feature absent? The right feature is present.
+- Unrelated neighboring annotations dominate? The crop contains a lot: left dimension table, right dimension table, FCF, 2X SURFACE, section view, detail labels, SPC control text. The selected FAI 40 is one of many. Does the unrelated content "dominate"? This is the crux.
+
+Hmm. The crop is essentially the entire central drawing area. The selected FAI 40 is a small part. I'd argue that the unrelated content (the whole left table, the FCF, the section view, the detail circles) does dominate the crop. The crop is not focused on FAI 40.
+
+But the validity definition says "The crop is valid only if it fully contains one coherent FAI annotation group". It doesn't say it must contain ONLY that group. The reject condition "unrelated neighboring annotations dominate" is a separate check. If the crop is huge and the FAI group is tiny, then unrelated annotations dominate → reject.
+
+Looking at IMAGE 2, the FAI 40 marker is in the middle, and there's a huge amount of other stuff around it: the entire left column of dimensions with their FAI circles (76, 75, 100), the right column other FAIs (39, 41), the FCF with FAI 202, the section view, the detail circles at top. So yes, unrelated annotations are abundant and arguably dominate.
+
+But wait, maybe the magenta rectangle (the actual crop) is smaller than IMAGE 2? No, IMAGE 2 IS the crop. So the crop is as big as IMAGE 2.
+
+Hmm, but actually, maybe I should look at whether the magenta rectangle in IMAGE 1 is small (just around FAI 40) and IMAGE 2 is mistakenly showing the whole thing? No, the instructions are clear that IMAGE 2 is the proposed crop.
+
+Let me reconsider. Perhaps the intended interpretation: The magenta rectangle in IMAGE 1 is the crop region. I should look at IMAGE 1 to see what's inside the magenta rectangle and what's just outside. Since I can't see the magenta rectangle, I'll guess it's roughly the region that IMAGE 2 shows. But IMAGE 2 shows almost everything, so the magenta rectangle is almost the whole image. That would mean the crop is the whole image, which contains the FAI 40 group fully. Then the only question is whether unrelated annotations dominate.
+
+Actually, you know, in many of these tasks, the "crop" being too large and including the whole drawing is considered invalid because it's not a focused crop and unrelated annotations dominate. But sometimes a large crop that fully contains the group with no clipping is considered valid. The instructions emphasize: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." This suggests we need to check the leaders and features carefully.
+
+Let me look really carefully at the right-side leader for 1.62 in IMAGE 2 and whether it's complete and whether the feature is touched.
+
+In IMAGE 2, right side: I see "1.62 +0.26 -0.10" with FAI 40 / SPC AM to its left. To the right of the text, there's a horizontal line at the 1.62 level going right to the hatched feature. The hatched feature on the right has a stepped profile. The horizontal line at 1.62 level connects to a step. Good, that's inside the image.
+
+Now the left side: the left hatched feature is at the left edge. In IMAGE 2, the left hatched feature (the hatched rectangle at y~1180-1280) is present but its left part might be cut at the left border? In IMAGE 2, the left hatched area starts at x=0 (left border) — the hatching lines go to the left border. So the left feature is clipped at the left border. But that's for FAI 75/100, not 40. Not relevant.
+
+Hmm, but the dimension leaders on the left: the leader for left 1.62 (FAI 75) goes left to the left feature. If the left feature is clipped at the border, the leader might reach the border? The left leader for 1.62 goes from the text leftward to the left feature's right edge, which is inside the image (around x=350). So the leader is fine. The feature is clipped but a portion is visible. Not relevant to 40 anyway.
+
+OK here's another thought. Maybe the magenta rectangle is actually small, centered on FAI 40, and IMAGE 2 is NOT the whole image but I'm misjudging because the images are presented at the same display size. Let me look at the relative sizes of text. In IMAGE 1, the text "SPC CONTROL FOR ALL HEAT STAKE POST" spans from x~500 to x~1800. In IMAGE 2, the same text spans from x~620 to x~1680. So in IMAGE 2 the text is smaller / more compressed horizontally? That would mean IMAGE 2 is zoomed out (showing more width). Hmm, but the width of both images is the same pixels. If IMAGE 2 shows more width of the drawing, then IMAGE 2 is zoomed out, meaning IMAGE 2 is the WIDER context, contradicting instructions.
+
+I'm spending too much time on pixel forensics. Let me think about the most likely intended answer.
+
+The selected FAI is 40. The crop (IMAGE 2) clearly contains FAI 40, SPC AM, the 1.62 dimension, and the right feature with its leader. It also contains a lot of extra stuff. The question is whether the extra stuff causes a reject via "unrelated neighboring annotations dominate" or whether some leader/arrowhead for the FAI 40 group is clipped.
+
+Let me look at the leader for the right 1.62 dimension once more. Actually, I realize the right-side dimensions' leaders might extend to the right border in IMAGE 2. Let's look at the 2.50 right leader: horizontal line at y~960 from text to x~1660, then diagonal to (1750,1040), then horizontal to the feature top at x~2150. The feature top-right is at the right border? The hatched feature's right edge in IMAGE 2 is at the right border (x~2337). The horizontal line at 1040 ends at the feature's left-top corner (x~1990). So inside. Good.
+
+The 1.62 right leader: horizontal line at y~1140 from text (x~1430) to the feature step at x~2130. Inside. Good.
+
+The 1.26 right leader: horizontal line at y~1210 from text to x~1880, then diagonal up to (1750,1140)? Hmm, actually the 1.26 leader on the right goes from text rightward then up-left? Let's look. In IMAGE 1, the right 1.26 leader: from text at y~1280, a line goes right to x~1700 then up-left diagonal to (1750,1140)? This is the witness line to the bottom step of the feature. It's inside.
+
+So no right leader reaches the border. Good.
+
+Thus the FAI 40 group's leaders and feature are fully within the crop. So the "missing" list would be empty, and no expansion needed for the group itself.
+
+Now the "unrelated dominate" concern. The crop includes the left table and the FCF and section view. But are these "neighboring annotations" that "dominate"? The phrase "unrelated neighboring annotations dominate" I think means: if the crop is so small that it's mostly filled by a different FAI's annotation, or if the crop is mis-centered such that the selected FAI is at the edge and another FAI's stuff fills the frame. Here the selected FAI 40 is roughly central in the dimension table, and the crop includes symmetric content. I don't think unrelated annotations "dominate" in the sense of mis-centering; rather the crop is just large.
+
+Hmm, but a large crop that includes the entire section view and detail circles is arguably not a "coherent FAI annotation group" crop. The definition: "fully contains one coherent FAI annotation group". It does fully contain it. The extra content doesn't violate "fully contains". The reject conditions are specific: leader reaches border, arrowhead clipped, feature absent, unrelated dominate.
+
+I think the safest interpretation given the visual: The crop is valid because the FAI 40 group is fully present with its leader and feature, and nothing of that group is clipped. The extra content is just context, not "dominating" in a way that excludes the group.
+
+But wait, the instruction "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers" is a warning against lazy validation. It wants me to verify leaders and features. I've verified the right leader and feature are present. So I can declare valid with that reasoning.
+
+However, I'm troubled by the left hatched feature being clipped at the left border in IMAGE 2. But that's not part of FAI 40's group. The left feature is touched by left leaders (FAI 75/100). Since those aren't the selected group, their clipping doesn't matter.
+
+But hold on: maybe the dimension table is considered one group? No, each FAI circle is its own annotation. The selected one is 40.
+
+Let me also check: is the SPC AM circle fully visible? Yes. Is the FAI 40 circle fully visible? Yes (red box around it in IMAGE 1, fully inside).
+
+Now, what about the leader from FAI 40 to the dimension? Actually the FAI circle is just placed next to the dimension; there's no leader from the FAI circle to the dimension. The "connected leader segment" refers to the dimension's leader to the feature. That's present.
+
+Thus I lean toward valid = true, missing = [], expand = all 0, confidence moderate-high.
+
+But let me double check the right feature visibility in IMAGE 2 vs the leader. The leader for 1.62 right ends at the feature step. In IMAGE 2, is that step visible? The right hatched feature in IMAGE 2 shows a stepped profile with hatching. The step at the 1.62 level (a horizontal surface) — I see the hatched region has a notch. Yes, visible.
+
+Now, one more: the rule "a visible local portion of every component feature touched by those arrows." The right feature is touched by the right leaders (for 39, 40, 41). For 40 specifically, the touched feature is the right hatched profile. A portion is visible. Good.
+
+Thus valid.
+
+But the "unrelated dominate" — let me look at the proportion. The crop IMAGE 2 is roughly 2337x2337. The FAI 40 group (FAI circle + SPC + dimension + leader + feature portion) occupies maybe the right-center region, say 800x400 pixels. The rest is unrelated. So unrelated content is ~80% of the crop. Does that "dominate"? In a strict reading, yes, unrelated annotations dominate the crop. That would be a reject.
+
+Hmm, this is the key decision. Let me think about the purpose. These crops are presumably for training/evaluating a model to localize FAI annotations. A valid crop should tightly frame the annotation so the model can see it in context without too much irrelevant stuff. If the crop is the whole drawing, it's not a useful tight crop, and the instruction explicitly warns against accepting just because an FAI circle is present. The phrase "unrelated neighboring annotations dominate" likely targets exactly this: a crop that's too big and full of other FAIs and features.
+
+In IMAGE 2, we see FAI 76, 75, 100, 39, 41, 202 — six other FAI circles — plus the section view, plus detail circles. That's a lot of unrelated FAI annotations. They arguably dominate.
+
+But also, the left hatched feature is clipped at the left border, and the right hatched feature is clipped at the right border, and the section view at the bottom is partially clipped (the slots at the very bottom are cut). These clippings are of features touched by OTHER FAIs' leaders (left leaders, FCF leader). The rule says reject if "a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent". For the selected FAI 40, none of these apply. But the rule might be interpreted as: any leader in the crop that reaches the border is a problem? It says "a relevant leader". Relevant = to the selected group. So left leaders not relevant.
+
+Hmm, but the left leaders' features are clipped at the border, meaning the left leaders might actually reach the border? Let's check left 1.62 leader in IMAGE 2: from text at x~430 going left to the left feature's right edge at x~350. That's inside, not at border. The left feature's hatching extends to x=0 (border), but the leader ends at x~350. So leader doesn't reach border. OK.
+
+So strictly by the letter of the rules for the selected group, the crop is valid.
+
+I need to make a decision. Let me look at the magenta rectangle hint: "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle." This implies the magenta rectangle is smaller than IMAGE 1 and there might be evidence just outside it that's needed. If the magenta rectangle were the whole image, there'd be nothing outside to inspect. So the magenta rectangle is probably a sub-region. And IMAGE 2 (the crop) equals that sub-region. But IMAGE 2 looks like the whole image to me...
+
+Unless IMAGE 1 is actually a zoomed-in view (the "wider candidate context" is misnamed?) No.
+
+Let me look at the very top of IMAGE 1 vs IMAGE 2. IMAGE 1 top edge cuts the top circles such that

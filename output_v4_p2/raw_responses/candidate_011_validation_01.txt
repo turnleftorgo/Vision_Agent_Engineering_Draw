@@ -1,0 +1,194 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows the wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker, FAI 76).
+
+Let me look at the magenta rectangle in IMAGE 1. It spans from the left edge (x=0) to about x=1350 (in pixel coordinates of the image, but let me think in relative terms). The top of the magenta rectangle is around y=1020 and the bottom is around y=1330.
+
+Inside the magenta rectangle, I see:
+- "2.50 +0.19 -0.10" with FAI 76 and SPC BS
+- "1.62 +0.19 -0.12" with FAI 75 and SPC BR (partially, the bottom of FAI 75 and SPC BR might be cut off)
+
+Wait, let me look more carefully. The magenta rectangle's bottom edge is at around y=1330. The "1.62" line with FAI 75 and SPC BR is at around y=1280-1330. Let me look at the second image (the crop itself).
+
+IMAGE 2 shows the crop. It contains:
+- "2.50 +0.19 -0.10" with FAI 76 and SPC BS
+- "1.62 +0.19 -0.12" with FAI 75 and SPC BR (but the bottom of FAI 75 and SPC BR is cut off! The "-0.12" is partially cut, the FAI 75 circle bottom is cut, SPC BR bottom is cut)
+
+Hmm, but the selected FAI marker is FAI 76 (the red rectangle). So the relevant group is FAI 76 / SPC BS / 2.50 +0.19 -0.10.
+
+Now I need to check the leader lines. In IMAGE 1, the "2.50" dimension has a leader line. Let me trace it. The leader for 2.50 goes from the text leftward, then there's a diagonal segment going down-left to a horizontal line. Let me look.
+
+In IMAGE 1, the "2.50" text is at around x=700-850, y=1140. To the left of "2.50" there's a leader line: a horizontal segment from about x=650 to x=680 at y=1140, then a diagonal going down-left to about x=620, y=1250, then a horizontal line going left to about x=55, y=1250. That horizontal line at y=1250 is the feature line (the top surface of the part).
+
+Wait, but the magenta rectangle's left edge is at x=0. So the horizontal leader line at y=1250 extends to the left edge of the image (x=0). In IMAGE 2, the crop shows the horizontal line going all the way to the left edge, and there's a small hatched square at the bottom left (the feature). Let me look at IMAGE 2.
+
+In IMAGE 2, I see at the bottom left a small square with diagonal hatching (a section view symbol or feature). The horizontal line from the leader goes to about x=230 (in IMAGE 2 coordinates) where it meets the diagonal. Then the horizontal line continues left to the hatched square at the left edge.
+
+Hmm wait. Let me look at the leader structure more carefully. In IMAGE 1, there are two leader lines for the 2.50 and 1.62 dimensions.
+
+For 2.50: text at right, leader goes left with a diagonal down to a horizontal line at y~1250.
+For 1.62: text at right, leader goes left with a diagonal down to a horizontal line at y~1340.
+
+Let me look at the horizontal lines. In IMAGE 1, the horizontal line for 2.50's leader is at y~1250, going from x~620 leftward to x~55 (where it meets the part outline). The horizontal line for 1.62's leader is at y~1340, going from x~620 leftward to x~55.
+
+Now the magenta rectangle bottom is at y~1330. So the 1.62 horizontal line at y~1340 is BELOW the magenta rectangle. That means the 1.62 leader's horizontal segment and its terminal are outside (below) the crop. But the selected FAI is 76, which corresponds to 2.50. So the 1.62 group (FAI 75) is a different group. We don't need it.
+
+But wait, the crop in IMAGE 2 includes the "1.62 +0.19 -0.12" text and FAI 75 / SPC BR partially. That's a neighboring annotation. The rule says "Reject it if ... unrelated neighboring annotations dominate." Does the 1.62 annotation dominate? It's partially included (cut off at the bottom). Hmm.
+
+Actually, let's look at the leader for the 2.50 group (FAI 76). The leader's horizontal segment is at y~1250. In IMAGE 1, this horizontal line goes from the diagonal (x~620) leftward to the part feature. Where does it terminate? It seems to terminate at the part outline around x~55, y~1250. But the magenta rectangle left edge is x=0, so the entire horizontal line is inside the crop (since x=0 to x=620 is within the crop's left-to-right extent? The crop right edge is x~1350, left edge x=0. Yes the horizontal line from x=55 to x=620 is inside).
+
+But wait, does the leader have a terminal arrowhead? In these dimension callouts, the leader typically ends at the feature line without an arrowhead, or with a small tick. Let me look. The horizontal line at y~1250 in IMAGE 1 — at its left end (x~55), does it have an arrowhead? It looks like it just meets the part outline. Hmm.
+
+Actually, looking at the structure, these are dimension leaders pointing to a feature. The horizontal line is the leader that points to the surface. The "terminal arrowhead" might be where the leader meets the feature.
+
+Let me look at the semantic_missing: ["terminal arrowhead for F0 leader", "target region for F0 leader"]. So the semantic association thinks the terminal arrowhead and target region for the leader are missing.
+
+Let me look at IMAGE 2 (the crop). In IMAGE 2, the horizontal line for the 2.50 leader goes from the diagonal (x~1130 in IMAGE 2 coords) leftward to the hatched square at the left edge (x~0 to x~230). The hatched square is at the bottom left. So the leader's horizontal line terminates at the hatched square? Or does it continue beyond the left edge?
+
+In IMAGE 1, the horizontal line at y~1250 — let me look at its left end. At x~55, there's the part outline (a vertical line going down). The horizontal line seems to end at the part outline. But in IMAGE 1, the magenta rectangle left edge is x=0, and the part outline vertical line is at x~55. So the part outline is inside the crop. Good.
+
+But in IMAGE 2, the hatched square is at the very left edge (x=0 to x~230). The horizontal line from the diagonal meets the right side of the hatched square at x~230. So the leader terminates at the hatched square. Is the hatched square the "target region"? It's a small feature.
+
+Hmm, but the semantic_missing says "target region for F0 leader" is missing. Let me look at IMAGE 1 to see what's at the left of the 2.50 leader's horizontal line. In IMAGE 1, at y~1250, the horizontal line goes left to about x~55 where there's a vertical line (part outline) and below it the hatched region starts at y~1380. Actually the hatched region (the section hatching) in IMAGE 1 is at y~1380-1530, which is below the magenta rectangle.
+
+Wait, I'm confusing myself. Let me look at IMAGE 1 more carefully with coordinates.
+
+IMAGE 1 dimensions: let's estimate. The image is 2337 wide maybe. Let me look at the magenta rectangle. Top edge y~1020, bottom edge y~1330, left edge x=0, right edge x~1365.
+
+Inside, the 2.50 text is at y~1140. The 1.62 text is at y~1280. The 1.26 text is at y~1420 (below magenta). The (0.00) text is at y~1530 (below magenta).
+
+The leader for 2.50: from text left, horizontal at y~1140 from x~650 to x~680, diagonal down-left to x~620 y~1250, horizontal left to x~55 y~1250.
+
+The leader for 1.62: from text left, horizontal at y~1280 from x~650 to x~680, diagonal down-left to x~620 y~1340, horizontal left to x~55 y~1340.
+
+Now in IMAGE 1, at the left, the part outline: there's a vertical line at x~55 from y~1250 down to y~1340 (the left edge of the part top surface). Then below, the hatched region.
+
+Hmm, actually the horizontal line at y~1250 in IMAGE 1 — at its left end x~55, it meets a vertical line. That vertical line is the left edge of the part. So the leader's terminal is at the part's left edge / top surface.
+
+Now in IMAGE 2 (the crop), the left edge is x=0 of the original (since magenta left = 0). The crop shows the hatched square at bottom left. Wait, in IMAGE 2 the hatched square is at the bottom left, around y~230-330 (in IMAGE 2 coords). And the horizontal line for 2.50 leader is at y~170 (IMAGE 2 coords) going from diagonal to the hatched square's right edge.
+
+Hold on. Let me re-examine IMAGE 2. IMAGE 2 is the crop, so its coordinates are relative to the magenta rectangle. The magenta rectangle in IMAGE 1 is from y~1020 to y~1330 (height ~310) and x~0 to x~1365 (width ~1365). So IMAGE 2 should be 1365 wide and 310 tall (scaled). But IMAGE 2 as shown is 2337 wide and ~330 tall? The aspect ratio doesn't match. Hmm, maybe IMAGE 2 is just displayed at a different scale. Let me not worry about exact pixel mapping.
+
+In IMAGE 2, I see:
+- Top right: "2.50 +0.19 -0.10" with FAI 76, SPC BS.
+- Below: "1.62 +0.19 -0.12" with FAI 75, SPC BR (cut off at bottom).
+- A leader line: from "2.50" left, horizontal, diagonal down-left, then horizontal left to a hatched square at the left edge.
+- The hatched square is at the bottom left, partially cut off at the left edge? It looks like the hatched square's left edge is at the image left edge (x=0). Actually it looks complete-ish but the left part might be cut.
+
+Now, the key question: does the crop fully contain the FAI 76 group's leader and terminal and touched feature?
+
+The leader for 2.50 (FAI 76) in IMAGE 1: horizontal line at y~1250 from x~620 to x~55. The terminal is at x~55 (the part outline). In the crop (magenta left=0), x~55 is inside. The part outline vertical line at x~55 from y~1250 to y~1340 — is that inside the crop? The crop bottom is y~1330. So the vertical line from y~1250 to y~1330 is inside, but from y~1330 to y~1340 is cut. But that's the part outline, not the leader terminal per se.
+
+Hmm, but what is the "touched feature"? The leader points to the top surface of the part (the horizontal line at y~1250 is the surface? or the leader?). Actually in these drawings, the dimension leader points to a feature. The horizontal line at y~1250 might BE the feature line (the top surface of the part), and the leader is the diagonal+horizontal that connects the text to that feature line.
+
+Let me look at the structure again. Typically a dimension callout like "2.50 +0.19 -0.10" has a leader line that goes from the text to the feature being dimensioned. The leader often has a diagonal "elbow" then a horizontal segment that ends at the feature with an arrowhead or just touches it.
+
+In IMAGE 1, the horizontal segment at y~1250 — is it the leader or the feature? Looking at the part drawing on the left, the part has a top surface. The horizontal line at y~1250 extends from the part's left edge (x~55) rightward to x~620 where the diagonal goes up. So this horizontal line is the leader, and it points to the part's left edge / top surface at x~55.
+
+But actually, the part's top surface in the drawing is the horizontal line at y~1250 from x~55 to ... hmm, the part outline. Let me look at the part shape on the left of IMAGE 1. There's a vertical line at x~55 from y~1250 to y~1340 (a step). Then the hatched region below.
+
+This is getting too detailed. Let me think about the validation criteria more holistically.
+
+The crop (IMAGE 2) contains the FAI 76 circle, SPC BS, the 2.50 +0.19 -0.10 values, and the leader line for 2.50 (the diagonal and horizontal). The horizontal leader line in IMAGE 2 ends at the hatched square at the left edge. Is the hatched square the touched feature? It's a small section symbol. Hmm.
+
+But wait — in IMAGE 1, the horizontal leader line for 2.50 at y~1250 ends at x~55, which is the part's left vertical edge. In IMAGE 2, the corresponding horizontal line ends at the hatched square. The hatched square in IMAGE 2 is at the bottom left. But in IMAGE 1, at the left edge around y~1250-1330, what's there? Let me look. In IMAGE 1, at the left edge x=0 to x~55, y~1250-1330, I see... the part outline vertical line at x~55, and to its left (x=0 to 55) is blank? Or is there the hatched square?
+
+Looking at IMAGE 1, the hatched region (diagonal lines) is at y~1380-1530, which is below the magenta rectangle. The hatched square in IMAGE 2 at the bottom left — where does it correspond in IMAGE 1? The magenta bottom is y~1330. The hatched square in IMAGE 2 is at the bottom, so it corresponds to y~1280-1330 in IMAGE 1. In IMAGE 1 at x=0-55, y~1280-1330, I see a small square with diagonal hatching! Yes, there's a small hatched square at the left edge around y~1250-1340. Let me look. In IMAGE 1, at the far left, around y~1250-1340, there's a small rectangle with a diagonal line (hatching). Yes I see it: at x=0 to x~55, y~1250 to y~1340, there's a small box with diagonal hatching (the section cut symbol or a feature). Actually it looks like a small square with one diagonal.
+
+Hmm, in IMAGE 1 I see at the left edge a small square outline from about (0,1250) to (55,1340) with a diagonal line inside. Yes that matches the hatched square in IMAGE 2.
+
+OK so the leader's horizontal line at y~1250 ends at the right edge of this small square (x~55). So the touched feature is this small square / the part's left edge.
+
+Now, is the small square fully inside the crop? In IMAGE 1, the small square is at x=0 to 55, y=1250 to 1340. The crop is x=0 to 1365, y=1020 to 1330. So the small square's bottom (y=1340) is below the crop bottom (1330). So the small square is cut off at the bottom in the crop! In IMAGE 2, the hatched square at the bottom left — is its bottom cut off? Looking at IMAGE 2, the hatched square's bottom edge is at the image bottom? The image 2 bottom is around y~330 (in its coords). The hatched square bottom looks like it's at y~330, possibly cut. Hard to say.
+
+But more importantly, the leader's terminal: the horizontal line at y~1250 ends at x~55 (right edge of small square). That's inside the crop. So the terminal is visible.
+
+Hmm, but the semantic_missing says "terminal arrowhead for F0 leader" and "target region for F0 leader" are missing. Let me look for an arrowhead. In these drawings, the leader might have an arrowhead at the feature. In IMAGE 1, at the left end of the horizontal line (x~55, y~1250), is there an arrowhead? I don't see a clear arrowhead; it just meets the square.
+
+Actually, maybe the leader structure is different. Let me look at the diagonal. The diagonal goes from (680,1140) to (620,1250). Then horizontal from (620,1250) to (55,1250). At (55,1250) it meets the square's top-right corner. No arrowhead visible.
+
+Hmm, but the criteria mention "every terminal arrowhead". If there's no arrowhead, then it's fine (no arrowhead to clip). The semantic_missing might be a false hypothesis.
+
+Let me reconsider. The semantic association is diagnostic, not ground truth. The semantic_missing entries are visual hypotheses to check. So I need to check in the images whether the terminal arrowhead and target region are actually missing from the crop.
+
+Looking at IMAGE 2, the leader's horizontal line clearly ends at the hatched square (the target region). The hatched square is visible (a local portion at least). So the target region is present in the crop. The terminal (end of leader) is at the square, visible. So I'd say the semantic_missing items are actually present in the crop (the hatched square is the target region, and the leader ends there).
+
+But wait, is the hatched square the correct target for the 2.50 leader, or is it the target for the 1.62 leader? In IMAGE 1, the 2.50 leader horizontal is at y~1250, the 1.62 leader horizontal is at y~1340. The small square spans y~1250 to 1340. So the 2.50 leader touches the top of the square, the 1.62 leader touches the bottom of the square. Both leaders touch the square.
+
+In the crop (bottom y~1330), the 1.62 leader horizontal at y~1340 is OUTSIDE (below) the crop. So in IMAGE 2, we should NOT see the 1.62 leader's horizontal line. Let me check IMAGE 2. In IMAGE 2, I see the 2.50 leader (diagonal + horizontal at the upper level) ending at the square. Do I see a second horizontal line for 1.62? The 1.62 text is at the bottom of IMAGE 2, and its leader diagonal starts but the horizontal part would be below the crop. In IMAGE 2, below the 1.62 text, I see the diagonal starting (a small line going down-left) but it's cut off at the bottom. So the 1.62 leader's horizontal and terminal are NOT in the crop. But that's the FAI 75 group, not the selected FAI 76 group. So that's fine — we don't need FAI 75's leader.
+
+But the rule: "Reject it if ... unrelated neighboring annotations dominate." The 1.62 / FAI 75 annotation is partially in the crop (the text and circles are cut off at the bottom). Does it "dominate"? It's at the bottom edge, partially cut. The selected group (FAI 76) is fully in the crop and is the main content. The 1.62 is a neighboring annotation that's partially included. Hmm.
+
+The criteria for valid: "fully contains one coherent FAI annotation group". The FAI 76 group is fully contained (FAI circle, SPC BS, 2.50 values, leader, terminal, touched feature). The presence of a partial neighboring annotation (FAI 75) at the bottom edge — is that a problem? The rule says reject if "unrelated neighboring annotations dominate." They don't dominate; the FAI 76 group is the dominant content. But the partial inclusion of FAI 75 might be considered "a relevant leader reaches the crop border" — the 1.62 leader's diagonal reaches the bottom border. But that leader belongs to FAI 75, not to the selected FAI 76 group. The rule says "Reject it if a relevant leader reaches the crop border". "Relevant" means relevant to the selected FAI group. The 1.62 leader is not relevant to FAI 76. So that's OK.
+
+Hmm, but wait. Let me look at the magenta rectangle bottom edge in IMAGE 1. It's at y~1330. The 1.62 text baseline is at y~1280, and the FAI 75 / SPC BR circles are at y~1280-1330. The bottom of those circles is at y~1330, right at the magenta edge. So in IMAGE 2, the FAI 75 and SPC BR circles are cut off at the bottom (we see the top half). Indeed in IMAGE 2, the FAI 75 and SPC BR circles look cut off at the bottom (the bottom arc is missing). And the "-0.12" is cut off.
+
+So the crop includes a partial FAI 75 annotation. This is a neighboring annotation that's cut off. The rule about "unrelated neighboring annotations dominate" — they don't dominate, but they are present and cut off. Is that a rejection criterion? The explicit rejection criteria are: "a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate." A cut-off neighboring annotation that doesn't dominate is not explicitly listed. But it's a bit messy.
+
+However, the main concern: does the crop fully contain the FAI 76 group? Let me double check the FAI 76 group's leader and terminal and touched feature are all inside.
+
+FAI 76 group elements:
+- FAI 76 circle: inside (top right of crop). Yes.
+- SPC BS circle: inside. Yes.
+- 2.50 +0.19 -0.10: inside. Yes.
+- Leader: diagonal + horizontal. The horizontal at y~1250 from x~620 to x~55. Inside (since crop is x 0-1365, y 1020-1330). Yes.
+- Terminal arrowhead: if any, at x~55 y~1250. Inside.
+- Touched feature: the small square / part left edge at x~55, y~1250. The square spans y 1250-1340. The top part (1250-1330) is inside, bottom (1330-1340) cut. So a visible local portion is inside. The criterion says "a visible local portion of every component feature touched by those arrows." So a local portion is enough. Good.
+
+So the FAI 76 group is fully contained with a visible local portion of the touched feature.
+
+Now the semantic_missing: "terminal arrowhead for F0 leader" and "target region for F0 leader". I've determined the target region (small square) is visible in the crop (local portion). The terminal arrowhead — if there is one, it's at the square, visible. If there's no arrowhead, then it's not missing. So I think these semantic_missing items are actually present (or not applicable) in the crop. The instruction says: "if the supposedly missing item is already sufficiently visible inside IMAGE 2, do not expand solely because semantic association failed to select its ID."
+
+So I should not expand for these.
+
+Now, is there anything relevant to FAI 76 that is OUTSIDE the magenta rectangle in IMAGE 1? Let me look immediately outside the magenta rectangle.
+
+Above the magenta rectangle (y < 1020): there's the text "SPC CONTROL FOR ALL HEAT STAKE POST / ANSI-114X ISO-114X JIS-110X" at y~910-970. That's a general note, not specific to FAI 76. Not part of the FAI 76 group.
+
+Below the magenta rectangle (y > 1330): the 1.26 and (0.00) dimensions and their leaders, and the bottom of the small square, and the 1.62 leader horizontal. The 1.62 leader horizontal belongs to FAI 75, not 76. The 1.26 belongs to FAI 100. Not relevant to 76.
+
+Left of the magenta rectangle (x < 0): nothing (it's the image edge).
+
+Right of the magenta rectangle (x > 1365): the FAI 39 / SPC AL / 2.50 +0.29 -0.07 group, etc. Not relevant to 76.
+
+So nothing relevant to FAI 76 is outside the magenta rectangle. Good.
+
+Therefore the crop seems valid for the FAI 76 group.
+
+But wait, I need to double check the leader for 2.50 in IMAGE 1 — does its horizontal line extend to the left beyond x=0? No, it ends at x~55 (the square). And the square's left edge is at x=0 (image edge). So the square might be cut at the left in the original image too, but that's the image boundary, not the crop boundary. In the crop, the square's left edge is at the crop's left edge (x=0). So the square is cut at the left by the crop boundary? The crop left = image left = 0. The square left = 0. So the square is not cut by the crop (it's at the boundary but the square's left edge coincides with the boundary; we see the full square width if the square's left edge is exactly at 0). In IMAGE 2, the hatched square's left edge is at the image left edge. We see the square's right edge and top and the hatching. The left edge is at the boundary. So we see a local portion (most of it). That's fine per "visible local portion".
+
+Hmm, but actually, is the small square the "touched feature" or is it a section symbol unrelated to the dimension? In engineering drawings, a small hatched square at the end of a leader often indicates a section or a specific feature. But here the leader for 2.50 points to it. Actually, maybe the small square is the part's cross-section (the part is a small post, and the square is its cross-section view). The dimension 2.50 is the height of the post, measured from the bottom (0.00) to the top (2.50). The leader points to the top surface of the post. The top surface in the cross-section is the top edge of the square. So the touched feature is the top edge of the square / the post's top.
+
+In the crop, the top edge of the square (y~1250) is visible. Good.
+
+OK here's another consideration. The leader for 2.50 — in IMAGE 1, the horizontal line at y~1250 — does it actually connect to the square, or does it connect to the part's top surface which is a horizontal line extending right? Let me look at the part drawing. The part on the left of IMAGE 1: I see at y~1250 a horizontal line from x~55 to x~620 (the leader). But is there also a part outline horizontal line at y~1250? The part's top surface might be at y~1250 from x~55 rightward. Hmm, but the part is drawn with hatching below (the cross-section). The top of the hatched region is at y~1380. So the part's top surface in the cross-section is at y~1380, not 1250. So the line at y~1250 is purely the leader, not the part outline.
+
+Wait, I'm overanalyzing the part geometry. Let me look at the left part of IMAGE 1 again. There's a vertical line at x~55 from y~1250 to y~1340 (the small square's right edge? or the part's left edge?). The small square is at x=0-55, y=1250-1340. To the right of x~55, at y~1250, the horizontal leader line goes right. Below, at y~1340, another horizontal line (the 1.62 leader) goes right from x~55. And the hatched region is at y~1380-1530 from x=0 to x~540.
+
+Hmm, this is confusing. Let me look at the small square in IMAGE 1: at the left edge, I see a square outline from (0,1250) to (55,1340) with a diagonal from (0,1340) to (55,1250) maybe. That's the hatched square. Then the horizontal leader lines at y~1250 and y~1340 start from the right edge of this square (x~55) and go right.
+
+So the leaders point to the square (the cross-section of the post). The 2.50 leader points to the top of the square, the 1.62 leader points to the bottom of the square (or a step). OK.
+
+So the touched feature for 2.50 is the top edge of the square, which is at y~1250, visible in the crop. Good.
+
+Thus, the FAI 76 group is fully contained. The crop is valid.
+
+But hold on, let me look at IMAGE 2 once more to ensure the 2.50 leader's horizontal line and the square are fully visible and not cut at the left. In IMAGE 2, the horizontal line for 2.50 goes from the diagonal (right) leftward to the square's right edge. The square is at the left edge. We see the square's right edge, top edge, and hatching. The left edge of the square is at the image boundary. So we see the square mostly. The top edge of the square (the touched feature) is visible. Good.
+
+Now, the partial FAI 75 at the bottom: is that a problem? The rule's rejection list doesn't include "partial neighboring annotation present" unless it dominates. It doesn't dominate. So I'll consider it acceptable. But it's a bit ugly. However, the instruction emphasizes: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." I need to verify the leader and feature. I have.
+
+Let me also check: does the 2.50 leader's diagonal or horizontal reach the crop border? The horizontal ends at the square (x~55 in original = some x in crop, not the border). The diagonal is in the middle. So no leader of the FAI 76 group reaches the crop border. Good. The 1.62 leader's diagonal reaches the bottom border, but that's FAI 75's, not relevant.
+
+Hmm wait, but actually, look at IMAGE 2: the 1.62 leader's diagonal — in IMAGE 2, below the "1.62" text, there's a diagonal line going down-left that reaches the bottom border. And the 2.50 leader's horizontal line — in IMAGE 2, it's at the upper level and ends at the square. Good.
+
+But here's a subtle point: in IMAGE 2, the horizontal line that I think is the 2.50 leader — let me trace. The "2.50" text is at top right. To its left, a horizontal segment, then a diagonal down-left, then a horizontal segment going left to the square. Yes that's the 2.50 leader. Good. And it's fully inside (the horizontal ends at the square which is inside, the diagonal is inside). Good.
+
+So I'm fairly confident the crop is valid for FAI 76.
+
+Let me reconsider the semantic_missing "target region for F0 leader". The target region is the square / top edge. In IMAGE 2, the square is visible at the bottom left. So the target region IS visible. So semantic_missing is a false hypothesis. Good, no expansion needed.
+
+Thus valid = true, missing = [], expand_norm all 0, confidence high.
+
+But wait, I should double check whether the magenta rectangle's left edge cutting the square is an issue. The square's left edge is at the image left edge (x=0), which is also the crop left edge. So the square is not cut by the crop; it's just at the boundary. We see the square's full height? The square top at y~1250, bottom at y~1340. The crop bottom is y~1330. So the square's bottom (1330-1340) is cut by the crop bottom! So in IMAGE 2, the square's bottom edge is cut off. Let me look at IMAGE 2: the hatched square at bottom left — its bottom edge, is it visible or cut? In IMAGE 2, the square's bottom appears to be at the image bottom edge (cut). Yes, the square's bottom is cut off in IMAGE 2.
+
+But the criterion only requires "a visible local portion of every component feature touched by those arrows." The touched feature for 2.50 is the top edge of the square (where the 2.50 leader's horizontal line meets it). The

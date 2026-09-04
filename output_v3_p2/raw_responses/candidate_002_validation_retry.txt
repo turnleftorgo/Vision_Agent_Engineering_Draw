@@ -1,0 +1,252 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop region. The red rectangle highlights the FAI 11 marker.
+
+Let me look at the magenta rectangle boundaries in IMAGE 1. The magenta rectangle spans horizontally across the full width (left edge to right edge). Vertically, the top magenta line is at around y=975 (in the image coordinate system, let's estimate). The bottom magenta line is at around y=1830.
+
+Now let's look at what's inside the magenta rectangle in IMAGE 1. The dimension text "Ø 1.54 ±0.05" with FAI 10 and SPC J circles, and the feature control frame "⊕ 0.21 A B C" with FAI 11 and SPC K circles are inside. The leader line from the triangle (terminal) goes down-left to the circle feature (the small circle with crosshairs on the left). The arrowhead of that leader is at the circle.
+
+Wait, let me look carefully. The leader line: there's a triangle (filled black triangle) at around (515, 1060). From the triangle, a line goes down-left to the circle at around (260, 1490). The arrowhead is at the circle.
+
+Now, the magenta rectangle top edge is at y~975. The triangle is at y~1060, which is inside. The dimension text is at y~1075, inside. The feature control frame is at y~1150, inside. The FAI 11 circle is at y~1150, inside.
+
+The leader line goes from the triangle down to the circle. The circle center is at around (160, 1640). The arrowhead is at around (260, 1490). The circle feature (the small solid circle with crosshairs) is at center (160, 1640), radius maybe 160. So the circle spans from y~1480 to y~1800. The bottom magenta line is at y~1830. So the circle is mostly inside, but let's check the bottom of the circle. The circle bottom is at y~1800, which is above the bottom magenta line at 1830. So the circle is inside.
+
+But wait, the leader line: does it reach the crop border? The leader line from the triangle goes down-left. Let's trace it. The triangle is at (515, 1060). The line goes to the arrowhead at (260, 1490). That's all inside the magenta rectangle (top 975, bottom 1830, left 0, right full width). So the leader is inside.
+
+Hmm, but the requirement says "every connected leader segment" and "every terminal arrowhead" and "a visible local portion of every component feature touched by those arrows."
+
+The arrowhead touches the small circle feature. The small circle is visible in the crop. Good.
+
+But wait, there's also the "KB" label at the top. The KB label is at (515, 845), which is ABOVE the top magenta line (975). The leader line from KB goes down through the magenta top line to the triangle. So the leader segment from KB to the triangle is partially outside the crop (the part above y=975).
+
+Hmm, but is the KB leader part of the FAI annotation group? The KB is a key/label pointing to the feature. The triangle is the terminal of the dimension leader. Actually, let's look. The KB box has a line going down to the triangle. The triangle is the terminal of the dimension line (the dimension "Ø 1.54 ±0.05" has its leader starting at the triangle). Actually the triangle is at the top of the leader that points to the circle.
+
+Let me look at the structure. The dimension text "Ø 1.54 ±0.05" is to the right of the triangle. The triangle is at (515, 1060). A horizontal line connects the triangle to the dimension text. Then from the triangle, a diagonal line goes down-left to the circle (the arrowhead at the circle). So the triangle is the "terminal" of the leader? Or is the triangle a target symbol?
+
+Actually in engineering drawings, a filled triangle often indicates a target or a specific point. Hmm. But here it looks like the leader line for the dimension goes from the dimension text, through the triangle, down to the circle. The triangle might be a "target" symbol or it might be the arrowhead of the leader pointing to... no.
+
+Let's look at IMAGE 2 (the crop). In IMAGE 2, we see the triangle at the top, with a vertical line going UP out of the top of the crop (the line from KB). So in the crop, the leader segment from the triangle going up to KB is cut off at the top border. The vertical line from the triangle goes up and exits the top of IMAGE 2.
+
+So the leader segment connected to the triangle that goes to KB is reaching the crop border. The requirement: "Reject it if a relevant leader reaches the crop border."
+
+Is the KB leader relevant? The KB is a label for the feature. Hmm. The KB box is at the top, outside the crop. The line from KB to the triangle is a leader. In the crop, this leader is cut at the top.
+
+But wait, is the KB leader part of the FAI annotation group? The FAI annotation group is the dimension + FCF + FAI circles. The leader for this group is the line from the triangle to the circle (the arrowhead). The KB line is a separate leader for the KB label, which is a different annotation (a key/label, not the FAI dimension).
+
+Hmm, but the triangle is shared. The triangle is the terminal of the dimension leader? Or is the triangle the terminal of the KB leader?
+
+Let's look more carefully at the geometry. In IMAGE 1, the KB box is at (515, 845). A vertical line goes from the bottom of the KB box (515, 885) down to the triangle (515, 1060). So the KB leader ends at the triangle (the triangle is the arrowhead/terminal of the KB leader? Or the triangle is just a point on the line?).
+
+Then from the triangle, a diagonal line goes down-left to the circle. And a horizontal line goes right to the dimension text.
+
+So the triangle is a junction point. The KB leader comes down to the triangle. The dimension leader goes from the triangle to the circle (diagonal) and the dimension text is attached at the triangle via horizontal line.
+
+Hmm, this is confusing. Let's think about what the "FAI annotation group" is. The FAI 11 marker is associated with the FCF "⊕ 0.21 A B C". The FAI 10 marker is associated with the dimension "Ø 1.54 ±0.05". Both are part of the same annotation cluster pointing to the same feature (the circle).
+
+The leader that points to the feature (the circle) is the diagonal line from the triangle to the circle, with the arrowhead at the circle. That's the relevant leader for the FAI group.
+
+The KB leader is a separate annotation (a key label). It's not part of the FAI group per se. But the triangle is shared.
+
+Now, in the crop (IMAGE 2), the top border cuts the KB leader line. The vertical line from the triangle goes up and exits the top. So a leader segment (the KB leader) reaches the crop border.
+
+But is the KB leader "relevant"? The instruction says "Reject it if a relevant leader reaches the crop border." The KB leader is not part of the FAI annotation group. However, the triangle is the terminal of the dimension leader? Let's look at the dimension leader.
+
+Actually, maybe the triangle IS the arrowhead/terminal of the dimension leader, and the dimension leader points to the KB? No, that doesn't make sense.
+
+Let's look at the arrowheads. In IMAGE 1, the diagonal line from the triangle to the circle has an arrowhead at the circle end (pointing to the circle). The triangle end is a filled triangle, which is a "target" symbol or a "terminal" symbol.
+
+Hmm, in many drawings, a filled triangle is used as a target symbol to indicate a specific point on the part, and the dimension/leader references that target. So the triangle is the target, and the leader from the dimension text points to the target (the triangle), and the target is located on the feature.
+
+Wait, but the diagonal line goes from the triangle to the circle with an arrowhead at the circle. So the leader points from the triangle to the circle. That means the triangle is the start of the leader (near the text) and the arrowhead is at the circle (the feature). So the triangle is just a bend point or a target marker near the text.
+
+Actually, I think the triangle is a "target" symbol that marks the exact point on the feature, and the leader line connects the target to the dimension text. But here the leader line goes from the triangle to the circle (arrowhead at circle). Hmm.
+
+Let's look at the right side. There's a "1.54" box with a leader going to the right feature (the slot/obround). That leader has arrowheads at both ends? It looks like a dimension line with arrowheads at both ends, measuring the slot width. That's a separate dimension.
+
+OK let's step back. The key question for validity: does the crop fully contain the FAI annotation group?
+
+The FAI annotation group includes:
+- FAI circle (11) and number: present in crop.
+- SPC letter (K): present in crop.
+- parameter/tolerance/FCF and description text: "Ø 1.54 ±0.05" and "⊕ 0.21 A B C": present in crop.
+- every connected leader segment: the leader from the text to the feature.
+- every terminal arrowhead: the arrowhead at the circle.
+- a visible local portion of every component feature touched by those arrows: the circle.
+
+Now, the leader from the text to the feature: In IMAGE 1, the leader is the diagonal line from the triangle to the circle. The triangle is at (515, 1060), inside the crop. The diagonal line goes to the arrowhead at (260, 1490), inside the crop. So that leader segment is fully inside.
+
+But there's also the vertical line from the triangle going up to KB. Is that part of the FAI group's leader? I'd argue no, it's the KB leader. But the triangle is shared.
+
+Hmm, but the instruction says "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle." Immediately outside the top magenta line, we have the KB box and the vertical line from KB to the triangle. The vertical line crosses the top magenta line. So in the crop, the vertical line is cut at the top.
+
+Now, is the vertical line a "relevant leader"? The vertical line connects the triangle (which is part of the FAI group's leader structure) to the KB box. If we consider the triangle as part of the FAI group (it's the terminal/bend of the dimension leader), then the vertical line going up from the triangle is a connected leader segment that reaches the crop border.
+
+Actually, I think the triangle is the terminal of the dimension leader in the sense that the dimension leader is: text -- horizontal line -- triangle -- diagonal line -- arrowhead at circle. So the triangle is a bend point in the leader. The vertical line from the triangle to KB is a SEPARATE leader (the KB leader) that happens to terminate at the same point (the triangle).
+
+So the KB leader terminates at the triangle. The triangle is inside the crop. The KB leader's segment from the triangle to the KB box goes outside the crop (above the top line). So the KB leader reaches the crop border.
+
+But the KB leader is not part of the FAI annotation group. The FAI group's leader is the text-to-circle path. The KB leader is a different annotation.
+
+The instruction: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+So we reject if a RELEVANT leader reaches the border. The KB leader is not relevant to the FAI group. So its reaching the border might not be a rejection criterion. But the triangle is shared, and the vertical line is cut. Hmm.
+
+But wait, also consider: the KB box itself is outside the crop. The KB is a label. Is the KB part of the FAI group? No.
+
+Let's look at the bottom of the crop. The bottom magenta line is at y~1830. The circle feature (small solid circle) center at (160, 1640), radius ~160, so bottom at ~1800. That's inside. The crosshair lines of the circle: vertical line from y~1410 to y~1870. The bottom of the vertical crosshair line is at ~1870, which is BELOW the bottom magenta line (1830). So the crosshair line is cut at the bottom!
+
+Let's check IMAGE 2. In IMAGE 2, the circle with crosshairs: the vertical crosshair line goes down and... in IMAGE 2, the circle's bottom is at the very bottom edge? Let's look. In IMAGE 2, the circle is at the left, center around (190, 1290) in IMAGE 2 coordinates. The vertical crosshair line extends below the circle. In IMAGE 2, the bottom of the image is at y~1750 (IMAGE 2 height). The circle bottom in IMAGE 2 is at ~1700. The vertical crosshair line in IMAGE 2 goes from top of circle to bottom of circle and a bit beyond. Let's look: in IMAGE 2, the vertical line of the crosshair seems to end at the bottom edge of the image? Hard to say.
+
+Actually, let's look at the dashed circle (the larger dashed circle around the small circle). In IMAGE 1, the dashed circle center (160, 1640), radius ~320, so it spans y from 1320 to 1960. The bottom of the dashed circle is at 1960, which is below the bottom magenta line (1830). So the dashed circle is cut at the bottom in the crop.
+
+In IMAGE 2, the dashed circle: we see the top arc and the left arc, but the bottom is cut off. Yes, in IMAGE 2 the dashed circle's bottom is not visible; it's cut at the bottom edge.
+
+Now, is the dashed circle a "component feature touched by those arrows"? The arrowhead touches the small solid circle, not the dashed circle. The dashed circle is probably a phantom/hidden feature or a detail boundary. Hmm.
+
+Actually, the dashed circle might be the boundary of "DETAIL A". At the bottom left of IMAGE 1, we see "DETAIL A". So the dashed circle is the detail boundary for DETAIL A. The arrowhead touches the small solid circle (the hole), which is inside the detail boundary.
+
+So the feature touched by the arrow is the small solid circle (the hole). That is visible in the crop (the small solid circle is fully inside? Let's check. Small solid circle center (160, 1640), radius ~160, top at 1480, bottom at 1800. The crop bottom is 1830. So the small solid circle is fully inside the crop vertically. Horizontally, center 160, radius 160, left at 0, right at 320. The crop left is 0. So the left edge of the small circle is at x=0, which is the crop left border. So the small circle touches the left border!
+
+In IMAGE 2, the small solid circle: its left edge is at the left border of the image? Let's look. In IMAGE 2, the small circle's left edge appears to be cut off at the left border. Yes! In IMAGE 2, the circle on the left is partially cut off on the left side. The leftmost part of the circle is at the image left edge.
+
+Hmm, let's look carefully at IMAGE 2. The small circle with crosshairs: I see the circle outline. The left side of the circle... the crosshair horizontal line extends to the left edge. The circle's left arc—does it reach the left edge? In IMAGE 2, the circle appears to be cut on the left. The horizontal crosshair line goes from the left edge to the right of the circle. The circle's left arc seems to be at or near the left edge.
+
+Let's compare with IMAGE 1. In IMAGE 1, the small circle center x=160, radius ~160, so left edge at x=0. The crop left is x=0. So the left edge of the circle is exactly at the crop left border. So the circle is just barely touching the left border, possibly slightly clipped.
+
+In IMAGE 2, looking at the circle, the left arc does appear to be cut by the left border. The horizontal crosshair line extends beyond the circle to the left edge, and the circle's left arc is at the left edge.
+
+Hmm, this is getting too detailed. Let's think about the overall validity.
+
+The main issues I see:
+1. The top of the crop cuts the KB leader line (vertical line from triangle to KB). The KB box is outside.
+2. The left of the crop may clip the small circle feature (the touched feature).
+3. The bottom of the crop cuts the dashed detail boundary and possibly the crosshair lines.
+
+The requirement: "a visible local portion of every component feature touched by those arrows." The arrow touches the small circle. A visible local portion is present (most of the circle is visible). So that's OK even if slightly clipped? The requirement says "visible local portion", so as long as some portion is visible, it's OK. But "Reject it if ... the touched feature is absent." The feature is not absent; it's mostly visible. So that's OK.
+
+But "Reject it if a relevant leader reaches the crop border." The leader from the text to the feature (the diagonal line) does NOT reach the border; it's fully inside. The KB leader reaches the border, but is it relevant? The KB leader is connected to the triangle, which is part of the FAI group's leader structure. Hmm.
+
+Actually, I realize the triangle might be considered the terminal of the dimension leader, and the dimension leader might be considered to include the vertical line? No.
+
+Let's look at the structure once more. The dimension text "Ø 1.54 ±0.05" is at the right of the triangle. A short horizontal line connects the text to the triangle. The triangle is a filled triangle pointing up. From the triangle, a diagonal line goes down-left to the circle (arrowhead at circle). Also from the triangle, a vertical line goes up to the KB box.
+
+So the triangle is a junction of three lines: horizontal (to text), diagonal (to circle), vertical (to KB).
+
+In standard drafting, a filled triangle like this is often a "target" symbol. The target symbol is placed on the feature, and leaders from dimensions/notes point to the target. But here the target (triangle) is NOT on the feature; it's floating above, with a diagonal line to the feature. That's unusual.
+
+Alternatively, the triangle is the arrowhead of the KB leader pointing down to the feature? No, the KB leader's arrowhead would be at the feature, not at the triangle.
+
+Hmm, wait. Maybe the diagonal line from the triangle to the circle is the KB leader, and the triangle is the arrowhead of the KB leader? No, the triangle points up, not down-left.
+
+Let's look at the arrowhead at the circle. In IMAGE 1, at the circle, there's a filled arrowhead pointing down-left (toward the circle). That's the terminal of the diagonal line. So the diagonal line's arrowhead is at the circle.
+
+So the diagonal line is a leader from the triangle to the circle. The triangle is the start. The triangle is connected to the text (horizontal) and to KB (vertical).
+
+I think the most sensible interpretation: The dimension "Ø 1.54 ±0.05" and the FCF "⊕ 0.21 A B C" both apply to the hole (the small circle). The leader for these is the diagonal line from the triangle to the circle. The triangle is a "target" or "bend" point. The KB is a separate key label that also points to the same location via the vertical line, terminating at the triangle (or the triangle is the target for both).
+
+Given the ambiguity, the safest interpretation for the validation task: The crop must contain the full leader from the text to the feature, including all segments. The vertical line to KB is a connected leader segment that reaches the crop border (top). Since the triangle is part of the FAI group's leader (it's the bend point connecting text to feature), the vertical line emanating from it is a "connected leader segment" that reaches the border.
+
+Hmm, but the vertical line is the KB leader, not part of the FAI leader. The FAI leader is text-horizontal-triangle-diagonal-circle. The vertical line is a different leader that shares the triangle node.
+
+The instruction says "every connected leader segment". This could mean every leader segment connected to the FAI group. The vertical line is connected to the triangle, which is connected to the FAI group. So it's a connected leader segment. And it reaches the crop border. So reject.
+
+Also, the KB box is outside, which is an "unrelated neighboring annotation"? The KB is a label, somewhat related (it's a key for the feature). But it's outside the crop.
+
+Let's look at the bottom. The crosshair vertical line of the small circle extends below the crop? In IMAGE 1, the vertical crosshair line of the small circle goes from y~1410 to y~1870. The crop bottom is 1830. So the bottom ~40 pixels of the vertical crosshair line are outside the crop. In IMAGE 2, the vertical crosshair line of the small circle—does it get cut at the bottom? In IMAGE 2, the small circle's vertical crosshair line: I see it going from top of circle to bottom of circle and a bit below. The bottom of IMAGE 2 is at the circle's bottom roughly. Let's look: in IMAGE 2, the circle bottom is near the bottom edge, and the vertical line extends to the bottom edge. So the vertical crosshair line is cut at the bottom.
+
+But the crosshair lines are part of the feature (the hole's centerlines). Are they "leaders"? No, they're centerlines of the feature. The requirement about leaders is about the annotation leaders, not centerlines. The requirement about the feature is "a visible local portion of every component feature touched by those arrows." The feature (hole) is visible. The centerlines being cut is not a leader issue.
+
+Hmm, but the dashed detail boundary being cut is also not a leader issue.
+
+So the main rejection reason is the top: the vertical leader line (KB leader) reaches the top border, and the KB box is outside. Also possibly the left clipping of the circle.
+
+Let's look at the left clipping more carefully. In IMAGE 1, the small circle left edge at x=0 (crop left). So the circle is exactly at the left border, meaning half of the circle's leftmost point is at the border. Actually if center x=160 and radius 160, left edge x=0, so the circle just touches the left border at one point. So it's not really clipped; it just touches. In IMAGE 2, the circle's left edge should be at the left border. Looking at IMAGE 2, the circle's left arc does appear to be at the left border, maybe slightly clipped. Hard to say.
+
+Given the typical design of these validation tasks, I think the intended answer is that the crop is INVALID because the top cuts the leader to KB (the vertical line and the KB box are outside), and/or the left cuts the feature.
+
+Wait, but the KB leader—is it "relevant"? The task says "Reject it if a relevant leader reaches the crop border". The KB leader is connected to the triangle which is the terminal/bend of the FAI leader. I think the intended interpretation is that the triangle is the terminal of the dimension leader (the dimension leader points to the triangle as a target, and the triangle is on the feature? No, the triangle is not on the feature).
+
+Hmm, let me look at the diagonal line again. Maybe the diagonal line is NOT a leader to the circle but rather the diagonal line is the leader from the dimension text to the circle, and the triangle is just a bend. And the vertical line from the triangle to KB is the KB leader.
+
+I keep going in circles (pun intended). Let's think about what makes a "coherent FAI annotation group". The group is: the dimension text, the FCF, the FAI circles, the SPC circles, the leader line(s) connecting them to the feature, the arrowhead(s), and the feature.
+
+The leader line connecting the text/FCF to the feature is the diagonal line (with the horizontal stub to the text). The triangle is on this leader line (a bend point). The vertical line to KB is NOT part of this leader; it's a separate leader for the KB label.
+
+So the FAI group's leader is fully inside the crop (horizontal stub + triangle + diagonal + arrowhead). The feature (circle) is visible. The FAI circles and SPC circles are inside. The text and FCF are inside.
+
+So by this interpretation, the crop IS valid, except for the left clipping of the circle (if any) and the bottom clipping of centerlines (not relevant).
+
+But the instruction explicitly says: "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle. Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers."
+
+This suggests that there IS connected evidence outside the magenta rectangle that should make us reject or expand. The connected evidence outside the top is the KB box and the vertical line. The vertical line is connected to the triangle (part of the FAI leader). So the FAI leader's node (triangle) has a connected segment (vertical line) that goes outside.
+
+Hmm, but is the vertical line part of the FAI leader? If the triangle is a target symbol, then the vertical line from KB points to the target, and the diagonal line from the target points to the feature. In that case, the target (triangle) is the reference point for both the KB and the dimension. The dimension leader is the diagonal line (from target to feature). The KB leader is the vertical line (from KB to target).
+
+So the FAI group's leader is the diagonal line, fully inside. The KB leader is separate.
+
+I think the key insight the task wants: The crop's top border cuts the vertical line that connects the triangle to the KB box. But more importantly, maybe the triangle itself is considered the terminal of the dimension leader, and the dimension leader is supposed to point to the feature via the triangle? No.
+
+Let's look at the arrowheads in IMAGE 2. In IMAGE 2, I see the triangle at top with a vertical line going up out of the image. I see the diagonal line from the triangle to the circle with an arrowhead at the circle. I see the horizontal line from the triangle to the text. So in the crop, the triangle is present, the diagonal leader is present, the arrowhead is present, the text is present, the FCF is present, the FAI/SPC circles are present, the circle feature is present (mostly).
+
+The only thing cut is the vertical line at the top (going to KB) and possibly the left edge of the circle and the bottom centerlines.
+
+Now, the vertical line at the top: is it a "relevant leader"? I'd say the KB leader is a separate annotation. The task says reject if "unrelated neighboring annotations dominate." The KB box is outside, so it doesn't dominate the crop. The vertical line stub at the top is a small artifact.
+
+Hmm, but the task also says "Reject it if a relevant leader reaches the crop border." The vertical line reaches the top border. If we consider the vertical line as part of the FAI group (because it's connected to the triangle which is the bend of the FAI leader), then it's a relevant leader reaching the border → reject.
+
+I think the intended answer is to REJECT and expand the top to include the KB box and the full vertical line, OR to reject because the leader reaches the border.
+
+But wait, the KB box is a separate annotation (a key label). Including it would add an unrelated annotation. The task says reject if "unrelated neighboring annotations dominate." If we expand to include KB, then KB is included but it's not dominating (it's small). Hmm.
+
+Actually, let's reconsider the whole structure. Maybe the triangle is the arrowhead/terminal of the dimension leader, and the dimension leader points UP to the KB? No, that makes no sense.
+
+Let's look at the right side for analogy. The "1.54" box has a leader line going right to the slot feature, with arrowheads at both ends of a dimension line measuring the slot. That's a dimension line, not a leader.
+
+The "KC" box at top right has a leader going down-right to the slot feature (arrowhead at the slot). So KC is a key label pointing to the slot.
+
+By analogy, KB is a key label pointing to the hole (the small circle). The KB leader goes from the KB box down to the hole. But in the drawing, the KB leader goes from the KB box down to the triangle, and then... does it continue to the hole? The diagonal line from the triangle to the hole—maybe that IS the KB leader, and the triangle is just a bend! And the dimension text "Ø 1.54 ±0.05" is attached to the triangle via the horizontal line, meaning the dimension also references the same point (the triangle/bend).
+
+Yes! That makes sense. The KB leader is: KB box -- vertical line -- triangle (bend) -- diagonal line -- arrowhead at hole. The dimension text is attached at the bend (triangle) via a horizontal line. So the dimension and the KB share the same leader path from the triangle to the hole.
+
+In that case, the FAI group's leader (the diagonal line to the hole) is shared with the KB leader. The vertical line from the triangle to KB is part of the KB leader, which is a separate annotation but shares the triangle node.
+
+So the FAI group's leader is the diagonal line (inside). The vertical line is the KB leader's segment (outside, cut at top).
+
+Now, is the vertical line a "connected leader segment" of the FAI group? It's connected to the triangle, which is on the FAI leader. So it's a connected segment. The task says "every connected leader segment" must be in the crop. The vertical line is connected to the FAI leader's node. So it should be in the crop. It's not (it's cut at top). So reject.
+
+Alternatively, the task's "connected leader segment" means the segments of the leader that belongs to the FAI group, i.e., the path from text to feature. The vertical line is not part of that path (it's a branch to KB). So it's not required.
+
+This is really ambiguous. Let's look at the visual evidence in IMAGE 2 to see if the crop "looks" complete or if something is obviously cut.
+
+In IMAGE 2, at the top, there's a vertical line stub going up from the triangle, cut off. This looks like an incomplete leader. A viewer would see a line going up and wonder where it goes. This is a sign that the crop is missing the top part (the KB box).
+
+Also, the left edge: the circle's left arc might be cut.
+
+Given the instruction's strong hint ("Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle. Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers."), I believe the intended answer is that the crop is INVALID, and we need to expand the top to include the KB box and the vertical leader, and possibly the left to include the full circle.
+
+But wait, if we expand the top to include KB, then the KB box (an unrelated annotation) is included. The task says reject if unrelated annotations dominate. KB is small, so it won't dominate. But including KB might be considered adding an unrelated annotation. However, the task allows expansion to make the crop valid. The expansion should include the connected leader segments.
+
+Hmm, but the KB box is a separate annotation. If the vertical line is the KB leader, then including it means including the KB annotation. That might be acceptable if the KB leader is considered "connected" to the FAI group.
+
+Actually, you know what, I think the triangle is a TARGET symbol. In many automotive drawings (this looks like a Ford or similar drawing with FAI/SPC circles), a target symbol (a filled triangle or a circle with a cross) is placed on the feature, and leaders from dimensions and notes point to the target. But here the target (triangle) is not on the feature; it's offset. That's unusual but possible if the feature is small and they offset the target.
+
+Wait, actually, maybe the triangle IS on the feature? No, the triangle is at (515, 1060), far from the circle at (160, 1640).
+
+Let me look at the diagonal line's arrowhead. It's at the circle. So the leader points to the circle. The triangle is the other end of the leader (near the text). So the triangle is a bend/terminal near the text.
+
+OK here's another thought. Maybe the vertical line from the triangle to KB is actually the leader for the dimension, and the diagonal line is the leader for KB? No, the diagonal line has the arrowhead at the circle, and the dimension text is at the triangle. Ugh.
+
+Let's look at the horizontal line. The horizontal line connects the triangle to the dimension text "Ø 1.54 ±0.05". So the dimension text is at the triangle. The dimension's leader to the feature must start at the triangle. The only line from the triangle going to the feature is the diagonal line. So the diagonal line is the dimension's leader. Good. The vertical line from the triangle goes to KB, so the vertical line is the KB's leader (KB points to the triangle, which is the same point the dimension references). So KB and the dimension both reference the triangle point, and the triangle point is connected to the feature by the diagonal line.
+
+So the FAI group (dimension + FCF + FAI circles) has its leader = diagonal line (inside). The KB leader = vertical line (cut at top). The KB leader is a separate annotation.
+
+Now, the task's definition of the FAI annotation group: "the FAI circle and readable inspection number; associated SPC letter if present; parameter/tolerance/feature-control-frame and description text; every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+"every connected leader segment" — I interpret this as every segment of the leader(s) that connect the FAI group to the feature. That's the diagonal line (and the horizontal stub to the text). The vertical line is NOT a leader segment of the FAI group; it's the KB leader. So it's not required.
+
+Thus, by this interpretation, the crop contains all required elements: FAI 11 circle, SPC K, FCF, dimension text, diagonal leader, arrowhead at circle, and the circle feature (visible portion). So the crop would be VALID.
+
+But then why the strong hint to inspect outside the magenta rectangle? Maybe the hint is a generic instruction, and in this case the outside evidence (KB) is NOT part of the FAI group, so it doesn't invalidate the crop. The hint says "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." This means we must verify the leader and feature are present, not just the FAI circle. In this case, the leader and feature ARE present in the crop. So the crop could be valid.
+
+But wait, let's double check the left clipping of the circle. If the circle (the touched feature) is clipped such that only a tiny portion is visible, that might be "the touched feature is absent" or not a "visible local portion". Let's look at IMAGE 2's circle. In IMAGE 2, the small circle with crosshairs: I can see most of the circle. The left arc—let's look. The horizontal crosshair line extends to the left edge of IMAGE 2. The circle's left arc: in IMAGE

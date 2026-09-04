@@ -1,0 +1,157 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "fai_number": "111",
+    "spc_letter": "CZ",
+    "annotation_ids": [],
+    "parameter_text_ids": [
+      "T10"
+    ],
+    "description_text_ids": [],
+    "leader_ids": [
+      "L17",
+      "L18",
+      "L20"
+    ],
+    "arrowhead_ids": [],
+    "target_ids": [],
+    "parameter_values": [
+      "111",
+      "CZ"
+    ],
+    "measurement_description": null,
+    "is_range_measurement": false,
+    "complete": true,
+    "missing": [],
+    "confidence": 0.9
+  },
+  "response_metadata": {
+    "finish_reason": "stop",
+    "elapsed_seconds": 55.442,
+    "prompt_tokens": 16137,
+    "completion_tokens": 97,
+    "total_tokens": 16234,
+    "reasoning_chars": 0,
+    "content_chars": 368,
+    "content_present": true,
+    "structured_output": "json_schema",
+    "max_tokens": 16384,
+    "mapping_valid": true,
+    "mapping_validation_errors": []
+  },
+  "selected_evidence_ids": [
+    "F0",
+    "T10",
+    "L17",
+    "L18",
+    "L20"
+  ],
+  "selected_evidence": [
+    {
+      "id": "F0",
+      "type": "fai_marker",
+      "bbox": [
+        1150,
+        1150,
+        1250,
+        1250
+      ],
+      "source": "LocateAnything"
+    },
+    {
+      "id": "T10",
+      "type": "ocr_text",
+      "bbox": [
+        1171,
+        1149,
+        1349,
+        1267
+      ],
+      "source": "Tesseract",
+      "text": "GD)",
+      "confidence": 0.479
+    },
+    {
+      "id": "L17",
+      "type": "leader_segment",
+      "bbox": [
+        1151,
+        1202,
+        1352,
+        1203
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          1151,
+          1202
+        ],
+        [
+          1351,
+          1202
+        ]
+      ]
+    },
+    {
+      "id": "L18",
+      "type": "leader_segment",
+      "bbox": [
+        1155,
+        1182,
+        1346,
+        1183
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          1155,
+          1182
+        ],
+        [
+          1345,
+          1182
+        ]
+      ]
+    },
+    {
+      "id": "L20",
+      "type": "leader_segment",
+      "bbox": [
+        1157,
+        1174,
+        1345,
+        1178
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          1157,
+          1177
+        ],
+        [
+          1344,
+          1174
+        ]
+      ]
+    }
+  ],
+  "selected_exact_union_roi_bbox": [
+    1150,
+    1149,
+    1352,
+    1267
+  ],
+  "minimum_crop_roi_bbox": [
+    1089,
+    1087,
+    1414,
+    1329
+  ],
+  "minimum_crop_full_image_bbox": [
+    2358,
+    2568,
+    2682,
+    2809
+  ],
+  "coordinate_owner": "Python"
+}

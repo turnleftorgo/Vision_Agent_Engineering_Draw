@@ -1,0 +1,131 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "fai_number": "2",
+    "spc_letter": "B",
+    "annotation_ids": [],
+    "parameter_text_ids": [
+      "T11",
+      "T12"
+    ],
+    "description_text_ids": [],
+    "leader_ids": [
+      "L17"
+    ],
+    "arrowhead_ids": [],
+    "target_ids": [],
+    "parameter_values": [
+      "278.06",
+      "+0.10",
+      "-0.20"
+    ],
+    "measurement_description": null,
+    "is_range_measurement": true,
+    "complete": false,
+    "missing": [
+      "A* annotation region for F0",
+      "terminal arrowhead for F0 leader",
+      "R* target region for F0"
+    ],
+    "confidence": 0.7
+  },
+  "response_metadata": {
+    "finish_reason": "stop",
+    "elapsed_seconds": 59.927,
+    "prompt_tokens": 16986,
+    "completion_tokens": 124,
+    "total_tokens": 17110,
+    "reasoning_chars": 0,
+    "content_chars": 465,
+    "content_present": true,
+    "structured_output": "json_schema",
+    "max_tokens": 16384,
+    "mapping_valid": true,
+    "mapping_validation_errors": []
+  },
+  "selected_evidence_ids": [
+    "F0",
+    "T11",
+    "T12",
+    "L17"
+  ],
+  "selected_evidence": [
+    {
+      "id": "F0",
+      "type": "fai_marker",
+      "bbox": [
+        1150,
+        1150,
+        1250,
+        1250
+      ],
+      "source": "LocateAnything"
+    },
+    {
+      "id": "T11",
+      "type": "ocr_text",
+      "bbox": [
+        1133,
+        1086,
+        1357,
+        1124
+      ],
+      "source": "Tesseract",
+      "text": "2/8.06",
+      "confidence": 0.648
+    },
+    {
+      "id": "T12",
+      "type": "ocr_text",
+      "bbox": [
+        1404,
+        1122,
+        1582,
+        1160
+      ],
+      "source": "Tesseract",
+      "text": "-0.20",
+      "confidence": 0.585
+    },
+    {
+      "id": "L17",
+      "type": "leader_segment",
+      "bbox": [
+        0,
+        1106,
+        1115,
+        1107
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          0,
+          1106
+        ],
+        [
+          1114,
+          1106
+        ]
+      ]
+    }
+  ],
+  "selected_exact_union_roi_bbox": [
+    0,
+    1086,
+    1582,
+    1250
+  ],
+  "minimum_crop_roi_bbox": [
+    0,
+    1024,
+    1644,
+    1311
+  ],
+  "minimum_crop_full_image_bbox": [
+    5703,
+    2755,
+    7347,
+    3042
+  ],
+  "coordinate_owner": "Python"
+}

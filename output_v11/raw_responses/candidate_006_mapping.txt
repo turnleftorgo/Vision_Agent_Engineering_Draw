@@ -1,0 +1,81 @@
+The user wants me to build a complete FAI annotation group for marker F0.
+
+Let me look at the evidence. F0 is at bbox [1152,1150,1248,1250]. This is the red box in image 2 around the "FAI 176" circle. So the FAI number is 176.
+
+Looking at image 1, the FAI 176 marker is in the row with "15" box, "FAI 176" circle, "SPC FP" circle, and "100%" triangle. This is associated with the "FOURTH TERRACE" annotation, which has "4X -0.60 +0.26 -0.34".
+
+Let me look at the layout. In image 1, the middle section shows:
+- "FOURTH TERRACE" text
+- "4X -0.60 +0.26" and "-0.34"
+- Row: [15] (FAI 176) (SPC FP) (100% triangle)
+- Row: [16] (FAI 205)
+
+So F0 = FAI 176. The SPC letter is "FP". The parameter text is "4X -0.60 +0.26 -0.34". The description is "FOURTH TERRACE".
+
+Now I need to find the leader segments and arrowheads connected to this annotation.
+
+Looking at image 2, the leader for the FOURTH TERRACE annotation goes from the text to the part. Let's look at the lines. The text "FOURTH TERRACE" is at T6 [933,960,1465,999]. There's a horizontal line L0 [15,977,974,978] and L1 [12,980,936,981] which are the horizontal leader lines going from the part to the text. Actually wait, looking at image 1, the "FOURTH TERRACE" text has a horizontal line going left to the part cross-section. That line is at y~977-980. So L0 and L1 are the leader lines connecting the annotation to the part.
+
+Hmm, but actually the leader line in image 1 for FOURTH TERRACE is a horizontal line from the text "FOURTH TERRACE" going left to the part. Let's look. In image 1, the text "FOURTH TERRACE" starts at x~933. There's a horizontal line from the part (around x=760) to the text. Yes, that's the leader.
+
+Now the arrowhead at the part end. Looking at image 2, there's a cyan arrowhead H2 at [760,989,800,1038]? Hmm, that's at the bottom of the part. Let's look. Actually in image 1, the leader line for FOURTH TERRACE ends at the part with an arrowhead? Let's look carefully.
+
+In image 1, the horizontal line from "FOURTH TERRACE" goes left and ends at the part cross-section around x=760, y=977. There's a small arrowhead there? Looking at image 2, H2 is at [760,989,800,1038] which is a cyan box at the bottom right of the part. Hmm.
+
+Wait, let's look at the part cross-section in the middle (SECTION BX-BX). The part has a horizontal base and a vertical wall. The leader line for FOURTH TERRACE is horizontal at y~977. It touches the part at the right side. In image 2, there's a cyan arrowhead H2 at [760,989,800,1038]. That's near the right end of the base. Hmm.
+
+Actually, let's look at the green boxes (R* local touched-part candidate). In image 2, I see green boxes around the part: G1? No, G* are triangles. The green boxes are R* but the evidence dictionary doesn't list R* types. Wait, the evidence dictionary has types: fai_marker, arrowhead, ocr_text, leader_segment, triangle. There's no "touched_part" type. The instructions mention R* as local touched-part candidate (green), but the evidence dictionary doesn't contain any R* IDs. So target_ids would be empty, and we use fallback box for target.
+
+Hmm wait, let me re-read. The evidence dictionary lists G0 and G1 as triangles. The green boxes in image 2 are around the part features but they aren't in the dictionary as a separate type. Actually the green boxes might be the "R*" but they're not in the dictionary. The instructions say "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box". So target_ids = [].
+
+Now let's look at the arrowheads. The leader line L0/L1 horizontal at y~977-980 goes from x=15 to x=974. The right end at x=974 is near the text "FOURTH TERRACE" (T6 starts at 933). The left end at x=15 is at the left edge of the part. Hmm, that doesn't look like an arrowhead at the part.
+
+Wait, I'm confusing myself. Let's look at image 1 more carefully. The middle cross-section (SECTION BX-BX) shows a part with a horizontal base (hatched) and a vertical wall on the right. The text "FOURTH TERRACE" is to the right of the part. There's a horizontal line connecting the part to the text. In image 1, I see the horizontal line at the level of the base top, going from the part's right edge to the text. Actually the line in image 1 appears to start at the part around x=760 (the right edge of the base, where there's a break line) and go right to the text "FOURTH TERRACE".
+
+Hmm, but L0 and L1 are at x=15 to 974, which spans the whole width including the part. That's odd. Maybe L0/L1 are the top and bottom edges of the base of the part? No, the base of the part is hatched and at y~1032-1036 (L2, L3). Let's check: L2 [0,1032,694,1033] and L3 [0,1035,690,1036] are the bottom edges of the base. L0 [15,977,974,978] and L1 [12,980,936,981] are the top edges of the base? The base top in image 1 is at y~977. Yes! The base of the part has a top surface at y~977 and bottom at y~1032. So L0/L1 are the top surface lines of the base, and L2/L3 are the bottom surface lines. These are part lines, not leaders.
+
+So the leader for FOURTH TERRACE is a separate line. In image 1, the leader line from "FOURTH TERRACE" goes left and ends with an arrowhead at the part. Let's look at image 2 for the leader. I see in image 2 a blue line at y~977 from x=0 to x=974 (that's L0/L1, the part top surface). And there's a blue line continuing to the right? Hmm.
+
+Actually, look at image 2: the text "FOURTH TERRACE" (T6) has a purple box around it. To the left of it, there's a blue horizontal line. That blue line at y~977 is L0/L1. But L0/L1 only go to x=974, which is the left edge of T6 (T6 starts at 933). So the line connects the part top surface to the text. But that line is also the part's top surface. So the leader and the part surface coincide? That's possible if the leader points to the top surface of the base.
+
+Hmm, but where's the arrowhead? In image 2, I see cyan arrowhead H2 at [760,989,800,1038]. That's at the right end of the base, pointing... Let's look. Actually in image 1, at the right end of the base there's a break line (zigzag). The arrowhead H2 might be at the leader's end pointing to the part.
+
+Wait, I think I need to look at this differently. Let's look at the leader line in image 1 for FOURTH TERRACE. The text "FOURTH TERRACE" is at the right. A horizontal line extends left from the text. In image 1, I see the line going from the text leftward to about x=760 where it meets the part's right edge / break line. There's no obvious arrowhead in image 1 at that point, but maybe there is a small one.
+
+Hmm, actually in image 1, looking at the middle part, the horizontal line at the base top level extends from the left edge all the way to the text "FOURTH TERRACE". So the line is continuous from the part through to the text. The "leader" is essentially this line. The arrowhead would be at the part end. But the part end is at the left? No, the text is at the right, so the leader goes from text (right) to part (left). The arrowhead should be at the left end where it touches the part. But the left end is at x=15 (off the part's left edge which is at x=0). Hmm.
+
+This is getting too detailed. Let's think about what the expected answer is. The pipeline expects me to associate the leader segments and arrowheads that connect F0's annotation to the part.
+
+Let's look at the cyan arrowheads in image 2: H0 at top [595,0,682,94] (that's the section K-K arrow at top), H1 at [0,955,36,995] (left edge, maybe an arrowhead at the left of the base top line?), H2 at [760,989,800,1038] (right end of base).
+
+Hmm, H1 at [0,955,36,995] is at the left edge of the image at the base top level. That could be the arrowhead of the leader pointing left into the part? But the leader for FOURTH TERRACE comes from the right (text side). So the arrowhead would be at the left end of the line, pointing left into the part. That matches H1!
+
+Wait, but in image 1, the line at the base top level: does it have an arrowhead at the left? Looking at image 1, at the left edge of the middle part, the base top line just starts at the edge, no arrowhead visible. Hmm.
+
+Let's look at image 2 again. H1 cyan box at [0,955,36,995] - that's at the very left edge, y~955-995. The base top line L0/L1 is at y~977-980. So H1 is at the left end of L0/L1. So H1 is the arrowhead at the left end of the line. But that line is the part's top surface, not a leader from the text.
+
+I'm overanalyzing. Let's step back and think about the structure of these FAI annotations in this drawing.
+
+In this drawing, each FAI marker (like FAI 176) is associated with a measurement annotation that includes a description (e.g., "FOURTH TERRACE"), a parameter (e.g., "4X -0.60 +0.26 -0.34"), an SPC letter (FP), and a 100% triangle. The measurement annotation is connected to the part via a leader line with an arrowhead.
+
+For the FOURTH TERRACE annotation, the leader line in image 1 is the horizontal line at the base top level that goes from the part to the text. Actually, I realize the leader line might be a separate line that I'm not seeing clearly. Let's look at image 2's blue lines near the FOURTH TERRACE text. I see L36 [1241,979,1399,983], L38 [1203,963,1349,964], L39 [1203,960,1343,961], L47 [1280,976,1399,981]. These are within the text region (x 1200-1400, y 960-983), so they're part of the text "FOURTH TERRACE" letters (the horizontal strokes). Not leaders.
+
+The horizontal line connecting part to text: in image 2, I see a blue line at y~977 from x=0 to x=974 (L0/L1). And the text T6 starts at x=933. So the line L0/L1 actually overlaps with the left part of the text? T6 bbox is [933,960,1465,999]. So x=933-974 is within T6. So L0/L1 ends at the left edge of the text. So L0/L1 is the leader line from the part (left) to the text (right)! And it coincides with the part's top surface on the left portion.
+
+Hmm, but then the arrowhead at the part end (left) would be H1 at [0,955,36,995]. And the arrowhead at the text end? No, leaders have arrowhead at the part end only.
+
+Wait, but actually in image 1, the line at the base top level: on the left side it's the part's top surface (hatched below). On the right side, after the part's right edge (x~760), the line continues to the text. So the line is both the part surface and the leader. The arrowhead at the part... hmm, but the part surface line doesn't have an arrowhead at its left end in image 1.
+
+OK here's another interpretation. Maybe the leader for FOURTH TERRACE is NOT the horizontal line. Maybe the leader is a line that I see in image 2 going from the text down-left to the part with an arrowhead. Let's look at the diagonal blue lines in image 2 near the middle part: L8, L9, L14, L15, L16, L17, L18 are diagonal lines in the hatched region of the vertical wall (the section hatching). L19, L44 are vertical lines (the wall's left edge). L65 is a diagonal at the right (the break line). These are all part lines (hatching and edges), not leaders.
+
+So the only horizontal line connecting to the text is L0/L1. Therefore the leader is L0/L1 (or one of them), and the arrowhead at the part end is H1 (left) or H2 (right)?
+
+Hmm, the text is on the right. The leader goes from text to part. The arrowhead points at the part. The part is on the left of the text. So the arrowhead is at the left end of the leader, i.e., where it touches the part. But the leader's left end is at x=15 (H1). But the part's left edge is at x=0. So H1 at the left edge would be the arrowhead pointing into the part from the right? That doesn't make sense geometrically because the line is the part's top surface.
+
+I think I'm spending too much time. Let's look at the visual in image 2 once more, focusing on the cyan boxes. There are cyan boxes at: top (H0) around the section arrow; left edge middle (H1); right of base middle (H2); and a few small cyan boxes on the part (around the break line and the small feature). Let me look: in image 2, I see cyan boxes at approximately: [595,0,682,94] top; [0,955,36,995] left; [760,989,800,1038] right of base; and small ones at [693,901,706,1032]? No that's L65. There's a cyan box at the small feature on the base (around x=690-710, y=900-1030) and at the break line (x=760-775). These small cyan boxes might be H* arrowheads too but they're not in the dictionary except H0, H1, H2.
+
+The dictionary only has H0, H1, H2 as arrowheads. So the only candidate arrowheads are these three. H0 is the section K-K arrow (top), not related to F0. H1 and H2 are at the middle part.
+
+For the FOURTH TERRACE leader, which arrowhead? The leader line L0/L1 is horizontal at the base top. Its right end is at the text. Its left end is at the part's left. Hmm, but actually maybe the leader is drawn from the text going left and the arrowhead is at the part's right edge (where the line meets the part's right side / break line). That would be H2 at [760,989,800,1038]. But H2's y is 989-1038, which is below the base top (977) and spans to the base bottom (1032). So H2 is at the right end of the base, vertical-ish. Hmm.
+
+Actually, you know, in image 1, look at the right end of the base: there's a break line (zigzag) at x~760. The horizontal leader

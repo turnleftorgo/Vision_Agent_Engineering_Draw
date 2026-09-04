@@ -1,0 +1,151 @@
+Let me carefully analyze the evidence for F0.
+
+F0 is the FAI marker at bbox [1150,1150,1250,1250]. Looking at the image, F0 corresponds to the "FAI 11" circle (the red box in image 2 is around the FAI 11 / SPC K area). Wait, let me look. In image 2, the red box (F0) is at approximately [1150,1150,1250,1250] in original coordinates. Looking at image 1, the FAI circles are: "FAI 10" and "SPC J" on the top row, "FAI 11" and "SPC K" on the bottom row. The red box in image 2 appears to be around the "FAI 11" circle. Let me check coordinates.
+
+In image 1, the FAI 10 circle is around x=1100, y=1070. The SPC J circle is around x=1190, y=1070. The FAI 11 circle is around x=1140, y=1140. The SPC K circle is around x=1230, y=1140.
+
+F0 bbox [1150,1150,1250,1250] — hmm, that's a 100x100 box. The FAI 11 circle center is around (1140, 1140)? Let's look at image 2's red box. The red box in image 2 is drawn around the "FAI 11" circle region. Actually the red rectangle in image 2 spans roughly x from 1150 to 1250, y from 1150 to 1250. Looking at the image, the red box encloses the "FAI 11" circle (the lower-left of the four circles). Hmm, but the FAI 11 circle in image 1 is at about x=1140, y=1140 (center). The red box [1150,1150,1250,1250] would be to the right and below that. Let me look more carefully.
+
+Actually, let's look at the OCR text T4 "CS" at [1174,1124,1246,1248] which is the SPC K / FAI 11 text region. Hmm.
+
+Let me look at the layout in image 1. The four circles: top row "FAI 10" (left) and "SPC J" (right). Bottom row "FAI 11" (left) and "SPC K" (right). The feature control frame is below the dimension line, with the bottom row circles to its right.
+
+In image 1, the dimension text "Ø 1.54 ±0.05" is at y~1070. The FAI 10 and SPC J circles are at y~1070 (top row, aligned with dimension text). The feature control frame "⊕ 0.21 A B C" is at y~1140. The FAI 11 and SPC K circles are at y~1140 (bottom row, aligned with FCF).
+
+So F0 at [1150,1150,1250,1250]... The FAI 11 circle center in image 1 looks like around (1140, 1140). The SPC K circle center around (1230, 1140). Hmm, F0's box [1150,1150,1250,1250] center is (1200, 1200). That's between them and below.
+
+Let me look at image 2's red box position visually. The red box in image 2 is drawn around the lower-left circle which contains "FAI 11"? Or the lower-right "SPC K"? In image 2, I see the red rectangle overlapping the "FAI 11" circle and the "SPC K" circle area. Hard to say.
+
+Actually, the red box in image 2 appears to be centered on the "FAI 11" circle. Let me look: the red rectangle's left edge is around the "11" text, top edge around the "FAI" text of the bottom circle. Hmm.
+
+Let's think about the typical structure. The FAI marker F0 should be associated with an SPC letter. The FAI 11 is paired with SPC K (same row). The FAI 10 is paired with SPC J.
+
+Given F0's bbox [1150,1150,1250,1250], and the FAI 11 circle is at roughly [1100,1100,1180,1180] and SPC K at [1190,1100,1270,1180] in image 1 coordinates... Hmm wait, I need to map image 1 pixel coordinates. The images are 2400-ish wide? The evidence bboxes go up to 2401 in x and 2383 in y, so the image is about 2400x2400.
+
+Let me estimate from image 1 (which is displayed at some resolution but coordinates are in the same space). In image 1, the "FAI 10" circle appears at roughly x=1140/2400 of width? Let's look at the displayed image 1. The image is square-ish. The "FAI 10" circle is at about 48% width, 46% height. 48% of 2400 = 1152. 46% of 2400 = 1104. So FAI 10 center ~ (1152, 1104). SPC J center ~ (1240, 1104). FAI 11 center ~ (1190, 1180). SPC K center ~ (1280, 1180). Hmm.
+
+Hmm, this is getting too detailed. Let's look at the red box in image 2 directly. In image 2, the red rectangle is drawn and I can see it encloses the circle that has "FAI 11" — actually the red box's interior shows "11" at the bottom and the top shows part of "FAI". And to the right of the red box is the "SPC K" circle (with "K" visible). So the red box = FAI 11 circle. Good. So F0 = FAI 11, and its SPC letter = K.
+
+Wait but the red box in image 2 looks like it's positioned over the "FAI 11" circle which is the lower-left of the four. Yes. And the SPC K circle is to its right (the "K" is visible just outside the red box on the right). Good.
+
+So fai_number = 11, spc_letter = K.
+
+Now the annotation: The FAI 11 is associated with the feature control frame "⊕ 0.21 A B C" (the bottom row). The FAI 10 is associated with the dimension "Ø 1.54 ±0.05" (top row). Hmm, but actually both FAI markers are placed next to the whole annotation block. Typically FAI 10 corresponds to the diameter dimension and FAI 11 corresponds to the position FCF. But the question says: "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation."
+
+Hmm. The FAI marker F0 (FAI 11) is on the bottom row, aligned with the FCF. So its measurement annotation is the FCF "⊕ 0.21 A B C". The SPC K is its SPC letter.
+
+But wait, the leader arrow: The leader line from the annotation goes to the part. In image 1, there's a leader line from the dimension/FCF block (the triangle arrow at the left of the dimension text, around (540,1090)) going down-left to the hole in Detail A (arrowhead at around (280,1540)). That leader is associated with the whole annotation (both the dimension and FCF). Hmm.
+
+Actually look: In image 1, there's a black filled triangle at about (540, 1090) which is the start of the leader (the arrow pointing at the annotation? or the leader origin?). Then a line goes from there down-left to the hole center arrowhead at (280,1540). So the leader connects the annotation block to the part feature (the hole).
+
+So the leader for F0's annotation includes that line and the arrowhead at the hole.
+
+Now which text IDs? The OCR text T3 "B1.54 +0. Ses" at [633,1077,1349,1248] covers the whole annotation block (dimension + FCF + circles). T4 "CS" at [1174,1124,1246,1248] covers the SPC/FAI circles text.
+
+Hmm, the parameter text for F0 (FAI 11) would be the FCF "⊕ 0.21 A B C". But OCR didn't produce a separate line for the FCF; T3 covers the whole block. So parameter_text_ids might be [T3] (since it's the only OCR covering the parameter). But T3 also includes the dimension. Hmm.
+
+Let's think about what the pipeline expects. The "parameter_text_ids" should be the OCR text lines that contain the parameter/tolerance/FCF. T3 is the main annotation text. T4 is the SPC/FAI circle text ("CS" garbled). 
+
+Given the ambiguity, I think the safest is to include T3 as parameter text (it contains the dimension and FCF). The description_text_ids: there's no instruction sentence, so empty.
+
+Now leader_ids: The leader path from annotation to part. Looking at image 2, the blue lines that form the leader from the annotation triangle to the hole arrowhead: L25, L26 (the segment from triangle at (537,1126) down to (418,1316)), then L35 (from (506,1180) to (372,1401)), L37, L40, L46, L47, L50, L51, L54 (these are the diagonal leader lines going to the hole). Hmm, there are many overlapping line segments because Hough detected the same line multiple times plus the part's arc lines.
+
+Let's look at the leader in image 1: It's a single straight line from the triangle (540,1090) to the arrowhead at the hole (280,1540). In image 2, the blue lines along that path: L25 [418,1126,537,1316], L26 [423,1128,538,1318], L35 [372,1180,506,1401], L37 [294,1367,391,1528], L40 [332,1273,447,1458], L46 [294,1380,384,1529], L47 [290,1381,381,1527], L50 [371,1338,491,1545], L51 [415,1439,568,1615], L54 [402,1414,544,1596].
+
+Hmm, but some of these (L51, L54) might be the part's arc/edge lines (the curved slot edges in Detail A). Actually in image 2, the blue lines on the left detail include the crosshair (L6, L7 vertical, L8, L9 horizontal) and the leader line and the slot edge lines. The slot edges are the curved double lines; Hough might detect straight segments along them.
+
+This is too uncertain. The instruction: "select only line IDs that are part of the FAI leader path." The leader path is the straight line from the annotation triangle to the hole arrowhead. The arrowhead at the hole is H4 [261,1517,305,1568]. The triangle at the annotation is H0 [513,1075,572,1127].
+
+So the leader line goes from H0 (540,1100) to H4 (280,1540). The line segments along that straight line: Let's compute the line from (540,1100) to (280,1540): slope = (1540-1100)/(280-540) = 440/(-260) = -1.69. So as x decreases, y increases. Points: at x=537, y~1105; at x=418, y~1306; at x=372, y~1384; at x=294, y~1516; at x=280, y~1540.
+
+Check L25: points [418,1315],[536,1126]. At x=536, y=1126; at x=418, y=1315. Slope = (1315-1126)/(418-536)=189/-118=-1.60. Close to our line. At x=537 our line y~1105, L25 y=1126 (off by 20). Hmm.
+
+Check L35: [372,1400],[505,1180]. slope=(1400-1180)/(372-505)=220/-133=-1.65. At x=505 y=1180; our line at x=505 y~1159. Off by 20.
+
+Check L40: [332,1457],[446,1273]. slope=(1457-1273)/(332-446)=184/-114=-1.61. At x=446 y=1273; our line at x=446 y~1240. Off by 30.
+
+Check L37: [294,1527],[390,1367]. slope=(1527-1367)/(294-390)=160/-96=-1.67. At x=390 y=1367; our line at x=390 y~1330. Off by 37.
+
+Hmm these are all roughly parallel but offset. The Hough lines are detecting the leader line but with some thickness/offset, plus maybe the leader line in the image is actually slightly different. Honestly the leader line in image 1 from triangle to arrowhead is a single straight line; Hough would produce multiple collinear segments. The segments L25, L26, L35, L37, L40, L46, L47, L50 are all along that diagonal. L51 and L54 are steeper? L51 [415,1439],[568,1615] slope=(1615-1439)/(568-415)=176/153=+1.15 — that's a different direction (going down-right), that's the slot edge line, not the leader. L54 [402,1414],[544,1596] slope=(1596-1414)/(544-402)=182/142=+1.28 — also slot edge. So exclude L51, L54.
+
+Also L6, L7 (vertical crosshair), L8, L9 (horizontal crosshair) are the centerlines of the hole, not leader. Exclude.
+
+So leader_ids = [L25, L26, L35, L37, L40, L46, L47, L50]. Hmm but that's a lot of duplicates. The instruction says select line IDs that are part of the FAI leader path. Duplicates are fine; they're all the same line. But maybe I should be more conservative and pick the ones that clearly form the continuous path. Honestly all of L25, L26, L35, L37, L40, L46, L47, L50 lie along the diagonal from triangle to arrowhead. Let me double check L50 [371,1338],[491,1545]: slope=(1545-1338)/(371-491)=207/-120=-1.725. At x=491 y=1545?? That's way off our line (our line at x=491 y~1180). Wait L50 points are [371,1338] and [491,1545]. At x=491, y=1545. Our leader line at x=491 is y~1180. So L50 is NOT on the leader line; it's a different diagonal (the slot edge going down-right? slope negative means as x increases y decreases... wait from (371,1338) to (491,1545): as x increases from 371 to 491, y increases from 1338 to 1545, slope positive +1.725. Hmm I mis-signed. Let's recompute: (1545-1338)/(491-371)=207/120=+1.725. Yes positive. So L50 goes down-right, that's a slot edge line, not the leader (leader goes down-left, negative slope in image coords? leader from (540,1100) to (280,1540): as x decreases y increases, so as x increases y decreases => negative slope). So L50 excluded.
+
+Let me recompute slopes carefully with image coords (y down). Leader direction: from triangle (540,1100) to arrowhead (280,1540). dx = 280-540 = -260, dy = 1540-1100 = +440. slope dy/dx = 440/-260 = -1.69.
+
+Now each candidate:
+L25: (418,1315)->(536,1126): dx=118, dy=-189, slope=-1.60. ✓ direction matches (negative).
+L26: (423,1317)->(537,1128): dx=114, dy=-189, slope=-1.66. ✓
+L35: (372,1400)->(505,1180): dx=133, dy=-220, slope=-1.65. ✓
+L37: (294,1527)->(390,1367): dx=96, dy=-160, slope=-1.67. ✓
+L40: (332,1457)->(446,1273): dx=114, dy=-184, slope=-1.61. ✓
+L46: (294,1528)->(383,1380): dx=89, dy=-148, slope=-1.66. ✓
+L47: (290,1526)->(380,1381): dx=90, dy=-145, slope=-1.61. ✓
+L50: (371,1338)->(491,1545): dx=120, dy=+207, slope=+1.725. ✗
+L51: (415,1439)->(568,1615): slope +1.15 ✗
+L54: (402,1414)->(544,1596): slope +1.28 ✗
+
+Now check whether the negative-slope ones actually lie on the leader line (not a parallel offset line like the slot edge which also could be negative slope? The slot edges in Detail A are curved arcs at upper-right and lower-left of the hole; their tangent could be negative slope too). Hmm. The upper-right slot edge in image 1 goes from about (350,1250) to (650,1620) — that's positive slope (down-right). The lower-left slot edge from (0,2000) to (350,2100) roughly horizontal-ish. So the negative-slope lines are likely the leader.
+
+But wait, are L37, L46, L47 on the leader or on something else? They are at x~290-390, y~1370-1530, which is exactly the lower part of the leader near the arrowhead (280,1540). Yes.
+
+L25, L26 at x~420-537, y~1126-1317: upper part of leader near triangle. Yes.
+L35 at x~372-505, y~1180-1400: middle. Yes.
+L40 at x~332-446, y~1273-1457: middle-lower. Yes.
+
+So all of L25, L26, L35, L37, L40, L46, L47 are leader segments. Good.
+
+Thus leader_ids = ["L25","L26","L35","L37","L40","L46","L47"].
+
+Arrowhead_ids: The terminal arrowhead of the leader is H4 (at the hole). The other end at the annotation is H0 (the triangle at the annotation, which is the leader's origin arrow pointing at the annotation? Actually in image 1 the black triangle at (540,1090) points up-left at the dimension text; it's the leader's arrowhead at the annotation side? Typically a leader has an arrowhead at the part end and a dot or nothing at the text end. But here there's a filled triangle at the text end. Hmm. In image 2, H0 is cyan box at the triangle. The instruction: "All terminal arrowheads of those leaders." The leader's terminal arrowhead at the part is H4. The triangle at the annotation (H0) is also an arrowhead of the leader (it points from the line to the annotation). I think we should include both H0 and H4 as arrowheads of the leader. But H0 is at the annotation, which is the "origin". Hmm.
+
+Look at image 1: the line from the hole goes up-right and ends at the black triangle which is just left of the dimension text. So the triangle is the arrowhead pointing at the annotation. So the leader has arrowheads at both ends? The hole end has an arrowhead (H4) pointing at the hole. The annotation end has the triangle (H0) pointing at the annotation. So both are terminal arrowheads of the leader line. I'll include H0 and H4.
+
+But wait, H0 might be considered the "leader arrowhead candidate" that connects the leader to the annotation. The evidence type H* is "leader arrowhead candidate". So H0 and H4 are both leader arrowheads. Good. The other H1, H2, H3 belong to Detail B's dimension leader (the 1.54 dimension on the right), not F0. So exclude.
+
+Thus arrowhead_ids = ["H0","H4"].
+
+target_ids: the local touched-part candidate (green R*). But there are no R* entries in the evidence dictionary! The evidence dict has no R* at all. So target_ids = [] and we use fallback box for target. The touched part is the hole in Detail A (the circle with crosshair). So target fallback box should cover that hole circle. In normalized coords [0,1000]. The hole circle in image 1 is at roughly center (175,1720) radius ~175 (the solid circle). In image 2 the green? there's no green. The hole circle bbox in original coords approx [0,1540,360,1900]. Normalize: x: 0/2400*1000=0 to 360/2400*1000=150; y: 1540/2400*1000=642 to 1900/2400*1000=792. Hmm but the image height? The evidence y goes to 2383, so height ~2400. So normalized target box ~ [0,642,150,792]. But maybe include a bit more. Let's look at the hole circle in image 1: it spans x from 0 to ~360, y from ~1540 to ~1900. Actually the circle left edge is at x=0 (cut off). Center crosshair at (175,1720). Radius ~175. So circle bbox [0,1545,350,1895]. Normalized [0,644,146,790].
+
+Hmm but the arrowhead H4 points at the upper-right of the hole circle (at (280,1540) which is on the circle's edge). So the touched part is the hole. Good.
+
+Now annotation fallback box: the annotation block (dimension + FCF + circles) in original coords approx [615,1075,1353,1250]. Normalized: x 615/2400*1000=256 to 1353/2400*1000=564; y 1075/2400*1000=448 to 1250/2400*1000=521. So annotation fallback ~ [256,448,564,521]. But we have OCR T3 covering [633,1077,1349,1248] which is the annotation text. Since we have annotation_ids? Wait annotation_ids field — what goes there? The schema has "annotation_ids" which probably is the list of evidence IDs for the annotation (the FAI marker + SPC + text + FCF?). Hmm. Actually the schema fields: marker_id, fai_number, spc_letter, annotation_ids, parameter_text_ids, description_text_ids, leader_ids, arrowhead_ids, target_ids, parameter_values, measurement_description, is_range_measurement, fallback_boxes_norm, complete, missing, confidence.
+
+I think annotation_ids should include the FAI marker and SPC marker and the FCF/parameter text? Or maybe annotation_ids is the set of evidence IDs that constitute the annotation (the text lines + FAI + SPC). Hmm. The instruction: "Build exactly one complete FAI annotation group for F0." and "A complete crop must contain: 1. F0 and its inspection number. 2. Associated SPC letter if present. 3. Parameter, tolerance, feature-control-frame, and description text. 4. All leader segments... 5. All terminal arrowheads... 6. The smallest useful local component..."
+
+So the fields map: marker_id=F0; fai_number=11; spc_letter=K; parameter_text_ids = OCR of parameter/FCF = [T3]; description_text_ids = [] (none); leader_ids = [...]; arrowhead_ids = [H0,H4]; target_ids = [] (no R*); annotation_ids = ? Maybe annotation_ids is the SPC marker ID? But there's no separate SPC evidence ID; the SPC K is part of T4 OCR or part of the circles. Hmm.
+
+Wait, maybe annotation_ids is meant to be the IDs of the annotation elements that are not in the other specific lists, like the SPC marker and the FAI marker? But F0 is marker_id. The SPC letter we have as text "K" but no evidence ID for the SPC circle specifically. T4 "CS" covers the circles text. Hmm.
+
+Let's look at the evidence types again: F* = selected FAI marker (red) = F0. There's no separate SPC evidence type. So the SPC letter is read from OCR or from the image. The SPC K circle's text would be in T4 maybe. T4 "CS" at [1174,1124,1246,1248] — that's the region of the bottom circles (FAI 11 / SPC K). Garbled.
+
+I think for annotation_ids, we should put the OCR text IDs that form the annotation block that are not parameter/description, i.e., maybe T4 (the SPC/FAI circle text) and T3? But T3 is parameter. Hmm.
+
+Let's think about typical expected output format from these pipelines. Usually:
+- annotation_ids: the FAI marker + SPC marker + the dimension/FCF text lines (the whole annotation cluster).
+- parameter_text_ids: subset that is the parameter/tolerance/FCF.
+- description_text_ids: instruction text.
+
+But we don't have a separate SPC marker ID. So annotation_ids might just be [F0, T3, T4]? But F0 is already marker_id. Hmm, maybe annotation_ids should not repeat marker_id.
+
+Given uncertainty, I'll set annotation_ids = ["T3","T4"] (the OCR lines of the annotation block including the FAI/SPC circles and the dimension/FCF). And parameter_text_ids = ["T3"] (the dimension + FCF). description_text_ids = [].
+
+Hmm but T4 is the SPC/FAI circle text which is more like the marker's own text, not parameter. That's fine to put in annotation_ids.
+
+Actually wait, maybe the cleaner interpretation: annotation_ids = the IDs of all annotation-related evidence (text + markers) that belong to this FAI group. Since F0 is the marker, and T3, T4 are the text, annotation_ids = ["T3","T4"]. parameter_text_ids = ["T3"]. That seems consistent.
+
+But hold on: is T3 really the parameter for F0 (FAI 11)? T3 = "B1.54 +0. Ses" which is the diameter dimension "Ø 1.54 ±0.05". That's the parameter for FAI 10, not FAI 11. The FCF "⊕ 0.21 A B C" is the parameter for FAI 11, but OCR didn't capture it as a separate line; it's within T3's bbox? T3 bbox [633,1077,1349,1248] spans both rows (y 1077 to 1248), so it includes the FCF row too. The OCR text "B1.54 +0. Ses" only captured the top row though. So the FCF text isn't in any OCR line. So parameter_text_ids = [T3] is the best we have (it covers the annotation block including FCF region). Good.
+
+Thus parameter_values: we can extract from the image: diameter 1.54 ±0.05, position 0.21 A B C. But parameter_values should correspond to F0's measurement which is the FCF (position 0.21). Hmm. But since F0=FAI 11 is on the FCF row, the parameter is the position tolerance 0.21 with datums A B C. But the diameter 1.54 is the basic dimension for that feature too. The instruction: "Parameter, tolerance, feature-control-frame, and description text." So parameter_values could include both the diameter and the position? The diameter is the size, the FCF is the position. For an FAI on the FCF row, the measured parameter is the position. But the diameter is also part of the annotation.
+
+Hmm, this is too detailed. I'll provide parameter_values as the values I can read: ["1.54 ±0.05", "0.21 A B C"]? Or maybe just the FCF. The schema example shows parameter_values as a list. I'll include both since both are in the annotation block and both relate to the feature. Actually, the FAI 11 specifically tags the FCF (position). The FAI 10 tags the diameter. But the leader is shared. The instruction says don't associate a nearby dimension unless connected to F0's measurement annotation. The diameter dimension IS connected (same leader, same annotation block). Hmm but it's a separate measurement (FAI 10). The instruction: "Do not associate a nearby dimension ... unless it is connected to F0's measurement annotation." The diameter is part of the same annotation block that F0 is attached to. So it's connected. So we can include it.
+
+I think it's safer to include both in parameter_values and T3 in parameter_text_ids.
+
+measurement_description: null (no instruction sentence).
+is_range_measurement: false (the ±0.05 is a tolerance, not a min/max range; the FCF is not a range). Actually ±0.05 is a symmetric tolerance, not a range/limit pair. So false.
+
+complete: We have marker, fai_number, spc_letter, parameter text, leader, arrowheads. Missing: target (no R* evidence) -> we use fallback box. So is the group "complete"? The schema has "complete" boolean and "missing" list. Since target evidence (R*) is absent, we should list "target" in missing and set complete = false? Or complete refers to whether we could build the group with fallbacks? The instruction: "If evidence is missing, provide a fallback box ... never invent IDs." And "complete" likely true if all required elements are present (even via fallback?). Hmm. The example shows complete: false and missing: []. I think complete should be true if we have everything we need (with fallbacks allowed). But missing should list the evidence types that were absent (target). Hmm.
+
+Let's think: The required elements: 1 F0+number (have), 2 SPC (have as letter, no ID but we read it), 3 parameter/FCF text (have T3), 4 leaders (have), 5 arrowheads (have), 6 touched part (no R* ID, use fallback). So element 6's evidence is missing. So missing = ["target"] and complete = false? Or complete = true because we provided fallback? The phrasing "complete crop must contain ... 6. The smallest useful local component" — we provide it via fallback

@@ -1,0 +1,33 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. The red rectangle highlights the FAI 63 marker. Let me look at what's inside the magenta rectangle and what's outside.
+
+Inside the magenta rectangle, I see:
+- The text "THIRD TERRACE" partially? Let me look. The "THIRD TERRACE" text is at the top, around y=860. The magenta rectangle top edge is around y=940. So "THIRD TERRACE" is ABOVE the magenta rectangle, outside it.
+- The feature control frame with the flatness symbol and "0.33" is at around y=940-970. The magenta top edge cuts through this. Let me look. The feature control frame box is at approximately y=910-975. The magenta top edge is at y=940. So the top of the feature control frame is clipped! Actually let me look more carefully.
+
+Let me look at coordinates. In IMAGE 1, the magenta rectangle spans roughly from x=680 to x=1490, y=940 to y=1980.
+
+The "THIRD TERRACE" text is at y~860, which is above the magenta top (940). So the description text "THIRD TERRACE" is OUTSIDE the crop.
+
+The feature control frame (flatness symbol + 0.33) is at y~910-975. The magenta top is at 940, so the top portion of the feature control frame is clipped. In IMAGE 2, I see at the very top a partial feature control frame - I can see the bottom of the flatness symbol and "0.33" but the top is cut off. Yes, in IMAGE 2 top edge shows a clipped box with the flatness symbol partially and "0.33" partially. So the feature control frame is clipped at the top.
+
+The leader line: There's a leader line from "THIRD TERRACE" going down to a dot at the bottom (around x=830, y=1960). The leader line starts at the top near "THIRD TERRACE" (around x=1050, y=860) and goes down to the dot. In the magenta rectangle, the leader line enters from the top edge (clipped) and goes to the dot at the bottom. The dot is at y~1960, which is inside the magenta (bottom 1980). The arrowheads: there are two arrowheads at the bottom, one at x~760, y~1900 and one at x~1410, y~1900. These are inside the magenta. But the leader line that connects to "THIRD TERRACE" - the top part of the leader is outside the magenta (above y=940). So the leader segment reaching the description text is clipped at the top border.
+
+Also the description text "THIRD TERRACE" is outside.
+
+So the crop is missing:
+- The description text "THIRD TERRACE"
+- The top of the feature control frame (clipped)
+- The top portion of the leader line connecting to the description
+
+Let me check the FAI circle 63 - it's inside. The "15" box is inside. The "16" box and FAI 211 are inside. The SPC circle is partially? In IMAGE 1, the SPC circle is at x~1470, y~1040. The magenta right edge is at x~1490. So the SPC circle might be partially clipped on the right. In IMAGE 2, the SPC circle is at the right edge and appears clipped (I see "SP" and "BH" partially). Yes, the SPC circle is clipped at the right border.
+
+So multiple issues. The crop is invalid.
+
+Now I need to determine expansion values. The crop currently is from IMAGE 1 magenta rectangle. Let me estimate the magenta rectangle dimensions in IMAGE 1 pixel coordinates.
+
+Looking at IMAGE 1, the magenta rectangle: left edge ~680, right edge ~1490, top edge ~940, bottom edge ~1980. So width ~810, height ~1040.
+
+Now what's missing and where:
+- Top: need to include "THIRD TERRACE" text (y~860) and the full feature control frame (top ~910)

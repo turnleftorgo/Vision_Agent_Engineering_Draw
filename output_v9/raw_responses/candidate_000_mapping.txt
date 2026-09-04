@@ -1,0 +1,141 @@
+The user wants me to build a FAI annotation group for marker F0. Let me carefully analyze the images and the evidence dictionary.
+
+First, let me understand the layout. IMAGE 1 is the clean drawing. IMAGE 2 has evidence IDs overlaid.
+
+Looking at IMAGE 1, there are three FAI annotations:
+1. Top one: FAI 17, SPC Q, 100%, with dimension 0.10 +0.235/-0.100, description "TOP PLATE TO PLASTIC TOP CASE GAP G21, G24, G29, G32, G36, G44, G50, G52". This has a leader going down to the leftmost point of the cross-section.
+2. Middle one: FAI 224, SPC GW, 100%, with dimension 0.00 +0.05/-0.05, description "TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G20 TO G33". Leader goes to the second point.
+3. Bottom one: FAI 199, SPC GM, 100%, with dimension 0.00 +0.08/-0.05, description "TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G1 TO G19, G34 TO G57". Leader goes to the third point.
+
+Now F0 is the selected FAI marker. Let me look at F0's bbox: [1150,1150,1250,1250]. In IMAGE 2, the red box F0 is around the "FAI 224" circle. Let me check. In IMAGE 2, the red rectangle is around the FAI circle that contains "224". Yes, looking at IMAGE 2, the red box is at the middle annotation's FAI circle (the one with 224). Let me verify coordinates. The middle annotation's FAI circle in IMAGE 1 is around x=1150-1250, y=1150-1250? Let's look. In IMAGE 1, the middle FAI circle "224" is at approximately... The image is 2400-ish wide. The middle FAI circle appears around x=1150-1250, y=1150-1250. Yes that matches F0 bbox [1150,1150,1250,1250].
+
+Wait, but let me double check by looking at IMAGE 2. The red box in IMAGE 2 is around the circle that says "FAI 224". Yes, I see the red rectangle around the left circle of the middle pair (FAI 224 / SPC GW). Good. So F0 = FAI 224.
+
+So the FAI number is 224, SPC letter is GW.
+
+Now the associated annotation: dimension 0.00 +0.05/-0.05, description "TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G20 TO G33".
+
+Let me map the OCR text IDs.
+
+Looking at the evidence:
+- T16: "+Q.05" bbox [940,1151,1122,1189] -> this is +0.05
+- T17: "QO.00" bbox [750,1186,897,1224] -> 0.00
+- T18: "-QO.05" bbox [943,1221,1122,1260] -> -0.05
+- T19: "TOP PLATE TO PLASTIC" bbox [753,1272,1517,1310]
+- T21: "TOP CASE Z DIRECTION OFFSET" bbox [753,1325,1787,1363]
+- T22: "G20 TO G33" bbox [752,1378,1131,1417]
+
+So parameter text: T17 (0.00), T16 (+0.05), T18 (-0.05). Description text: T19, T21, T22.
+
+Now the leader segments. The middle annotation's leader goes from the dimension text down to the second arrowhead point. Let's look at the leader lines. In IMAGE 1, the middle leader is a vertical line from around the "0.00" text going down to the second arrowhead. Looking at the coordinates, the vertical line for the middle leader is around x=672 (L16, L17). Let's check: L16 bbox [672,1203,673,1824], L17 [669,1204,670,1824]. These are vertical lines from y~1203 to y~1824. That matches the middle leader (starts near the 0.00 text at y~1200 and goes down to the arrowhead at y~1824). Also there's a horizontal segment connecting the 0.00 text to the vertical line: L52 [1152,1203,1357,1204]? No wait, that's at x 1152-1357 which is to the right. Hmm.
+
+Let me look more carefully. In IMAGE 1, the middle annotation: the "0.00" is at left, then "+0.05/-0.05" to the right, then FAI/SPC circles, then triangle. The leader line: there's a horizontal line from the left of "0.00" going left a bit then down? Let's look at IMAGE 1. Actually the leader for the middle annotation: I see a horizontal line at the level of "0.00" going left from "0.00" to a vertical line that goes down to the second arrowhead. Let's look at the image. In IMAGE 1, the middle "0.00" has a line going left from it (a short horizontal segment) then down vertically to the arrowhead at the second position.
+
+Hmm, but the OCR T17 "0.00" is at x 750-897. The vertical line L16/L17 is at x~670. So the horizontal connector would be from x~670 to x~750 at y~1200. Is there such a line? Let's look. L52 is [1152,1203,1357,1204] - that's at the right side (the FAI circle area). Hmm.
+
+Wait, maybe I'm misreading the leader geometry. Let's look at IMAGE 2 carefully. The middle leader: I see a blue vertical line at around x=672 going from y~1203 down to y~1824 (that's L16/L17). At the top of that vertical line, there's a horizontal blue line going right to the "0.00"? Actually in IMAGE 2, I see the vertical line at x~672 starts at y~1203 and there's a horizontal segment at y~1203 going from x~672 to x~750 (the left edge of 0.00). Hmm but I don't see that in the line list clearly. Let's look at the line list around y=1203: L52 [1152,1203,1357,1204], L53 [1152,1200,1357,1201]. Those are at x 1152-1357, which is the FAI circle region (the line through the FAI/SPC circles? Actually in IMAGE 2 there's a blue horizontal line through the FAI 224 / SPC GW circles at y~1200). Hmm.
+
+Wait, I need to look at the actual leader path in IMAGE 1. Let me look at the middle annotation's leader in IMAGE 1. The "0.00" text is at left. To the left of "0.00" there's a horizontal line that goes left and then turns down. Looking at IMAGE 1, yes: there's a horizontal line at the vertical center of "0.00" extending left to about x=672, then a vertical line down to the arrowhead. So the horizontal connector is from x~672 to x~750 at y~1203. Is that in the line list? Let's scan for horizontal lines at y~1200-1205 with x range 672-750. I don't see one explicitly. Hmm.
+
+Actually wait. Let's look at the line list again. The vertical lines L16, L17 are at x 669-673, y 1203-1824. The horizontal line at the top connecting to 0.00... maybe it's not detected as a separate segment, or maybe it's part of L52? No, L52 is at x 1152-1357.
+
+Hmm, let me look at IMAGE 2 again. In IMAGE 2, the middle leader's vertical line is at x~672 (blue). At its top, I see it connects to a horizontal blue line that goes... left? Actually I see in IMAGE 2 a horizontal blue line at y~1203 from x~672 going right to about x~750? Hard to say. Actually I think the horizontal line at the top of the middle leader goes from the vertical line rightward to the "0.00" text. But the "0.00" text left edge is at x=750. So horizontal from 672 to 750. Not in list.
+
+Hold on, maybe I have the wrong vertical line. Let's look at the arrowheads. The middle arrowhead (second position) is H2? Let's check arrowhead bboxes. H2 [657,1822,682,1909], H3 [909,1822,932,1912]. So H2 is at x~657-682 (the second arrowhead position), H3 at x~909-932 (the third arrowhead position). And H0 [513,674,543,699], H1 [573,674,608,697] are at the top (the dimension line arrowheads for the top annotation? Actually H0 and H1 are at y~674-699 which is the top dimension line "0.10" arrowheads).
+
+So for the middle annotation, the terminal arrowhead is H2 (x~670). The vertical leader line for the middle annotation should be at x~670, which is L16/L17 (x 669-673). Good. So the middle leader vertical = L16, L17.
+
+Now the horizontal connector at top of middle leader: from x~670 to the "0.00" text. The "0.00" text T17 left edge x=750. So horizontal from 670 to 750 at y~1203. Not in line list? Let me look again... Hmm, maybe it's there but I missed. Let me list all horizontal lines with y between 1190 and 1210: L52 (y1203, x1152-1357), L53 (y1200, x1152-1357). That's it. So no horizontal connector at x 670-750.
+
+Wait, maybe the leader for the middle annotation doesn't have a horizontal connector to 0.00; maybe the vertical line just starts at the 0.00 level and the 0.00 is to the right of the vertical line, with the leader being just the vertical line plus the dimension text is placed to the right. Let's look at IMAGE 1 again. In IMAGE 1, the middle "0.00" — to its left there's a horizontal line? Looking carefully at IMAGE 1, I see: the middle "0.00" has a horizontal line going left from it (a short segment) then down. Yes I'm fairly sure there's a horizontal segment. But maybe OpenCV didn't detect it because it's short. In that case, I should not invent it. The instruction says select only line IDs that are part of the FAI leader path. If the horizontal connector isn't in the list, I leave it out (the vertical line L16/L17 is the main leader).
+
+Hmm, but actually wait. Let's look at the top annotation's leader to compare. The top annotation's leader vertical line is at x~562 (L5, L6, L7, L8 at x 553-566, y 662-1894). The top arrowhead is at the leftmost position (x~562). The top dimension "0.10" is at the top with arrowheads H0, H1. The horizontal line at top connecting the vertical leader to the dimension: L18 [298,381,875,382], L19 [306,387,867,388], L22 [318,378,855,379] — these are at y~380, which is the top dimension line level (the "0.10" line). And the vertical leader L5-L8 start at y~662, not 380. Hmm, so the top leader vertical starts at y~662 which is below the dimension line at y~380. That's odd.
+
+Wait, I'm confusing myself. Let's look at IMAGE 1 layout vertically. The top dimension "0.10 +0.235/-0.100" is at around y=650-720 (in the original image coordinates? The image is 2400 tall maybe). Hmm, the OCR T7 "+0.235" bbox [1093,633,1314,671], T8 "O.100" [1128,704,1314,742]. So the top dimension numbers are at y~633-742. The "0.10" text would be around there too. The top dimension line with arrowheads H0, H1 is at y~674-699. So the horizontal dimension line is at y~685 (L31 [606,685,907,686], L34 [608,688,907,689]). And the vertical leader for the top annotation goes from y~662 (just above the dimension line) down to y~1894 (the arrowhead at leftmost). Wait but the vertical leader L5-L8 start at y~662 which is right at the dimension line level. Hmm, but the dimension line is at y~685. So the vertical leader top at y~662 is slightly above. OK.
+
+Actually, I realize the top annotation's leader: the vertical line goes from the dimension line down to the leftmost arrowhead. The dimension line horizontal is at y~685 (L31/L34). The vertical line L5-L8 at x~562 from y662 to y1894. The leftmost arrowhead would be at the bottom of that vertical line, around y~1894. But the arrowhead list: H0, H1 at top (y674-699), H2 at x657-682 y1822-1909, H3 at x909-932 y1822-1912. There's no arrowhead at x~562 y~1894! Hmm.
+
+Wait, that's a problem. Let's look at IMAGE 1. The top annotation's leader goes down to the leftmost point of the cross-section. In IMAGE 1, the leftmost arrowhead is at the left edge of the cross-section top surface. Looking at IMAGE 1, the leftmost vertical leader ends with an arrowhead at the top-left of the cross-section. In IMAGE 2, that arrowhead... let's look. The cyan arrowheads in IMAGE 2: I see at the top two small cyan boxes (H0, H1) at the dimension line. Then at the bottom, I see cyan boxes at the second and third positions (H2, H3). Is there a cyan box at the leftmost position? Looking at IMAGE 2, at the leftmost vertical line bottom (x~562, y~1890), I see a cyan box labeled H? Hmm, the labels near there: I see "H0" and "H1" at top. At the bottom leftmost, I see a cyan box but the label is hard to read; it might be H? Actually the evidence only has H0-H3. So the leftmost arrowhead is NOT in the evidence list!
+
+Hmm wait. Let's re-examine. The arrowheads H0 [513,674,543,699] and H1 [573,674,608,697] are at y~674-699, x~513-608. That's the top dimension line arrowheads (the "0.10" dimension has two arrowheads pointing left and right at the dimension line). Actually in IMAGE 1, the top dimension line "0.10" has a left arrowhead at the left end (pointing to the vertical leader line) and the line extends right to the "0.10" text. Hmm, actually the top dimension in IMAGE 1: there's a horizontal line with a left-pointing arrowhead at the left (at the vertical leader) and the "0.10" text to the right. So H0 and H1 might be the two arrowheads of that dimension line? But a dimension line usually has arrowheads at both ends. The left end is at the vertical leader (x~562), the right end is at the "0.10" text (x~875?). H0 x513-543, H1 x573-608. Both near x~562. So both are at the left end? That's weird.
+
+Hmm, this is getting too detailed. Let's step back. The task is specifically about F0 = FAI 224 (the middle annotation). I need to build the group for the MIDDLE annotation only. I should NOT include the top annotation's stuff (H0, H1, the top dimension, the top leader L5-L8, etc.) because those belong to FAI 17, not FAI 224.
+
+So for the middle annotation (FAI 224):
+- FAI marker: F0
+- SPC letter: GW (the circle next to FAI 224). Is there an OCR/ID for the SPC circle? The SPC circle is part of the marker region. The evidence doesn't have a separate ID for the SPC circle text. The SPC letter "GW" — is it in OCR? I don't see "GW" in the OCR list. The OCR list has T16-T22 for the middle annotation but no "GW" or "224" or "FAI". So the FAI number and SPC letter are not in OCR; I'll provide them as text values (fai_number="224", spc_letter="GW") based on visual reading. The instruction says "fai_number" and "spc_letter" fields can be strings. Good.
+
+- annotation_ids: This should include the FAI marker and SPC marker? The schema has "annotation_ids" which I think is for the FAI/SPC marker group. Hmm, let's think about the schema fields:
+  - marker_id: F0
+  - fai_number: "224"
+  - spc_letter: "GW"
+  - annotation_ids: probably the FAI marker + SPC marker + triangle? Or the dimension annotation? The description says "A complete crop must contain: 1. F0 and its inspection number. 2. Associated SPC letter if present. 3. Parameter, tolerance, feature-control-frame, and description text. 4. All leader segments... 5. All terminal arrowheads... 6. The smallest useful local component..."
+
+The schema fields: annotation_ids, parameter_text_ids, description_text_ids, leader_ids, arrowhead_ids, target_ids.
+
+I think annotation_ids = the FAI marker and SPC marker and the 100% triangle (the annotation symbols). But we only have F0 as an ID for the FAI marker. The SPC circle and triangle don't have IDs in the evidence (no separate IDs). So annotation_ids = ["F0"].
+
+parameter_text_ids = the dimension numbers: T17 (0.00), T16 (+0.05), T18 (-0.05).
+description_text_ids = T19, T21, T22.
+leader_ids = the leader segments for the middle annotation: L16, L17 (vertical). Possibly also a horizontal connector if present. Let's look for the horizontal connector at top of middle leader. The middle leader vertical is at x~670. The "0.00" text is at x750-897. In IMAGE 1, is there a horizontal line from x670 to x750 at y~1203? Looking at IMAGE 1, yes there's a horizontal line to the left of "0.00". But it's not in the line list. Hmm. Wait, maybe the horizontal line is actually from the vertical line going right to the 0.00, but OpenCV detected it as part of something else. Let me look at the line list for any horizontal line at y~1200 with x in 670-750. None. So I'll just use L16, L17.
+
+Actually wait, maybe I should look at whether the vertical line for the middle leader is L16/L17 or something else. Let's double check by looking at the bottom of L16/L17: y=1824. The arrowhead H2 is at y1822-1909, x657-682. So the vertical line L16/L17 (x669-673) ends at y1824 which is the top of arrowhead H2. Good, that's the connection. So L16, L17 are the middle leader vertical.
+
+But also, is there a horizontal segment at the top connecting the vertical line to the dimension text? In IMAGE 1, the middle leader: I'll look really carefully. The "0.00" is at left of the middle annotation. To the left of "0.00" there's a horizontal line that goes left and then down. Yes I'm confident there's a horizontal segment. But it's not in the evidence. The instruction: "select only line IDs that are part of the FAI leader path." If it's not in the evidence, I can't select it. So leader_ids = ["L16","L17"].
+
+Hmm, but wait. Let's look at IMAGE 2 to see the blue lines for the middle leader. In IMAGE 2, the middle leader vertical blue line is at x~672 from y~1203 to y~1824. At its top, I see a horizontal blue line going... I see at y~1203 a horizontal blue line from x~672 to x~750? Actually in IMAGE 2 I notice the horizontal blue line at the top of the middle vertical line seems to go right to the "0.00"? Hmm, but the "0.00" purple box T17 is at x750-897. The blue horizontal line at y~1203 in IMAGE 2 — I see one going from x~672 rightward a short distance. It's hard to tell. Given it's not in the line list, I'll exclude it.
+
+Actually, hold on. Let me look at the line list for L52/L53 again: [1152,1203,1357,1204] and [1152,1200,1357,1201]. These are at x1152-1357, y~1200-1203. That's the horizontal line through the FAI 224 / SPC GW circles (in IMAGE 2 there's a blue horizontal line crossing those circles). That's not a leader; that's an artifact of the circle detection or a line through the circles. Not part of leader. Exclude.
+
+So leader_ids = ["L16","L17"].
+
+arrowhead_ids = ["H2"] (the terminal arrowhead of the middle leader).
+
+target_ids = the local component touched by H2. The arrowhead H2 points to the top surface of the cross-section at the second position. The "smallest useful local component/cross-section touched" — this would be the cross-section region near that arrowhead. Is there an R* (green) ID? The evidence dictionary has no R* entries at all! Let me check. The evidence list has F0, H0-H3, T0-T35, L0-L69, G0-G10. No R* and no A* and no G*? Wait G* are triangles (teal). The prompt says G* = OpenCV triangular arrowhead candidate (teal). And R* = local touched-part candidate (green). There are no R* in the evidence. So target_ids would be empty, and I use fallback box for target.
+
+Hmm, but the green boxes in IMAGE 2 — the prompt says R* is green. In IMAGE 2 I see green rectangles around the cross-section features (the touched parts). But they're not in the evidence dictionary! The evidence dictionary only contains the IDs listed. The green boxes in IMAGE 2 must correspond to R* IDs that are NOT in the dictionary? That can't be; the instruction says "Every selected ID must exist verbatim in the Evidence dictionary." So if R* aren't in the dictionary, I cannot select them. So target_ids = [] and I provide a fallback target box.
+
+Wait, but the green boxes in IMAGE 2 are visible. Let me look: in IMAGE 2, around the cross-section, there are green rectangles (e.g., around the second and third features). These would be R* candidates. But they're not in the evidence dictionary. So I must not use them. Therefore target_ids = [].
+
+Hmm, but then how do I represent the touched part? Via fallback_boxes_norm.target.
+
+OK here's my plan. Let me also double check the G* triangles. The G* are "OpenCV triangular arrowhead candidate (teal)". In IMAGE 2, the teal triangles at the bottom (G0-G10) are around the cross-section top surface — these are likely the hatching or the arrowhead shapes? Actually they look like they're at the top surface of the cross-section (the small triangles might be the arrowhead tips or part of the section). Hmm. The prompt distinguishes H* (leader arrowhead candidate, cyan) from G* (triangular arrowhead candidate, teal). The H2 is the cyan arrowhead for the middle leader. The G* triangles are at the cross-section top (y1868-1891 etc.) which is the surface line, not the leader arrowhead. So G* are not the leader arrowheads; they're probably false positives from the section hatching or the surface. I should not include G* as arrowheads. The leader arrowhead is H2.
+
+Wait, but actually look at IMAGE 1: the arrowheads at the bottom (where the leaders touch the cross-section) are filled black triangles pointing down. In IMAGE 2, those are the cyan H2, H3 boxes. The teal G* boxes in IMAGE 2 are at the top surface line of the cross-section (the horizontal line with hatching). So G* are not arrowheads of leaders. Exclude.
+
+So arrowhead_ids = ["H2"].
+
+Now parameter_values: the dimension values. For the middle annotation: nominal 0.00, +0.05, -0.05. So parameter_values = ["0.00", "+0.05", "-0.05"] or maybe as a structured list. The schema example shows parameter_values: []. I'll put ["0.00", "+0.05", "-0.05"].
+
+measurement_description: the instruction sentence. The description text is "TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G20 TO G33". That's the measurement description. So measurement_description = "TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G20 TO G33".
+
+is_range_measurement: The annotation specifies +0.05/-0.05 which is a tolerance pair (limit pair). The definition: "is_range_measurement is true only when the annotation explicitly specifies a min/max interval, range, or limit pair; a two-row feature-control frame by itself is not a range measurement." Here we have a nominal with +/− tolerance, which is a limit pair (min = -0.05, max = +0.05). Hmm, is that a "range measurement"? The top annotation has 0.10 +0.235/-0.100 which is also a tolerance. The middle has 0.00 +0.05/-0.05. These are tolerance limits, i.e., a min/max interval. I think yes, this is a range/limit pair. But wait, the description says "a two-row feature-control frame by itself is not a range measurement." That's about FCF, not about +/− tolerances. A +/− tolerance is a limit pair. Hmm, but is it a "range measurement"? The phrase "min/max interval, range, or limit pair" — a +/− tolerance around a nominal is exactly a limit pair (the measurement must be between nominal-0.05 and nominal+0.05). So I'd say is_range_measurement = true.
+
+Hmm, but let's think about the intent. The top annotation "0.10 +0.235/-0.100" is a gap measurement with tolerance. The middle "0.00 +0.05/-0.05" is an offset with tolerance. Both are limit pairs. I think the intended meaning of is_range_measurement might be about whether the annotation gives a range like "0.10 to 0.20" or a tolerance band. A +/− tolerance is a band. I'll set true.
+
+Actually, let me reconsider. The phrase "min/max interval, range, or limit pair" strongly suggests that a +/− tolerance (which gives a min and max limit) qualifies. So true.
+
+Hmm, but maybe the pipeline considers a single nominal with symmetric tolerance as a "tolerance" not a "range". The example they give for NOT a range is "a two-row feature-control frame by itself". They don't give an example of a +/− tolerance. I'll go with true because +0.05/-0.05 explicitly specifies a limit pair (the acceptable range is -0.05 to +0.05).
+
+Let me look at the top annotation for consistency: it's not F0, so doesn't matter.
+
+I'll set is_range_measurement = true.
+
+Now fallback_boxes_norm. I need normalized ROI coordinates [0,1000]. The ROI is the whole image? The image dimensions: I need to know the image size to normalize. The evidence bboxes are in pixel coordinates. The image appears to be about 2400 wide and 2400 tall? Let's estimate from max coordinates. T11 x up to 2401, T33 y up to 2256, T34 y 2381-2401. L0 x up to 1410. The cross-section bottom L67 y up to 2230. So image height maybe ~2400, width ~2400. Let's assume the ROI is the full image of size W x H. I need W and H. The max x in evidence is 2401 (T11, T15, etc. at x2198-2401). The max y is 2401 (T34, T35 at y2381-2401). So image is likely 2400x2400 or maybe a bit more. Let's assume 2400x2400 for normalization? But the right side labels L1-L7 are at x~2190-2400, and the image might extend to 2400. Hmm.
+
+Actually, the normalization should be relative to the ROI. The ROI is "the clean candidate ROI" which is IMAGE 1. IMAGE 1's dimensions — I don't know exactly. The evidence bboxes are presumably in the same coordinate system as IMAGE 1 (the ROI). So I'll normalize by the ROI width and height. I need to guess W and H.
+
+Let me look at the maximum extents. The rightmost text T11 etc. at x=2401. The bottommost T34/T35 at y=2401. So the image is at least 2401x2401. Possibly exactly 2400x2400 with some rounding, or maybe the image is larger and these are just the extents of content. Hard to say.
+
+Hmm, this is too uncertain. The fallback boxes are a safety net. Let me think about what's reasonable. The instruction: "provide a fallback box in normalized ROI coordinates [0,1000]." So I map pixel (x,y) to (x/W*1000, y/H*1000). I need W and H.
+
+Let me look at IMAGE 1 visually. It's a square-ish image. The content (the cross-section and annotations) occupies roughly the left 2/3 and the right 1/3 has the L1-L7 labels. The full image width includes the L labels. So W ~ 2400. Height: the top has the partial view (the rectangle with the connector), then the annotations, then the cross-section at the bottom. The bottom of cross-section ~ y2230, plus T34/T35 at y2400 (the "rc" text at very bottom). So H ~ 2400.
+
+I'll assume W=2400, H=2400. Then normalization factor = 1000/2400 = 0.4167.
+
+Let me compute the fallback boxes.
+
+annotation fallback box: should cover F0 + SPC + triangle + dimension + description? Actually the "annotation" fallback is for the annotation text block (parameter + description + markers). Let's define it as the bounding box of the middle annotation's text and markers: from the FAI circle (x~1150) left to the dimension text left (x~750) and the description right (x~1787), top at the +0.05 (y~1151) to bottom at G20 TO G33 (y~1417). Also include the FAI/SPC/triangle which are at x up to ~1480 (triangle). Let's get extents:
+- T16 +0.05: x940-1122, y1151-1189
+- T17 0.00: x750-897, y1186-1224
+- T1

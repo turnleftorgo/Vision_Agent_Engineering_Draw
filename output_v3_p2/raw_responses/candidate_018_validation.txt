@@ -1,0 +1,185 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. The red rectangle highlights the selected FAI marker, which is "SPC CO" (paired with FAI 100).
+
+Let me look at the magenta rectangle boundaries in IMAGE 1. The magenta rectangle spans from the left edge (x=0) to about x=1250 (the vertical magenta line), and from the top (y=0) to about y=1310 (the horizontal magenta line).
+
+Now let's look at what's inside the magenta rectangle. The crop contains:
+- "DETAIL BM SCALE 20:1" text
+- "SPC CONTROL FOR ALL HEAT STAKE POST ANSI-114X ISO-114X JIS-110X" text (partially - the text extends to the right of the magenta line? Let's check. The text "SPC CONTROL FOR ALL HEAT STAKE POST" goes from about x=750 to x=2030. The magenta line is at x=1250. So the text is cut off by the magenta line! The text "ANSI-114X ISO-114X JIS-110X" also extends beyond. So the description text is clipped.
+
+Wait, but the question is about the FAI annotation group. The selected FAI marker is the red rectangle "SPC CO" with FAI 100. Let's look at the FAI annotation group for FAI 100 / SPC CO.
+
+The FAI 100 / SPC CO group is associated with the dimension "1.26 +0.19 -0.12". The leader line for this dimension goes from the dimension text to the left, to the feature. Let's trace the leader.
+
+Looking at IMAGE 1, the dimension "1.26 +0.19 -0.12" has a leader line. The leader for 1.26 goes left and down to a horizontal line at about y=1150, which is the top of the hatched feature. Actually let's look carefully.
+
+The dimensions on the left side:
+- 2.50 +0.19 -0.10 with FAI 76 / SPC BS. Leader goes left and down to a horizontal line at about y=960.
+- 1.62 +0.19 -0.12 with FAI 75 / SPC BR. Leader goes left and down to a horizontal line at about y=1060.
+- 1.26 +0.19 -0.12 with FAI 100 / SPC CO. Leader goes left and down to a horizontal line at about y=1150 (the top of the hatched region).
+- (0.00) leader goes left to a horizontal line at about y=1240.
+
+Now, the magenta rectangle's left edge is at x=0. The leader lines for these dimensions start at the dimension text (around x=580-620) and go left to about x=0 or beyond? Let's look. The leader for 2.50 goes from x=580 left to x=540 then diagonally down-left to x=520 then horizontally left to x=0 (the left edge of the image). Actually the horizontal line at y=960 extends from x=0 to x=520. So the leader line touches the left border of the image (x=0). The magenta rectangle's left edge is also at x=0. So the leader line reaches the left border of the crop.
+
+Hmm, but wait. The leader line for these dimensions - where does it terminate? In a typical dimension, the leader line points to the feature. The horizontal line at y=960 is the extension line / leader that points to the feature on the left. But the feature itself (the part outline) is to the left of x=0? Let's look at IMAGE 1. The hatched region (the cross-section) is at the bottom left, from x=0 to about x=430. The horizontal lines at y=960, y=1060, y=1150, y=1240 - these are the dimension extension lines that point to the feature. But the feature outline (the part) - the hatched region's top is at y=1110 or so. The horizontal line at y=1150 is the top of the hatched region? Let's look.
+
+Actually, looking more carefully at IMAGE 1, the hatched region (diagonal lines) is between y=1110 and y=1210 approximately, from x=0 to x=430. The horizontal line at y=1150 (the leader for 1.26) - hmm.
+
+Let me look at the structure. There's a horizontal line at y=960 (top of a step), a horizontal line at y=1060 (another step), then the hatched region top at y=1110, then hatched region bottom at y=1210, then a line at y=1240.
+
+The leaders:
+- 2.50 leader: from text left to x=540, diagonal to x=520 y=960, horizontal to x=0.
+- 1.62 leader: from text left to x=560, diagonal to x=520 y=1060, horizontal to x=0.
+- 1.26 leader: from text left to x=560, diagonal to x=580 y=1150, horizontal to x=430 (the right edge of hatched region)? Let's look. The line at y=1150 goes from x=430 to x=580. Hmm, actually the leader for 1.26 seems to point to the top-right corner of the hatched region.
+- (0.00) leader: horizontal line at y=1240 from x=430 to x=580.
+
+OK this is getting too detailed. The key question: does the crop fully contain the FAI annotation group for FAI 100 / SPC CO?
+
+The FAI 100 / SPC CO group includes the dimension 1.26 +0.19 -0.12, the FAI circle, the SPC circle, and the leader line to the feature.
+
+Now, the leader line for 1.26 - where does it terminate? It points to the feature. The feature is the hatched region / part outline. In IMAGE 1, the hatched region is partially visible (x=0 to x=430). The leader line for 1.26 terminates at the top of the hatched region around x=430, y=1110? Or does it terminate at the left border?
+
+Let's look at the leader line for 1.26 in IMAGE 1. The text "1.26" is at about x=620-730. The leader line: from the left of "1.26" there's a line going left to about x=560, then diagonal down-right? No wait. Let me look at the shape. The leader for 1.26 looks like: horizontal from x=560 to x=430 at y=1110? Hmm.
+
+Actually, I see in IMAGE 1 the leader lines form a zigzag. Let me look at the 1.26 row. The text "1.26" left side has a line that goes left and slightly down to a horizontal segment. The horizontal segment at y=1110 (top of hatched region) goes from x=430 to x=560? And the diagonal connects.
+
+Hmm, I think the leader for 1.26 points to the top edge of the hatched region at the right side (x=430). The hatched region's top-right corner is at about (430, 1110). So the leader terminates there, which is inside the crop (since crop left is x=0, right is x=1250, top y=0, bottom y=1310). So the leader termination is inside.
+
+But wait, the hatched region itself - is it fully inside the crop? The hatched region spans x=0 to x=430. The left edge of the hatched region is at x=0, which is the left border of the crop. So the hatched region is cut off at the left! The "visible local portion of every component feature touched by those arrows" - the arrow/leader touches the hatched region. The hatched region's left part is cut off by the crop border (x=0). But the requirement is "a visible local portion of every component feature touched by those arrows." So we need a visible local portion. The hatched region is partially visible (x=0 to 430). The leader touches the top-right of the hatched region which is visible. So a local portion is visible. That might be OK.
+
+But hold on. Let's look at the leader lines for 2.50 and 1.62. Their horizontal segments extend to x=0 (the left border). That means the leader line reaches the crop border. The rule says: "Reject it if a relevant leader reaches the crop border."
+
+But are those leaders "relevant" to the selected FAI marker (FAI 100 / SPC CO)? The selected FAI marker is FAI 100 / SPC CO, which corresponds to the 1.26 dimension. The 2.50 and 1.62 dimensions are different FAI markers (FAI 76/BS and FAI 75/BR). So their leaders are not part of the selected FAI annotation group.
+
+Hmm, but the crop is supposed to contain "one coherent FAI annotation group." The crop currently contains THREE FAI groups on the left (76/BS, 75/BR, 100/CO) plus the (0.00) reference. That's multiple FAI groups. The rule says "fully contains one coherent FAI annotation group." It doesn't say it must contain ONLY one. But it says "Reject it if ... unrelated neighboring annotations dominate."
+
+Hmm, this is tricky. Let's think about what the "selected FAI marker" is. The red rectangle is on SPC CO (FAI 100). So the relevant group is the 1.26 / FAI 100 / SPC CO group.
+
+Now, does the crop fully contain this group? The group includes:
+- FAI 100 circle: visible (at about x=1050, y=1150).
+- SPC CO circle: visible (red rectangle, x=1150, y=1150).
+- dimension 1.26 +0.19 -0.12: visible.
+- leader line: from text to feature.
+- terminal arrowhead: hmm, is there an arrowhead? In these dimension leaders, I don't see explicit arrowheads; the leader lines just touch the feature lines. Actually, looking at the leaders, they're like extension lines that meet the feature outline. There's no arrowhead per se. The "terminal arrowhead" requirement might be satisfied by the leader touching the feature.
+
+Wait, but actually, let's look at the leader for 1.26 more carefully. In IMAGE 1, the leader for 1.26: I see a line from the left of "1.26" going left to about x=560, then a diagonal going down-left to about x=580? No.
+
+Let me look at the geometry of the leaders in IMAGE 1 around the 1.26 row. I'll describe what I see: There's a horizontal line at y=1110 from x=0 to x=430 (top of hatched region). Then from x=430, y=1110, a line goes right and slightly up? Hmm.
+
+Actually, I realize the leaders in these drawings typically look like: a horizontal line from the feature, then a diagonal, then a horizontal line to the text. The "terminal" at the feature end is where it touches the feature outline (no arrowhead, just a touch point). The requirement mentions "every terminal arrowhead" - maybe in some drawings there are arrowheads. Here I don't see arrowheads on these leaders; they're just lines touching the feature.
+
+OK let's step back and think about the overall validity. The main issues I see:
+
+1. The description text "SPC CONTROL FOR ALL HEAT STAKE POST ANSI-114X ISO-114X JIS-110X" is clipped by the right magenta border. The text extends to x=2030 but the magenta line is at x=1250. So in IMAGE 2, the text shows "SPC CONTROL FO" and "ANSI-114X ISO-" - yes it's clipped! In IMAGE 2 I can see "SPC CONTROL FO" (cut off) and "ANSI-114X ISO-" (cut off). So the description text is NOT fully contained.
+
+But is this description text part of the FAI annotation group? The description text "SPC CONTROL FOR ALL HEAT STAKE POST..." is a general note, not specifically tied to one FAI marker. Hmm. The requirement lists "parameter/tolerance/feature-control-frame and description text" as part of the group. The "description text" might refer to text associated with the FAI. But this SPC CONTROL note is a global note.
+
+Hmm, but actually the note is positioned above the FAI groups and applies to all of them. It's arguably part of the annotation context. If it's clipped, that's a problem.
+
+2. The leader lines for 2.50 and 1.62 reach the left border (x=0). But those are not the selected FAI's leaders. However, the crop contains those FAI groups partially? Let's check: FAI 76/BS circle is at x=1050, y=850 - inside crop. FAI 75/BR at x=1050, y=1000 - inside. Their leaders reach x=0 (left border). So those leaders reach the crop border. But again, are they "relevant"? The selected marker is FAI 100. The rule says "Reject it if a relevant leader reaches the crop border." The leaders for 76 and 75 are not relevant to the selected marker 100. So maybe not a rejection reason.
+
+But wait, the crop is supposed to contain "one coherent FAI annotation group." If the crop contains multiple FAI groups, and some of their leaders are clipped, that's messy. The instruction: "The crop is valid only if it fully contains one coherent FAI annotation group." It doesn't strictly require that other groups be absent, but it says reject if "unrelated neighboring annotations dominate." Here, the crop contains 3 FAI groups on the left plus the global note. The selected one is 100/CO. The other two (76, 75) are neighboring annotations. Do they "dominate"? They take up a significant portion. Hmm.
+
+Actually, I think the intent of these validation tasks is: the crop should tightly contain the selected FAI group and its associated dimension/leader/feature, and not be cut off. The presence of extra neighboring groups that are themselves fully contained might be acceptable, but if they're cut off or if the crop is too wide including clipped text, it's invalid.
+
+Let's look at IMAGE 2 (the proposed crop) to see what's actually in it. IMAGE 2 shows:
+- Top left: a circle with crosshairs (part of a detail view, the BM detail circle).
+- "DETAIL BM SCALE 20:1"
+- "SPC CONTROL FO" / "ANSI-114X ISO-" (clipped text on the right)
+- The three dimensions 2.50, 1.62, 1.26 with their FAI/SPC circles (76/BS, 75/BR, 100/CO)
+- (0.00)
+- The hatched region on the left, but it's cut off at the left edge (the hatching starts at x=0 in IMAGE 2, and the left part of the hatched region / part outline is missing).
+
+So in IMAGE 2, the left edge cuts through the hatched region and through the leader lines (the horizontal leader lines for 2.50 and 1.62 end at the left edge, meaning they continue beyond). Also the hatched region's left portion is missing.
+
+Now, the selected FAI is 100/CO. Its leader (for 1.26) - does it reach the left border in IMAGE 2? Let's look. In IMAGE 2, the 1.26 leader: I see the horizontal line at the top of the hatched region. The hatched region top line in IMAGE 2 goes from x=0 to about x=850 (in IMAGE 2 coordinates). The leader for 1.26 connects to the right end of that line. Hmm, but the hatched region in IMAGE 2 is cut at left (x=0). The leader for 1.26 touches the top-right of the hatched region which is visible. So the leader for 1.26 does NOT reach the left border; it terminates at the visible feature. Good.
+
+But the leaders for 2.50 and 1.62 DO reach the left border in IMAGE 2 (their horizontal lines go all the way to x=0). And the hatched region is cut at left.
+
+So the question: is the crop valid for the selected FAI 100?
+
+The selected FAI 100's group: dimension 1.26, FAI 100 circle, SPC CO circle, leader to feature, feature portion. All of these appear to be inside the crop (the leader terminates at the visible hatched region top-right). The feature portion (hatched region) is partially visible but a local portion is visible. So the selected group seems fully contained.
+
+However, the crop also includes the global note text which is clipped on the right. Is that note part of the selected group? The note "SPC CONTROL FOR ALL HEAT STAKE POST" is a general instruction. It's not specifically the "description text" of the FAI 100 group. The "description text" in the requirement likely refers to text that describes the feature/dimension, like a feature control frame or a note pointing to the feature. The global SPC note is more of a header.
+
+Hmm, but the requirement explicitly lists "description text" as part of the group. If we consider the SPC CONTROL note as description text associated with the FAI markers (since it says "SPC CONTROL FOR ALL HEAT STAKE POST" and the FAI markers have SPC codes), then it's part of the annotation context and it's clipped. That would be a rejection.
+
+Also, the crop includes the "DETAIL BM SCALE 20:1" text and the detail circle at top, which are unrelated to the FAI group. And the (0.00) reference. And the other two FAI groups. So the crop contains a lot of unrelated/extra content. The rule: "Reject it if ... unrelated neighboring annotations dominate." Do they dominate? The crop is fairly large and contains the detail view label, the global note, three FAI groups, and the reference. The selected FAI group (1.26/100/CO) is just one of three. So neighboring annotations (76, 75, the detail label, the global note) are present and arguably dominate or at least clutter.
+
+Hmm, but the rule for validity is "fully contains one coherent FAI annotation group." It's possible to have extra stuff as long as the one group is fully contained and the extra stuff doesn't "dominate" or isn't clipped in a way that affects the group.
+
+Let me think about the typical expected answer for these tasks. Usually, the crop is invalid if a leader of the selected group reaches the border, or the feature is missing, or the FAI circle is clipped. Here, the selected FAI circle (100/CO) is fully inside. Its dimension is fully inside. Its leader terminates at a visible feature. So the selected group itself is fully contained.
+
+But the global note text is clipped. Is that a problem? The note is not part of the selected group's "description text" in the strict sense. Hmm.
+
+Actually, wait. Let's reconsider what the "FAI annotation group" means. In these drawings, each FAI marker (circle with number) is paired with an SPC marker (circle with letters) and a dimension. The "group" is: dimension + tolerance + FAI circle + SPC circle + leader + feature. The "description text" might be a separate note. The global SPC note is a separate note that applies to all.
+
+Given the ambiguity, let's look at the leaders reaching the border issue more carefully for the SELECTED group. The selected group's leader (1.26) - in IMAGE 1, trace it: text "1.26" at x~620-730, y~1150. To the left of "1.26" there's a small horizontal line then a diagonal. Let me look at the shape: I see at y~1110 a horizontal line from x=430 to x=560 (this is the top of hatched region extended? or the leader?). Then a diagonal from (560,1110) to (580,1150)? Then horizontal from (580,1150) to the text? Hmm, hard to say.
+
+Actually, you know, I think the leaders in this drawing are drawn as: from the feature, a horizontal line, then a 45-degree diagonal, then a horizontal line to the dimension text. The "terminal" at the feature is the horizontal line touching the feature outline. For 1.26, the feature is the top of the hatched region. The horizontal line at the top of the hatched region (y~1110) from x=0 to x=430 is the feature outline (top edge of the part). The leader for 1.26 would be a separate line that points to that edge. Hmm.
+
+Let me look at the (0.00) row: horizontal line at y~1240 from x=430 to x=580, then to text "(0.00)". This line at y=1240 is the bottom of the hatched region? The hatched region bottom is at y~1210, and there's another line at y~1240 (the part outline bottom). So (0.00) points to the bottom edge.
+
+For 1.26, the leader points to the top edge of the hatched region (y~1110). The line at y~1110 from x=430 to x=560 is the leader's horizontal segment, and it touches the feature at x=430 (the right end of the top edge). So the leader terminates at (430, 1110), which is inside the crop. Good. The feature (top edge of hatched region) is visible from x=0 to x=430, but it's cut at x=0. The leader touches it at x=430, which is visible. So a local portion of the feature at the touch point is visible. Good.
+
+So the selected group's leader does NOT reach the crop border. 
+
+Now the leaders for 2.50 and 1.62: their horizontal segments go from x=0 to x=520 (at y~960 and y~1060). These reach x=0 (the left border). But these are NOT the selected group's leaders. So per the rule "Reject it if a relevant leader reaches the crop border" - these are not relevant. So not a rejection on that basis.
+
+But the rule also says the crop must "fully contain one coherent FAI annotation group." It does contain the selected group fully. The presence of other groups whose leaders are clipped - does that make the crop invalid? The rule's rejection criteria are: (a) relevant leader reaches border, (b) arrowhead clipped, (c) touched feature absent, (d) unrelated neighboring annotations dominate.
+
+For (d): do unrelated neighboring annotations dominate? The crop contains the detail label, the global note (clipped), two other FAI groups (with clipped leaders), and the reference. The selected group is one of three FAI groups. The other two FAI groups are "neighboring annotations." Are they dominating? They occupy the upper-left portion. The selected group is in the lower-middle. Hmm.
+
+I think the intended interpretation is that the crop should be focused on the selected FAI group. Including two other full FAI groups plus a clipped global note plus a detail label suggests the crop is too large / not focused, and the clipped global note is a problem because it's part of the annotation context (the SPC CONTROL note is directly related to the SPC markers in the FAI groups).
+
+Actually, the global note "SPC CONTROL FOR ALL HEAT STAKE POST" is essentially the description that explains the SPC markers. It's clipped in the crop. If we consider the SPC markers as part of the FAI group (the requirement says "associated SPC letter if present"), then the description text that explains them (the SPC CONTROL note) might be considered part of the group's context. But it's a global note, not specific to one FAI.
+
+Hmm, I'm overthinking. Let's look at the visual evidence in IMAGE 2: the right side shows clipped text "SPC CONTROL FO" and "ANSI-114X ISO-". This is clearly a clipped annotation. The crop's right border cuts through this text. This text is in the upper-right area of the crop. Is it "relevant" to the selected FAI? It's a global note. But it's clipped, which is a sign of a bad crop.
+
+Also, the left side of IMAGE 2 cuts through the hatched region and the leaders for 2.50/1.62. So the crop has clipped content on both left and right.
+
+Given all this, I lean towards the crop being INVALID. The reasons:
+- The global SPC CONTROL note (description text associated with the SPC markers) is clipped on the right.
+- The crop includes multiple FAI groups and the detail label, so unrelated/neighboring annotations are present and the crop is not a tight coherent group; the neighboring FAI groups' leaders are clipped at the left border, indicating the crop border cuts through relevant annotation geometry (even if not the selected one, the crop is not clean).
+- The hatched feature is cut at the left.
+
+But wait, the rule says reject if "a relevant leader reaches the crop border." The leaders for 2.50 and 1.62 reach the left border. If we consider the crop's purpose to contain the selected FAI group, those leaders are not relevant. But the crop is supposed to be a coherent crop of the drawing region. Hmm.
+
+Let me think about what expansion would fix it. If we want to fully contain the selected FAI group AND the global note AND not clip the hatched feature AND not clip the 2.50/1.62 leaders, we'd need to expand left (to include the full hatched region and the left ends of the 2.50/1.62 leaders - but those leaders might extend to the part outline which is further left, possibly off the original image? In IMAGE 1, the leaders for 2.50/1.62 horizontal lines go to x=0, which is the image edge. So the part outline they point to is off-image to the left. So we can't fully contain them by expanding within the image. That means the crop can never fully contain those leaders' feature touch points because they're off the original image. Therefore, including those FAI groups in the crop is impossible to do "fully." Hence the crop should NOT include them; the crop should be tightened to only the selected group.
+
+But the selected group's feature (hatched region) is also cut at x=0 in IMAGE 1? In IMAGE 1, the hatched region spans x=0 to x=430. The left edge of the hatched region is at x=0 (image edge). So the hatched region is also cut at the image edge! That means the feature for the selected group is also partially off-image. But the leader for 1.26 touches the hatched region at x=430 (right end), which is on-image. So a local portion is visible. The requirement only needs "a visible local portion of every component feature touched by those arrows." The arrow/leader for 1.26 touches the hatched region at its right end (x=430), which is visible. So that's satisfied even though the left part of the hatched region is off-image.
+
+OK so for the selected group, the feature touch point is visible. Good.
+
+Now, the global note: it's clipped on the right in the crop. If we expand right, we'd include more of the right-side FAI groups (39/AL, 40/AM, 41/AN) which are unrelated. That would add more unrelated annotations. Not good.
+
+Hmm, this is a tough call. Let's look at the structure of these validation tasks generally. I recall that in similar tasks, the crop is considered valid if the selected FAI group (FAI circle + SPC + dimension + leader + feature touch) is fully inside, even if there's some extra context, as long as no relevant leader is clipped and the feature touch is visible. The "description text" in the requirement likely refers to text that is part of the dimension annotation (like a feature control frame or a note directly attached), not a global header.
+
+But the global note being clipped is still a visual defect. However, the global note is not "relevant" to the selected FAI group's leader/feature. The rejection criteria are specific: relevant leader reaches border, arrowhead clipped, touched feature absent, unrelated annotations dominate. The clipped global note doesn't fit "relevant leader reaches border" (it's text, not a leader). It might fit "unrelated neighboring annotations dominate" if we consider the global note + detail label + 2 other FAI groups as dominating.
+
+Let's assess "dominate." In IMAGE 2, the area is roughly: top third has the detail circle + DETAIL BM label + global note. Middle has the three FAI groups. Bottom has the hatched region. The selected FAI group (1.26/100/CO) is in the lower-middle, taking maybe 1/4 of the crop. The rest is other stuff. So yes, unrelated/neighboring annotations arguably dominate or at least are very prominent.
+
+Hmm, but the rule says "unrelated neighboring annotations dominate" as a rejection. The two other FAI groups (76, 75) are neighboring annotations (same column, adjacent). They are fully visible (their circles and dimensions are inside; only their leaders are clipped at left). The detail label and global note are also there.
+
+I think the safest interpretation, given the explicit instruction "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers" and "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle," is that we should look outside the magenta rectangle for connected evidence. Outside the magenta rectangle on the right, there's the continuation of the global note text ("R ALL HEAT STAKE POST" and "114X JIS-110X") and the right-side FAI groups. Outside on the left, there's nothing (image edge). Outside on the top, the detail circle continues. Outside on the bottom, the part outline continues.
+
+The connected evidence immediately outside the magenta rectangle on the right is the global note text. This text is connected to the SPC markers (it's the description for them). Since the SPC markers are part of the FAI group, the description text is part of the group, and it's clipped. Therefore the crop is invalid.
+
+Also, the leaders for 2.50 and 1.62 reach the left border - but those are not the selected group. However, the fact that the crop includes those groups means the crop is not a clean single group.
+
+Let me think about the expansion. To make the crop valid, we'd want to:
+- Include the full global note? That requires expanding right significantly, which brings in the right FAI groups (unrelated). Not ideal.
+- Or, tighten the crop to exclude the global note and the other FAI groups, focusing only on the selected group. But the task only allows expansion, not shrinking. The expand_norm values are additions to the current crop. We can't shrink. So we can't remove the global note or the other FAI groups by expansion. We can only add more.
+
+Given we can only expand, and the current crop already has clipped global note and clipped leaders for other groups, expanding won't fix the clipping of the global note unless we expand right a lot (which adds unrelated groups). Expanding left won't help because the left is image edge.
+
+Thus, the crop cannot be made valid by expansion alone, because the fundamental problem is that the crop includes too much (multiple groups + clipped global note) and we can't shrink. Wait, but validity is about the current crop (IMAGE 2) being valid, and expand_norm is a suggestion if it's not valid but could be fixed by expansion. If it can't be fixed by expansion, then valid=false and expand_norm might be whatever (or zeros).
+
+Hmm, but actually maybe the intended answer is that the crop IS valid for the selected group, and the extra stuff is acceptable, and the clipped global note is not considered part of the group. Let's look at the requirement list again: "the FAI circle and readable inspection number; associated SPC letter if present; parameter/tolerance/feature-control-frame and description text; every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+The "description text" here - in the context of an FAI annotation, the description text would be something like a note that describes the feature, e.g., "2X SURFACE" or a feature control frame. The global "SPC CONTROL FOR ALL HEAT STAKE POST" is a general note, not a description of the specific feature for FAI 100. So it's not part of the FAI 100 group's description text. Therefore its clipping is not a violation of the group's completeness.
+
+But then "unrelated neighboring annotations dominate" - the global note and detail label and other FAI groups are unrelated. Do they dominate? In IMAGE 2, the selected group (1.26/100/CO) is clearly present and readable. The other groups are also present. The detail label is present. I'd say the unrelated annotations are present but the selected group is also clearly there. "Dominate" is subjective.
+
+Let's look at the leaders reaching the border for the selected group one more time, very carefully, because that's the most objective criterion. In IMAGE 1, the magenta left edge is at x=0. The selected group's leader (1.26) - I need to determine if any part of it touches x=0. The 1.26 leader's leftmost point: the horizontal segment of the leader. Looking at IMAGE 1, the 1.26 row's leader horizontal segment appears to be at y~1110 from x=430 to x=560 (the diagonal connects to the text). Actually wait, I see the hatched region top line at y~1110 from x=0 to x=430. Then there's a gap, then the leader? Or is the leader the line from x=430 to x=560 at y~1110? Let's look at the (0.00) row: the line at y~1240 from x=430 to x=580. And the hatched region bottom line at y~1210 from x=0 to x=430. So the pattern is: feature outline line from x=0 to x=430, then a leader line from x=430 to x=560/580 (slightly offset vertically), then diagonal to text. Hmm, but for 1.26, the feature top is at y~111

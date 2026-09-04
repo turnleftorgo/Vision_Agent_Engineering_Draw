@@ -1,0 +1,389 @@
+{
+  "version": 4,
+  "source": "/Users/macsuper/Desktop/Vision_Agent/p11.png",
+  "source_size": [
+    10200,
+    6600
+  ],
+  "coordinate_space": "absolute_pixels",
+  "candidate_count": 14,
+  "models": {
+    "locate": "LocateAnything-3B-8bit",
+    "semantic_and_validation": "Qwen3.8-27B-MLX-8bit",
+    "endpoint": "http://127.0.0.1:8001/v1"
+  },
+  "pipeline": {
+    "tile_size": 1200,
+    "tile_overlap": 0.2,
+    "mapping_max_tokens": 16384,
+    "structured_semantic_output": "json_schema",
+    "semantic_coordinate_output": false,
+    "max_line_evidence": 40,
+    "tesseract_enabled": true,
+    "verification_enabled": true,
+    "validation_attempts": 3
+  },
+  "artifacts": {
+    "qwen_selected": "Qwen-selected evidence on the full candidate ROI",
+    "minimum": "raw minimum enclosing crop computed by Python",
+    "minimum_selected": "minimum crop with only Qwen-selected evidence",
+    "validated": "final crop after successful crop validation"
+  },
+  "results": [
+    {
+      "candidate_index": 0,
+      "fai_number": "63",
+      "marker_bbox": [
+        9313,
+        970,
+        9413,
+        1071
+      ],
+      "roi_bbox": [
+        8163,
+        0,
+        10200,
+        2221
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "fai_number": "63",
+        "spc_letter": null,
+        "annotation_ids": [],
+        "parameter_text_ids": [],
+        "description_text_ids": [],
+        "leader_ids": [
+          "L0"
+        ],
+        "arrowhead_ids": [
+          "H0"
+        ],
+        "target_ids": [],
+        "parameter_values": [],
+        "measurement_description": null,
+        "is_range_measurement": false,
+        "complete": true,
+        "missing": [],
+        "confidence": 0.85
+      },
+      "mapping_response": {
+        "finish_reason": "stop",
+        "elapsed_seconds": 40.949,
+        "prompt_tokens": 12653,
+        "completion_tokens": 80,
+        "total_tokens": 12733,
+        "reasoning_chars": 0,
+        "content_chars": 341,
+        "content_present": true,
+        "structured_output": "json_schema",
+        "max_tokens": 16384,
+        "mapping_valid": true,
+        "mapping_validation_errors": []
+      },
+      "selected_evidence_ids": [
+        "F0",
+        "L0",
+        "H0"
+      ],
+      "mapping_complete": true,
+      "status": "validated",
+      "selected_exact_union_roi_bbox": [
+        666,
+        841,
+        1250,
+        1908
+      ],
+      "minimum_crop_roi_bbox": [
+        476,
+        786,
+        1305,
+        2083
+      ],
+      "minimum_crop_bbox": [
+        8639,
+        786,
+        9468,
+        2083
+      ],
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI63_000_qwen_selected.png",
+      "selection_json_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI63_000_qwen_selection.json",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI63_000_minimum.png",
+      "minimum_selected_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI63_000_minimum_selected.png",
+      "validation_history": [
+        {
+          "attempt": 1,
+          "crop_bbox": [
+            8639,
+            786,
+            9468,
+            2083
+          ],
+          "result": {
+            "valid": false,
+            "missing": [
+              "THIRD TERRACE description text (right portion clipped)",
+              "SPC circle / SPC letter (clipped at right border)",
+              "100% sampling triangle (clipped at right border)",
+              "feature control frame 0.33 right border (clipped)"
+            ],
+            "expand_norm": {
+              "left": 0,
+              "top": 0,
+              "right": 250,
+              "bottom": 0
+            },
+            "confidence": 0.85
+          }
+        },
+        {
+          "attempt": 2,
+          "crop_bbox": [
+            8639,
+            786,
+            9674,
+            2083
+          ],
+          "result": {
+            "valid": true,
+            "missing": [],
+            "expand_norm": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.82
+          }
+        }
+      ],
+      "final_crop_bbox": [
+        8639,
+        786,
+        9674,
+        2083
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI63_000_validated.png"
+    },
+    {
+      "candidate_index": 1,
+      "fai_number": "211",
+      "marker_bbox": [
+        9314,
+        1128,
+        9414,
+        1228
+      ],
+      "roi_bbox": [
+        8164,
+        0,
+        10200,
+        2378
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "fai_number": "211",
+        "spc_letter": null,
+        "annotation_ids": [],
+        "parameter_text_ids": [],
+        "description_text_ids": [],
+        "leader_ids": [
+          "L0"
+        ],
+        "arrowhead_ids": [],
+        "target_ids": [],
+        "parameter_values": [],
+        "measurement_description": null,
+        "is_range_measurement": false,
+        "complete": false,
+        "missing": [
+          "terminal arrowhead for F0 leader",
+          "target region for F0 leader"
+        ],
+        "confidence": 0.5
+      },
+      "mapping_response": {
+        "finish_reason": "stop",
+        "elapsed_seconds": 44.12,
+        "prompt_tokens": 13422,
+        "completion_tokens": 92,
+        "total_tokens": 13514,
+        "reasoning_chars": 0,
+        "content_chars": 403,
+        "content_present": true,
+        "structured_output": "json_schema",
+        "max_tokens": 16384,
+        "mapping_valid": true,
+        "mapping_validation_errors": []
+      },
+      "selected_evidence_ids": [
+        "F0",
+        "L0"
+      ],
+      "mapping_complete": false,
+      "status": "mapping_incomplete",
+      "selected_exact_union_roi_bbox": [
+        746,
+        841,
+        1250,
+        1909
+      ],
+      "minimum_crop_roi_bbox": [
+        689,
+        784,
+        1307,
+        1966
+      ],
+      "minimum_crop_bbox": [
+        8853,
+        784,
+        9471,
+        1966
+      ],
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI211_001_INCOMPLETE_qwen_selected.png",
+      "selection_json_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI211_001_INCOMPLETE_qwen_selection.json",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI211_001_INCOMPLETE_minimum.png",
+      "minimum_selected_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI211_001_INCOMPLETE_minimum_selected.png",
+      "validation_history": []
+    },
+    {
+      "candidate_index": 2,
+      "fai_number": "191",
+      "marker_bbox": [
+        1994,
+        3217,
+        2094,
+        3316
+      ],
+      "roi_bbox": [
+        844,
+        2066,
+        3245,
+        4467
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "fai_number": "191",
+        "spc_letter": "GE",
+        "annotation_ids": [],
+        "parameter_text_ids": [
+          "T8"
+        ],
+        "description_text_ids": [],
+        "leader_ids": [
+          "L7",
+          "L10",
+          "L13"
+        ],
+        "arrowhead_ids": [
+          "H0"
+        ],
+        "target_ids": [],
+        "parameter_values": [
+          "4X 0.49 ±0.10"
+        ],
+        "measurement_description": "4X 0.49 ±0.10",
+        "is_range_measurement": false,
+        "complete": true,
+        "missing": [],
+        "confidence": 0.85
+      },
+      "mapping_response": {
+        "finish_reason": "stop",
+        "elapsed_seconds": 53.61,
+        "prompt_tokens": 15707,
+        "completion_tokens": 114,
+        "total_tokens": 15821,
+        "reasoning_chars": 0,
+        "content_chars": 396,
+        "content_present": true,
+        "structured_output": "json_schema",
+        "max_tokens": 16384,
+        "mapping_valid": true,
+        "mapping_validation_errors": []
+      },
+      "selected_evidence_ids": [
+        "F0",
+        "T8",
+        "L7",
+        "L10",
+        "L13",
+        "H0"
+      ],
+      "mapping_complete": true,
+      "status": "validated",
+      "selected_exact_union_roi_bbox": [
+        579,
+        1150,
+        1354,
+        1592
+      ],
+      "minimum_crop_roi_bbox": [
+        517,
+        1089,
+        1416,
+        1806
+      ],
+      "minimum_crop_bbox": [
+        1362,
+        3156,
+        2260,
+        3873
+      ],
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI191_002_qwen_selected.png",
+      "selection_json_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI191_002_qwen_selection.json",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI191_002_minimum.png",
+      "minimum_selected_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI191_002_minimum_selected.png",
+      "validation_history": [
+        {
+          "attempt": 1,
+          "crop_bbox": [
+            1362,
+            3156,
+            2260,
+            3873
+          ],
+          "result": {
+            "valid": false,
+            "missing": [
+              "validation_object"
+            ],
+            "expand_norm": {
+              "left": 80,
+              "top": 80,
+              "right": 80,
+              "bottom": 80
+            },
+            "confidence": 0.0
+          }
+        },
+        {
+          "attempt": 2,
+          "crop_bbox": [
+            1290,
+            3098,
+            2332,
+            3930
+          ],
+          "result": {
+            "valid": true,
+            "missing": [],
+            "expand_norm": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.82
+          }
+        }
+      ],
+      "final_crop_bbox": [
+        1290,
+        3098,
+        2332,
+        3930
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_v4_p5/crops/FAI191_002_validated.png"
+    }
+  ]
+}

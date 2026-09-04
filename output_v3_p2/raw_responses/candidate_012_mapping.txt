@@ -1,0 +1,167 @@
+The user wants me to build a complete FAI annotation group for marker F0.
+
+Let me look at the evidence. F0 is at bbox [1150,1150,1250,1250]. In image 2, F0 is the red box around the "FAI 39" circle. So the FAI number is 39.
+
+Now I need to find the associated SPC letter. Looking at the image, next to FAI 39 is the SPC circle with "AL". So SPC letter is AL.
+
+Now the measurement annotation connected to F0. Looking at the layout, the right column has:
+- FAI 39 / SPC AL next to "2.50 +0.29 -0.07"
+- FAI 40 / SPC AM next to "1.62 +0.26 -0.10"
+- FAI 41 / SPC AN next to "1.26 +0.25 -0.10"
+
+So F0 (FAI 39) corresponds to the dimension 2.50 with tolerance +0.29 / -0.07.
+
+Let me find the OCR text IDs for these. The dimension "2.50" on the right is T14 (bbox [1435,1183,1505,1221], text "50"). The tolerance +0.29 is T11 ("OQ" at [1582,1148,1614,1186]) and T12 ("29" at [1660,1148,1730,1186]). The -0.07 is T15? T15 is "7K" at [1660,1200,2220,1333] which is a big box, hmm. Actually looking at image 2, the "-0.07" text is at around y=1200-1240. Let's look. T15 bbox [1660,1200,2220,1333] text "7K" confidence 0.123 - that's a weird big box. Hmm.
+
+Wait, let's look at the OCR more carefully. The right column top dimension is "2.50 +0.29 -0.07". The OCR lines:
+- T11: [1582,1148,1614,1186] "OQ" -> this is the "+0." part? Actually +0.29: the "+0." might be T11 and "29" is T12.
+- T12: [1660,1148,1730,1186] "29"
+- T14: [1435,1183,1505,1221] "50" -> the "2.50" but only "50" captured? Hmm the "2." part might be missing or part of T14. Actually T14 text is "50".
+- The "-0.07": T15 is "7K" at [1660,1200,2220,1333] which is too big. Hmm.
+
+Let me look at image 2's purple boxes. In image 2, around the right top dimension, I see purple boxes: T11 around "+0.", T12 around "29", T14 around "50" (the 2.50's 50), and T15 around "07"? Actually T15 bbox in image 2 appears as a purple box around "07" maybe. Let's look: in image 2, the right side top shows "+ 0 . 29" with purple boxes around "+", "0", "29"? Hard to say.
+
+Actually, let's look at the structure. The left column dimensions have OCR like T8 "+O", T9 "19", T13 "- 2.50", T16 "OQ", T17 "10". So for left 2.50 +0.19 -0.10: T8=+0, T9=19, T13=2.50, T16=0, T17=10. Good.
+
+For right 2.50 +0.29 -0.07: T11=+0 (OQ), T12=29, T14=50 (the 2.50), and the -0.07 would be... T15? T15 text "7K" bbox [1660,1200,2220,1333]. Hmm that's a huge box covering the leader line area. That doesn't look right for "07". But in image 2, I see a purple box labeled T15 around "07"? Let's look at image 2 coordinates. The "-0.07" in image 1 is at around y=1200-1240, x=1480-1650. In image 2, the purple box for the "07" part... I see "T15" label near a purple box around "07"? Actually in image 2 I see at the right top: "+ [T11] 0 . [T12]29" then below "- 0 . [T15]07"? The T15 box in image 2 looks like it's around "07" but the bbox given is [1660,1200,2220,1333] which is huge. Hmm, but the bbox in the dictionary might be wrong/expanded. Wait the instruction says never alter coordinates behind an ID. The bbox for T15 is [1660,1200,2220,1333]. That's a big region. But in image 2, the purple box for T15... let me look. Actually I see in image 2 a purple box around "07" at the right that's labeled T15? The label T15 appears at top-left of a purple box. Looking carefully at image 2, near the right top dimension, I see purple boxes: one around "+", one around "0", one around "29" (T12), and below one around "0" and one around "07"? Hmm.
+
+This is getting too detailed. The key point: I need to associate the parameter text IDs for F0's measurement. The measurement is 2.50 +0.29 -0.07. The relevant OCR IDs are T11, T12, T14, and the -0.07 part. Let's see what's available. The "-0.07" -0 part might be missing or part of T15. Actually T15 text "7K" might be a misread of "07" with the box expanded. Hmm but the box [1660,1200,2220,1333] is way too big and would include the leader line. That's suspicious.
+
+Let me look at image 2 again. In image 2, the right top dimension area: I see purple box around "2.50"? Actually T14 is "50" at [1435,1183,1505,1221]. In image 2 there's a purple box around "50" labeled T14. Good. The "2." before it might not have its own box. The "+0.29": T11 around "+0"? T11 bbox [1582,1148,1614,1186] is small, around the "+" maybe. T12 around "29". The "-0.07": I see in image 2 a purple box around "07" labeled T15? The T15 label in image 2 is at the top-left of a purple box that's around "07"? But the bbox says [1660,1200,2220,1333]. Hmm, maybe the OCR box got merged with the leader line region. But in image 2, the purple box for T15 visually... I'll trust the visual: there's a purple box around "07" at the right. Actually wait, in image 2 I see at right top: "+ [box] 0 . [box]29" on first line, "- 0 . [box]07" on second line. The box around "07" - what's its label? It might be T15. The label T15 in image 2 appears at top-left of that box. Yes I think T15 corresponds to "07" visually even though the dictionary bbox is large (maybe a bug, but I must use the ID as is).
+
+Hmm, but actually the dictionary bbox for T15 [1660,1200,2220,1333] - in image 2, is there a purple box that big? Looking at image 2, the right top region has a purple box that spans from around the "07" to the right edge? I see a long purple horizontal line/box at the top right that's the leader line L3/L4 area, not text. Hmm.
+
+Let me step back. The exact OCR ID mapping for the tolerance digits is not critical for the "complete" determination as long as I include the parameter text. But I should include the dimension value and tolerance. Let me include T11, T12, T14, T15 as parameter text for the 2.50 +0.29 -0.07 measurement. Actually T15's text "7K" is a misread but its position (y~1200) matches the -0.07 line. The x range 1660-2220 is too wide but the left part 1660-1730 matches "07". I'll include T15.
+
+Hmm wait, but maybe the "-0.07" minus and zero are not captured. That's fine.
+
+Now the leader segments connected to this annotation. The dimension 2.50 on the right has a leader line going to the part. Looking at image 1, the right column dimensions have leader lines: the 2.50 dimension has a leader that goes right then down to the part (the line from "2.50" going right and down to the top surface of the part). In image 1, I see a line from the right of "2.50" going right horizontally then diagonally down to the part. Let's look at the line segments.
+
+The leader for the right 2.50: In image 1, after "2.50 +0.29 -0.07" there's a line that goes right (horizontal) then down-diagonal to the part's top edge. Looking at the lines: L3 [1806,1330,2401,1331] and L4 [1807,1333,2401,1334] are horizontal lines at y~1330 from x1806 to 2401. That's the horizontal part of the leader for 2.50? And the diagonal part? Hmm.
+
+Actually let's look at the geometry in image 1. The right column: "2.50" is at top (y~1180). To its right, the leader line starts at around x1680,y1180? No. Let's look. In image 1, the line for the 2.50 dimension: I see a horizontal line at the level of "2.50"? Actually the dimension text "2.50 +0.29 -0.07" is at y~1180-1240. The leader line in image 1 appears to start at the right of the tolerance, go right horizontally at y~1180? Hmm but I see in image 1 a horizontal line at y~1330 (the L3/L4) that connects to the part. And a diagonal line from (1680,1180) to (1720,1330)? Let's look.
+
+In image 1, the right side: there's a line that goes from near "2.50" diagonally down-right to a horizontal line that goes to the part. Specifically I see a diagonal segment from about (1680,1180) to (1720,1330) then horizontal to the right edge. Hmm.
+
+Let's look at the line list for segments in that region (x 1600-2400, y 1150-1350):
+- L3: [1806,1330,2401,1331] horizontal
+- L4: [1807,1333,2401,1334] horizontal
+- L0: [1622,134,2225,135] - that's top, the centerline, not relevant.
+- L8, L9: vertical centerlines top, not relevant.
+
+Hmm, where's the diagonal leader from 2.50? In image 1, I see a diagonal line from the "2.50" area going down-right. Let's look at the lines with diagonal in that region. L17, L18 are diagonal at x2132-2400,y1341-1610 (that's the part's hatching/edge). Not the leader.
+
+Hmm, maybe the leader for 2.50 is: horizontal line at y~1180 from x1680 to x1720? Not in list. Then diagonal? Not in list.
+
+Wait, maybe I'm misreading the image. Let's look at image 1 carefully. The right column dimension "2.50 +0.29 -0.07": to the right of "-0.07" there's a line that goes right a bit then diagonally down to a horizontal line at the level of the part's top, which then goes right to the part. Actually in image 1, I see: from the right of the tolerance, a short horizontal then a diagonal down to y~1330, then horizontal right to the part edge at x~2130. So the horizontal at y1330 is L3/L4 (x1806-2401). The diagonal would be from (1720,1180) to (1806,1330)? Is there such a line? Not obviously in the list. Hmm.
+
+Let's look at all lines with x in 1600-1850 and y in 1150-1350:
+- L3 starts at 1806.
+- L4 starts at 1807.
+Nothing else.
+
+Hmm. Maybe the diagonal leader line wasn't detected by Hough, or it's part of the part outline. Actually wait, in image 1, the leader for the right 2.50 dimension: I see a line that goes from the dimension text rightward and then there's a vertical-ish diagonal. Let me look at the image 1 right side shape: The part cross-section on the right has a top horizontal edge at y~1330 (the L3/L4 line is the top edge of the part? or the leader?). Actually the part's top surface in image 1 right side is at y~1330 (the horizontal line that the leader points to). And the leader from 2.50 goes diagonally from (1680,1180) to (1720,1330) then... no.
+
+I'm overanalyzing the leader lines. The instruction says: "OpenCV line candidates include both leaders and ordinary part/dimension lines; select only line IDs that are part of the FAI leader path." And "If evidence is missing, provide a fallback box."
+
+Given the difficulty, perhaps the leader for F0's annotation is not well captured, and I should rely on fallback boxes. But I should still try to include the leader lines that are clearly the leader.
+
+Let's look at image 2 to see which blue lines are highlighted as part of the leader for the right 2.50. In image 2, the blue lines (L*) in the right top region: I see L3 and L4 (the horizontal at y1330) are blue. Also there's a blue diagonal? In image 2 right side, I see blue lines: L3/L4 horizontal at y1330, L5/L6 horizontal at y1433, L10/L11 horizontal at y1479, L12/L13/L14 horizontal at y1590-1628, L17/L18 diagonal. And the diagonal leader from 2.50? In image 2, I see a black diagonal line from (1680,1180) to (1720,1330) that is NOT blue (it's black in image 2). Hmm, actually in image 2 the leader diagonal for 2.50 appears black, meaning it wasn't selected as a blue line? But the blue lines are the OpenCV detections; the black lines in image 2 are the original drawing lines not detected? No wait, image 2 overlays blue on top of the original black lines where detected. So if a line is black in image 2, it means OpenCV didn't detect it as a separate segment (or it's part of the original). Hmm, but actually image 2 shows the original drawing in black plus colored overlays. The blue lines are the L* segments. So the diagonal leader for 2.50, if not blue, means no L* ID covers it.
+
+Hold on, let's look at image 2 right top: I see the dimension "2.50" with red box F0 around FAI 39. To the right, the leader: I see a black diagonal line from the dimension going down-right to the horizontal blue line L3/L4. So the diagonal is not a blue L* segment. The horizontal L3/L4 is blue. So the leader path includes L3/L4 (horizontal) plus the undetected diagonal.
+
+Hmm, this is too uncertain. Given the complexity and that the leader arrowhead for this dimension points to the part's top surface, and the arrowhead might not be detected (H* candidates are H0,H1,H2 which are on the left side, not right). Indeed H0 [0,0,152,344], H1 [0,1181,320,1304], H2 [0,1447,183,1604] are all on the left (x<320). So no arrowhead on the right for F0's leader. So arrowhead_ids empty.
+
+Thus the leader for F0's annotation: the horizontal line L3/L4? But is L3/L4 the leader or the part's top edge? In image 1, the part's top edge on the right is at y~1330 and extends to the right edge (x2400). The leader from 2.50 also ends at that top edge. So L3/L4 might be the part's top edge line, not the leader. The leader is the diagonal that touches it.
+
+Ugh. This is really hard to disambiguate.
+
+Let's think about what the "complete" group should be and whether I can mark complete=true. The requirements: F0 + inspection number (39) ✓, SPC letter (AL) ✓, parameter/tolerance (2.50 +0.29 -0.07) ✓ via T11,T12,T14,T15, leader segments connected (uncertain), terminal arrowheads (none detected), touched part (none detected as R*).
+
+Since arrowheads and target part are missing (no R* at all in evidence, no H* on right), I cannot fully complete the group with evidence IDs. The instruction: "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box." So I should provide fallback boxes for target and complete_group, and leave arrowhead_ids and target_ids empty.
+
+But leader_ids: I can include the leader line if I can identify it. The leader for the right 2.50 dimension in image 1 is the diagonal+horizontal that points to the part. Given the ambiguity, maybe the horizontal L3/L4 is actually the leader line (the dimension line that the leader follows). Hmm.
+
+Actually, let's look at the left column for comparison to understand the leader structure. Left column 2.50 dimension: leader goes from "2.50" leftward horizontally then... In image 1 left side, the 2.50 dimension has a leader line going left then down to the part? The left part cross-section is at x0-180. The leader lines on left: L20/L22 horizontal at y1298-1301 (x0-274), L19/L21 horizontal at y1445-1448, L23/L24 horizontal at y1402-1405, L15/L16 horizontal at y1593-1596, L50/L51/L53 horizontal at y1546-1561. And diagonals L49/L52 (x0-132,y144-277 top), L63 (x8-115,y205-312), L55 (x39-158,y1449-1569). Hmm.
+
+This is the left part's outline and leaders. The left 2.50 dimension's leader: in image 1, from "2.50" a line goes left horizontally at y~1205 (L69 [351,1205,494,1206]) then diagonally down-left to the part? L69 is at y1205 x351-494, that's the horizontal part of the leader for left 2.50. Then a diagonal from (351,1205) to (274,1301)? That diagonal might be L? Not sure. Then horizontal L20/L22 at y1301 to the part.
+
+OK this is way too detailed and I'm spending too much time. Let me make a pragmatic decision.
+
+Given the evidence, the right 2.50 dimension's leader is not cleanly captured by a single L* ID that I'm confident about. The horizontal lines L3/L4 at y1330 are likely the part's top edge (since they extend to x2400 which is the right edge of the part cross-section). The leader diagonal is not in the list.
+
+Therefore, I'll set leader_ids to empty? But then the group is missing leader. Hmm. But the instruction says select only line IDs that are part of the FAI leader path; if none, leave empty and use fallback.
+
+Actually wait. Let's look at image 2 once more for the right 2.50 leader. In image 2, I notice the blue lines on the right: there's a blue horizontal at y1330 (L3/L4) that goes from x1806 to 2400. And there's a black diagonal from (1680,1180) to (1806,1330)? In image 2 that diagonal looks black. And the part's top edge in image 1 right side: the part's top horizontal edge is at y1330 from x1806 to 2400? But the part cross-section in image 1 right side: the top edge of the part (the horizontal line with hatching below) is at y1330? Looking at image 1, the right part's top surface horizontal line is at about y1330 and extends from x1806 to the right edge. Yes that's the part edge. The leader from 2.50 touches it at its left end (x1806). So L3/L4 = part edge, not leader.
+
+Thus the leader for 2.50 is just the diagonal (undetected) plus maybe a tiny horizontal. So no L* for the leader.
+
+Hence leader_ids = [].
+
+Given that, the group is incomplete (missing leader, arrowhead, target). So complete = false, and I provide fallback boxes.
+
+Now fallback boxes in normalized ROI coordinates [0,1000]. I need to know the ROI size. The image dimensions? The bboxes go up to x~2400, y~2277. So the ROI is probably 2400x2277 or maybe the full image is larger. The normalized coordinates [0,1000] mean I divide by width and height and multiply by 1000. But I don't know the exact ROI pixel dimensions. Hmm.
+
+The instruction: "provide a fallback box in normalized ROI coordinates [0,1000]." I need to assume the ROI pixel size. The evidence bboxes max x ~2401, max y ~2277. The image 1 and 2 are likely 2400x2400 or 2300x2300? Hard to say.
+
+Hmm, this is a problem. Without knowing the ROI dimensions, I can't compute normalized coords precisely. But maybe the ROI is the full image and the image is, say, 2400 wide and 2400 tall? The bboxes max y is 2277 (T44) and max x 2401 (L3 etc). So image width ~2400, height ~2400? Possibly the image is 2400x2400. But T44 y up to 2277, and there's content at bottom (the feature control frame at y2009-2123, "2X SURFACE" at y2203-2277). So height maybe 2400.
+
+Actually, I recall these tasks usually the ROI is the whole image and normalized = (coord / image_size) * 1000. If image is 2400x2400, then normalized x = x/2400*1000 = x*0.4167, y = y*0.4167.
+
+But I'm not confident. Let me look at the bboxes: F0 [1150,1150,1250,1250]. If image 2400x2400, F0 normalized = [479,479,521,521].
+
+Hmm, but maybe the image is 2300x2300 or 2000x2000. The max coordinate 2401 suggests width >=2401. So width likely 2400 or 2401 or 2500.
+
+This is too uncertain. Given the high uncertainty, maybe the expected answer is to mark complete=false with empty fallback boxes? But the instruction says "If evidence is missing, provide a fallback box." So I should provide them.
+
+Let me think about typical image size for these. The images look square-ish. The coordinates go to ~2400 in x and ~2277 in y. A common size might be 2400x2400. I'll assume 2400x2400? But then y max 2277 < 2400 ok.
+
+Actually, maybe I should look at the structure: the original full drawing is larger, and this ROI is a crop. The ROI pixel size might be exactly the max extent? No.
+
+Given the deep uncertainty, perhaps the safest is to provide fallback boxes computed assuming the ROI is 2400 wide and 2400 tall? But if wrong, the boxes are wrong.
+
+Alternatively, maybe the convention is that normalized coordinates are relative to the ROI which equals the image shown, and the image shown is 2400x2400? I'll go with width=2400, height=2400? Hmm but the y content ends at 2277, leaving margin, plausible.
+
+Wait, actually I realize I might be overthinking the "complete" status. Let's reconsider whether the leader for F0 might actually be capturable. Look at the left column: the FAI markers on left are 76,75,100 (not F0). F0 is on the right (FAI 39). The right column's leaders: maybe the horizontal lines L3/L4 ARE considered the leader lines in this pipeline's view (the dimension extension lines). In many drawings, the dimension line/leader is the horizontal line that the text sits on, and it extends to the part. For the right 2.50, the text "2.50 +0.29 -0.07" sits above a horizontal line? In image 1, the "2.50" text is at y1180, and below it the "-0.07" at y1240. The horizontal line L3/L4 at y1330 is below the text. The leader diagonal connects text to that line. Hmm.
+
+I'll make a decision: I'll include L3 and L4 as leader_ids? But they're the part edge. Risky.
+
+Let's look at image 2 to see if L3/L4 are drawn as the leader (blue) connecting to the dimension. In image 2, the blue L3/L4 horizontal at y1330 spans x1806-2400. The dimension text is at x1435-1730, y1148-1240. The diagonal from text to (1806,1330) is black in image 2 (not blue). So the blue horizontal L3/L4 is not connected to the text by a blue line; it's connected by a black (undetected) diagonal. So L3/L4 is more likely the part edge.
+
+Thus I'll leave leader_ids empty.
+
+OK given all this, the group is missing leader, arrowhead, target. So complete=false.
+
+Now fallback boxes. I'll compute with assumed ROI size. Let me guess the ROI size from the image. The images provided are likely 2400x2400? Let me look at the aspect: image 1 appears square. The coordinates max x 2401, max y 2277. If square 2400x2400, fine.
+
+Hmm, but actually maybe the image is 2300x2300 and the 2401 is out of bounds? No, bboxes shouldn't exceed image. So width >=2401. Could be 2400? 2401>2400. So width >=2401, maybe 2400 is wrong; maybe 2500 or 2401. Ugh.
+
+Let me look at L3 points [1806,1330],[2400,1330] and bbox x2=2401. So image width at least 2401. Could be exactly 2400 with off-by-one, or 2401, or larger.
+
+I think for these pipeline tasks, the normalized coordinate is computed as (x / W * 1000) where W is the ROI width in pixels, and the ROI is the full image. The full image size is probably known to the system but not to me. I'll have to guess.
+
+Given the max coordinate ~2400, I'll guess W=2400, H=2400. Then:
+
+F0 bbox [1150,1150,1250,1250] -> norm [479,479,521,521].
+
+The annotation (FAI 39 + SPC AL + 2.50 +0.29 -0.07) region: x from ~1150 (FAI circle left) to ~1730 (right of 29/07), y from ~1148 to ~1240. Plus the FAI/SPC circles at x1150-1340. So annotation bbox approx [1148,1148,1730,1240]. Norm: x1=1148/2400*1000=478, y1=1148/2400*1000=478, x2=1730/2400*1000=721, y2=1240/2400*1000=517. So annotation norm ~ [478,478,721,517].
+
+Target (touched part): the part's top edge near x1806-2400,y1330. The arrowhead would touch around (1806,1330). The local component touched: the top surface of the part. Fallback target box maybe [1806,1300,2400,1400]? Norm: x1=752,y1=542,x2=1000,y2=583.
+
+Complete group: union of annotation + leader + target: x from 1148 to 2400, y from 1148 to 1400. Norm: [478,478,1000,583].
+
+These are rough.
+
+Honestly, given the huge uncertainty in ROI size, my normalized boxes will likely be off. But the task expects some numbers. I'll provide them with low confidence.
+
+Hmm, wait. Maybe I should reconsider the whole thing. Perhaps the intended interpretation is simpler: F0's annotation is the FAI 39 / SPC AL circle pair, and the "measurement annotation" it's connected to is the 2.50 +0.29 -0.07 dimension, and the leader is the line connecting them, and the target is the part. The pipeline might consider the group "complete" if I can identify these via evidence, but since arrowhead/target evidence absent, complete=false.
+
+Let me also double check the SPC letter for F0. In image 1, FAI 39 circle is paired with SPC AL circle (the circle to its right says "SPC AL"). Yes.
+
+FAI number = 39.
+
+Parameter values: nominal 2.50, +0.29, -0.07. So parameter_values = ["2.50", "+0.29", "-0.07"] or as numbers? The schema example shows parameter_values as a list. I'll put ["2.50", "+0.29", "-0.07"].
+
+measurement_description: null (no instruction sentence).
+
+is_range_measurement: The annotation specifies +0.29/-0.07 which is a tolerance pair (limits). Is that a "range measurement"? The definition: "true only when the annotation explicitly specifies a min/max interval, range, or limit pair; a two-row feature-control frame by itself is not a range measurement." A tolerance pair +0.29/-0.07 is a limit pair (upper/lower deviation). Hmm, but that's a standard dimensional tolerance, not a "range measurement" in the sense of a min/max interval like "1.2 to 1.5". The phrase "limit pair" could include tolerance limits. But typically in these FAI contexts, is_range_measurement refers to something like a range dimension (e.g., "2.50 - 3.00"). A +/− tolerance is not usually

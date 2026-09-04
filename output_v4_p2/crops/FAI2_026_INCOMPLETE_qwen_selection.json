@@ -1,0 +1,87 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "fai_number": "2",
+    "spc_letter": null,
+    "annotation_ids": [],
+    "parameter_text_ids": [
+      "T38"
+    ],
+    "description_text_ids": [],
+    "leader_ids": [],
+    "arrowhead_ids": [],
+    "target_ids": [],
+    "parameter_values": [],
+    "measurement_description": null,
+    "is_range_measurement": false,
+    "complete": false,
+    "missing": [
+      "No leader line or arrowhead associated with F0 in the evidence dictionary.",
+      "No annotation region (A*) associated with F0."
+    ],
+    "confidence": 0.9
+  },
+  "response_metadata": {
+    "finish_reason": "stop",
+    "elapsed_seconds": 57.66,
+    "prompt_tokens": 16897,
+    "completion_tokens": 146,
+    "total_tokens": 17043,
+    "reasoning_chars": 0,
+    "content_chars": 462,
+    "content_present": true,
+    "structured_output": "json_schema",
+    "max_tokens": 16384,
+    "mapping_valid": true,
+    "mapping_validation_errors": []
+  },
+  "selected_evidence_ids": [
+    "F0",
+    "T38"
+  ],
+  "selected_evidence": [
+    {
+      "id": "F0",
+      "type": "fai_marker",
+      "bbox": [
+        1156,
+        1158,
+        1244,
+        1242
+      ],
+      "source": "LocateAnything"
+    },
+    {
+      "id": "T38",
+      "type": "ocr_text",
+      "bbox": [
+        709,
+        1869,
+        743,
+        1921
+      ],
+      "source": "Tesseract",
+      "text": "2",
+      "confidence": 0.926
+    }
+  ],
+  "selected_exact_union_roi_bbox": [
+    709,
+    1158,
+    1244,
+    1921
+  ],
+  "minimum_crop_roi_bbox": [
+    653,
+    1102,
+    1300,
+    1968
+  ],
+  "minimum_crop_full_image_bbox": [
+    6302,
+    5734,
+    6949,
+    6600
+  ],
+  "coordinate_owner": "Python"
+}

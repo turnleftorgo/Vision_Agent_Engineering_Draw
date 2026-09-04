@@ -1,0 +1,175 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context. There's a magenta rectangle (the proposed crop boundary) and a red rectangle (the selected FAI marker). The red rectangle is around the "SPC BS" circle, which is paired with "FAI 76".
+
+Let me look at the magenta rectangle in IMAGE 1. The magenta rectangle spans horizontally across the image. Looking at the coordinates, the magenta rectangle's top edge is around y=1000 (the line below "ANSI-114X ISO-114X JIS-110X") and the bottom edge is around y=1680 (the line below the dimension text).
+
+Wait, let me look more carefully. In IMAGE 1, there are two magenta horizontal lines. The top one is at approximately y=1000 (just below the "SPC CONTROL FOR ALL HEAT STAKE POST / ANSI-114X ISO-114X JIS-110X" text). The bottom magenta line is at approximately y=1680 (below the dimension rows).
+
+So the magenta rectangle (the crop) contains the dimension rows: 2.50, 1.62, 1.26, (0.00) on the left and 2.50, 1.62, 1.26 on the right, with their FAI/SPC circles.
+
+Now let's look at IMAGE 2, the proposed crop. It shows the dimension rows with the FAI/SPC circles. But importantly, the leader lines! In IMAGE 1, the leader lines for the left dimensions go to the left, connecting to the cross-section drawing on the left side. The leader lines for the right dimensions go to the right, connecting to the cross-section on the right.
+
+In IMAGE 2, I see the leader lines. On the left side, the leaders go left and connect to a cross-section shape (the hatched profile). On the right side, the leaders go right and connect to a hatched profile on the right.
+
+Let me check whether the leaders and arrowheads are fully contained. In IMAGE 2, the left leaders: the top leader (2.50) goes left and ends at a horizontal line. The middle leader (1.62) goes left and ends at a horizontal line. The bottom leader (1.26) goes left and ends at a horizontal line. The (0.00) leader goes left to a horizontal line. These horizontal lines appear to be the top edges of the cross-section profile.
+
+Hmm, but wait. In IMAGE 1, the left cross-section is partially visible. The leaders on the left in IMAGE 1 connect to the profile. Let me look at the left edge of the magenta rectangle in IMAGE 1. The magenta rectangle's left edge is at x=0 (the left border of the image). Actually the magenta lines extend from x=0 to x=2337 (full width). So the crop's left edge is at x=0.
+
+In IMAGE 1, the left cross-section profile (hatched) is at the left, around x=0 to x=440. The leaders from the dimension text (around x=580) go left to about x=520 then horizontal to x=0? Let's look. The leader for 2.50: from the text "2.50" at around x=600, a line goes left-down to about x=520, y=1150, then horizontal left to x=0. So the horizontal segment extends to the left edge of the image (x=0). In IMAGE 2, the horizontal segment for 2.50 also extends to the left edge? Let's look at IMAGE 2. The horizontal line for 2.50 goes from the leader elbow leftward to about x=180 (in IMAGE 2 coordinates), where it meets the top of the hatched profile. Actually in IMAGE 2, the hatched profile's top edge is at around x=180-170. The horizontal leader line for 2.50 ends at the profile's top edge.
+
+Hmm, but in IMAGE 1, the horizontal leader line for 2.50 extends all the way to x=0 (the left edge), passing through the profile? Let me look. In IMAGE 1, the left profile hatched region is at x=0 to x=440, y=1400-1550. The horizontal line for 2.50 is at y=1250, which is above the profile. It goes from x=520 leftward to x=0. So in IMAGE 1, that horizontal line at y=1250 goes off the left edge of the image (x=0). That means the leader line is cut off at the left edge of IMAGE 1!
+
+Wait, but the magenta rectangle's left edge is at x=0. So the crop's left edge is at x=0, which is the same as IMAGE 1's left edge. So if the leader line extends to x=0 in IMAGE 1, then in the crop it also extends to the left edge, meaning the leader is clipped at the left border.
+
+Let me look at IMAGE 2 more carefully. In IMAGE 2, the horizontal line for 2.50 (top left) starts at the elbow (around x=640) and goes left to about x=180, where it meets the top of the hatched profile. Actually, looking at IMAGE 2, the hatched profile's top horizontal edge is at y=770 (the top of the rectangle part of the profile). The leader line for 2.50 is at y=770? Let's see. In IMAGE 2, the "2.50" text is at y=430. The leader elbow is at about (640, 770)? Hmm.
+
+Let me look at the structure. In IMAGE 2, left side:
+- "2.50 +0.19 -0.10" at top, with FAI 76 / SPC BS.
+- The leader line: from "2.50" a line goes left-down to an elbow, then horizontal left. The horizontal line is at the level of the top of the profile's upper step.
+- "1.62 +0.19 -0.12" with FAI 75 / SPC BR. Leader goes left-down to elbow then horizontal left to the profile's middle step.
+- "1.26 +0.19 -0.12" with FAI 100 / SPC CO. Leader goes left-down to elbow then horizontal left to the profile's top hatched surface.
+- "(0.00)" leader horizontal left to the profile's bottom line.
+
+Now in IMAGE 2, do these horizontal lines reach the left border? Looking at IMAGE 2, the leftmost extent of the horizontal lines: the 2.50 horizontal line ends at the profile's top edge around x=180. The 1.62 horizontal line ends at the profile's middle step around x=230. The 1.26 horizontal line ends at the profile's hatched top around x=560? Hmm wait.
+
+Actually, I need to look at the profile shape in IMAGE 2. The profile on the left in IMAGE 2 is a hatched shape that occupies from x=0 to about x=560, with steps. The top of the profile (the highest step) is at around x=60-170, y=770-950. Then a step down to x=170-230, y=950-1050. Then the main hatched body from x=0 to x=560, y=1050-1350.
+
+Hmm, this is getting too detailed. Let me think about the key question: is the crop valid?
+
+The rule: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+In IMAGE 1, the left leaders' horizontal segments extend to x=0 (the left edge of the image, which is also the left edge of the magenta crop). That means the leader lines reach the crop border on the left. But wait, do they actually reach the border, or do they terminate at the profile which is inside the crop?
+
+Let me look at IMAGE 1 again. The left profile in IMAGE 1 is at x=0 to x=440, y=1400-1550 (the hatched region). The horizontal leader lines are at y=1250 (2.50), y=1350 (1.62), y=1430 (1.26), y=1530 (0.00). 
+
+The 2.50 horizontal line at y=1250: in IMAGE 1, it goes from the elbow at x=520 leftward. Does it stop at the profile? The profile's top is at y=1400, so at y=1250 there's no profile. So the horizontal line at y=1250 would extend leftward past the profile's x-range and reach x=0. Yes! In IMAGE 1, I can see the horizontal line at y=1250 going all the way to x=0 (left edge). Similarly the 1.62 line at y=1350 goes to x=0. The 1.26 line at y=1430: the profile top is at y=1400, so at y=1430 the profile exists from x=0 to x=440. So the 1.26 horizontal line would terminate at the profile's left edge? But the profile's left edge is at x=0 (the hatched region starts at x=0). Hmm.
+
+Actually, looking at IMAGE 1, the hatched profile on the left: the hatching lines start at x=0. The top horizontal line of the hatched region is at y=1400 from x=0 to x=440. So the 1.26 leader at y=1430 would hit the hatched region's left edge at x=0? But the hatched region's left edge is the diagonal line of the profile (the leftmost diagonal). Hmm.
+
+This is too uncertain. Let me look at IMAGE 2 to see what's actually in the crop. In IMAGE 2, the left profile is more fully shown: it has a stepped top (a small rectangle at top left, x=60-170, y=770-950), then a step, then the hatched body. The horizontal leader lines in IMAGE 2: the 2.50 line at y=770 ends at the top of the small rectangle (x=170). The 1.62 line at y=1050 ends at the step (x=230). The 1.26 line at y=1150 ends at the hatched top (x=560). The 0.00 line at y=1350 ends at the bottom line (x=560).
+
+Wait, but in IMAGE 2, do these horizontal lines extend to the left border (x=0)? Looking at IMAGE 2, the 2.50 horizontal line: I see it going from the elbow leftward to x=170 (the right edge of the top rectangle). It does NOT extend to x=0. Good. The 1.62 horizontal line goes from elbow to x=230 (the step). Does not extend to x=0. The 1.26 line goes from elbow to x=560 (the hatched top right edge). The 0.00 line goes from x=560 leftward to x=0? In IMAGE 2, the bottom line (0.00) at y=1350: I see a horizontal line from x=560 leftward to x=0 (the bottom of the hatched region). Hmm, but that's the profile's own bottom line, not a leader reaching the border.
+
+OK here's the thing. The crop in IMAGE 2 shows the left profile partially. The leftmost part of the profile (the diagonal left edge) might be cut off at x=0. In IMAGE 1, the left profile's leftmost diagonal also seems to be cut at x=0 (the hatching goes to x=0). So the profile is cut off at the left border in both IMAGE 1 and IMAGE 2.
+
+But the rule says "a visible local portion of every component feature touched by those arrows." The arrows (leader terminals) touch the profile. As long as a visible local portion of the profile is present at the touch point, it's OK. The touch points are at the top edges of the profile steps, which are visible in IMAGE 2. So that's fine.
+
+Now the critical issue: "Reject it if a relevant leader reaches the crop border." In IMAGE 2, do any leader lines reach the left or right border? Let's look at the right side of IMAGE 2. The right leaders: 2.50 leader goes right-down to elbow then horizontal right. In IMAGE 2, the right horizontal line for 2.50 goes from the elbow (x=1810) rightward to x=2200 (the profile's top edge on the right). Does it reach the right border (x=2337)? In IMAGE 2, the right profile's top edge is at around x=2200-2337. The horizontal line for 2.50 ends at the profile's top edge at x=2200. Hmm, but the profile on the right in IMAGE 2 extends to the right border (x=2337). The horizontal line for 2.50 at y=770: the profile's top on the right is at y=770 from x=2200 to x=2337. So the horizontal leader line at y=770 would coincide with the profile's top edge and extend to the right border? Or does it terminate at the profile's left edge (x=2200)?
+
+Looking at IMAGE 2, the right profile: top edge at y=770 from x=2200 to x=2337 (right border). The 2.50 horizontal leader line at y=770 goes from elbow x=1810 to x=2200 (where it meets the profile's top-left corner). So it terminates at the profile, not the border. Good.
+
+Hmm, but actually in IMAGE 1, the right profile is at x=2130-2337, y=1400-1550 (hatched). The right leaders' horizontal lines are at y=1250 (2.50), y=1350 (1.62), y=1430 (1.26). In IMAGE 1, the 2.50 horizontal line at y=1250 goes from elbow x=1970 rightward to x=2337 (right border)? Because the profile's top is at y=1400, so at y=1250 there's no profile, the line would extend to the right border. Yes! In IMAGE 1, I see the right horizontal line for 2.50 extending to the right edge (x=2337). Similarly the 1.62 line at y=1350 extends to the right edge.
+
+So in IMAGE 1, the leaders on both left and right extend to the image borders (x=0 and x=2337). Since the magenta crop's left and right edges are at x=0 and x=2337 (full width), the crop also has these leaders reaching the borders!
+
+Wait, but in IMAGE 2, the leaders do NOT extend to the borders because IMAGE 2 includes more of the profile (the profile's top steps are visible, so the leaders terminate at the profile's top edges which are inside the crop).
+
+Hold on. Let me reconcile. In IMAGE 1, the left profile's top is at y=1400 (the hatched region top). But in IMAGE 2, the left profile has a stepped top going up to y=770. That means IMAGE 2 shows MORE of the profile vertically than IMAGE 1? That can't be right if IMAGE 2 is a crop of IMAGE 1.
+
+Wait, I think I'm misreading IMAGE 1. Let me look at IMAGE 1's left profile again. In IMAGE 1, the left hatched region is at y=1400-1550, x=0-440. But above that, is there a stepped profile? In IMAGE 1, at y=1250-1400, x=0-440, I see... the horizontal leader lines at y=1250 and y=1350, but no profile outline. So in IMAGE 1, the profile's stepped top (the part above y=1400) is NOT shown? That's strange.
+
+Hmm, wait. Maybe IMAGE 1's left profile is actually cut off at the top by the magenta rectangle? No, the magenta rectangle's top is at y=1000, which is above y=1250. So the region y=1000-1400 is inside the magenta crop. In that region, on the left, I see only the horizontal leader lines, no profile outline. So the profile's stepped top is missing in IMAGE 1's left side within the crop?
+
+But in IMAGE 2, the profile's stepped top IS shown (the small rectangle at top left). So IMAGE 2 shows content that is NOT in IMAGE 1's corresponding region? That would mean IMAGE 2 is NOT a crop of IMAGE 1, which contradicts the premise.
+
+Let me re-examine. Maybe I'm misaligning the y-coordinates between IMAGE 1 and IMAGE 2. IMAGE 1 is 2337x2337 (roughly square). IMAGE 2 is 2337x672 (wide and short). The crop in IMAGE 1 is the magenta rectangle, which spans y=1000 to y=1680 (height ~680) and x=0 to x=2337 (width 2337). So the crop aspect ratio is 2337:680 ≈ 3.44:1. IMAGE 2 is 2337:672 ≈ 3.48:1. Close enough. So IMAGE 2 should be exactly the magenta rectangle region of IMAGE 1.
+
+So in IMAGE 1, the magenta rectangle region (y=1000-1680) on the left should contain the same content as IMAGE 2's left. In IMAGE 2's left, the profile's stepped top (small rectangle) is at y=770-950 in IMAGE 2 coordinates. Mapping to IMAGE 1: IMAGE 2's y=0 corresponds to IMAGE 1's y=1000. IMAGE 2's height 672 maps to IMAGE 1's 680. So IMAGE 2's y=770 maps to IMAGE 1's y=1000 + 770*(680/672) ≈ 1000 + 778 = 1778. That's below the magenta rectangle's bottom (1680)! That doesn't work.
+
+I think my coordinate reading is off. Let me look at IMAGE 1 more carefully with the actual pixel positions.
+
+Actually, I don't have exact pixel coordinates. Let me look at the visual layout. In IMAGE 1, the magenta rectangle (between the two magenta lines) contains the dimension text rows. The left profile hatched region in IMAGE 1 is at the same vertical level as the dimension rows? Let's see. In IMAGE 1, the dimension rows (2.50, 1.62, 1.26, 0.00) are at y≈1150, 1300, 1430, 1530. The left hatched profile in IMAGE 1 is at y≈1400-1550. So the hatched profile's top (y=1400) aligns with the 1.26 row. The 2.50 and 1.62 rows are above the hatched profile. So in IMAGE 1, above the hatched profile (y=1000-1400), on the left, there's no profile outline—just the leader lines.
+
+But in IMAGE 2, the left profile has a stepped top that extends above the hatched body, reaching up to the 2.50 row level. So IMAGE 2's left profile is TALLER than IMAGE 1's left profile. This is a contradiction if IMAGE 2 is a crop of IMAGE 1.
+
+Unless... IMAGE 1's left profile actually DOES have the stepped top, but it's drawn faintly or I'm misreading. Let me look at IMAGE 1's left region between y=1000 and y=1400. I see the horizontal leader lines at y=1250 and y=1350. Do I see vertical lines forming a stepped profile? Looking carefully... In IMAGE 1, at the left, I see the hatched region starting at y=1400. Above it, I don't see vertical profile lines. Hmm.
+
+Wait, maybe the difference is that IMAGE 1 is a "wider candidate context" but the left profile in IMAGE 1 is actually a DIFFERENT view or the profile is partially outside the left edge. In IMAGE 1, the left profile's left edge is at x=0 (cut off). In IMAGE 2, the left profile's left edge is also at x=0 (cut off) but the profile shape is different?
+
+I'm overanalyzing the pixel-level differences. Let me step back and think about the intent of the task.
+
+The task is to validate a crop. The red rectangle in IMAGE 1 highlights the "SPC BS" circle (paired with FAI 76). The crop should fully contain one coherent FAI annotation group: the FAI circle (76), the SPC letter (BS), the parameter/tolerance (2.50 +0.19 -0.10), and the leader line and arrowhead and the touched feature.
+
+Now, the issue is whether the leader line for FAI 76 (the 2.50 dimension on the left) is fully contained in the crop, including its terminal and the touched feature.
+
+In IMAGE 1, the left 2.50 leader line: from the text, goes left-down to an elbow, then horizontal left. In IMAGE 1, this horizontal line extends to the left edge of the image (x=0). The left edge of the image is also the left edge of the magenta crop. So the leader line reaches the crop border on the left! That's a rejection criterion: "a relevant leader reaches the crop border."
+
+But wait, in IMAGE 2, the left 2.50 leader line's horizontal segment ends at the profile's top edge (the small rectangle's top-right corner), which is inside the crop (not at the border). So in IMAGE 2, the leader does NOT reach the border.
+
+Hmm, but if IMAGE 2 is the crop of IMAGE 1, then the content must match. The discrepancy suggests that in IMAGE 1, the profile's stepped top is actually present but I'm not seeing it clearly, OR the leader line in IMAGE 1 actually terminates at the profile's stepped top which is at x>0, and the horizontal line I think extends to x=0 actually stops at the profile.
+
+Let me look at IMAGE 1's left 2.50 horizontal line endpoint. In IMAGE 1, the horizontal line at y=1250 (2.50) goes from the elbow (x≈520) leftward. Where does it stop? If the profile's stepped top (small rectangle) is at x=60-170, y=1150-1300 (in IMAGE 1 coords, mapped from IMAGE 2), then the horizontal line at y=1250 would stop at x=170 (the right edge of the small rectangle). But in IMAGE 1, I see the horizontal line at y=1250 going all the way to x=0. So either the small rectangle is not in IMAGE 1, or the line passes through it.
+
+I really can't resolve this by squinting. Let me think about the typical design of these validation tasks. Usually, the crop is either valid or has a specific missing element like a leader reaching the border or an arrowhead clipped.
+
+Let me look at the right side of IMAGE 2. The right leaders: 2.50, 1.62, 1.26. In IMAGE 2, the right profile is at the right edge, partially cut off (the hatched region extends to the right border x=2337). The right 2.50 horizontal leader line: from elbow (x≈1810) rightward to the profile's top edge. In IMAGE 2, the profile's top edge on the right is at y=770 from x=2200 to x=2337. The horizontal leader line at y=770 would go from x=1810 to x=2200 (terminating at the profile's top-left corner). So it doesn't reach the border. Good.
+
+But the right profile in IMAGE 2 is cut off at the right border (the hatched region and the profile's right side extend beyond x=2337). The leader terminals touch the profile's top edges, which are visible. So the touched feature is present (a local portion). OK.
+
+Now, the key rejection criterion I keep coming back to: in IMAGE 1, do the leaders reach the magenta crop's left/right borders? The magenta crop's left border is x=0 and right border is x=2337 (full width of IMAGE 1). In IMAGE 1, the left leaders' horizontal lines appear to reach x=0, and the right leaders' horizontal lines appear to reach x=2337. If so, the crop is invalid because leaders reach the border.
+
+But in IMAGE 2, the leaders do NOT reach the borders (they terminate at the profile). This is the contradiction.
+
+Let me look really carefully at IMAGE 2's left edge. The leftmost horizontal line in IMAGE 2 is the 0.00 line at the bottom (y≈1350), which goes from x=560 leftward to x=0. That line reaches the left border! But is that a "leader" or is it the profile's bottom edge? In IMAGE 2, the 0.00 dimension's leader: the text "(0.00)" is at x≈620, and a horizontal line goes left from there to x=560 (the profile's bottom-right corner), then the profile's bottom edge continues from x=560 to x=0. So the leader line for 0.00 is just the segment from x=620 to x=560, and the rest (x=560 to x=0) is the profile's own bottom edge. So the leader does NOT reach the border; it terminates at the profile. The profile's bottom edge reaching the border is fine (it's the feature, and a local portion is visible).
+
+Hmm OK so in IMAGE 2, the leaders terminate at the profile, not the border. Good.
+
+Now in IMAGE 1, the same logic: the 0.00 leader terminates at the profile's bottom-right corner (x≈440 in IMAGE 1), and the profile's bottom edge continues to x=0. So the leader doesn't reach the border. Good.
+
+For the 2.50 leader in IMAGE 1: if the profile's stepped top (small rectangle) is present in IMAGE 1 at the appropriate location, then the 2.50 leader terminates at the small rectangle's right edge, not the border. So I need to determine if the small rectangle is in IMAGE 1.
+
+Looking at IMAGE 1's left region one more time. The hatched region top is at y≈1400. Above it, at y≈1150-1400, x≈0-440, I look for vertical lines. I think I might see a faint vertical line at x≈440 (the right edge of the hatched region) going up? And the horizontal leader lines cross it. Hmm.
+
+Actually, you know what, I bet the difference between IMAGE 1 and IMAGE 2 on the left profile is just my misperception. The most likely intended answer: the crop is INVALID because the leaders on the left and right extend beyond the crop (the profile features touched by the leaders are not fully within the crop, or the leaders reach the border).
+
+Wait, but the rule says "a visible local portion of every component feature touched by those arrows" is required. It does NOT require the entire feature. So even if the profile is cut off at the border, as long as the touch point (where the arrow/leader terminal is) is visible, it's OK.
+
+Let me look at the leader terminals. In these dimension callouts, the leader line ends at the feature with a small horizontal tick or just touches the feature line. There's no arrowhead per se; the leader line's end is the terminal. The rule mentions "every terminal arrowhead" and "every connected leader segment."
+
+In IMAGE 2, the left 2.50 leader's horizontal segment ends at the small rectangle's top edge (visible). The left 1.62 leader ends at the step (visible). The left 1.26 leader ends at the hatched top (visible). The left 0.00 leader ends at the bottom line (visible). All terminals visible.
+
+In IMAGE 2, the right 2.50 leader ends at the right profile's top edge (visible). The right 1.62 leader ends at the right profile's step (visible). The right 1.26 leader ends at the right profile's hatched top (visible). All terminals visible.
+
+So in IMAGE 2, all leaders and terminals are visible and within the crop. The touched features (local portions) are visible. So the crop seems valid for the FAI 76/BS group? But wait, the crop contains MULTIPLE FAI groups (76/BS, 75/BR, 100/CO on left; 39/AL, 40/AM, 41/AN on right). The rule says "fully contains one coherent FAI annotation group" and "Reject it if ... unrelated neighboring annotations dominate."
+
+Hmm, "unrelated neighboring annotations dominate." The crop contains 6 FAI groups. The selected one is 76/BS (red rectangle). The other 5 are neighboring. Do they "dominate"? The crop is essentially the entire dimension table. The selected FAI 76/BS is just one of six. The neighboring annotations are present but do they "dominate"? This is subjective.
+
+Actually, re-reading the task: "The crop is valid only if it fully contains one coherent FAI annotation group: [list]. Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+I think the intent is that the crop should be tightly around ONE FAI group, not the whole table. If the crop contains the whole table with 6 FAI groups, then the neighboring annotations are present and arguably "dominate" or at least the crop is not focused on one group. But the rule for "dominate" is ambiguous.
+
+Hmm, but actually many of these validation tasks consider a crop valid if it contains the selected FAI group fully, even if other groups are also present, as long as the selected group's leader/feature is intact. The "dominate" clause is for cases where the selected group is tiny and surrounded by huge unrelated text.
+
+Let me look at the leaders of the SELECTED group (76/BS, the left 2.50). Its leader goes left to the profile. In IMAGE 2, that leader and its terminal are visible. Good.
+
+But here's a subtle point: in IMAGE 1, the left 2.50 leader's horizontal line—does it reach the left border of the magenta crop? If in IMAGE 1 the profile's stepped top is NOT drawn (i.e., the profile in IMAGE 1 is just the hatched body without the stepped top), then the 2.50 leader's horizontal line would extend leftward past the hatched body's top (since the hatched body top is at y=1400, below the 2.50 line at y=1250) and reach x=0. In that case, in IMAGE 1 the leader reaches the left border. But in IMAGE 2, the stepped top IS drawn, so the leader terminates at the stepped top. This means IMAGE 2 ≠ crop of IMAGE 1, which is impossible.
+
+I think I must be misreading IMAGE 1. Let me assume IMAGE 1 and IMAGE 2 are consistent, meaning the stepped top IS in IMAGE 1 but I just can't see it well due to the leader lines overlapping. In that case, the leaders terminate at the profile in both, and the crop is fine on that front.
+
+Given the ambiguity, let me think about what the "expected" answer is. The red rectangle is on SPC BS (FAI 76). The crop (magenta) is the full width strip containing all 6 FAI groups. The question is whether this crop is "valid."
+
+I recall that in these types of tasks, a crop that includes the entire dimension table with multiple FAI markers is often considered INVALID because it doesn't isolate one group, OR it's considered valid if the selected group is fully present. The phrase "unrelated neighboring annotations dominate" suggests that if the crop is mostly other annotations, it's invalid.
+
+But actually, looking at the layout, the selected FAI 76/BS is at the top-left of the table. The crop includes it plus 5 others. The selected one is not "dominated" in the sense of being obscured; it's clearly visible. But the crop is not focused on it.
+
+Hmm, let me look at the leaders again. The selected group's leader (left 2.50) goes to the left profile. The left profile in the crop is partially visible (cut at left border). The terminal of the 2.50 leader touches the left profile's stepped top. Is that stepped top visible in the crop? In IMAGE 2, yes, the small rectangle at top-left is visible. So the touched feature is present.
+
+OK let me look at whether any leader reaches the crop border in IMAGE 2. I'll examine each leader's horizontal segment endpoint in IMAGE 2:
+
+Left side:
+- 2.50: horizontal line from elbow to small rectangle top-right corner (x≈170). Not at border (border is x=0). OK.
+- 1.62: horizontal line from elbow to step (x≈230). Not at border. OK.
+- 1.26: horizontal line from elbow to hatched top-right (x≈560). Not at border. OK.
+- 0.00: horizontal line from text to bottom line at x≈560, then profile bottom edge to x=0. The leader itself ends at x≈560. OK.
+
+Right side:
+- 2.50: horizontal line from elbow to right profile top-left corner (x≈2200). Not at border (border x=2337). OK.
+- 1.62: horizontal line from elbow to right profile step (x≈2130). Not at border. OK.
+- 1.26: horizontal line from elbow to right profile hatched top-left (x≈2050). Not at border. OK.
+
+So no leader reaches the border in IMAGE 2. Good.
+
+Thus, by the strict criteria, the crop seems valid: the selected FAI 76/BS group is fully present (circle, number, SPC letter, tolerance, leader, terminal, touched feature). The neighboring groups are present but the selected one is not obscured.
+
+But wait, the rule "unrelated neighboring annotations dominate" — the crop contains 5 other FAI groups. Is that "dominating"? I'd argue the crop is a balanced

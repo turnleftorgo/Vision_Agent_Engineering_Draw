@@ -1,0 +1,185 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle is around the SPC "AN" circle, which is part of the FAI 41 group.
+
+Let me look at the FAI 41 group in IMAGE 1. It consists of:
+- FAI circle with "41"
+- SPC circle with "AN"
+- Parameter "1.26" with tolerances "+0.25" and "-0.10"
+- A leader line going to the right, connecting to a feature.
+
+Now let me look at the magenta rectangle in IMAGE 1. The magenta rectangle encloses the FAI 41 / SPC AN circles and the "1.26 +0.25 -0.10" text. But what about the leader line?
+
+Looking at IMAGE 1, the leader line for the 1.26 dimension (FAI 41) goes to the right. Let me trace it. The text "1.26 +0.25 -0.10" is inside the magenta rectangle. To the right of "-0.10" there's a leader line that goes up and to the right, connecting to a feature (the hatched section). Let me look carefully.
+
+In IMAGE 1, the magenta rectangle's right edge is at approximately x=1660 (in pixel coordinates of the image). The text "-0.10" for the 1.26 line ends around x=1560. Then there's a leader line that starts after "-0.10" and goes right and up. Let me look.
+
+Actually, looking at the layout, the leader line for the 1.26 (FAI 41) appears to be the line that goes from the right side of "-0.10" upward to the right, connecting to the feature. Let me look at the coordinates.
+
+In IMAGE 1, I see for the 1.26 line: "1.26 +0.25 -0.10" then a leader line. The leader line for 1.26 (FAI 41) - let me trace. There's a line that goes from around (1575, 1148) up-right to (1630, 1043) then horizontal to the feature. Hmm.
+
+Wait, let me look at the leaders more carefully. There are multiple dimensions on the right side:
+- 2.50 +0.29 -0.07 (FAI 39 / SPC AL): leader goes right and down to a feature.
+- 1.62 +0.26 -0.10 (FAI 40 / SPC AM): leader goes right to a feature.
+- 1.26 +0.25 -0.10 (FAI 41 / SPC AN): leader goes right and up to a feature.
+
+Let me look at the leader lines on the right side of the magenta box. I see a line that goes from the right of "-0.10" (the 1.26 line) diagonally up-right. Actually the diagonal line I see at around (1575,1148) to (1630,1043) - that's the leader for 1.26? Let's look.
+
+Hmm, the magenta rectangle right edge is at about x=1660. The diagonal leader line for 1.26 starts at about x=1575 (inside the magenta box) and goes to x=1630 (still inside? 1630 < 1660, so inside) then horizontal to the feature at x=1750+ (outside).
+
+Wait, I need to look at the actual pixel positions. Let me look at IMAGE 1 dimensions. The image is 2337 wide maybe. Let me estimate.
+
+Actually, let me look at the magenta rectangle boundaries. In IMAGE 1, the magenta rectangle left edge ~ x=897, top ~ y=1013, right ~ x=1683, bottom ~ y=1263.
+
+Now the leader line for 1.26 (FAI 41): The text "-0.10" ends at about x=1560. Then there's a leader. Looking at the image, I see a diagonal line from about (1575, 1148) going up-right to (1630, 1043), then a horizontal line from (1630, 1043) to (1750, 1043) which is the feature line.
+
+Hmm wait, but that horizontal line at y=1043 - is that the leader for 1.26 or for 1.62? Let's look at the 1.62 line. The 1.62 text is at y~1003-1043. Its leader... The 1.62 line's leader goes right from "-0.10" at y~1043 horizontally to the feature.
+
+Let me look at the structure on the right. There's a hatched cross-section. The horizontal lines at the right are the feature edges.
+
+Let me look at the leaders:
+- For 2.50 (FAI 39): leader from right of "-0.07" at (1590, 793) goes right-down to (1645, 908) then horizontal right to feature at (2050, 908).
+- For 1.62 (FAI 40): leader from right of "-0.10" at (1575, 1043) horizontal right to feature.
+- For 1.26 (FAI 41): leader from right of "-0.10" at (1575, 1148) diagonal up-right to (1630, 1043)? Hmm that would merge with the 1.62 line. That doesn't seem right.
+
+Let me look more carefully at the image. I'll describe what I see in the right portion of IMAGE 1.
+
+At the right of the magenta box, I see:
+- A horizontal line at y~908 from x~1645 to x~2050 (top feature edge).
+- A horizontal line at y~1003 from x~1590 to x~2050 (middle feature edge).
+- A horizontal line at y~1043 from x~1630 to x~2050 (another feature edge).
+- A diagonal line from (1575, 1148) to (1630, 1043).
+
+Hmm, this is confusing. Let me think about which leader belongs to which dimension.
+
+Actually, the typical layout: each dimension text has a leader line that points to the feature it measures. The leader usually starts near the text and ends at the feature with an arrowhead or just touches.
+
+For 1.26 (FAI 41), the dimension value 1.26 corresponds to a vertical distance. The leader would point to the feature.
+
+Let me look at the left side for comparison. On the left, the dimensions 2.50, 1.62, 1.26, (0.00) have leaders going left to the feature (the stepped profile on the left). The 1.26 leader on the left goes from the text leftward to the feature.
+
+On the right side, the dimensions 2.50, 1.62, 1.26 have leaders going right to the feature (the hatched section).
+
+Now, the magenta box contains the FAI 41 / SPC AN circles and the 1.26 +0.25 -0.10 text. The leader for this 1.26 (right side) - where does it start and end?
+
+Looking at the image, the diagonal line from (1575, 1148) to (1630, 1043) - the bottom point (1575, 1148) is at the same y as the 1.26 text (y~1148). So that diagonal line is the leader for 1.26! It starts at the right of the 1.26 text and goes up-right to (1630, 1043), then... does it continue horizontally? At (1630, 1043) there's a horizontal line going right to the feature. But that horizontal line at y=1043 might be the leader for 1.62 OR the continuation of 1.26's leader.
+
+Hmm, this is getting too detailed. Let me look at the magenta box right edge = 1683. The diagonal line ends at x=1630 which is inside the box (1630 < 1683). But then the horizontal continuation from 1630 to the feature (x>1750) is OUTSIDE the box. So the leader line is cut off at the magenta box right edge!
+
+Wait, but does the leader for 1.26 actually continue horizontally outside? Let's look. The diagonal line ends at (1630, 1043). At that point, is there a horizontal line going right? Looking at the image, at y=1043 there's a horizontal line from about x=1630 to x=2050 (the feature). But also at y=1003 there's a horizontal line. Hmm.
+
+Actually, I think the leaders might be:
+- 1.62 leader: horizontal line at y=1003 from text to feature.
+- 1.26 leader: diagonal from (1575,1148) to (1630,1043) then horizontal at y=1043 to feature.
+
+But wait, the 1.62 text is at y~1003-1043 (the "1.62" baseline ~1003, "-0.10" ~1043). The 1.26 text is at y~1148 (the "1.26" baseline ~1148, "+0.25" ~1113, "-0.10" ~1183).
+
+Hmm, let me look at the y-coordinates of the text in IMAGE 1:
+- 2.50 line: "2.50" at y~783, "+0.29" at y~753, "-0.07" at y~818.
+- 1.62 line: "1.62" at y~1003, "+0.26" at y~973, "-0.10" at y~1043.
+- 1.26 line: "1.26" at y~1148, "+0.25" at y~1113, "-0.10" at y~1183.
+
+Now the leaders on the right:
+- The 2.50 leader: starts at right of "-0.07" (y~818) at x~1590, goes diagonally down-right to (1645, 908), then horizontal at y=908 to feature.
+- The 1.62 leader: starts at right of "-0.10" (y~1043) at x~1575, horizontal at y=1043? Or diagonal?
+- The 1.26 leader: starts at right of "-0.10" (y~1183) at x~1575, diagonal up-right to (1630, 1043)?
+
+Hmm, I see in the image a diagonal line that goes from lower-left to upper-right in the region x=1575-1630, y=1043-1148. That diagonal's lower end is at y~1148 (the 1.26 text level) and upper end at y~1043. So that diagonal is the 1.26 leader's first segment. Then from (1630, 1043) it would go horizontal to the feature. But the horizontal line at y=1043 from 1630 to feature - is that the 1.26 leader or the 1.62 leader?
+
+This is too uncertain. Let me look at IMAGE 2, the proposed crop. IMAGE 2 shows:
+- Top: partial "40" and "AM" circles (cut off at top), and "1.62" partially cut, "-0.10".
+- Bottom: FAI 41 circle, SPC AN circle, "1.26 +0.25 -0.10", and a leader line that goes right and up, ending at the right edge of IMAGE 2 (the leader is cut off at the right border!).
+
+Yes! In IMAGE 2, I can clearly see the leader line for the 1.26 (FAI 41) group: it starts after "-0.10" and goes diagonally up-right, and it reaches the right border of IMAGE 2 (the line ends at the right edge, clipped). There's no arrowhead visible, and the feature it points to is not visible.
+
+So the crop is missing: the terminal arrowhead / the rest of the leader line / the touched feature. The leader line is clipped at the right border.
+
+Also, the top of IMAGE 2 includes part of the FAI 40 / SPC AM group (the "40" and "AM" circles are cut off at top, and "1.62 -0.10" partially). That's a neighboring annotation that's partially included but cut off. The instructions say "Reject it if ... unrelated neighboring annotations dominate." Here the neighboring FAI 40 group is partially in the crop but cut off at the top. That's not dominating, but it's a partial inclusion which is messy. However the main issue is the leader line for FAI 41 is clipped.
+
+Let me confirm by looking at IMAGE 2 right edge. The diagonal line in IMAGE 2 goes from about (560, 130) [in IMAGE 2 coords] up-right to (620, 30) then horizontal to the right edge (660, 30). The right edge of IMAGE 2 cuts it. So the leader is clipped, no arrowhead, no feature.
+
+Therefore the crop is INVALID. We need to expand right to include the full leader and the touched feature. Also possibly expand top to either fully include or fully exclude the FAI 40 group. But the FAI 40 group's leader also goes right to the same feature region. Hmm.
+
+Wait, but the requirement is "fully contains one coherent FAI annotation group". The FAI 41 group's leader must be fully contained including the terminal arrowhead and the touched feature. Currently the leader is clipped at the right. So we must expand right.
+
+How much to expand right? The feature (hatched section) in IMAGE 1 is at x from ~1750 to ~2337 (the right edge of the image). The leader for 1.26 ends at the feature edge at about x=1750-1800. Let's look. In IMAGE 1, the diagonal leader for 1.26 ends at (1630, 1043) then horizontal to the feature. The feature's left edge (the vertical line of the hatched section) is at about x=2050? Or is there a step at x=1750?
+
+Let me look at the hatched section in IMAGE 1. The hatched region (diagonal lines) starts at about x=1750 (there's a vertical line at x=1750 from y=1043 to y=1183) and continues to the right edge. Actually the hatching pattern: I see vertical lines at x~1750, 1850, 1950, 2050, etc. The leftmost vertical line of the hatched section is at about x=1750 (the step). Hmm.
+
+Let me look at the leaders' endpoints. The 2.50 leader horizontal line at y=908 goes from x=1645 to x=2050 (where it meets the top vertical edge of the hatched section at x=2050). The 1.62 leader horizontal at y=1003 goes from x=1590 to x=2050. The 1.26 leader: diagonal to (1630,1043) then horizontal at y=1043 from 1630 to x=2050? Or to x=1750?
+
+Hmm, looking at the image, at y=1043 the horizontal line seems to go from x=1630 to x=2050 as well, meeting the vertical edge at x=2050. But there's also a vertical line at x=2050 from y=908 to y=1043 (the step). And the hatched section's left boundary...
+
+This is too detailed. The key point: the leader line for FAI 41 extends well beyond the magenta box's right edge (1683). It needs to reach at least to the feature, which is around x=2050 or x=1750. The magenta box right edge is 1683. The crop width in IMAGE 1 is from 897 to 1683 = 786 pixels. To include the feature at x=2050, we need to extend right by (2050-1683)=367 pixels, which is 367/786 = 467 in normalized units. To include up to x=1750, extend by (1750-1683)=67 pixels = 85 normalized.
+
+But also we need the arrowhead. Where is the arrowhead? Typically the leader ends with an arrowhead at the feature. If the feature edge is at x=2050, the arrowhead is there.
+
+Hmm, but actually, maybe the leaders don't have arrowheads; they just touch the feature line. The semantic_missing says "terminal arrowhead for F0 leader" and "target region for F0 leader". So we need both the arrowhead and the target region.
+
+Let me look at the left side leaders for comparison - do they have arrowheads? On the left, the leaders for 2.50, 1.62, 1.26, (0.00) go left and end at the feature lines. I don't see explicit arrowheads; they just touch the lines. Hmm. But the semantic says arrowhead missing.
+
+Actually, looking carefully at the left leaders, they end at the feature with a small horizontal tick or just touch. Hard to say.
+
+Regardless, the right leader for FAI 41 is clearly clipped in the crop (IMAGE 2 shows it cut at the right border). So we must expand right.
+
+Now, how much right? We need to include the full leader and the touched feature. The touched feature is the hatched section's edge. Let's estimate the feature edge x-coordinate. In IMAGE 1, the hatched section's leftmost vertical line that the leaders point to... Let me look at the 2.50 leader: it's the topmost, horizontal at y=908, and it ends at the vertical line at x=2050 (the top step of the hatched section). The 1.62 leader at y=1003 ends at x=2050 too? Or at the step x=2050? The 1.26 leader at y=1043 ends at x=2050?
+
+Hmm, but the hatched section has a step: top part (y=908 to 1003) starts at x=2050, middle part (y=1003 to 1043) starts at x=2050, lower part (y=1043 to 1183) starts at x=1750. Let me look. The hatched region: I see the top horizontal edge at y=908 from x=2050 rightward. Then a vertical line at x=2050 from y=908 to y=1003. Then horizontal at y=1003 from x=2050 rightward? No wait.
+
+Let me look at the shape. The hatched cross-section on the right of IMAGE 1: It looks like a stepped profile. Top edge y=908 from x=2050 to right. Left edge vertical at x=2050 from y=908 to y=1003. Then horizontal at y=1003 from x=2050 leftward to x=2050? No.
+
+I'm overanalyzing the exact geometry. Let me look at where the leaders terminate. The leaders are horizontal lines that terminate at the left boundary of the hatched section. For the 1.26 leader (y=1043), the left boundary of the hatched section at that y is at x=1750 (the lower step). For the 1.62 leader (y=1003), the left boundary is at x=2050. For the 2.50 leader (y=908), left boundary at x=2050.
+
+Hmm, but the diagonal for 1.26 goes from (1575,1148) to (1630,1043). At y=1043, x=1630. Then horizontal from 1630 to the feature left boundary at that y. If the feature left boundary at y=1043 is x=1750, then the horizontal segment is from 1630 to 1750, which is short and mostly inside? 1750 > 1683 (magenta right edge), so it's clipped. We'd need to extend to 1750, i.e., +67 px = +85 norm. But to be safe and include the feature visibly, maybe extend to ~1850 or 2050.
+
+Actually, the requirement: "a visible local portion of every component feature touched by those arrows." So we need a visible portion of the feature. The feature is the hatched section. If we extend right to include x=1750-1850, we'd see the left edge of the hatched section and some hatching. That should be a visible local portion.
+
+But also the leader line itself must be fully contained. The leader's horizontal segment ends at the feature edge (x=1750 or 2050). So we need to include up to that point plus a bit of the feature.
+
+Let me look at IMAGE 1 more carefully to determine the feature edge for the 1.26 leader. I'll look at the diagonal line and the horizontal line.
+
+In IMAGE 1, I observe the diagonal line from (1575, 1148) to (1630, 1043). Then I see a horizontal line at y=1043 from x=1630 going right. Where does it stop? It seems to go to about x=2050 where there's a vertical line. But there's also a vertical line at x=1750 from y=1043 to y=1183 (the lower step's left edge). Hmm, if the horizontal leader at y=1043 goes from 1630 to 2050, it would cross the vertical line at 1750. That's possible if the leader points to the upper step edge at 2050. But the 1.26 dimension measures a vertical distance; the leader should point to the relevant feature line.
+
+OK here's another approach. Let me look at the left side to understand the dimension scheme. On the left, the dimensions are vertical distances from a datum (0.00). 1.26 is the distance from 0.00 to the 1.26 feature line. The leader on the left for 1.26 points to the horizontal feature line at the 1.26 level. On the right, the same 1.26 dimension's leader points to the corresponding horizontal feature line on the right side of the part.
+
+The right side feature lines (horizontal edges of the hatched section) are at y=908, 1003, 1043, 1183 (the bottom). The 1.26 level on the left corresponds to which y on the right? The left 1.26 line is at y~1043 (the leader on left for 1.26 is at y~1043? Let's check left leaders: left 2.50 leader at y~873, left 1.62 leader at y~973, left 1.26 leader at y~1043, left (0.00) leader at y~1148). Hmm so left 1.26 leader is at y~1043. On the right, the corresponding feature line should be at the same y=1043. The right feature line at y=1043 is the horizontal edge of the hatched section. Its left endpoint (where the leader touches) is at x=1750 (the lower step) or x=2050?
+
+Looking at the hatched section shape: I think the profile is: top horizontal edge y=908 from x=2050 rightward; vertical down at x=2050 to y=1003; horizontal left at y=1003 from x=2050 to x=2050? no.
+
+Ugh, I really can't be precise. Let me just look at the visual: the hatched section's left boundary appears as a staircase going down-left: top step at x=2050 (y 908-1003), then step at x=2050? Hmm.
+
+Let me look at the vertical lines in the hatched region. I see vertical lines (the hatching is diagonal, but the boundary is vertical/horizontal). The left boundary of the hatched region: I see a vertical line at x=2050 from y=908 to y=1003. Then a horizontal line at y=1003 from x=2050 leftward to x=2050? No, that's zero length.
+
+I'll zoom into my mental image. The hatched region in IMAGE 1 right side: The top edge is at y~908 starting at x~2050. The left edge goes down vertically at x~2050 to y~1003. Then there's a horizontal edge at y~1003 going left to x~2050? That can't be.
+
+Maybe the staircase is: top edge y=908 from x=2050 right. Left edge vertical x=2050 from y=908 to y=1003. Then horizontal edge y=1003 from x=2050 left to x=2050... no.
+
+Let me think about typical part geometry. This is a "heat stake post" detail. The cross-section shows a post with steps. The right side hatched region is the post body. The left side (unhatched, the stepped lines) is the other side of the post or the mating feature.
+
+Actually the left stepped lines (at x~0-200) are the left profile of the post, and the right hatched region is the right profile? No, a cross-section would show both sides hatched. Hmm, but the left side isn't hatched in this view (maybe it's a different section).
+
+I'm spending too much time. The decision is clear: the crop is INVALID because the leader line for FAI 41 is clipped at the right border (visible in IMAGE 2 as a line ending at the right edge with no arrowhead and no feature). We need to expand right to include the full leader and a visible portion of the feature.
+
+Now the expansion amount. The magenta box in IMAGE 1: left=897, right=1683, width=786. The leader for FAI 41 needs to extend to the feature. Let's estimate the feature edge that the 1.26 leader touches. Looking at IMAGE 2, the leader's diagonal goes up-right and then horizontal, and at the right edge of IMAGE 2 (which corresponds to x=1683 in IMAGE 1) the horizontal line is at the top of IMAGE 2 (y~30 in IMAGE 2 coords, which corresponds to y~1043 in IMAGE 1). So at x=1683, the leader is at y=1043 horizontal. It continues right to the feature.
+
+In IMAGE 1, the horizontal line at y=1043 from x=1683 continues to where? I'll guess it continues to x=2050 (the vertical edge). So we need to extend right to at least x=2050 plus a bit of feature, say x=2150. That's an extension of (2150-1683)=467 px = 467/786 = 594 norm. Hmm that's a lot.
+
+But wait, maybe the feature edge for the 1.26 leader is at x=1750 (the lower step). Let's look at the diagonal: it ends at (1630, 1043). If the feature edge at y=1043 is at x=1750, then the horizontal segment is 1630->1750, only 120 px, ending at 1750 which is just 67 px beyond the magenta right edge (1683). So extending right by ~100-150 px (130-190 norm) would include the leader end and a bit of feature.
+
+Hmm, but in IMAGE 2, the horizontal line at the top right seems to extend to the very right edge and beyond (clipped). In IMAGE 2, the horizontal line at top right goes from x~620 to x~660 (right edge). In IMAGE 1 coords, IMAGE 2's right edge = 1683. IMAGE 2's left edge = 897. So IMAGE 2 width = 786 px maps to IMAGE 2 pixel width. Let's get IMAGE 2 pixel width. IMAGE 2 appears to be 660 px wide (roughly). So scale: 786/660 = 1.19. The horizontal line in IMAGE 2 at top right from x=620 to 660 corresponds to IMAGE 1 x = 897 + 620*1.19 = 897+738 = 1635 to 897+660*1.19=897+786=1683. So the horizontal line in IMAGE 2 spans IMAGE 1 x 1635-1683, clipped at 1683. So we don't know from IMAGE 2 where it ends.
+
+From IMAGE 1, I need to see the horizontal line at y=1043 beyond x=1683. Looking at IMAGE 1, beyond the magenta box right edge, at y=1043, I see a horizontal line continuing right. It seems to go to about x=2050 where it meets a vertical line. But also there's the vertical line at x=1750 (the lower step left edge) which the horizontal line at y=1043 would cross or end at.
+
+Let me look at the hatched region's left boundary shape one more time, focusing on the lower part. The lower part of the hatched region (y from 1043 to 1183) has its left edge at x=1750 (I see a vertical line there with hatching to the right). The middle part (y 1003-1043) left edge at x=2050? That would make a weird overhang. More likely the staircase goes: top (y908-1003) left edge x=2050; middle (y1003-1043) left edge x=2050; lower (y1043-1183) left edge x=1750. So at y=1043, the boundary steps from x=2050 (above) to x=1750 (below). The horizontal line at y=1043 is the step edge from x=1750 to x=2050. So the leader at y=1043 coming from the left (x=1630) would hit the step edge at x=1750 (the left end of that horizontal step edge). So the leader ends at x=1750!
+
+Yes that makes sense: the horizontal step edge at y=1043 spans x=1750 to x=2050. The leader from the left approaches this edge and touches it at its left end x=1750. So the leader's terminal is at (1750, 1043).
+
+Thus we need to extend right to include x=1750 plus a visible portion of the feature (the hatched region to the right of 1750, say up to x=1850-1900). So extend right to ~1900. Extension = 1900-1683 = 217 px = 217/786 = 276 norm.
+
+Hmm, but also we need the arrowhead if present. If the leader ends with an arrowhead at (1750,1043), we need to include that.
+
+Let me also consider the top of the crop. IMAGE 2 top includes the FAI 40 / SPC AM circles cut off (only bottom halves visible) and "1.62 -0.10" partially. This is a neighboring annotation group (FAI 40) that is partially included. The instructions: "Reject it if ... unrelated neighboring annotations dominate." They don't dominate; they're just partially cut at the top. But also the rule: "fully contains one coherent FAI annotation group" - the FAI 41 group is the target. The partial FAI 40 at top is not part of FAI 41 group, and it's cut off. Is that a problem? The crop should fully contain the FAI 41 group; it doesn't need to fully contain FAI 40. But having a cut-off neighboring annotation at the top is messy but maybe acceptable? The instructions say reject if unrelated neighboring annotations dominate. They don't dominate. However, the cut-off FAI 40 circles at the top might be considered "a relevant leader reaches the crop border"? No, the FAI 40 leader goes right, not up.
+
+Hmm, but the top cut-off of FAI 40 means the crop's top border cuts through the FAI 40 circles. That's not a leader of FAI 41. So it's not a violation per se for FAI 41's completeness. But it's ugly. The main violation is the right leader clip.
+
+Should we also expand top to either include or exclude FAI 40? If we expand top, we'd include the full

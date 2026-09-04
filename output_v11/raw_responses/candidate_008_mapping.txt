@@ -1,0 +1,96 @@
+The user wants me to build a complete FAI annotation group for marker F0.
+
+Let me look at the evidence. F0 is at bbox [1149,1150,1251,1250]. Looking at IMAGE 2, F0 is the red box around the FAI circle containing "59". So the FAI number is 59.
+
+Now I need to find the associated SPC letter. Looking at the layout, the SECOND TERRACE group has:
+- T3 "SECOND TERRACE" at [1020,1014,1553,1052]
+- T7 "mc" (which is the feature control frame / 0.10) at [1018,1277,1249,1374] - wait, let me look. Actually the feature control frame with 0.10 is at around [1018,1064,1319,1162] in image 1. Let me check the OCR. T7 is "mc" at [1018,1277,1249,1374] which is low confidence. Hmm.
+
+Let me look at the image 1 layout for SECOND TERRACE:
+- "SECOND TERRACE" text
+- Feature control frame: parallelism symbol | 0.10
+- Row: [15] (FAI 59) (SPC BF) triangle 100%
+- Row: [16] (FAI 208)
+
+So F0 = FAI 59. The SPC letter next to it is BF. The triangle 100% is the inspection percentage.
+
+Now the OCR text lines: T3 = "SECOND TERRACE". The feature control frame 0.10 - is there an OCR for it? T7 = "mc" at [1018,1277,1249,1374] - that bbox is around the [15] (FAI 59) (SPC BF) row? Let's check coordinates. In image 1, the [15] row for second terrace is at y around 1150-1250. The feature control frame 0.10 is at y around 1064-1162. Hmm.
+
+Let me look at the bboxes more carefully. In image 1:
+- "SECOND TERRACE" text baseline ~ y=1030
+- Feature control frame (parallelism | 0.10) box ~ y=1064 to 1162
+- [15] (FAI 59) (SPC BF) triangle ~ y=1150 to 1250
+- [16] (FAI 208) ~ y=1300 to 1400
+
+Now OCR:
+- T3 "SECOND TERRACE" [1020,1014,1553,1052] - matches the title
+- T7 "mc" [1018,1277,1249,1374] - this bbox y=1277-1374 corresponds to the [16] (FAI 208) row? Hmm but text is "mc". Actually wait, the [16] row in image 1 is at y ~1300-1400. T7 y=1277-1374 matches that. But the text "mc" doesn't match "16 FAI 208". OCR is unreliable.
+
+Hmm, but where's the OCR for the feature control frame 0.10? Maybe it's not captured well. Let's look at T4 "27 \ 0. 47 |" [36,1064,335,1162] which is the FIRST TERRACE feature control frame 0.47. So for second terrace, the feature control frame 0.10 should be at similar y ~1064-1162 but x ~1018-1319. Is there an OCR there? I don't see one explicitly. T7 is at y=1277. Hmm.
+
+Wait, maybe I mis-assigned. Let's look at the purple boxes in image 2. In image 2, the SECOND TERRACE area:
+- Purple box around "SECOND TERRACE" (T3)
+- Blue lines L34, L35 around the feature control frame top/bottom? L34 [1016,1069,1319,1070], L35 [1017,1066,1318,1067] - these are the top edges of the feature control frame box.
+- L37 [1016,1137,1319,1138], L38 [1017,1140,1318,1141] - bottom edges of feature control frame box.
+- Red box F0 around FAI 59.
+- Teal box around SPC BF (G2 triangle? no, G2 is at [1262,1151,1360,1249] which is the SPC BF circle? Hmm). Actually in image 2, the teal boxes are around the SPC circle and the 100% triangle. Let's see: G2 [1262,1151,1360,1249] - that's the SPC BF circle region. G1 [1365,1150,1470,1242] - that's the 100% triangle. H1 [1361,1147,1468,1247] arrowhead candidate = the 100% triangle.
+
+Hmm wait, but the SPC letter is part of the annotation group? The instructions say "Associated SPC letter if present." So SPC BF should be included. But there's no OCR text for "BF" specifically. The SPC circle contains "SPC" over "BF". Is there an OCR? I don't see one. T7 "mc" might be a misread of the SPC BF circle? T7 bbox [1018,1277,1249,1374] - no that's too low.
+
+Let me reexamine. Actually maybe the OCR for the SPC BF and FAI 59 row is missing or merged. Let's look at all OCR bboxes in the second terrace x-range (1000-1500):
+- T3 [1020,1014,1553,1052] "SECOND TERRACE"
+- T7 [1018,1277,1249,1374] "mc"
+That's it. So the feature control frame 0.10 and the [15] FAI 59 SPC BF row have no good OCR. T7 "mc" at y=1277-1374 is the [16] FAI 208 row? In image 1, [16] FAI 208 for second terrace is at y ~1300-1400. Yes T7 matches that row but text is garbage "mc".
+
+Hmm, this is tricky. The OCR is poor. So for the annotation group, I should rely on the visual layout and the evidence IDs that exist.
+
+Let me think about what the "complete FAI annotation group" for F0 (FAI 59) should contain:
+1. F0 and its inspection number: F0 (the FAI 59 circle). The number 59 is inside F0's bbox.
+2. Associated SPC letter: BF. The SPC circle is at G2 region [1262,1151,1360,1249]. But there's no OCR text ID for "BF". Hmm. The instruction says "Associated SPC letter if present." I should set spc_letter = "BF" based on visual reading of image 1. But the evidence IDs for text... there's no OCR for BF. So I'll set spc_letter to "BF" as a string (the field is a string, not an ID list). Yes spc_letter is a string field. Good.
+3. Parameter, tolerance, feature-control-frame, and description text: The feature control frame is parallelism | 0.10. The description text is "SECOND TERRACE" (T3). The parameter/tolerance is 0.10. There's no OCR for 0.10 though. Hmm.
+
+Wait, but the instruction says "Prefer selecting evidence IDs. Never alter the coordinates behind an ID." and "Every selected ID must exist verbatim in the Evidence dictionary." So for parameter_text_ids, I need OCR text IDs that correspond to the parameter/tolerance. If there's no OCR for 0.10, I leave it empty and use fallback box.
+
+Let me look again. Is there any OCR that captured "0.10"? T7 "mc" no. Hmm. Actually maybe T7 is the feature control frame? Let's check y. The feature control frame in image 1 for second terrace: I'll estimate from image 1 pixel positions. The image is 2400 wide presumably (since L0 goes to 2400). The image height? The bottom "SECT" is at y~2200. So image height ~2300.
+
+In image 1, "SECOND TERRACE" text is at roughly 42% down? Hard to say. Let's use the OCR bboxes as ground truth for positions since they're from the same image. T3 "SECOND TERRACE" y=1014-1052. The feature control frame box in image 1 is just below the title, so y ~1064-1162 (like T4 for first terrace which is at 1064-1162). The [15] FAI 59 row is below that, y ~1150-1250 (F0 is at 1150-1250, matches!). The [16] FAI 208 row is below that, y ~1300-1400. T7 at 1277-1374 matches the [16] row.
+
+So indeed there's NO OCR for the feature control frame 0.10, and NO OCR for the [15] FAI 59 SPC BF row (except F0 itself which is a fai_marker, not OCR).
+
+Therefore parameter_text_ids would be empty (no OCR for 0.10). description_text_ids = [T3] (SECOND TERRACE). Hmm but is "SECOND TERRACE" a measurement description or a section title? The instruction: "A section title such as 'SECTION A-A' is not a measurement description." But "SECOND TERRACE" is a feature/area name, like a description of what's being measured. In these FAI drawings, the text above the feature control frame (like "FIRST TERRACE", "SECOND TERRACE", "THIRD TERRACE") is the description of the feature being inspected. So I think it counts as description text. Actually wait, the instruction says measurement_description means "an instruction sentence directly associated with the FAI measurement." Hmm. "SECOND TERRACE" is a label, not an instruction sentence. But it's the feature name.
+
+Let's look at how the third terrace is annotated: "THIRD TERRACE" then "2X -0.42 +0.23 -0.11". So the description there includes the count and tolerance. For second terrace, the description is just "SECOND TERRACE" and the feature control frame 0.10.
+
+I think for these drawings, the text label (e.g., "SECOND TERRACE") is the description of the feature. The measurement_description field should probably be "SECOND TERRACE" or null? The instruction distinguishes measurement_description from section titles. "SECOND TERRACE" is not a section title like "SECTION A-A"; it's a feature/area name. I'll treat it as the description.
+
+Hmm, but actually the structure of these FAI callouts: The text "SECOND TERRACE" with a leader line pointing to the part is the feature name/description. The feature control frame gives the tolerance. So description_text_ids = [T3].
+
+Now leader segments: The leader for the SECOND TERRACE annotation. Looking at image 1, there's a leader line from "SECOND TERRACE" text going left to a vertical line then up to the part. In image 2, I see L11 [939,0,940,1031] vertical line, and the text "SECOND TERRACE" has a small horizontal leader at its left (the "—" before SECOND). Actually in image 1, there's a horizontal line from the left of "SECOND TERRACE" going to the vertical line at x~940. Let's look: in image 1, at y~1030, there's a horizontal segment from x~940 to x~1020 (the dash before SECOND). And the vertical line L10/L11 goes from top down to y~1030. So the leader path is: vertical line L11 (or L10) from the part down to y~1030, then horizontal to the text.
+
+Hmm, but L10/L11 are long vertical lines from y=0 to y=1031. That vertical line is the leader from the part (top) down to the annotation. Actually wait, looking at image 1, the vertical line at x~940 goes from the top of the image all the way down to the "SECOND TERRACE" text level, where it has a horizontal tick to the text. Yes that's the leader.
+
+But also there's the leader for the feature control frame? In these drawings, typically the leader points from the feature control frame / text to the part. The vertical line L10/L11 is the leader.
+
+Hmm, but L10 and L11 are nearly identical vertical lines (x=942 and x=939). They might be the two edges of a thick line, or one is the leader and one is a part line. Looking at image 2, the blue vertical line at x~940 is drawn (L10/L11). And there's a horizontal blue line at the top connecting? Actually in image 2 I see at the top a blue horizontal line L17 [933,207,1472,208] etc. Those are part lines of the upper view.
+
+Let's look at the leader more carefully. In image 1, the vertical line at x~940 starts at the top (y=0) and goes down to about y=1030 where it meets a horizontal line that goes right to "SECOND TERRACE". Wait, actually the horizontal line at y~1030 from x=940 to x=1020 is the leader's horizontal segment (the dash). And the vertical line is the leader's vertical segment.
+
+But hold on, is the vertical line at x=940 actually a leader or is it a part outline? In image 1, the vertical line at x~940 in the upper view (y=0 to 500) appears to be a part outline line (the edge of the part). Then it continues down through the white space to the annotation. Hmm. Actually in many of these drawings, the leader line is drawn from the part feature down to the callout. The vertical line at x=940 in the upper region might be the part's vertical edge, and the leader is a separate line.
+
+This is getting too detailed. Let's look at image 2's blue lines to see which are highlighted as leader candidates near the SECOND TERRACE annotation. In image 2, near SECOND TERRACE I see:
+- L11 vertical blue line at x~940 from y=0 to y~1030 (the label "L11" appears at the bottom of it near the text).
+- L58 [1021,1016,1180,1017] horizontal blue line at top of "SECOND TERRACE" text.
+- L59 [1020,1048,1178,149] horizontal blue line at bottom of "SECOND TERRACE" text.
+- L60 [1329,1033,1487,1034] horizontal blue line at right part of "SECOND TERRACE".
+- L65, L66 horizontal blue lines through the text.
+- L34, L35 top of feature control frame.
+- L37, L38 bottom of feature control frame.
+- L55 [1155,1180,1325,1184] horizontal blue line through F0/SPC row.
+
+Hmm, the blue lines L58, L59, L60, L65, L66 are just the text's bounding lines (OCR/line detection on the text), not leaders.
+
+The actual leader is the vertical line L10/L11 plus the horizontal dash. But the horizontal dash before "SECOND" — is there a line ID? In image 1, the dash is at y~1030 from x~940 to x~1020. I don't see a line ID for that short horizontal segment. L58 is at y=1016 (top of text), L59 at y=1048 (bottom of text). The dash would be at y~1030. Not present.
+
+Hmm. So the leader path: vertical L11 (or L10) is the main leader. The horizontal connection to text might be missing as a line ID.
+
+Actually, wait. Let's reconsider the geometry. Look at image 1 again. The vertical line at x~940: in the upper view it's a part line. Below the part (y>500), it continues as a thin line down to

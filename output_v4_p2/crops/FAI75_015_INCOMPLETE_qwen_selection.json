@@ -1,0 +1,171 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "fai_number": "75",
+    "spc_letter": "BR",
+    "annotation_ids": [],
+    "parameter_text_ids": [
+      "T20",
+      "T21",
+      "T24",
+      "T25",
+      "T23"
+    ],
+    "description_text_ids": [],
+    "leader_ids": [
+      "L2"
+    ],
+    "arrowhead_ids": [],
+    "target_ids": [],
+    "parameter_values": [],
+    "measurement_description": null,
+    "is_range_measurement": false,
+    "complete": false,
+    "missing": [
+      "terminal arrowhead for F0 leader",
+      "target region for F0 leader"
+    ],
+    "confidence": 0.8
+  },
+  "response_metadata": {
+    "finish_reason": "stop",
+    "elapsed_seconds": 60.246,
+    "prompt_tokens": 17500,
+    "completion_tokens": 110,
+    "total_tokens": 17610,
+    "reasoning_chars": 0,
+    "content_chars": 435,
+    "content_present": true,
+    "structured_output": "json_schema",
+    "max_tokens": 16384,
+    "mapping_valid": true,
+    "mapping_validation_errors": []
+  },
+  "selected_evidence_ids": [
+    "F0",
+    "T20",
+    "T21",
+    "T24",
+    "T25",
+    "T23",
+    "L2"
+  ],
+  "selected_evidence": [
+    {
+      "id": "F0",
+      "type": "fai_marker",
+      "bbox": [
+        1150,
+        1150,
+        1250,
+        1250
+      ],
+      "source": "LocateAnything"
+    },
+    {
+      "id": "T20",
+      "type": "ocr_text",
+      "bbox": [
+        918,
+        1147,
+        985,
+        1185
+      ],
+      "source": "Tesseract",
+      "text": "+O",
+      "confidence": 0.94
+    },
+    {
+      "id": "T21",
+      "type": "ocr_text",
+      "bbox": [
+        1041,
+        1147,
+        1100,
+        1185
+      ],
+      "source": "Tesseract",
+      "text": "19",
+      "confidence": 0.948
+    },
+    {
+      "id": "T24",
+      "type": "ocr_text",
+      "bbox": [
+        953,
+        1218,
+        985,
+        1256
+      ],
+      "source": "Tesseract",
+      "text": "O",
+      "confidence": 0.706
+    },
+    {
+      "id": "T25",
+      "type": "ocr_text",
+      "bbox": [
+        1041,
+        1218,
+        1100,
+        1256
+      ],
+      "source": "Tesseract",
+      "text": "l2",
+      "confidence": 0.797
+    },
+    {
+      "id": "T23",
+      "type": "ocr_text",
+      "bbox": [
+        675,
+        1182,
+        876,
+        1222
+      ],
+      "source": "Tesseract",
+      "text": "y- 1.62",
+      "confidence": 0.632
+    },
+    {
+      "id": "L2",
+      "type": "leader_segment",
+      "bbox": [
+        48,
+        1266,
+        653,
+        1267
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          48,
+          1266
+        ],
+        [
+          652,
+          1266
+        ]
+      ]
+    }
+  ],
+  "selected_exact_union_roi_bbox": [
+    48,
+    1147,
+    1250,
+    1267
+  ],
+  "minimum_crop_roi_bbox": [
+    0,
+    1085,
+    1311,
+    1329
+  ],
+  "minimum_crop_full_image_bbox": [
+    1252,
+    4100,
+    2564,
+    4343
+  ],
+  "coordinate_owner": "Python"
+}

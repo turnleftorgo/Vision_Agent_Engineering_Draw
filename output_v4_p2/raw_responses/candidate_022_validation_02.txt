@@ -1,0 +1,171 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle is around the SPC "AN" circle, which is paired with FAI 41.
+
+Let me look at the FAI 41 group. In IMAGE 1, the FAI 41 circle is at the left, then SPC AN circle (red box), then the parameter "1.26" with tolerances "+0.25" and "-0.10". There's a leader line going from the tolerance text to the right, connecting to a feature on the right side (the hatched section).
+
+Now let me look at the magenta rectangle. It contains:
+- FAI 40 / SPC AM circle (top)
+- FAI 41 / SPC AN circle (bottom, with red box)
+- The text "1.62 +0.26 -0.10" (top right, partially)
+- The text "1.26 +0.25 -0.10" (bottom right)
+
+Wait, let me look more carefully. The magenta rectangle's top edge cuts through the FAI 40 / SPC AM circles. Let me look. In IMAGE 1, the FAI 40 / SPC AM circles are at the top, and the magenta rectangle's top line appears to pass right through the middle of those circles. Actually, looking carefully, the top edge of the magenta rectangle is at the level of the FAI 40/SPC AM circles - it seems to cut them. Let me look at the coordinates.
+
+In IMAGE 1, the FAI 40 circle center is around y=997 (in some coordinate). The magenta rectangle top edge is around y=997 as well. Hmm.
+
+Let me look at the actual pixel positions. The image is 2337 wide maybe. Let me estimate. The magenta rectangle top edge is at about y=1003 (the horizontal magenta line). The FAI 40 circle is centered around y=1003 too? The FAI 40 circle spans roughly y=975 to y=1050. The magenta top line at y=1003 would cut through the middle of the FAI 40 circle.
+
+Hmm, but the FAI 40 group is a different annotation group (FAI 40 / SPC AM with 1.62 +0.26 -0.10). The selected FAI is 41. So the FAI 40 group is a neighboring annotation. The rule says "Reject it if ... unrelated neighboring annotations dominate." But also the crop should fully contain one coherent FAI annotation group (the selected one, FAI 41).
+
+Now, the key issue: the leader line for FAI 41. Let's trace it. The FAI 41 group's parameter is "1.26 +0.25 -0.10". The leader line for this group goes from the right side of the tolerance text. In IMAGE 1, I see a leader line starting at the right of "-0.10" (the bottom one) going right and then up to a feature. Let me look. There's a line that goes from around x=1590, y=1150 (right of -0.10) horizontally right a bit, then diagonally up to x=1640, y=1050, then horizontally right to the feature at the hatched section.
+
+Actually let me look at the leader lines more carefully. There are two leader lines on the right side of the magenta box. One for the 1.62 group (top) and one for the 1.26 group (bottom).
+
+For the 1.62 group (FAI 40/AM): the leader goes from right of "-0.10" (top, at y~1043) horizontally right to about x=1640, then... hmm.
+
+Let me look at the lines. I see a line at the top right of the magenta box: from x=1590 (right of -0.10 top) going right to x=1640 then up? Actually there's a horizontal line at y~1043 from x=1590 to x=1640, then a diagonal? Hmm.
+
+Let me look at the bottom leader: from x=1590 (right of -0.10 bottom, y~1150) going right to x=1640, then diagonally up to x=1640? No.
+
+Let me look at the image more systematically. On the right side of the magenta rectangle, I see two leader line structures:
+
+Top one: a horizontal segment at y≈1043 from x≈1590 to x≈1640, then it connects to a horizontal line at y≈1043 going right to the feature? Actually I see at y≈1043 a line from x≈1590 to x≈1640, then there's a step.
+
+Hmm, this is getting too detailed. Let me think about the semantic_missing: ["terminal arrowhead for F0 leader", "target region for F0 leader"]. This suggests the leader's terminal arrowhead and target region are missing from the crop.
+
+Looking at IMAGE 1, the leader lines for both the 1.62 and 1.26 groups extend to the right, beyond the magenta rectangle, to reach the hatched feature on the right. The magenta rectangle's right edge is at about x=1745. The leader lines go from x≈1590 rightward. Do they exit the magenta rectangle? The magenta right edge is at x≈1745. The leader line for the bottom group: from x≈1590, y≈1150, goes right to x≈1640, then diagonally up to x≈1640, y≈1050? Then horizontally right to x≈1745? It seems the leader line crosses the magenta right border.
+
+Let me look at the lines crossing the magenta right edge. I see at the right edge of the magenta box, there's a horizontal line at y≈1043 (top) that goes from inside to outside? And a horizontal line at y≈1050? And the diagonal line at x≈1640 from y≈1150 to y≈1050 is inside the magenta box (since magenta right edge is 1745). Then from x≈1640, y≈1050, a horizontal line goes right to x≈1745 (the magenta edge) and continues outside to the feature.
+
+Hmm, actually I see in IMAGE 1, to the right of the magenta box, there's a horizontal line at y≈1050 from x≈1745 to x≈1830 (the feature step). And the diagonal line at x≈1640 connects y≈1150 to y≈1050. So the leader for the bottom group (1.26) is: text at left, then horizontal line at y≈1150 from x≈1590 to x≈1640, then diagonal up to y≈1050, then horizontal right from x≈1640 to the feature at x≈1830. This horizontal segment from x≈1640 to x≈1830 crosses the magenta right edge at x≈1745. So the leader line is cut by the magenta border, and the terminal arrowhead / target feature is outside.
+
+Thus the crop is missing the terminal arrowhead and target region for the leader. The semantic_missing confirms this.
+
+Therefore the crop is invalid. We need to expand right to include the leader's terminal and the touched feature.
+
+Also, the top edge of the magenta box cuts through the FAI 40/SPC AM circles. But those belong to a different group (FAI 40). However, the rule says the crop must fully contain one coherent FAI annotation group (the selected one = FAI 41). The FAI 40 group is a neighboring annotation. If the top edge cuts FAI 40, that's a neighboring annotation being partially included. The rule: "Reject it if ... unrelated neighboring annotations dominate." Does FAI 40 dominate? In IMAGE 2, we see FAI 40/AM at top (partially cut? In IMAGE 2 the top shows FAI 40/AM circles but the top of them is cut off - we see "FAI 40" and "SPC AM" but the top arc is cut). Actually in IMAGE 2, the top circles are cut at the top edge. So FAI 40 is partially visible and cut. That's a neighboring annotation that's clipped. But the main issue is the leader.
+
+Hmm, but the rule about neighboring annotations dominating: In IMAGE 2, we have FAI 40/AM (cut at top) and FAI 41/AN (complete) plus the text 1.62 and 1.26. So both groups' text are present. The FAI 40 group's leader also goes to the right and is cut. So the crop contains parts of two groups, both with leaders cut on the right.
+
+The selected FAI is 41. For the crop to be valid, it must fully contain the FAI 41 group including its leader and target feature. The leader for 41 is cut on the right. So invalid.
+
+Thus we need to expand right significantly to capture the leader terminal and the feature. Also maybe expand top to not cut FAI 40? But FAI 40 is a different group; we don't need to include it fully. However, the rule says reject if unrelated neighboring annotations dominate. In IMAGE 2, FAI 40 is cut at top, which is a clipped neighboring annotation. But the dominant issue is the leader.
+
+Actually, let's reconsider. The instruction: "The crop is valid only if it fully contains one coherent FAI annotation group: the FAI circle and readable inspection number; associated SPC letter if present; parameter/tolerance/feature-control-frame and description text; every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+So for FAI 41, we need every connected leader segment and terminal arrowhead and the touched feature. The leader for 41 goes right and is cut. So we must expand right.
+
+How much to expand right? The feature touched is the hatched section on the right. In IMAGE 1, the leader for 41 (bottom) ends at the feature around x≈1830-1900, y≈1050. The magenta right edge is at x≈1745. The crop width in IMAGE 1: magenta left edge ≈835, right edge ≈1745, so width ≈910 pixels. The crop in IMAGE 2 has width corresponding to that. To include the feature at x≈1900, we need to extend right by (1900-1745)/910 ≈ 155/910 ≈ 0.17 ≈ 170 in normalized units. But we also need the arrowhead. Let's look where the arrowhead is. The leader line for the bottom group: I see it ends at the feature with maybe an arrowhead at the step. Hard to see.
+
+Let's look at the top group's leader too. The top group (1.62, FAI 40) leader goes from x≈1590, y≈1043 right to x≈1640 then... actually wait, I need to look at the lines again.
+
+Let me look at the right side of magenta box in IMAGE 1 very carefully. I'll describe what I see:
+
+- At y≈1043 (top tolerance -0.10 line level), there's a horizontal line from x≈1590 to x≈1640. Then at x≈1640 it goes... I think there's a horizontal line continuing at y≈1043 from x≈1640 to x≈1745 (magenta edge) and beyond to x≈1830? Hmm but I also see a horizontal line at y≈1050 from x≈1745 to x≈1830.
+
+Actually, let me look at the structure of the feature on the right. The hatched section has a step. There's a horizontal line at y≈1043 from x≈1640 to x≈1830 (this is the top surface of a step), and a vertical line at x≈1830 from y≈1043 down to y≈1050, then horizontal at y≈1050 from x≈1830 to x≈1900, etc.
+
+Hmm, I'm overanalyzing the exact geometry. The key point: the leaders for both groups extend to the right beyond the magenta box to touch the feature. The magenta box right edge cuts these leaders. So the crop is missing the terminal arrowheads and the touched feature.
+
+Thus valid = false. We need to expand right.
+
+Now, what about top? The FAI 40/AM circles are cut at the top of the magenta box. But FAI 40 is not the selected group. However, the rule about "unrelated neighboring annotations dominate" - in IMAGE 2, the FAI 40 group is partially present (cut at top) and its text 1.62 is present. This could be considered a neighboring annotation that's clipped. But the primary requirement is about the selected group. The selected group is 41, which is fully present in terms of circle+SPC+text. The problem is its leader.
+
+But wait, does the FAI 41 leader actually go to the right? Let's double check by looking at the leader lines. The text "1.26 +0.25 -0.10" for FAI 41 is at the bottom. The leader line for it: I see a line starting at the right of "-0.10" (bottom) at x≈1590, y≈1150, going right to x≈1640, then diagonally up-left? No, diagonally up to x≈1640, y≈1050? Hmm, actually the diagonal I see goes from (1640,1150) up to (1640,1050)? That's vertical. Let me look: I see a diagonal line from about (1640,1150) to (1640,1050)? No, a diagonal would change x. I see a line that goes from (1640,1150) up-right to (1640,1050)? I'm confused.
+
+Let me look at the image region. To the right of the magenta box, between the magenta right edge and the hatched feature, I see:
+- A horizontal line at y≈1043 from x≈1640 to x≈1830 (top of step).
+- A horizontal line at y≈1050 from x≈1745 (magenta edge) to x≈1830.
+- A diagonal line from (1640,1150) to (1640,1050)? 
+
+Hmm, actually I think the diagonal line is from (1640,1150) going up-right to (1640,1050) is wrong. Let me look at the shape: I see a "/" shaped line. It goes from lower-left to upper-right. Lower-left at about (1640,1150), upper-right at about (1640,1050)? That's not a "/" if x same. A "/" would be from (1600,1150) to (1640,1050). Yes that's plausible: from (1600,1150) to (1640,1050). Then from (1640,1050) horizontal right to the feature.
+
+OK regardless, the leader for the bottom group (1.26) clearly extends to the right and the horizontal portion at y≈1050 from x≈1640 to the feature crosses the magenta right edge (1745). So part of the leader is outside the crop. The terminal arrowhead and the touched feature are outside.
+
+Hence the crop is invalid; expand right.
+
+How much right? The feature touched: the leader's terminal is at the step around x≈1830-1900. To include a visible local portion of the feature and the arrowhead, we need to extend right to about x≈1900 or a bit more. The magenta right edge is 1745. The crop width is 910. So extension = (1900-1745)/910 ≈ 155/910 ≈ 0.17 → 170. But to be safe and include the feature portion, maybe extend to x≈2000, which is (2000-1745)/910 ≈ 255/910 ≈ 0.28 → 280. Hmm.
+
+But also we should consider the top group's leader which goes to the same feature region. Since we're expanding right, both leaders' terminals would be included if we go far enough.
+
+Now, what about the top edge cutting FAI 40? The selected group is 41, but the crop also includes FAI 40 partially. The rule says reject if unrelated neighboring annotations dominate. In IMAGE 2, FAI 40 is cut at top (the top arc missing). This is a clipped neighboring annotation. But does it "dominate"? The crop contains both 40 and 41 groups' text. Hmm. The instruction also says: "if a reported missing item is visible outside the magenta rectangle and belongs to this FAI group, return valid=false and request expansion toward it". The semantic_missing items are about the leader terminal and target region, which belong to the FAI 41 group (the leader for 41). So we expand right.
+
+But should we also expand top to include FAI 40 fully? FAI 40 is not the selected group, so we don't strictly need it. However, having a clipped neighboring annotation might be a reason to reject, but the fix would be to either expand top or shrink top to exclude it. The instruction's expansion mechanism only allows expanding (left/top/right/bottom positive values add to that side). It doesn't allow shrinking. So if FAI 40 is clipped at top, we can't shrink; we'd have to expand top to include it fully. But that would add more of the FAI 40 group, which is a neighboring annotation. Hmm.
+
+Wait, but the rule "Reject it if ... unrelated neighboring annotations dominate." In IMAGE 2, do unrelated neighboring annotations dominate? The crop shows FAI 40/AM (cut) and FAI 41/AN (full) and the texts 1.62 and 1.26. So roughly half the content is the FAI 40 group. That might be considered dominating or at least the FAI 40 group is clipped which is bad. But the main selected group 41's leader is also clipped.
+
+Hmm, but the typical expectation in these tasks: the crop should contain exactly the selected FAI group and its leader/feature, and not be cut. The presence of a clipped neighboring group (FAI 40 cut at top) is a problem because the crop border cuts through it. The rule: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate." A clipped neighboring annotation isn't exactly "dominate" but it's a border-cut issue. However, the listed rejection criteria are specific. A clipped neighboring annotation that's not the selected one... The criterion "unrelated neighboring annotations dominate" - if FAI 40 takes up significant space and is cut, that's a problem.
+
+But actually, maybe the intended interpretation: the magenta box was drawn to capture the FAI 41 group but the person who drew it also accidentally included the FAI 40 group's circles (cut) and the leaders are cut on the right. So the crop is bad in two ways: top cuts FAI 40 (neighboring), right cuts leaders.
+
+Given the expansion-only mechanism, to fix the top cut of FAI 40 we'd expand top. But that includes more of FAI 40, which is fine as long as it's not "dominating"? Hmm, but if we expand top to fully include FAI 40, then the crop contains two full groups (40 and 41) plus their leaders. That might be acceptable? The rule says "fully contains one coherent FAI annotation group" - it doesn't say it must contain ONLY one. It says reject if unrelated neighboring annotations dominate. If we include both fully, neither dominates? They're equal. Hmm.
+
+But wait, the FAI 40 group's leader also goes right to the same feature. If we expand right to include the feature, both leaders are included. So the crop would contain two complete groups. Is that "dominating"? Probably not dominating, but it's two groups. The instruction's primary check is whether the selected group is fully contained. The selected group (41) is not fully contained because its leader is cut. So valid=false regardless.
+
+For the expansion, I think the main needed expansion is right (to capture the leader terminal and feature). Possibly also top to not cut FAI 40? But FAI 40 is not the selected group; the rule about the selected group doesn't require FAI 40. However, the rejection criterion "unrelated neighboring annotations dominate" - in the current crop, FAI 40 is cut, which is a clipped annotation. The instruction says "Reject it if ... an arrowhead is clipped" - that's about the selected group's arrowhead. The FAI 40 circle being cut is not an arrowhead. Hmm.
+
+Let me think about what the expected answer is. The semantic_missing lists only the leader terminal and target region. It does NOT list the FAI 40 circle as missing. So the semantic association thinks the FAI 40 circle is fine (or it's considered a different group and ignored). The instruction says: "ignore a reported missing item if the pixels show that it belongs to a different annotation group." Conversely, items not reported missing but visible inside are fine.
+
+The FAI 40 circle is partially visible inside IMAGE 2 (cut at top). Is that a problem? The rule for validity is about the selected group being fully contained. The FAI 40 circle being cut is a neighboring annotation issue. The rejection criterion "unrelated neighboring annotations dominate" - I'd argue that in IMAGE 2, the FAI 40 group (circle + 1.62 text) is present and roughly equal in size to the FAI 41 group. So it's not "dominating" in the sense of being the majority, but it's a clipped neighbor.
+
+Hmm, this is tricky. Let me look at IMAGE 2 again. IMAGE 2 shows:
+- Top: FAI 40 / SPC AM circles (top cut off - we see the bottom 2/3 of the circles, the "FAI 40" and "SPC AM" text is visible but the top arc is cut).
+- Right of that: "1.62" and "-0.10" (the +0.26 is cut off at top? In IMAGE 2 I see "1.62" then below "-0.10". The "+0.26" is not visible in IMAGE 2! Let me check. In IMAGE 1, the 1.62 group has +0.26 on top and -0.10 below. In IMAGE 2, I see "1.62" at top and "-0.10" below it, but the "+0.26" is missing (cut at top). Yes, the top of IMAGE 2 cuts off the +0.26 line.
+- Bottom: FAI 41 / SPC AN circles (full), "1.26" with "+0.25" and "-0.10".
+
+So in IMAGE 2, the FAI 40 group is heavily cut (missing +0.26, top of circles). The FAI 41 group is complete in circle+SPC+text but missing its leader terminal/feature.
+
+So the crop is invalid primarily because the FAI 41 leader is cut on the right. The FAI 40 group being cut is a secondary issue (neighboring annotation clipped).
+
+Now, the expansion: We need to expand right to get the FAI 41 leader terminal and feature. Should we also expand top to fix FAI 40? If we expand top, we'd include the +0.26 and full FAI 40 circles. But then the crop contains the full FAI 40 group too. Is that desired? The selected group is 41. Including the full 40 group might be okay if it doesn't dominate. But the rule "unrelated neighboring annotations dominate" - if we include full 40 and full 41, they're equal, not dominating. But actually, maybe the better fix is to NOT include 40 at all, i.e., shrink top. But we can't shrink. So we must either leave 40 cut (bad) or expand top to include it fully (then two groups).
+
+Hmm, but the instruction's expansion is meant to make the crop valid by including missing parts of the SELECTED group. It's not meant to fix neighboring groups. The validity criterion is about the selected group. The neighboring group being cut is a rejection reason only if it "dominates". In the current crop, does FAI 40 dominate? It's cut and partial, so it's not really dominating; it's just a clipped neighbor. The dominant content is arguably the FAI 41 group plus the cut FAI 40. Hard to say.
+
+Let me look at the typical pattern of these tasks. Usually the magenta box is a "proposed crop" that the user wants validated. The red box is the selected FAI marker. The crop is valid if it fully contains the selected FAI group. The semantic_missing tells us what's missing. Here semantic_missing = leader terminal + target region. So we need to expand right.
+
+I think the expected answer is valid=false, missing = ["terminal arrowhead for F0 leader", "target region for F0 leader"] (or similar), expand_norm right = some value, top maybe 0.
+
+But wait, the top cut of FAI 40: is that a "relevant leader reaches the crop border"? No. Is it "an arrowhead is clipped"? No. Is it "the touched feature is absent"? The touched feature for FAI 41 is absent (cut on right). Is it "unrelated neighboring annotations dominate"? The FAI 40 group is unrelated and is present (cut). Does it dominate? In IMAGE 2, the FAI 40 group occupies the top half. The FAI 41 group occupies the bottom half. So they're roughly equal. I'd say FAI 40 doesn't dominate; it's co-present. But it's clipped, which is ugly.
+
+Hmm, but the rule for the selected group: "fully contains one coherent FAI annotation group". The crop does contain the FAI 41 circle, SPC, text. But not the leader/feature. So it fails.
+
+I think the cleanest answer: valid=false, expand right to include the leader and feature. Possibly also expand top a bit so that the FAI 40 group is either fully in or we don't care. But expanding top would include the +0.26 and full circles of FAI 40, making the crop contain two groups. That might be considered "neighboring annotations dominate"? No, equal.
+
+Actually, let's reconsider whether the FAI 40 group's leader also needs to be in the crop. If we expand right to include the FAI 41 leader's feature, the FAI 40 leader's feature is at the same place (the step). So both leaders' terminals would be in the crop after right expansion. But the FAI 40 group's top (+0.26) would still be cut unless we expand top. So after right expansion, the crop would have: FAI 40 circle (cut top) + 1.62 + -0.10 (no +0.26) + leader to feature; FAI 41 full + leader to feature. That's a mess with a clipped neighbor.
+
+Given the ambiguity, maybe the intended valid crop should actually be just the FAI 41 group, and the magenta box is too tall (includes FAI 40) and too narrow (cuts leaders). But we can only expand, not shrink. So we cannot remove FAI 40. Therefore, even after expansion, the crop will contain FAI 40 (at least partially). If we expand top to fully include FAI 40, then the crop contains two full groups. The rule "unrelated neighboring annotations dominate" - with two equal groups, I'd argue it's borderline. But the rule says "dominate", meaning one unrelated group takes over. Two equal groups isn't domination.
+
+Hmm, but actually maybe the intended reading is that the crop should be centered on the selected FAI and the presence of a clipped neighboring group is itself a rejection reason that can't be fixed by expansion (since expansion makes it worse by including more of it). In that case, the crop would be invalid and we'd... but the output format only allows expand_norm, not "reject without expansion". The valid field can be false with expand_norm suggesting what to add. But if the crop is fundamentally bad (includes a clipped neighbor that can't be removed), then maybe we still set valid=false and provide expansion that at least fixes the selected group's leader, acknowledging the neighbor issue.
+
+Let me look at the example expansion values: "bottom=150 means add 15% of the crop height at the bottom." So expand_norm values are in [0,1000] as fractions of current crop width/height.
+
+I'll provide expand right to capture the leader and feature. Let me estimate the needed right expansion in normalized units.
+
+Current crop (magenta) in IMAGE 1: left ≈ 835, right ≈ 1745, width ≈ 910. top ≈ 1003, bottom ≈ 1303, height ≈ 300.
+
+The FAI 41 leader's terminal/feature: The leader horizontal line at y≈1050 goes from x≈1640 to the feature. The feature step is at x≈1830-1900. The arrowhead (if any) is at the feature. To include a visible local portion of the feature, we need right edge to be at least x≈1900-1950. Let's say x≈1950. Then right extension = 1950 - 1745 = 205 pixels. Normalized = 205/910 ≈ 0.225 → 225.
+
+But also the top group's leader goes to the same feature, fine.
+
+Now top: to include FAI 40 fully, top edge needs to be at y≈975 (top of FAI 40 circle) and also include +0.26 which is at y≈975? In IMAGE 1, +0.26 for the 1.62 group is at y≈975 (the line above 1.62). Actually the 1.62 group's +0.26 is at the same height as the FAI 40 circle top? Let's see: In IMAGE 1, the row for 1.62 (FAI 40/AM) has +0.26 at top (y≈975) and -0.10 at bottom (y≈1043). The FAI 40 circle center is at y≈1003. So +0.26 is at y≈975, which is above the magenta top edge (1003). So to include +0.26 and full FAI 40 circle, top edge must go to y≈960. Current top = 1003. Extension = 1003-960 = 43 pixels. Normalized = 43/300 ≈ 0.143 → 143.
+
+But do we WANT to include FAI 40 fully? If we don't, FAI 40 remains clipped, which is a neighboring annotation clipped at the border. The rejection criterion "unrelated neighboring annotations dominate" - a clipped neighbor isn't dominating. Hmm.
+
+Let me think about the philosophy. The crop is supposed to be a clean crop of the selected FAI group. The magenta box as drawn is bad because (a) it cuts the selected group's leader on the right, and (b) it includes a neighboring group (FAI 40) that it cuts at the top. The ideal crop would be just the FAI 41 group: from below the FAI 40 row to the bottom, and from the FAI 41 circle to the feature on the right. But we can't shrink. So the best we can do with expansion is to make the selected group complete (expand right) and either leave the neighbor clipped or expand top to include it fully.
+
+If we leave the neighbor clipped, the crop still has a border cutting through FAI 40's circle and the +0.26 text. That's a "relevant leader reaches the crop border"? No, that's not a leader. It's a neighboring annotation cut. The rejection criteria list doesn't explicitly include "neighboring annotation cut at border" except via "dominate". So maybe leaving it clipped is acceptable per the letter of the rules, as long as it doesn't dominate.
+
+But honestly, in these validation tasks, I think the expected behavior is: the crop is invalid because the selected group's leader/feature is missing (right cut). The fix is to expand right. The top cut of the neighbor is a separate imperfection but the semantic_missing didn't flag it, and the instruction says to focus on the selected group's missing items. The instruction: "if a reported missing item is visible outside the magenta rectangle and belongs to this FAI group, return valid=false and request expansion toward it". The reported missing items (leader terminal, target region) belong to FAI 41 group and are outside on the right. So expand right.
+
+The instruction also: "if the supposedly missing item is already sufficiently visible inside IMAGE 2, do not expand solely because semantic association failed to select its ID". Not applicable.
+
+"ignore a reported missing item if the pixels show that it belongs to a different annotation group". Not applicable; the leader belongs to FAI 41.
+
+So the action: valid=false, expand right.
+
+Now, should I also expand top? The semantic_missing didn't report the FAI 40 circle or +0.26 as missing (because they belong to a different group, FAI 40, and the semantic association for FAI 41 wouldn't include them). So per the instruction, I should ignore them (they belong to a different group). Therefore I should NOT expand top to include them. Good. That resolves the dilemma: I ignore the FAI 40 group entirely because it's a different annotation group. The fact that it's clipped at the top border is not a rejection reason per the criteria (it's not dominating, and it's not the selected group's leader/arrowhead/feature).
+
+Wait but is it "dominating"? In IMAGE 2, the FAI 40 group (cut) takes the top half. Hmm. But the instruction's "dominate" likely means the crop is mostly about a different FAI, e.g., if the selected FAI's content is tiny and a neighbor fills the crop. Here the selected FAI 41 content (circle+SPC+text) is fully present and is half the crop. The neighbor is the other half. I'd say it's not dominating; it's a tie. And the neighbor is clipped, which actually makes it less "present". I think it's acceptable to ignore.
+
+Thus my decision: valid=false

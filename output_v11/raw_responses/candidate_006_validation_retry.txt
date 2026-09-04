@@ -1,0 +1,33 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle is around the FAI 176 circle.
+
+Let me look at the magenta rectangle in IMAGE 1. It's a vertical rectangle that spans from the top of the image down to about the middle, and horizontally it's positioned around the right-center area. Let me trace its boundaries.
+
+Looking at IMAGE 1, the magenta rectangle's left edge is around x=1350 (in pixel coordinates of the image), top edge is at the very top (y=0), right edge is around x=1350? Wait, let me look more carefully.
+
+Actually the magenta line appears as a vertical line at around x=1350 going from top to about y=1350, and a horizontal line at y=1350 going from x=0 to x=1350. So the magenta rectangle is the region to the LEFT of x=1350 and ABOVE y=1350? Or is it the region bounded by these lines?
+
+Hmm, the magenta rectangle is the proposed crop. Let me look. The vertical magenta line is at approximately x=1350. The horizontal magenta line is at approximately y=1350. The rectangle would be the area enclosed. But the lines only show two edges (right and bottom), suggesting the crop region is the top-left area bounded by these lines, i.e., from (0,0) to (1350,1350).
+
+Wait, but the red rectangle (FAI 176) is at around x=1150, y=1150. That's inside the top-left region. Good.
+
+Now let's look at what's in the crop region (top-left of magenta lines). The crop should contain the FAI annotation group for FAI 176.
+
+Let's look at the annotation group for FAI 176 in IMAGE 1:
+- "FOURTH TERRACE" text at around y=930, x=880-1400.
+- "4X -0.60 +0.26 -0.34" at around y=1030-1070.
+- Box "15" at x=1000, y=1150.
+- FAI 176 circle at x=1150, y=1150 (red rectangle).
+- SPC FP circle at x=1250, y=1150.
+- Triangle 100% at x=1340, y=1150.
+- Box "16" at x=1000, y=1310.
+- FAI 205 circle at x=1150, y=1310.
+
+Now the magenta vertical line is at x=1350. The triangle "100%" is at x=1340, which is just left of the line, but the triangle might be partially cut. Let's look. The triangle in IMAGE 1 at the FAI 176 group: I see "10" and "%" partially? It shows "10%" but the right part might be cut by the magenta line. Actually in IMAGE 1, the triangle at FAI 176 group shows "10%" but it's right at the magenta line. Let me look: the triangle is at around x=1340, and the magenta line is at x=1350. The triangle's right vertex might be cut.
+
+Hmm, but more importantly, let's look at the leader lines and arrowheads. The annotation "FOURTH TERRACE" has a leader line going left to the feature. The feature is the section BX-BX drawing on the left. The leader line for "FOURTH TERRACE" goes from the text leftward to the section drawing. In IMAGE 1, the leader line for FOURTH TERRACE is at y=930, going from x=880 leftward to the section drawing at around x=850. That's within the crop (left of 1350, above 1350). Good.
+
+But wait, the crop in IMAGE 2 - let's look at what IMAGE 2 contains. IMAGE 2 shows:
+- Top: a section drawing (K-K) with hatching and some arrows.
+- "SECTION K-K

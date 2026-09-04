@@ -1,0 +1,181 @@
+The user wants me to act as the semantic association stage. I need to look at the evidence dictionary and the images carefully.
+
+The selected marker is F0. Let me look at F0's bbox: [1149,1148,1251,1252]. In image 2, the red box (F0) is around the FAI marker that contains "FAI 199" and "SPC GM" and "100%". Wait, let me look carefully.
+
+In image 2, there's a red rectangle around a region. Let me look at the coordinates. The red box in image 2 appears to be around the FAI 199 / SPC GM marker. Let me check the position. The red box in image 2 is at approximately x=1150-1250, y=1150-1250 in the original coordinate system? Let's look.
+
+Actually, looking at image 2, the red box is around the third FAI marker (the one with "FAI 199" and "SPC GM"). Let me verify by looking at the text positions. T20 is "+0.08" at [953,1140,1135,1179]. T22 is "0.00" at [763,1176,910,1214]. T23 is "-0.05" at [957,1211,1135,1249]. T25 is "TOP PLATE TO PLASTI" at [752,1267,1467,1306]. T26 is "TOP CASE Z 5 IRECTION OFFSET" at [752,1267,1787,1359]. T27 is "G1" at [752,1374,812,1412]. T28 is "TO G19, G34 TO G5S/" at [868,1374,1555,1412].
+
+So the FAI 199 / SPC GM marker is associated with the annotation "0.00 +0.08 -0.05 TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G1 TO G19, G34 TO G57".
+
+Now F0's bbox is [1149,1148,1251,1252]. That matches the FAI 199 / SPC GM marker region (the red box in image 2). Yes, the red box in image 2 is around that marker. Good.
+
+So F0 = FAI 199, SPC GM.
+
+Now I need to build the annotation group for F0.
+
+The annotation includes:
+- FAI marker F0 (FAI 199)
+- SPC letter GM
+- Tolerance values: 0.00, +0.08, -0.05 (T20, T22, T23)
+- Description text: T25, T26, T27, T28 ("TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G1 TO G19, G34 TO G57")
+- Leader segments connected to that annotation
+- Terminal arrowheads of those leaders
+- The local component touched by each arrowhead
+
+Now let's look at the leaders. In image 1, the third annotation (FAI 199) has a leader line that goes from the text down to the part. Looking at image 1, the leader for the third annotation starts at the left of "0.00" (around x=685) and goes down to an arrowhead at the part. Let's look.
+
+In image 1, the third annotation's leader: there's a horizontal line from the text "0.00" going left a bit then down. Actually let's look at the structure. The first annotation (FAI 17) has a long vertical leader on the left going down to the top of the part (the gap measurement). The second annotation (FAI 224) has a leader going down to the part. The third annotation (FAI 199) has a leader going down to the part.
+
+Let me look at the leader lines in the evidence. L31: [685,1193,686,1509] vertical line. L32: [682,1197,683,1512] vertical line. These are at x~685, y from ~1193 to ~1510. That matches the leader for the third annotation (the text "0.00" is at x=763-910, y=1176-1214; the leader horizontal part would be at y~1193 from x~685 to x~763, then vertical down). Hmm, but I see L31 and L32 are vertical lines at x~685. The horizontal part connecting to the text might be missing or might be one of the lines. Let's check.
+
+Actually, looking at image 1, the third annotation's leader: the horizontal line is at the level of "0.00" going left from the text to x~685, then vertical down to the arrowhead at the part. The arrowhead at the part for the third annotation is H7? Let's check H7: [674,1505,699,1604]. That's a vertical-ish arrowhead at x~674-699, y~1505-1604. Hmm, that's at the part top. And H8: [415,1507,445,1604] is the arrowhead for the second annotation (FAI 224) leader at x~415-445.
+
+Wait, let's look at the leaders more carefully. In image 1, there are two arrowheads pointing down at the part top surface (the small arrows near the top of the cross-section). One is at around x=430 (the second annotation's leader) and one at around x=685 (the third annotation's leader). And the first annotation's leader (the long one on the left at x~320) points to the top plate line.
+
+Let's look at H0 and H1: H0 [268,355,305,382], H1 [331,357,370,385]. These are at the top, around y=355-385, which is the dimension line for the first annotation (the gap dimension 0.10 +0.235 -0.100). Those are the arrowheads of the dimension line, not leaders to the part. Hmm.
+
+Actually wait. Let's look at image 1 again. The first annotation has a dimension line at the top with two arrowheads (the horizontal dimension line for the gap). The vertical line on the left (x~320) goes from that dimension line down to the part. Hmm, actually the dimension line is horizontal at the top with arrowheads pointing left and right? Let's look. The dimension "0.10 +0.235 -0.100" has a horizontal line with arrowheads at both ends? In image 1, I see at the top a horizontal line with an arrowhead on the left (around x=280) and the line extends right. Hmm.
+
+Let's look at the structure of the first annotation. The text "0.10 +0.235 -0.100" is at the top. Below it "TOP PLATE TO PLASTIC TOP CASE GAP G21, G24, ...". There's a horizontal dimension line at the level of "0.10" with arrowheads. The left arrowhead points to a vertical extension line that goes down to the part (the left edge of the top plate). The right arrowhead points to... hmm.
+
+Actually, this is getting too detailed. Let me focus on F0 = FAI 199.
+
+For F0, the leader is the vertical line at x~685 (L31, L32) going down to arrowhead H7. The horizontal part of the leader connecting the text to the vertical line: I need to find it. The text "0.00" (T22) is at [763,1176,910,1214]. The vertical leader L31/L32 is at x~685, y from 1193 to 1510. So the horizontal connector would be at y~1193 from x~685 to x~763. Is there a line for that? Let's look. I don't see an obvious horizontal line at y~1193 in the list. Hmm. L48 [1152,1200,1353,1201] and L49 [1152,1197,1353,1198] are at y~1200, x from 1152 to 1353 — that's the horizontal line through the FAI marker (the line separating FAI number from SPC? Actually it's the line inside the FAI/SPC circles). L57 [1157,1175,1347,1176] and L59 [1159,1172,1346,1173] also at the marker.
+
+Hmm, the horizontal connector for the third leader might not be detected as a separate line, or it might be part of the text baseline. Let's look at image 2 to see the blue lines. In image 2, the third annotation's leader: I see a blue vertical line at x~685 going from the text down to the part (the line labeled L31/L32 region). And there's a blue horizontal line at the top of that vertical line connecting to the text? In image 2, I see at the third annotation a blue vertical line starting around the "0.00" text going left then down. Actually in image 2, the blue line for the third leader appears to start at the left of "0.00" (around x=685, y=1193) and go down. The horizontal segment from x=685 to x=763 at y=1193 — I see in image 2 a short blue horizontal line there? Hard to tell.
+
+Let's look at the evidence lines around y=1193. L31 starts at y=1193. So the vertical line's top is at y=1193. The horizontal connector might be missing from detection. That's okay; I'll include L31 and L32 as the leader vertical segments. The horizontal connector, if not present, I leave out.
+
+Actually, wait. Let's look at the second annotation's leader for comparison. The second annotation (FAI 224) text "0.00" is at T14 [511,873,658,911]. Its leader vertical line is L20 [433,890,434,1511] and L21 [430,891,431,1511] at x~433. The horizontal connector from x=433 to x=511 at y~890 — is there a line? I don't see one in the list either. So the horizontal connectors are not detected. Fine.
+
+So for F0, leader_ids = [L31, L32]. Arrowhead at the bottom = H7.
+
+Now the target (touched part): the arrowhead H7 points to the top surface of the part (the cross-section). The local component touched is the top plate / part cross-section. In the evidence, the "target" would be the local part lines. Hmm, but the target_ids should be the local touched-part candidate (green R* in image 2). But there are no R* IDs in the evidence dictionary! Let me check. The evidence dictionary has F0, H0-H12, T0-T35, L0-L69, G0-G11. No R* IDs. So target_ids must be empty, and I use fallback box for target.
+
+Wait, the instructions say: "R*: local touched-part candidate (green)". But the evidence dictionary doesn't contain any R* entries. So I cannot select R* IDs. The instructions say: "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box; never invent IDs."
+
+So target_ids = [] and I provide a fallback box for target.
+
+Hmm, but wait. Let me double check the evidence dictionary for any R. Scanning... F0, H0..H12, T0..T35, L0..L69, G0..G11. No R. Confirmed.
+
+So target_ids = [].
+
+Now the arrowhead H7 points to the part. The "smallest useful local component/cross-section touched by each arrowhead" — since no R* evidence, I use fallback box for target. The target fallback box should be the local part region around the arrowhead H7. H7 is at [674,1505,699,1604]. The part top surface around there. Let me define a fallback box in normalized coordinates.
+
+Now I need normalized ROI coordinates [0,1000]. I need to know the ROI size. The ROI is the image. The image dimensions? The bboxes go up to x~2400, y~2400. Let's figure out the image size. The evidence bboxes max x is around 2397 (L28), max y around 2401 (L0). So the image is probably 2400x2400 or so. Hmm, but I need the exact ROI dimensions to normalize.
+
+Actually, the normalized coordinates are [0,1000] over the ROI. The ROI is the whole image presumably. Let me estimate image width and height. Looking at the bboxes, the rightmost is ~2397, topmost 0, bottommost ~2401. So image is about 2400 wide and 2400 tall? But the image aspect ratio in the display looks square-ish. Let's assume the image is 2400x2400? Hmm, but I'm not sure.
+
+Wait, actually the normalization should be based on the ROI bounding box, which is the image itself. Let me look at the image dimensions. The two images are displayed. I don't have explicit pixel dimensions. But the evidence coordinates seem to be in the original image pixel space. The max coordinate ~2400 suggests image ~2400x2400.
+
+Hmm, but actually maybe the image is larger. Let's look at the rightmost vertical lines L0-L8 at x~2256-2333, and L22/L23 at x~2316-2320, L3/L4 at x~2329-2333. The image right edge might be ~2400. The bottom L0 goes to y=2400. So image height ~2400.
+
+Let me just assume image is 2400 x 2400 for normalization? That's risky. Alternatively, maybe the standard is that the ROI is the full image and I should compute normalized = pixel / image_size * 1000.
+
+Hmm, but I don't know image_size exactly. Let me think. The displayed images in the prompt are square. The coordinates go 0..~2400 in both axes. So likely image is 2400x2400 or maybe the original is something like 2338x2338? Hard.
+
+Actually, maybe I should look at the maximum extent of all evidence to estimate. Max x = 2397 (L28 point [2396,2273]). Max y = 2401 (L0 [2265,2400]). Min x = 0 (L13, L14, L17). Min y = 0 (L0 etc). So the image is at least 2397x2401. Probably exactly 2400x2400 or the image is 2400 wide.
+
+Hmm, this is too uncertain. Let me think about whether the fallback boxes are even critical. The instructions require fallback_boxes_norm. I'll provide them as best I can.
+
+Let me assume image width = 2400, height = 2400. Then normalized = pixel/2400*1000 = pixel/2.4.
+
+Let me compute the annotation fallback box. The annotation for F0 includes the FAI marker F0 [1149,1148,1251,1252], the SPC (part of marker), the tolerance text T20 [953,1140,1135,1179], T22 [763,1176,910,1214], T23 [957,1211,1135,1249], and description T25 [752,1267,1467,1306], T26 [752,1267,1787,1359], T27 [752,1374,812,1412], T28 [868,1374,1555,1412].
+
+The bounding box of all these: min x = 752, max x = 1787, min y = 1140, max y = 1412. So annotation box pixel = [752,1140,1787,1412]. Normalized (divide by 2.4): x1=752/2.4=313.3, y1=1140/2.4=475, x2=1787/2.4=744.6, y2=1412/2.4=588.3. So ~[313,475,745,588].
+
+Hmm wait, but the annotation should also include the leader? The "annotation" fallback box is for the annotation text+marker+tolerance, not the leader. The "complete_group" includes everything.
+
+Let me define:
+- annotation fallback: the text+marker region = [752,1140,1787,1412] -> norm [313,475,745,588].
+- target fallback: the local part touched by H7. H7 at [674,1505,699,1604]. The part top surface around there. Let's say a box around the touched region: maybe [600,1500,800,1650]? In image 1, the arrowhead H7 points to the top surface of the part at around x=685, y=1555 (the top line of the cross-section). The local component is the top plate / part. Let's make target box pixel [620,1540,760,1620] -> norm [258,642,317,675]. Hmm.
+
+Actually, the "target" is the smallest useful local component/cross-section touched by the arrowhead. The arrowhead H7 touches the top surface line of the part. The local component could be the top plate region. Let me look at the part cross-section. The top surface line is at y~1555 (L15, L16). The arrowhead H7 spans y 1505-1604, so it touches the top surface. The local component is the part top. I'll make a box around the touched area: pixel [640,1540,740,1620] -> norm [267,642,308,675].
+
+Hmm, but maybe the target should be larger to be "useful". The instructions: "smallest useful local component/cross-section touched by each arrowhead." I'll keep it modest.
+
+- complete_group fallback: includes annotation + leader + arrowhead + target. So union of annotation box [752,1140,1787,1412], leader L31/L32 [682,1193,686,1512], arrowhead H7 [674,1505,699,1604], target [640,1540,740,1620]. Union: min x = 640, max x = 1787, min y = 1140, max y = 1620. Pixel [640,1140,1787,1620] -> norm [267,475,745,675].
+
+Now, since I have actual evidence IDs for most things, do I still need fallback boxes? The instructions: "If evidence is missing, provide a fallback box". The target evidence (R*) is missing, so I need target fallback. The annotation evidence is present (T*, F0), so annotation fallback could be null? But the schema shows fallback_boxes_norm with annotation, target, complete_group. The instruction: "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box". So for target, since R* absent, I provide target fallback. For annotation, evidence present, so annotation fallback can be null. For complete_group, it's a safety envelope; I think I should provide it always? The instruction says "The complete_group fallback is a safety envelope that includes the full annotation, every connected leader/arrowhead, and the touched local part." It doesn't say only when missing. Hmm. But the schema default is null. I think I should provide complete_group fallback as a safety envelope regardless, or only when something missing. The phrasing "If evidence is missing, provide a fallback box in normalized ROI coordinates" suggests fallback boxes are for missing evidence. But complete_group is described as a safety envelope. I'll provide complete_group fallback to be safe, and target fallback (since R* missing), and annotation fallback null (since annotation evidence present). Actually, to be safe and consistent, maybe provide all three? But the instruction says "Do not expand it to unrelated neighboring views" for complete_group.
+
+Hmm, let me re-read: "If evidence is missing, provide a fallback box in normalized ROI coordinates [0,1000]. The complete_group fallback is a safety envelope that includes the full annotation, every connected leader/arrowhead, and the touched local part. Do not expand it to unrelated neighboring views."
+
+I think the safest interpretation: provide fallback boxes for the parts where evidence is missing or as a safety net. Since target evidence (R*) is missing, target fallback required. complete_group is a safety envelope — I'll provide it. annotation evidence present, so annotation fallback null is fine, but providing it doesn't hurt. I'll set annotation to null since we have full annotation evidence. Actually, the schema example shows all null by default. I'll provide target and complete_group, leave annotation null. Hmm, but maybe they expect annotation fallback too if any annotation text is missing. We have all annotation text. So null.
+
+Wait, but is the SPC letter present as evidence? The SPC letter "GM" is part of the FAI marker region (the circle). There's no separate T* for "GM"? Let's check. The FAI marker F0 bbox [1149,1148,1251,1252] covers the FAI 199 circle and the SPC GM circle? In image 1, the FAI 199 circle and SPC GM circle are side by side. F0 bbox width is 1251-1149=102, height 1252-1148=104. That's about one circle size. Hmm. In image 2, the red box (F0) appears to cover both the FAI 199 circle and the SPC GM circle? Let's look. The red box in image 2 spans from the FAI circle to the SPC circle? Looking at image 2, the red rectangle seems to enclose the "FAI 199" circle and the "SPC GM" circle partially. Actually the red box right edge is around the SPC circle. Hard to say.
+
+The SPC letter "GM" — is there OCR text for it? T21 is "OO |" at [1152,1145,1520,1310] which is a low-confidence OCR over the marker region. Not useful. So the SPC letter is not separately in T*. But it's visually part of the marker. The schema has spc_letter field. I can set spc_letter = "GM" by reading the image (the marker shows SPC GM). The instruction says "Associated SPC letter if present." It's present in the image. I'll set spc_letter = "GM". And fai_number = "199".
+
+Now parameter_text_ids: the tolerance values T20 (+0.08), T22 (0.00), T23 (-0.05). These are the parameter/tolerance. description_text_ids: T25, T26, T27, T28.
+
+Wait, but T25 and T26 overlap (both at y 1267). T25 = "TOP PLATE TO PLASTI" [752,1267,1467,1306], T26 = "TOP CASE Z 5 IRECTION OFFSET" [752,1267,1787,1359]. These are two OCR lines for the two description lines "TOP PLATE TO PLASTIC" and "TOP CASE Z DIRECTION OFFSET". Good. T27 = "G1", T28 = "TO G19, G34 TO G5S/" for the third line "G1 TO G19, G34 TO G57". Good.
+
+So description_text_ids = [T25, T26, T27, T28].
+
+parameter_text_ids = [T20, T22, T23].
+
+annotation_ids: This should include the FAI marker and SPC? The schema has separate marker_id and spc_letter. annotation_ids probably refers to the annotation group's text/parameter IDs? Hmm. Let's look at the schema fields: marker_id, fai_number, spc_letter, annotation_ids, parameter_text_ids, description_text_ids, leader_ids, arrowhead_ids, target_ids, parameter_values, measurement_description, is_range_measurement, fallback_boxes_norm, complete, missing, confidence.
+
+What is annotation_ids vs parameter_text_ids vs description_text_ids? Possibly annotation_ids is the union of all text IDs that form the annotation (parameter + description + maybe the marker's OCR). Or annotation_ids might be the IDs of the annotation elements (the FAI marker text, SPC text). Hmm.
+
+Given the structure, I think:
+- parameter_text_ids: the tolerance/parameter text (T20, T22, T23)
+- description_text_ids: the description text (T25, T26, T27, T28)
+- annotation_ids: maybe the same as the combination? Or maybe annotation_ids is for the FAI/SPC marker text? But the marker is F0.
+
+Hmm, this is ambiguous. Let me think about typical pipeline design. The "annotation" is the whole FAI annotation block. annotation_ids might list all the OCR text IDs that belong to the annotation (i.e., parameter + description). But then parameter_text_ids and description_text_ids are subsets. That's redundant but possible.
+
+Alternatively, annotation_ids could be the IDs of the non-text annotation elements like the FAI marker and SPC marker (but those are F0 and there's no separate SPC ID). Hmm.
+
+Let me look at the field order and the requirement list:
+1. F0 and its inspection number. -> marker_id, fai_number
+2. Associated SPC letter if present. -> spc_letter
+3. Parameter, tolerance, feature-control-frame, and description text. -> parameter_text_ids, description_text_ids (and maybe annotation_ids for feature-control-frame?)
+4. All leader segments connected to that annotation. -> leader_ids
+5. All terminal arrowheads of those leaders. -> arrowhead_ids
+6. The smallest useful local component/cross-section touched by each arrowhead. -> target_ids
+
+So annotation_ids might correspond to requirement 3's "feature-control-frame" or it's the overall annotation text set. Hmm.
+
+I think the cleanest: annotation_ids = all text IDs that are part of the annotation (parameter + description) = [T20, T22, T23, T25, T26, T27, T28]. And parameter_text_ids = [T20, T22, T23], description_text_ids = [T25, T26, T27, T28]. That way annotation_ids is the superset. That seems reasonable.
+
+But wait, maybe annotation_ids is meant to be the FAI marker + SPC marker IDs (the graphical annotation symbols). But we only have F0 for the marker. There's no SPC marker ID. So annotation_ids might just be [F0]? But marker_id is already F0. Hmm.
+
+Let me look at the evidence types: F* = selected FAI marker. There's no separate "SPC marker" type. So the SPC is part of F0's region or read from image.
+
+I'll go with annotation_ids = the text IDs forming the annotation (parameter + description). Actually, re-reading: "3. Parameter, tolerance, feature-control-frame, and description text." This is one requirement covering multiple text categories. The schema splits into parameter_text_ids and description_text_ids. There's no feature-control-frame ID type. So annotation_ids might be the catch-all for "the annotation's text" = parameter + description. I'll set annotation_ids = [T20, T22, T23, T25, T26, T27, T28].
+
+Hmm, but that duplicates. Alternatively annotation_ids could be empty if it's meant for something else. This is too uncertain.
+
+Let me think about what's most standard in these FAI pipeline tasks. I recall similar tasks where annotation_ids lists the OCR text lines that constitute the annotation (the dimension value + description), while parameter_text_ids and description_text_ids are the categorized subsets. Actually I think in many of these, annotation_ids is the list of all text IDs associated (the union). I'll go with union.
+
+Hold on, maybe annotation_ids is specifically the "parameter/tolerance/feature-control-frame" text and description_text_ids is the description. But then parameter_text_ids would be redundant with annotation_ids. Ugh.
+
+Let me look at the field names again: "annotation_ids", "parameter_text_ids", "description_text_ids". The presence of both "annotation_ids" and the two text sub-lists suggests annotation_ids is the overall set and the two are breakdowns. I'll make annotation_ids = union of parameter and description text IDs.
+
+Now parameter_values: the actual values. The tolerance is 0.00 +0.08 -0.05. So parameter_values = ["0.00", "+0.08", "-0.05"]? Or maybe ["0.00 +0.08 -0.05"]. I'll provide the list of values: ["0.00", "+0.08", "-0.05"].
+
+measurement_description: the instruction sentence directly associated. That's "TOP PLATE TO PLASTIC TOP CASE Z DIRECTION OFFSET G1 TO G19, G34 TO G57". I'll set measurement_description to that string.
+
+is_range_measurement: The annotation specifies a tolerance with +0.08/-0.05 around 0.00. Is that a "min/max interval, range, or limit pair"? The instruction: "is_range_measurement is true only when the annotation explicitly specifies a min/max interval, range, or limit pair; a two-row feature-control frame by itself is not a range measurement." A tolerance of 0.00 +0.08 -0.05 is a limit pair (nominal with upper/lower deviation). Hmm. Is that a "range measurement"? The phrase "min/max interval, range, or limit pair" — a tolerance with +/− is a limit pair. But the example says "a two-row feature-control frame by itself is not a range measurement." This tolerance is not a feature-control frame; it's a dimensional tolerance with explicit + and − limits. I think that qualifies as a limit pair / range. Hmm, but actually the description "Z DIRECTION OFFSET" with tolerance 0.00 +0.08 -0.05 — this is a tolerance, which gives a range of acceptable values (-0.05 to +0.08). I'd lean is_range_measurement = true because it explicitly gives + and − limits (a limit pair).
+
+But wait, the first annotation (gap) has 0.10 +0.235 -0.100 which is also a limit pair. The second has 0.00 +0.05 -0.05. All are tolerances with +/−. If I set is_range_measurement true for these, then it's basically "has explicit +/− tolerance". The instruction's negative example is about feature-control frames (GD&T symbols) which by themselves don't specify a numeric range. Here we have explicit numeric +/− limits, so it's a limit pair. I'll set is_range_measurement = true.
+
+Hmm, but let me reconsider. The phrase "min/max interval, range, or limit pair" strongly matches a tolerance written as nominal +upper -lower, which defines a min and max. Yes, I'll set true.
+
+Actually, wait. Let me think about the intent. In these FAI drawings, a "range measurement" might refer to something like a gap measurement that's inherently a range, or a tolerance that's a range. The distinction they draw: feature-control frame (GD&T) is NOT a range measurement even if two-row. But a plain tolerance with +/− IS a limit pair. So yes true.
+
+I'll set is_range_measurement = true.
+
+Now leader_ids = [L31, L32]. Are there other leader segments for F0? The horizontal connector from text to vertical line — not detected. So just L31, L32.
+
+Wait, but I should double check that L31/L32 belong to F0's leader and not to something else. L31 [685,1193,686,1509], L32 [682,1197,683,1512]. The top y~1193 matches the third annotation's text line level (T22 at y 1176-1214, so the leader horizontal would be at ~1193). The bottom y~1510 matches the arrowhead H7 top (H7 y 1505-1604). Yes, L31/L32 connect the third annotation text to arrowhead H7. Good. So leader_ids = [L31, L32].
+
+arrowhead_ids = [H7].
+
+target_ids = [] (no R* evidence).
+
+Now missing: since target evidence (R*) is absent, missing should list something like ["target"] or ["R*"]? The schema "missing" is a list. I'll put ["target"] to indicate the local touched-part candidate is missing. Hmm, or maybe missing lists the missing evidence types. I'll use ["target_part"] or ["R"]. Let me think. The instruction: "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box". The missing field probably records which required elements are missing. I'll put ["target"].
+
+Now complete

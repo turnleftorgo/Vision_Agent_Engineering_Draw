@@ -1,0 +1,209 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The magenta rectangle contains:
+- FAI circle with "41"
+- SPC circle with "AN" (highlighted in red)
+- The text "1.26 +0.25 -0.10"
+
+Now I need to look at the leader line. In IMAGE 1, the dimension "1.26 +0.25 -0.10" has a leader line. Let me trace it. The leader line for this dimension appears to go to the right, toward the cross-section view on the right side of the image. Looking at IMAGE 1, the leader line for the 1.26 dimension (the one in the magenta box) extends to the right and connects to a feature in the cross-section.
+
+Let me look carefully. In IMAGE 1, the right column of dimensions has:
+- 2.50 +0.29 -0.07 with FAI 39 / SPC AL
+- 1.62 +0.26 -0.10 with FAI 40 / SPC AM
+- 1.26 +0.25 -0.10 with FAI 41 / SPC AN
+
+Each of these has a leader line going to the right. The leader for 1.26 (FAI 41) goes to the right and points to a feature in the cross-section. In IMAGE 1, I can see the leader line for the 1.26 dimension starting from the right of the text and going right, then there's a diagonal segment. Let me look.
+
+Actually, looking at the right side, the leaders go from the dimension text to the right edge of the cross-section. The leader for 1.26 (the bottom one in the right column) - I see a line that goes from the text rightward and then diagonally down-right to a point on the cross-section. Let me trace.
+
+In IMAGE 1, to the right of "1.26 +0.25 -0.10" there's a leader line. I see a small diagonal line segment at the right of the magenta box, around the right edge. Actually the magenta box's right edge is at about x=1620 (in some coordinate). The leader line for 1.26 appears to start just to the right of the text "-0.10" and go diagonally. Let me look at the pixels.
+
+Looking at IMAGE 1, the magenta rectangle spans roughly from x=945 to x=1620, y=1040 to y=1260 (in pixel coordinates of the displayed image, but let's think in relative terms). The text "1.26 +0.25 -0.10" is inside. To the right of "-0.10" there's a leader line that goes diagonally up-right? Let me look.
+
+Hmm, I see in IMAGE 1, at the right of the magenta box, there's a diagonal line that goes from around the right edge of the box upward-right to the cross-section. Actually the leader for the 1.26 dimension: I see a line segment that starts near the right of the magenta box (around the "-0.10" text) and goes diagonally. Let me look at the structure of leaders on the right.
+
+The right column leaders: For 2.50, the leader goes from the text rightward horizontally then down to a horizontal line at the top of the cross-section. For 1.62, the leader goes rightward horizontally to a line. For 1.26, the leader goes rightward then diagonally down to a point.
+
+Actually, let me look at the visible leader lines on the right side of IMAGE 1. I see:
+- A horizontal line at the top going from the 2.50 text area to the cross-section top edge.
+- A horizontal line in the middle from 1.62 to the cross-section.
+- A diagonal line from the 1.26 area going down-right to the cross-section.
+
+In the magenta box, the right edge cuts off the leader line. The leader line for 1.26 starts inside the box? Let's see. The text "-0.10" is at the right part of the box. To the right of it, the leader line begins. In IMAGE 1, I see a diagonal line segment that appears to start at the right edge of the magenta box (or just inside) and go up-right. Hmm.
+
+Let me look at the second image (IMAGE 2), the proposed crop. It shows:
+- Top: "-0.10" (partial, the bottom of the 1.62 dimension's tolerance)
+- FAI 41 circle
+- SPC AN circle
+- "1.26 +0.25 -0.10"
+- To the right of "-0.10" there's a diagonal line segment (the start of the leader) that is cut off at the right edge of the crop.
+
+So in IMAGE 2, the leader line is visible as a small diagonal segment at the right edge, but it's clipped. The leader line continues outside the crop to the right, connecting to the cross-section feature. The terminal arrowhead (or the point where it touches the feature) is NOT in the crop. The touched feature (the cross-section line) is also NOT in the crop.
+
+Therefore, the crop is missing the leader segment, the terminal arrowhead, and the touched feature. According to the rules: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent."
+
+In IMAGE 2, the leader line reaches the crop border (the diagonal segment touches the right edge). The arrowhead is not visible (clipped/absent). The touched feature is absent. So the crop is invalid.
+
+The semantic_missing says: "terminal arrowhead for F0 leader", "target region for F0 leader". This matches my observation.
+
+So I need to return valid=false and request expansion to the right (and maybe the leader goes right and down to the cross-section). Let me look at where the leader terminates in IMAGE 1.
+
+In IMAGE 1, the leader for 1.26 (FAI 41) - let me trace it carefully. The text "1.26 +0.25 -0.10" is at around y=1150-1180. To the right of "-0.10" at around x=1570, there's a diagonal line going up-right? Or down-right? Let me look at the cross-section on the right. The cross-section has horizontal lines at various y levels. The 1.26 dimension likely points to a specific horizontal line in the cross-section.
+
+Looking at the right side of IMAGE 1, I see leader lines:
+- From 2.50 text (y~780): horizontal line at y~910 going right to x~2030, then the cross-section top.
+- From 1.62 text (y~1010): horizontal line at y~1000 going right to x~2010.
+- From 1.26 text (y~1150): a diagonal line. I see at around x=1620, y=1050 a diagonal going down-right to x=1600, y=1150? Hmm.
+
+Let me look more carefully at the lines near the magenta box right edge. In IMAGE 1, just to the right of the magenta box, I see a diagonal line segment that goes from upper-left to lower-right, around coordinates (1620,1050) to (1600,1150)? Actually it's hard.
+
+Let me look at the structure. The cross-section on the right has a stepped profile. The leaders point to the steps. The 1.26 dimension's leader probably points to the bottom step of the cross-section.
+
+Regardless of exact geometry, the key point is that the leader line and its terminal and the touched feature are outside the magenta box (to the right). So the crop must be expanded to the right significantly to include the leader and the feature.
+
+But wait, the rules also say: "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows." So we need the leader to be fully inside, the arrowhead inside, and a portion of the feature inside.
+
+In IMAGE 1, the leader for 1.26 goes from the text to the cross-section. The cross-section is at the right of IMAGE 1, around x=1770 to x=2300. The leader line for 1.26 - let me find where it ends. I see a diagonal line at around (1620,1050)-(1600,1150) which is the start of the leader going from the text? Hmm, actually the leader typically starts at the text and goes to the feature. The text "-0.10" right edge is at about x=1570. The leader would start there.
+
+Looking at IMAGE 1, I see a diagonal line that starts at about (1620, 1050) and goes down to (1600, 1150)? That doesn't make sense as a leader from the text.
+
+Let me look at the right column leaders more holistically. I'll describe what I see on the right of the dimension text:
+
+For 2.50 (top right): after "-0.07" there's a line that goes right a bit then diagonally down-right to a horizontal line at y~910 that extends to the cross-section.
+
+For 1.62 (middle right): after "-0.10" there's a horizontal line at y~1000 extending right to the cross-section.
+
+For 1.26 (bottom right): after "-0.10" there's a diagonal line going down-right to a point on the cross-section at around (1600,1150)? Hmm.
+
+Actually, I notice in IMAGE 1 there's a diagonal line segment right at the right edge of the magenta box, going from top-right to bottom-left, like "/" shape, around (1620,1050) to (1600,1150). This might be the leader for 1.26 that's mostly outside the box.
+
+Hmm, this is getting too detailed. The conclusion is clear: the crop is invalid because the leader line is clipped at the right border, the terminal arrowhead is missing, and the touched feature is absent. I need to expand right.
+
+How much to expand? The crop width in IMAGE 1: magenta box from x~945 to x~1620, width ~675 pixels. The full image width is ~2337 pixels (let's estimate). The cross-section feature that the leader touches is at around x~1770-2000. So I need to expand right to include at least the leader and a portion of the feature.
+
+But the expansion values are normalized fractions of the current crop width or height. The current crop width corresponds to the magenta box width. To include the feature at the cross-section, I need to expand right by a significant amount.
+
+Let me estimate pixel coordinates more carefully by looking at the image. The image is 2337 wide (typical). Let me assume the displayed image is 2337x2337 or so. Actually the image dimensions aren't given. Let me just estimate relative positions.
+
+Magenta box left edge ~ 41% of width? Let's look. The image width, the magenta box left edge is at about x=945 out of 2337 = 0.40. Right edge at x=1620 = 0.69. So width = 0.29 of image width.
+
+The cross-section feature touched by the 1.26 leader: I need to find it. The leader for 1.26 likely points to the bottom horizontal line of the cross-section, around x=1770-2000, y=1180-1200. That's at about 0.76-0.86 of image width.
+
+So to include the feature, the right edge of the crop needs to go to about 0.86 of image width. Current right edge is 0.69. Current width is 0.29. So additional right = 0.86-0.69 = 0.17 of image width = 0.17/0.29 = 0.59 of crop width = 590 in normalized units.
+
+Hmm but also the leader might extend further. Let me look at the diagonal leader. Actually, maybe the leader for 1.26 points to a feature that's not too far. Let me look at the diagonal line near the magenta box.
+
+I think I'm overanalyzing the exact pixel positions. The task is to determine validity and provide a reasonable expansion. The key is valid=false, missing items = leader/arrowhead/feature, and expand right.
+
+Let me look at the leader line in IMAGE 1 once more. I'll focus on the region right of the magenta box. I see:
+- A horizontal line at y~1000 (the 1.62 leader) extending from x~1600 to x~2010.
+- A diagonal line from (1620,1050) to (1600,1150)? This is confusing.
+
+Actually, you know, maybe the leader for 1.26 is the diagonal line that goes from the text rightward and down to the cross-section's lower step. The cross-section's lower step is at around y=1180, x=1770-2000.
+
+Let me look at the cross-section shape. On the right of IMAGE 1, there's a hatched region (cross-section). It has a stepped left profile: top step at y~910, middle step at y~1000, bottom step at y~1050, then a slanted line going down-left to y~1180, then horizontal at y~1180.
+
+The leaders point to these steps. The 1.26 leader probably points to the slanted line or the bottom horizontal.
+
+OK here's another approach. The semantic_missing mentions "terminal arrowhead for F0 leader" and "target region for F0 leader". So the leader's terminal and target are missing. The leader line itself - is it partially in the crop? In IMAGE 2, I see a diagonal line at the right edge (the "/" shape after "-0.10"). So the leader's start is in the crop but it's clipped. So we need to expand right to capture the full leader and the target.
+
+Given the geometry, expanding right by maybe 500-700 normalized units should capture it. But also, the leader might go down a bit, so maybe expand bottom slightly too. But the feature is at about the same y as the text or slightly below. The text "1.26" is at y~1150, the feature at y~1180, similar. So bottom expansion minimal.
+
+Let me look at the diagonal in IMAGE 2: it's at the right edge, going from upper-right to lower-left, i.e., the line enters the crop at the right edge at some y and goes down-left to the text. So outside the crop, the line continues up-right. That means the leader goes up-right from the text to the feature? That would put the feature at a higher y (smaller y value) than the text. Hmm.
+
+Wait, in IMAGE 2, the diagonal line after "-0.10" looks like it goes from lower-left (near the text) to upper-right (exiting the right edge at a higher position). Let me look: the line in IMAGE 2 right side is at around the vertical middle-right, slanted like "/". The bottom of the "/" is near the "-0.10" text level, the top of the "/" exits the right edge higher up. So the leader goes up-right.
+
+In IMAGE 1, that diagonal would continue up-right to... the 1.62 leader's horizontal line? No. Hmm.
+
+Actually maybe I'm misreading and that diagonal in IMAGE 2 is the leader for 1.26 going up-right to point at the middle step of the cross-section. The middle step is at y~1000-1050, which is above the 1.26 text (y~1150). Yes that's plausible: the leader goes up-right from the 1.26 text to the middle step of the cross-section.
+
+But wait, the 1.62 dimension also points to a step. Let's think about the order. The dimensions from top to bottom on the right: 2.50, 1.62, 1.26. These are likely heights from the bottom datum (0.00). So 1.26 is the lowest feature, 1.62 the next, 2.50 the top. The leaders should point to corresponding horizontal lines in the cross-section from bottom to top. So 1.26 points to the lowest line, 1.62 to the next, 2.50 to the top.
+
+The lowest line in the cross-section is at y~1180 (bottom horizontal). The 1.26 text is at y~1150, close to that. So the leader for 1.26 would go roughly horizontally or slightly down-right to the bottom line. Hmm but the diagonal in IMAGE 2 goes up-right.
+
+I'm spending too much time. The exact direction doesn't change the validity conclusion. The crop is invalid; we need to expand right (and possibly top/bottom a little) to include the leader, arrowhead, and feature.
+
+Let me settle on expansion values. The crop width in normalized = 1000 corresponds to magenta box width. The feature is to the right by roughly (0.86-0.69)/0.29 ≈ 0.59 → 590. But to be safe and include the leader fully plus a portion of the feature, maybe expand right by ~600-700. Also the leader might extend a bit above or below, but the feature is roughly at the same vertical band as the text or within the box's vertical extent. The box vertical extent is y~1040 to 1260 (height ~220). The feature at y~1180 is within that band. The leader's path might go up to y~1000 (above the box top) if it points to the middle step. To be safe, expand top a bit too.
+
+Hmm, but the rules say expand toward missing items. The missing items are the leader terminal and target region. The target region is to the right. The leader path is to the right. So primarily right expansion.
+
+Let me look at IMAGE 1 to see the vertical extent of the 1.26 leader. I'll guess the leader goes from the text (y~1150) diagonally to the feature. If the feature is the bottom line at y~1180, the leader is roughly horizontal, within the box's vertical band, so no top/bottom expansion needed beyond right. If the feature is higher, we need top expansion.
+
+Given uncertainty, I'll provide right expansion as the main, and a modest top expansion to be safe? But over-expanding might include unrelated annotations. The 1.62 leader and text are above; if I expand top too much I'd include the 1.62 group which is a different FAI group (FAI 40). The rule says reject if unrelated neighboring annotations dominate. So I should avoid expanding top into the 1.62 group.
+
+Thus I'll keep top expansion 0 or small, and focus on right.
+
+Let me look at the diagonal in IMAGE 2 again to decide vertical. The diagonal "/" in IMAGE 2 right edge: its top is at about the vertical level of the FAI/SPC circles (middle of crop), its bottom at the "-0.10" level (lower part of crop). So the leader, as it exits the right edge, is at the middle vertical level of the crop, which in IMAGE 1 corresponds to y~1150 (the text level). So outside, it continues up-right or right. If it continues up-right, it might reach y~1000 (above crop top) before hitting the feature. That would require top expansion.
+
+Ugh. Let me look at IMAGE 1's right side lines one more time, focusing on the diagonal near the magenta box. I see in IMAGE 1 a diagonal line that starts at the right edge of the magenta box around y=1050 (top-right corner area) and goes down-left to about (1600,1150)? Or up-right? The magenta box top-right corner is at (1620,1040). I see a diagonal line just outside the right edge going from (1620,1050) down to (1600,1150)? That would be inside-ish.
+
+Honestly, the visual evidence strongly indicates the leader is clipped and the feature is outside. The exact expansion magnitude is a judgment call. I'll provide a right expansion of about 600 and a top expansion of about 100 to capture the leader's upper portion if it goes up, but not so much as to include the 1.62 text (which is at y~1010, above the box top 1040 by ~30 px; box height 220, so 30/220 ≈ 136 normalized top would reach the 1.62 text). Hmm that's risky.
+
+Let me reconsider the vertical position of the 1.62 group. In IMAGE 1, the 1.62 text (right column) is at y~1010. The magenta box top is at y~1040. So the 1.62 text is just above the box top by ~30 px. The 1.62 leader horizontal line is at y~1000. If I expand top by 100 normalized = 100/1000*220 = 22 px, the new top = 1040-22 = 1018, still below the 1.62 text (1010) and its leader (1000). Good, so top=100 is safe-ish. If I expand top by 150 = 33 px, new top = 1007, which would clip the 1.62 leader line. So keep top ≤ 100.
+
+But do I even need top expansion? If the 1.26 leader goes up-right to a feature at y~1000, then yes I'd need top expansion to ~150 which risks the 1.62 group. But maybe the feature for 1.26 is at the bottom, not top.
+
+Let me think about typical dimensioning. The right column dimensions 2.50, 1.62, 1.26 with the left column 2.50, 1.62, 1.26, (0.00). The left column has the datum (0.00) at the bottom. The right column is the same features but with different tolerances (maybe a different condition or the SPC control values). The leaders on the right point to the same features as the left? The left leaders point to the left side of the cross-section? Actually the left column leaders point left (off the image, to another view maybe). The right column leaders point right to the cross-section.
+
+The cross-section's horizontal lines from bottom: 0.00 (bottom), 1.26, 1.62, 2.50. So the 1.26 line is the first step above the bottom. In the cross-section, the bottom horizontal is at y~1180 (the (0.00) level). The 1.26 line would be at y~1180 - (1.26*scale). Hard to know scale.
+
+Given the cross-section drawing, the steps from bottom: bottom line y~1180, then a slanted line up to y~1050, then horizontal y~1050, then step up to y~1000, then horizontal to y~910, etc. So the 1.26 feature might be the slanted line or the y~1050 line. The 1.26 text is at y~1150. A leader from y~1150 to y~1050 would go up-right. So top expansion needed to ~ (1150-1050)/220*1000 ≈ 450? That's a lot and would include the 1.62 group.
+
+Hmm, this is too uncertain. Let me look at the actual leader lines drawn in IMAGE 1 on the right, because they are drawn explicitly. I'll trust the drawn lines.
+
+Drawn lines on the right of the right-column text (from top):
+1. After "2.50 +0.29 -0.07": I see a line that goes right from "-0.07" then diagonally down-right to a horizontal line at y~910 that runs to the cross-section top-left corner.
+2. After "1.62 +0.26 -0.10": I see a horizontal line at y~1000 running right to the cross-section.
+3. After "1.26 +0.25 -0.10": I see a diagonal line. Where? I think I see a diagonal line from about (1620,1050) going down-right to (1770,1180)? That would connect the 1.26 text area to the bottom-left of the cross-section (the slanted line). Hmm but the text is at y~1150, and the diagonal starts at y~1050? That doesn't align with the text.
+
+Wait, maybe the diagonal I see at (1620,1050)-(1600,1150) is actually the leader for 1.26 that goes from the text (right side, y~1150) up-right? No, (1600,1150) to (1620,1050) is up-right as x increases. So from the text at (1570,1150) the leader goes up-right to (1620,1050) then continues? But (1620,1050) is near the magenta box top-right corner. Then it would continue up-right outside the box to the feature. That feature would be at y < 1050, i.e., above the box top (1040). So top expansion needed.
+
+But that conflicts with the dimension ordering (1.26 should be lower feature). Unless the cross-section is oriented such that the 1.26 line is higher in the drawing? No, the cross-section is a vertical profile; higher dimension = higher in drawing.
+
+I'm now quite confused by the exact geometry. Let me step back. The validation task doesn't require me to perfectly reconstruct the geometry; it requires me to notice that the leader/arrowhead/feature are outside the crop and request expansion toward them. The semantic_missing already tells me the terminal arrowhead and target region are missing. My visual check confirms the leader is clipped at the right border (the diagonal in IMAGE 2 touches the right edge) and the feature is not in the crop.
+
+For expansion, I'll provide a right expansion that's generous enough to reach the cross-section, and a top expansion that's moderate to capture the leader if it goes up, but I'll cap it to avoid the 1.62 group. Actually, including a bit of the 1.62 leader line might be acceptable as long as it doesn't "dominate." The rule: "Reject it if ... unrelated neighboring annotations dominate." If I expand top a little and the 1.62 text/leader appear at the top edge but don't dominate, it's probably fine. But to be safe, I'd prefer not to include them.
+
+Given the ambiguity, maybe the safest is to expand right a lot and top a moderate amount, and bottom a small amount, to ensure the leader and feature are captured. The feature (cross-section) spans a vertical range; a portion of it will be in the crop as long as the crop's vertical band overlaps the feature's vertical position. The crop's vertical band is y~1040-1260. The cross-section spans y~910-1200. So the overlap is y~1040-1200, which is a good portion. So even without top/bottom expansion, the vertical band already overlaps the cross-section's lower-middle. So if I expand right to reach the cross-section, the feature portion will be visible within the existing vertical band! Because the cross-section at the right has material at y~1040-1200 (the hatched region). Yes! The hatched cross-section region in IMAGE 1 spans from y~910 to y~1200 at the right. So the existing vertical band (1040-1260) overlaps the hatched region (1040-1200). So expanding right alone will bring a portion of the hatched feature into the crop, within the current vertical band. 
+
+But the leader line: if the leader goes up-right to a feature point at y~1000 (above the band), then the leader's terminal would be above the band, requiring top expansion. But if the leader points to a feature at y~1100-1180 (within the band), then no top expansion needed.
+
+Given the dimension 1.26 is the lowest non-zero feature, its line in the cross-section is likely near the bottom, within the band. So I'll guess the leader terminal is within the band or just above. To be safe, I'll add a small top expansion (like 50-100) and a small bottom expansion (0) and a large right expansion.
+
+Hmm, but the diagonal in IMAGE 2 clearly goes up-right (the "/" shape). If it goes up-right and exits the right edge at the middle of the crop (y~1150 in IMAGE 1 terms? the middle of the crop is y~1150), then outside it continues up-right and would exit the top of the crop (y~1040) at some x to the right. So the leader's path goes above the crop top before reaching the feature. That means the terminal arrowhead is above the crop top → need top expansion.
+
+Let me estimate: in IMAGE 2, the diagonal "/" spans from bottom-left (at the text, y near bottom of crop) to top-right (exiting right edge at y near top of crop). So the slope is such that over the crop width (1000 normalized), it rises the full crop height (1000 normalized). So outside the crop, to rise another crop-height (to reach a feature above), it would need to go right another crop-width. That would put the feature far right and far up, possibly into the 1.62/2.50 region. That seems too much.
+
+I think I'm misreading the diagonal in IMAGE 2. Let me look really carefully at IMAGE 2. The right side shows after "-0.10" a line that looks like a check mark or a diagonal. It's at the far right, roughly vertically centered, slanted. It might actually be the leader going down-right (i.e., "\" shape) to a feature below. Hard to say.
+
+Given all this uncertainty, the most robust answer: valid=false, missing = ["leader line", "terminal arrowhead", "touched feature"], expand right substantially (e.g., 700) and top moderately (e.g., 200) and bottom slightly (e.g., 100) to be safe, but not so much as to dominate with other groups. But top 200 = 44 px → new top = 1040-44 = 996, which would include the 1.62 leader line (y~1000) and maybe the 1.62 text bottom. That might be considered including a neighboring annotation. But it wouldn't "dominate" because the 1.62 group is small and at the top edge.
+
+Hmm, the instruction: "if a reported missing item is visible outside the magenta rectangle and belongs to this FAI group, return valid=false and request expansion toward it." The reported missing items are the terminal arrowhead and target region for the F0 leader (the 1.26 leader). So I should expand toward them, i.e., right and whatever vertical direction they're in.
+
+I'll make a decision: expand right = 650, top = 150, bottom = 50, left = 0. This should capture the leader and a portion of the cross-section feature without including the full 1.62 text (top 150 = 33px → new top 1007, the 1.62 text at 1010 would be just at the edge, mostly excluded; the 1.62 leader line at 1000 excluded). Good enough.
+
+Wait, but if the leader goes up-right and the feature is at y~1000, then top 150 (new top 1007) still misses the feature at 1000. Argh.
+
+Let me look at IMAGE 1 one more time, specifically the cross-section left profile and the leaders, to pin down the 1.26 leader's target.
+
+The cross-section (hatched) left profile, from top to bottom, I'll list the y-levels of horizontal segments as I perceive:
+- y~910: top horizontal (left part)
+- y~1000: a horizontal step
+- y~1050: a horizontal step
+- y~1180: bottom horizontal
+And slanted segments connecting some.
+
+The leaders from the right column:
+- 2.50 leader → y~910 (top)
+- 1.62 leader → y~1000
+- 1.26 leader → y~1050 or the slant or y~1180?
+
+If 1.26 → y~1050, that's just above the crop top (1040) by 10 px. So top expansion of ~50-100 normalized (11-22 px) would capture it. Good, that's small and safe.
+
+If 1.26 → y~1180 (bottom), that's within the crop band, no top expansion needed.
+
+Either way, top expansion of ~100 is safe and sufficient. Let me set top = 100.
+
+Now the leader path: from text (y~1150) to feature (y~1050 or 1180). If feature at 1050, leader goes up-right, staying within y 1050-1150, which after top expansion (new top 1018) is fully within the new vertical band. Good. If feature at 1180, leader goes down-right within 1150-1180, within band (bottom 1260). Good. So top=100, bottom=0 works for the leader path too.
+
+Now right expansion: need to reach the feature x. The feature (cross-section left profile) is at x~1770-2010. The crop right edge is 1620. So need right expansion to at least 1770-1620 = 150 px = 150/675*1000 ≈ 222 normalized to reach the left edge of the cross-section. But the leader terminal/arrowhead is at the feature, so we need to include the arrowhead which is at the feature line, x~1770-2010. To include a visible portion of the feature,

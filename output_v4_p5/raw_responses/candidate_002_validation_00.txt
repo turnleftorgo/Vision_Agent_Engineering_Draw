@@ -1,0 +1,177 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. Inside it, I see:
+- The text "4X 0.49 ±0.10"
+- The FAI circle with "191" (highlighted in red)
+- The SPC circle with "GE"
+- A leader line going down from the text, with two arrowheads pointing to a feature (a horizontal line/edge on the left side)
+- A section line "K-K" at the bottom left
+- A hatched feature in the middle labeled "SECOND TERRACE" (partially)
+
+Now let me look at what's outside the magenta rectangle but connected.
+
+Looking at IMAGE 1, the leader line on the left side of the magenta box: the leader starts at the text "4X 0.49" and goes down. The arrowheads point to a feature. Let me look at the feature. The feature being pointed to is on the left edge of the magenta box. In IMAGE 1, the leader line's arrowheads point to a horizontal line that is part of a hatched cross-section. Looking at the left side, the hatched cross-section feature extends to the LEFT of the magenta box. The arrowheads point to a line that is at the left border of the magenta box.
+
+Let me look more carefully. In IMAGE 1, the magenta box left edge is at approximately x=497 (in some coordinate). The leader line vertical segment is at around x=553. The arrowheads point to a horizontal line at around y=1450-1470. That horizontal line - is it inside the magenta box? The magenta box left edge is at x~497. The horizontal line that the arrows point to: in IMAGE 1, I see a hatched cross-section on the left that ends at the magenta box left edge. The line the arrows point to appears to be at the left edge of the magenta box, possibly extending outside.
+
+Let me look at IMAGE 2 (the crop). In IMAGE 2, the leader line with two arrowheads points to a horizontal line. But that horizontal line in IMAGE 2 appears to be just two short horizontal lines (the arrow target) without the hatched feature to the left. Actually in IMAGE 2, I see the arrowheads pointing to a horizontal line that is just a small segment. The hatched feature that the line belongs to is NOT visible in IMAGE 2 - it's cut off at the left border.
+
+Wait, let's look. In IMAGE 2, the left side shows the vertical leader line with two arrowheads. The arrowheads point to a horizontal line. But that horizontal line in IMAGE 2 is just a tiny segment (two horizontal lines crossing the vertical leader). The actual feature (the hatched cross-section edge) is to the left, which is outside the crop.
+
+In IMAGE 1, the hatched cross-section on the left (the one with diagonal hatching) extends from the left edge of the image to the magenta box. The line that the arrows point to is the top edge of that hatched feature, which is at the magenta box's left border. So the feature touched by the arrows is mostly OUTSIDE the magenta box (to the left).
+
+Let me look at the coordinates. In IMAGE 1, the magenta box left edge is at x≈497. The hatched feature on the left spans from x=0 to x≈490 (the hatched region). The horizontal line that the arrows point to: I see at y≈1450 there's a horizontal line from x=0 to x≈490 (top of hatched feature), and then there's a small gap, then the arrow target lines at x≈500-575. Hmm.
+
+Actually, let's look at the structure. The cross-section shows a part. On the left of the magenta box, there's a hatched block. The top surface of that block is at some y. The arrows point to that top surface edge. In IMAGE 1, the top surface line of the left hatched block ends at the magenta box left edge (x≈490). Then inside the magenta box, the arrow target horizontal lines are at x≈500-575, which is a continuation? Or is it a separate feature?
+
+Hmm, this is tricky. Let's look at the second hatched feature inside the magenta box (the one labeled SECOND TERRACE). That's at x≈730-1070, y≈1450-1510. That's a separate feature.
+
+The arrows on the left leader point to a feature at x≈500-575. In IMAGE 1, that feature's horizontal line - does it connect to the left hatched block? The left hatched block's right edge is at x≈490. The arrow target lines are at x≈500-575. There's a small gap. So the arrow target is a small horizontal line segment that is the top edge of... what? It might be the top edge of the left hatched block but the block is drawn to the left.
+
+Actually, I think the leader arrows point to the top edge of the left hatched cross-section feature. The top edge line of that feature, in the drawing, is drawn from x=0 to about x=490 (the hatched block), but the arrow target extension lines (the two short horizontal lines the arrows point between) are at x≈500-575. Hmm, but those extension lines should be on the feature.
+
+Let me look at IMAGE 2 again. In IMAGE 2, the left part shows the vertical leader with two arrowheads, and the arrowheads point to two horizontal lines (the target). To the left of those horizontal lines, there's nothing - the crop border. So the feature that these lines represent is NOT visible in the crop. The lines are just floating.
+
+In IMAGE 1, to the left of the magenta box, the hatched block's top edge is at the same y as the arrow target lines? Let's check y. In IMAGE 1, the left hatched block top edge is at y≈1450. The arrow target lines are at y≈1450 and y≈1470. Yes, roughly aligned. So the arrow target lines are the extension of the top edge of the left hatched block, but the block itself is to the left, outside the crop.
+
+Therefore, the touched feature (the left hatched cross-section) is mostly absent from the crop. The crop only contains the arrow target extension lines but not the actual feature.
+
+Also, the "SECOND TERRACE" text and its hatched feature: the text "SECOND TERRACE" is partially outside the magenta box (the "S" is at the right edge). In IMAGE 1, "SECOND TERRACE" starts at x≈1265 which is outside the magenta box right edge (x≈1350? wait magenta right edge is at x≈1350). Let me check. The magenta box right edge in IMAGE 1 is at x≈1350. The text "SECOND TERRACE" starts at x≈1265 and goes to x≈1780. So most of the text is outside the magenta box. But is "SECOND TERRACE" part of the FAI 191 annotation group? The FAI 191 is associated with "4X 0.49 ±0.10". The "SECOND TERRACE" label is associated with the second hatched feature, which might be a different annotation (FAI 69/204 with -0.21 +0.15 -0.08). So "SECOND TERRACE" is probably NOT part of the FAI 191 group.
+
+Hmm, but the second hatched feature inside the magenta box - is it touched by any arrow of the FAI 191 leader? The FAI 191 leader only has the left vertical line with two arrowheads. It does not point to the second hatched feature. So the second hatched feature is just context, not part of the group.
+
+So the key issue: the left leader's arrowheads point to a feature that is mostly outside the crop (the left hatched block). In the crop, we only see the arrow target extension lines but not the feature itself. The requirement says "a visible local portion of every component feature touched by those arrows." The feature touched is the left hatched block's top edge. In the crop, is there a visible local portion? The arrow target lines are at the left border of the crop. The actual hatched feature is to the left, outside. So the visible portion inside the crop is just the extension lines, not the feature.
+
+Hmm, but actually the arrow target lines ARE on the feature's edge (the top edge line). If the top edge line of the left block extends into the crop a tiny bit, then there's a visible local portion. But in IMAGE 2, the horizontal lines at the arrow target appear to start exactly at the left border or just inside. Let's look: in IMAGE 2, the two horizontal lines at the arrow target span from x≈0 to x≈110 (in IMAGE 2 coordinates). So they are inside the crop. But are they the feature edge or just extension lines? In a cross-section, the top edge of the hatched block would be a solid line. The hatched block is to the left. So the line at the arrow target, if it's the top edge, would connect to the hatched block on the left. But the hatched block is outside the crop. So inside the crop, we see the top edge line starting from the left border. That IS a visible local portion of the feature edge.
+
+Hmm, but wait. Let's look at IMAGE 1 more carefully. The left hatched block: its top edge line - where does it end on the right? In IMAGE 1, the left hatched block's right edge is at x≈490 (a vertical line going down). The top edge line goes from x=0 to x≈490. Then there's a gap from x≈490 to x≈500. Then the arrow target lines from x≈500 to x≈575. So the arrow target lines are NOT connected to the left hatched block's top edge. They are a separate short line.
+
+What feature do the arrow target lines belong to? Maybe they are the top edge of a feature that is drawn inside the magenta box but I'm misreading. Let me look at the cross-section shape. The left hatched block has a step. Looking at IMAGE 1, the left hatched block: top edge at y≈1450 from x=0 to x≈310, then a step down? Actually there's a notch. Let me look: at x≈310 there's a small vertical line up, then top edge continues? This is too detailed.
+
+Let's think about the overall intent. The crop is meant to capture the FAI 191 annotation: "4X 0.49 ±0.10" with FAI 191 and SPC GE, and its leader with arrowheads pointing to a feature. The leader's arrowheads point to a feature on the left. In the crop (IMAGE 2), the leader and arrowheads are present, but the feature they point to is cut off (the hatched block is to the left, outside). The crop's left border cuts through the feature.
+
+Look at IMAGE 2: the left border is at x=0. The vertical leader line is at x≈150. The arrowheads point to horizontal lines at x≈0-110. So the horizontal lines touch the left border. The feature (hatched block) is to the left of x=0, i.e., outside. So the touched feature is NOT visible in the crop (only the extension/target lines which are at the border).
+
+Actually, the requirement: "a visible local portion of every component feature touched by those arrows." If the arrow points to the top edge of the left block, and the top edge line is visible in the crop (the horizontal lines at the arrow target), then there is a visible local portion. But are those horizontal lines the feature edge or just the arrow's target ticks? In engineering drawings, the arrow points to a line; the line is the feature edge. The two horizontal lines I see at the arrow target might actually be the feature edge line plus a dimension extension line. Hmm.
+
+Let's look at IMAGE 1's left leader. The vertical line goes down, and at the bottom there are two arrowheads (one pointing up, one pointing down) straddling a horizontal line. That horizontal line is the feature edge (the top surface of the part at that location). The two arrowheads point to it from above and below. So the horizontal line is the feature edge. In IMAGE 1, that horizontal line at the arrow target is at x≈500-575, y≈1450 and y≈1470? No wait, the two arrowheads straddle ONE horizontal line. Let me look: I see at the bottom of the vertical leader, there's an up-arrow and a down-arrow, and between them a horizontal line. Actually I see two horizontal lines close together (y≈1450 and y≈1470). The up-arrow points to the top one, the down-arrow points to the bottom one? Or they straddle a single line?
+
+This is too detailed. Let's step back and think about the typical validation logic for these tasks. The crop is usually invalid if the leader's arrowhead or the feature it points to is cut off at the border. In IMAGE 2, the left leader's arrowheads are near the left border, and the feature they point to (the hatched cross-section) is to the left, outside the crop. So the touched feature is absent/clipped.
+
+Also, look at the bottom of the magenta box: the "K-K" section line. In IMAGE 1, the section line "K - K" is at the bottom left, partially inside the magenta box. The "K" letters are at x≈410 and x≈575. The magenta box left edge is at x≈497. So the first "K" (at x≈410) is outside the magenta box, and the section line dash-dot line crosses the left border. But is the section line part of the FAI 191 group? No, the section line is a separate annotation. So it's not required.
+
+But the requirement also says "Reject it if ... unrelated neighboring annotations dominate." The section line K-K is at the bottom, partially in the crop. In IMAGE 2, I see "- K" at the bottom left. That's a fragment of the section line. It's a neighboring annotation fragment. Does it dominate? Not really, it's small.
+
+The main problem is the left feature. Let's look at IMAGE 2's left edge: the horizontal lines at the arrow target touch the left border (x=0). This means the leader's target feature is clipped at the left border. The hatched feature is outside. So the crop does NOT contain a visible local portion of the touched feature (the hatched block). The horizontal lines at the border are just the very edge of the feature, but the feature body (hatching) is outside.
+
+Hmm, but the requirement says "a visible local portion of every component feature touched by those arrows." If the arrow points to the top edge line, and that line is visible (even a small portion), then it's satisfied. But the line in IMAGE 2 at the arrow target - is it the feature edge or an extension line? In a cross-section view, the top edge of the part is a solid line. The hatched region is below it. In IMAGE 2, below the horizontal line at the arrow target, is there hatching? No, the area below is empty (white). The hatching is to the left (outside). So the horizontal line at the arrow target in IMAGE 2 is NOT the top edge of a hatched feature within the crop; it's just a line that, in the full drawing, is the top edge of the left hatched block, but the hatched block is outside.
+
+Wait, but in IMAGE 1, the left hatched block's top edge is at y≈1450 from x=0 to x≈490. The arrow target horizontal line is at x≈500-575. These don't connect. So the arrow target line is a separate line. What is it? Maybe it's the top edge of a thin feature that is inside the magenta box but I can't see its hatching because it's thin? Or maybe the arrow target line is actually the continuation of the left block's top edge but with a gap due to the section line crossing?
+
+I'm overanalyzing. Let's look at the visual evidence in IMAGE 2: the left leader's arrowheads point to a horizontal line that is at the very left edge of the crop, and there's no feature (no hatching, no shape) associated with it inside the crop. The feature is clearly cut off. This is a classic "touched feature is absent" or "leader reaches the crop border" situation. The leader's target is at the border.
+
+Actually, the leader line itself (vertical) is at x≈150 in IMAGE 2, which is inside. The arrowheads are at x≈150, y≈430-490. The horizontal target lines are at x≈0-110, y≈430-490. So the horizontal target lines extend to the left border (x=0). This means the feature edge line is clipped at the left border. The actual feature (hatched block) is to the left, outside.
+
+Therefore, the crop is INVALID because the touched feature (the left cross-section feature) is not visible / is clipped at the left border. We need to expand left to include the hatched feature.
+
+Let's determine the expansion. In IMAGE 1, the magenta box left edge is at x≈497. The left hatched block spans from x=0 to x≈490. To include a visible local portion of that feature, we need to expand left to include at least part of the hatched block. The hatched block's right portion is at x≈300-490. So we need to expand left by enough to include, say, x≈300 to x≈490, which is about 200 pixels. The magenta box width is from x≈497 to x≈1350, so width ≈ 853 pixels. To expand left by 200 pixels, that's 200/853 ≈ 23% ≈ 230 in normalized units. But we might want to include more of the feature to make it coherent. Let's say expand left by ~300-400 pixels to capture a good chunk of the hatched block. 300/853 ≈ 350. Hmm.
+
+But wait, also the section line K-K first "K" is at x≈410, which would be included if we expand left by ~100 pixels. That's fine, it's a neighboring annotation but not dominating.
+
+Let me look at the right side. The magenta box right edge is at x≈1350. The "SECOND TERRACE" text starts at x≈1265, so a bit of it ("SE") is inside. The second hatched feature is at x≈730-1070, fully inside. The right side seems okay; we don't need to expand right for the FAI 191 group. The "SECOND TERRACE" text is not part of the FAI 191 group, so we don't need it. But having "SE" fragment inside is a bit ugly but not dominating.
+
+Top side: the magenta box top edge is at y≈1040. The text "4X 0.49 ±0.10" and FAI/SPC circles are at y≈1150, inside. The leader top is at y≈1150. So top is fine.
+
+Bottom side: the magenta box bottom edge is at y≈1710. The section line K-K is at y≈1680, inside. The second hatched feature bottom is at y≈1510, inside. So bottom is fine.
+
+Thus the main expansion needed is LEFT.
+
+Let me estimate the left expansion more precisely. I'll look at IMAGE 1 pixel coordinates. The image is 2337 wide (typical). Let me estimate from the visual. The magenta box left edge appears at about 21% of the width? Hard to say. Let me just use relative reasoning.
+
+In IMAGE 1, the left hatched block's right edge (the vertical line where hatching ends) is at some x. The arrow target lines are just to the right of that. To include a visible local portion of the hatched feature, we need to expand left to include the hatched block's right portion. The hatched block in IMAGE 1 spans from the left image edge to about the magenta left edge. So the hatched block is entirely to the left of the magenta box (with maybe a tiny overlap). Therefore, to include any hatching, we need to expand left by a significant amount, maybe 25-35% of the crop width.
+
+Let me look at the proportions in IMAGE 1. The magenta box width visually: left edge at ~21% of image width, right edge at ~58% of image width. So width ~37% of image width. The left hatched block right edge is at ~21% (just at the magenta left edge). The hatched block left edge is at 0%. So the hatched block width is ~21% of image width. To include, say, the right half of the hatched block (10% of image width), we need to expand left by 10% of image width = 10/37 ≈ 27% of crop width ≈ 270 normalized. To include the whole hatched block, expand left by 21/37 ≈ 57% ≈ 570 normalized.
+
+Hmm, but we only need "a visible local portion." So maybe 250-300 normalized is enough to show some hatching.
+
+But also, the arrow target lines in IMAGE 2 are at the left border. If we expand left, the arrow target lines will move away from the border and we'll see the hatched block to their left, making the feature visible. Good.
+
+Let me also double check: is the left leader's arrowhead clipped in IMAGE 2? The arrowheads are at x≈150, y≈430-490, which is inside (not at border). So arrowheads are fine. The issue is the feature.
+
+Thus missing: the touched feature (left cross-section / hatched feature) is clipped/absent. We should list it as missing something like "left cross-section feature touched by leader arrowheads" or "component feature at left leader target".
+
+Let me phrase missing as: ["left cross-section feature (hatched) touched by the leader arrowheads is clipped at the left border"].
+
+Now expansion: left ~300, top 0, right 0, bottom 0. Maybe also a tiny bottom to fully include the section line? The section line is not part of the group, so not needed. But the section line fragment "- K" at bottom left of IMAGE 2 is a neighboring annotation; expanding left would include the full "K - K" which is fine.
+
+Actually, wait. Let's reconsider whether the left leader's target feature is the left hatched block or something else. Look at IMAGE 1: the vertical leader line is at x≈553. The arrowheads at the bottom point to a horizontal line at x≈500-575. To the left of x≈500, at the same y, is there a hatched block? The left hatched block's top edge is at y≈1450 (same as the upper arrow target line). The left hatched block's right edge vertical line is at x≈490. So at x≈500-575, y≈1450, that's just to the right of the left hatched block's right edge. So the horizontal line at x≈500-575 is NOT on the left hatched block. It's a separate short line.
+
+Hmm, so what is that short line? Maybe it's the top edge of a feature that is drawn between the left block and the second block, but it's not hatched because it's a thin wall? Or maybe it's a dimension extension line?
+
+Let's look at the cross-section shape in IMAGE 1 between the left block and the second block. The left block right edge at x≈490 goes down. Then there's white space. Then the second block (SECOND TERRACE) starts at x≈730. So between x≈490 and x≈730 is white (the gap between two part features in the cross-section). The arrow target line at x≈500-575 is in this white gap. That's weird.
+
+Wait, maybe I'm misreading the left block's right edge. Let me look again. In IMAGE 1, the left hatched block: I see hatching from x=0 to about x=410. Then at x≈410 there's a vertical line. Then from x≈410 to x≈490 there's a thin un-hatched region? Then at x≈490 the magenta box left edge. Hmm.
+
+Actually the cross-section might show a part with a flange. The top surface line might extend from x=0 to x≈575 (the arrow target), with hatching only in part of it. The hatching pattern might be drawn only on the left portion due to space, but the top edge line continues to x≈575. In that case, the arrow target line IS the top edge of the left feature, and the feature's top edge is visible in the crop (the line from x≈497 to x≈575 inside the magenta box). But the hatching (the body of the feature) is to the left, outside.
+
+The requirement: "a visible local portion of every component feature touched by those arrows." The feature is the part cross-section. A visible local portion would be the top edge line plus some hatching. If only the top edge line is visible (no hatching), is that a "visible local portion of the component feature"? Arguably yes, the edge line is part of the feature. But it's borderline.
+
+However, the bigger issue: in IMAGE 2, the top edge line at the arrow target touches the left border (x=0). That means the line is clipped at the left border. The requirement says "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent". The leader (vertical line) does NOT reach the border (it's at x≈150). The arrowheads are not clipped. The touched feature: the top edge line is present but clipped at the left border (it extends to x=0). The hatched body is absent.
+
+I think the intended answer is that the crop is invalid because the left feature is cut off. The leader's target feature (the cross-section hatched region) is mostly outside the crop. We need to expand left.
+
+Let me look at IMAGE 2 once more. At the left, I see the vertical leader line, two arrowheads, and two horizontal lines that start at the left border (x=0) and go to about x=110. There's no hatching, no feature shape. So the feature is essentially absent; we only see the target lines which are at the border. This strongly indicates the feature is clipped.
+
+Thus valid = false.
+
+Missing: the component feature (cross-section hatched region) at the left leader target.
+
+Expand left to include it. How much? In IMAGE 1, the hatched region's right edge is at the magenta left border (x≈497) or just left of it. To include a visible local portion of the hatched region, we need to expand left by maybe 20-30% of crop width. Let's say left = 300.
+
+But also, we might want to ensure the arrow target lines are not at the border after expansion. If we expand left by 300 (30% of width ≈ 256 pixels), the new left border in IMAGE 1 coordinates would be at x≈497-256 = x≈241. The hatched region spans x=0 to x≈490, so after expansion, the hatched region from x≈241 to x≈490 would be visible (about 250 pixels of hatching). Good, that's a visible local portion. The arrow target lines at x≈500-575 would now be well inside. Good.
+
+So left expansion ~300 normalized.
+
+Let me double check the crop width in pixels to convert. I don't have exact pixels, but normalized is fraction of crop width, so I just need the fraction. The hatched region width in IMAGE 1 is from x=0 to x≈490. The magenta box is from x≈497 to x≈1350, width ≈853. The hatched region is to the left of the magenta box, width ≈490 (from 0 to 490). To include, say, the right 60% of the hatched region (x≈200 to x≈490, width 290), we need to expand left by 290 pixels = 290/853 ≈ 34% ≈ 340 normalized. To include the right 50% (x≈245 to 490, width 245), expand left by 245/853 ≈ 29% ≈ 290.
+
+I'll set left = 350 to be safe, ensuring a good visible portion of the hatched feature.
+
+Hmm, but if I expand left too much, I might include the "5" and "6" boxes and FAI 66/67 circles on the left (which are at x≈0-250, y≈1150-1280). Those are unrelated neighboring annotations. If they dominate, that's bad. But they're at the top-left, and after expansion they'd be at the left edge, not dominating the center. The requirement says reject if unrelated neighboring annotations dominate. Including a bit of them at the edge is probably okay, but to be safe, maybe expand left just enough to show the hatched feature without including the FAI 66/67 circles. The FAI 66/67 circles are at y≈1150-1280, which is the top portion. The hatched feature is at y≈1450-1510. So if I expand left, the top-left will include FAI 66/67 and the "5","6" boxes. That might be considered "unrelated neighboring annotations" but they wouldn't dominate because the crop is wide.
+
+Actually, the FAI 66/67 and "5","6" are at the same vertical level as the "4X 0.49" text (top of crop). If I expand left, they'd appear to the left of "4X 0.49". That's a lot of unrelated annotation. Hmm.
+
+But the requirement is about the FAI 191 group's leader and feature. The leader's feature is the hatched cross-section at the bottom-left. To show it, I must expand left, which will also bring in the top-left annotations. That's unavoidable if the feature is to the left.
+
+Alternatively, maybe the intended interpretation is that the crop is invalid and we should expand left moderately. The presence of some neighboring annotations at the edge is acceptable as long as they don't "dominate."
+
+Let me think about whether the crop might actually be considered valid. The instructions say: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." This hints that the crop might be invalid despite containing the FAI circle. The reason would be the clipped feature/leader.
+
+In IMAGE 2, the left leader's target lines touch the left border. That's a strong signal of clipping. So invalid.
+
+Thus I'll go with valid=false, missing the left feature, expand left.
+
+Let me also consider the bottom: the section line "K-K" - in IMAGE 2 we see "- K" at bottom left. The full section line in IMAGE 1 is "SECTION K - K" with the dash-dot line crossing the magenta box left border. The "SECTION" text is outside (left). The first "K" is at x≈410 (outside magenta left edge 497). The dash-dot line crosses the left border. So the section line is clipped at the left border too. But the section line is not part of the FAI 191 group, so it's not required. However, it's a "relevant leader"? No, it's a section line, not a leader for FAI 191. So we don't need to include it. But it's a neighboring annotation that's clipped; that's fine, we don't care.
+
+But wait, the requirement: "Reject it if a relevant leader reaches the crop border". The section line is not a relevant leader for FAI 191. So okay.
+
+Thus the only relevant issue is the left feature for the FAI 191 leader.
+
+Let me finalize expansion: left = 350, top = 0, right = 0, bottom = 0.
+
+Hmm, but maybe I should also expand bottom a little to fully include the hatched feature's bottom? The hatched feature in IMAGE 1 spans y≈1450-1510. The magenta box bottom is at y≈1710, so the hatched feature is fully within the vertical range. No bottom expansion needed.
+
+Top: the hatched feature top is at y≈1450, magenta top at y≈1040, fine.
+
+So only left.
+
+Let me set left = 350. Confidence moderate, say 0.7.
+
+Actually, let me reconsider the magnitude. The crop width in IMAGE 1: I'll estimate pixel positions by looking at the image dimensions. The image appears to be 2337x2337 or similar (square-ish). The magenta box left edge at ~21% = ~490 px, right edge at ~58% = ~1355 px, width ~865 px. The hatched feature right edge at ~21% = ~490 px (just at left border). The hatched feature left edge at 0%. So hatched feature width ~490 px. To include a "visible local portion," maybe 1/3 of it = ~160 px = 160/865 ≈ 185 normalized. To include half = ~245 px ≈ 283 normalized. I'll pick left = 300 as a reasonable value to show a clear portion of the hatched feature while not over-including the top-left annotations.
+
+Hmm, but the top-left annotations (FAI 66/67, boxes 5,6) are at x≈0-250. If I expand left by 300 normalized = 300/1000 * 865 = 259 px, new left border at 490-259 = 231 px. So the top-left annotations from x=0 to 231 would be partially included (the right part of them). The FAI 66 circle is at x≈180-250, so it'd be partially included. That's a bit messy but not dominating.
+
+Alternatively, expand left by 200 normalized = 173 px, new left border at 317 px. Then hatched feature from 317 to 490 visible (173 px of hatching) - a visible local portion. And top-left annotations from 0 to 317 partially included (FAI 66 at 180-250 fully included, box 5 at 0-60 included). Hmm that includes more top-left annotations.
+
+This is a tradeoff. The hatched feature and the top-left annotations are at the same x-range (both on the left). So any left expansion includes both. There's no way to include the hatched feature without including some top-left annotations, because they're vertically separated but horizontally overlapping.
+
+Given that, the "unrelated neighboring annotations dominate" criterion: after expansion, the crop would contain the FAI 191 group in the center-right, the hatched feature at bottom-left, and the FAI 66/6

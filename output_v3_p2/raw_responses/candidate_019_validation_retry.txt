@@ -1,0 +1,194 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle encloses a region containing three FAI/SPC marker pairs and their associated dimensions:
+- 2.50 +0.19/-0.10 with FAI 76 / SPC BS
+- 1.62 +0.19/-0.12 with FAI 75 / SPC BR
+- 1.26 +0.19/-0.12 with FAI 100 / SPC CO (the red rectangle highlights FAI 100)
+- (0.00) at the bottom
+
+The leaders for these dimensions go to the left, pointing to the cross-section feature (the hatched profile). Let me look at where the leaders terminate.
+
+Looking at IMAGE 1, the magenta rectangle's left edge is at the very left of the image (x=0). The leaders for the dimensions 2.50, 1.62, 1.26, and (0.00) extend to the left and connect to the cross-section profile. Let me trace them.
+
+The leader for 2.50 goes left and down to a horizontal line at the top of the profile. The leader for 1.62 goes left and down to a horizontal line. The leader for 1.26 goes left and down to a horizontal line. The leader for (0.00) goes left to a horizontal line.
+
+Now, in IMAGE 1, the magenta rectangle's left edge appears to cut through the cross-section profile. Let me look. The magenta rectangle left edge is at x=0 (the image left border). The cross-section profile (hatched area) is visible inside the magenta rectangle on the left side. But wait, does the profile extend beyond the left edge of the magenta rectangle?
+
+Looking at IMAGE 1, the hatched cross-section profile on the left side: I see the hatching starts at the left edge of the magenta rectangle. The profile's left portion might be cut off. Let me look carefully. The magenta rectangle left edge is at x=0. The hatched region's leftmost visible part is at x=0. But the profile shape (the stepped outline) - the top step's left vertical line is at around x=40-50, which is inside. The hatching lines go all the way to x=0. So the profile might be cut on the left.
+
+Hmm, but the leaders terminate at horizontal lines that are part of the profile. Let me trace each leader's terminal.
+
+Leader for 2.50: from the dimension text, a line goes left-down to a horizontal line at y~975 (in image 1 coordinates). That horizontal line extends left to x~55. So the terminal is at x~55, which is inside the magenta rectangle (left edge 0). Good.
+
+Leader for 1.62: line goes left-down to horizontal line at y~1065, extending left to x~85. Inside.
+
+Leader for 1.26: line goes left-down to horizontal line at y~1105, extending left to x~540? Wait, let me look. The leader for 1.26 in image 1: from "1.26" text, a line goes left and slightly down to a horizontal line. Actually the leader line for 1.26 goes from the text leftward to about x=660 then down to a horizontal line at y~1105 that extends left to x~540. Hmm.
+
+Wait, I need to look at the structure. The dimension leaders in these drawings typically have a horizontal extension line from the feature and a leader line from the text. Let me look at the second image (the crop) to see what's included.
+
+In IMAGE 2 (the crop), I see the cross-section profile on the left with hatching. The leaders:
+- 2.50 leader goes left-down to a horizontal line at the top step.
+- 1.62 leader goes left-down to a horizontal line at the middle step.
+- 1.26 leader goes left-down to a horizontal line at the bottom of the hatched region.
+- (0.00) leader goes left to a horizontal line at the very bottom.
+
+In IMAGE 2, the left edge of the crop cuts through the hatched profile. The hatching lines extend to the left edge of the crop (x=0 in image 2). The profile's left outline (the diagonal hatching and the left vertical/stepped edge) - in image 2, I see the stepped outline on the left: there's a vertical line at x~185 (top step), then a step down at x~225, then the hatched region. The hatching extends left to x=0. So the profile is cut on the left in the crop.
+
+But is the left part of the profile necessary? The leaders terminate at horizontal lines that are within the crop. The "touched feature" - the leaders point to horizontal surfaces of the profile. Those horizontal surfaces are visible in the crop. The left cut of the profile might just be the profile extending beyond, but the touched features (the horizontal lines where leaders terminate) are present.
+
+Hmm, but the rule says "a visible local portion of every component feature touched by those arrows." The arrows/leaders terminate at the horizontal lines. In the crop, those horizontal lines are visible. So that's satisfied.
+
+But wait, the rule also says "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent."
+
+Let me check if any leader reaches the crop border (left edge). In IMAGE 2, the leaders for the dimensions: the leader line for 2.50 goes from text to a horizontal line at top. The horizontal line at top (the extension line) extends left to x~185 (the vertical step). It does NOT reach the left border. Good. The leader for 1.62 horizontal line extends left to x~225. Good. The leader for 1.26 horizontal line extends left to x~920? No wait.
+
+Let me look at IMAGE 2 more carefully. The hatched region's top horizontal line (where 1.26 leader points) - in image 2, the 1.26 leader goes from text left-down to a horizontal line at y~1310 that is the top of the hatched region? Actually the hatched region top is at y~1310. The leader for 1.26 terminates at that line at x~920. The hatched region's top line extends left to x~0 (the left border). Hmm, but that's the feature line, not the leader.
+
+Actually, let's think about what the "leader" is. The leader is the line connecting the dimension text to the feature. In these drawings, the leader typically is an angled line from the text to a point on the feature, or to an extension line.
+
+Let me look at the structure in IMAGE 1 for the 1.26 dimension. The text "1.26" is at around x=770, y=1145. From the left of "1.26", a line goes left to x~660, y~1145, then down-left to x~660? Hmm, hard to say.
+
+Actually, I think the leaders here are: from the dimension value, a horizontal line goes left, then an angled line goes to the feature. Let me look at the 2.50 one in image 1: text "2.50" at x~770, y=865. A line from left of "2.50" goes left to x~660, y=865, then angled down-left to x~625, y=975, then horizontal left to x~55, y=975. So the horizontal line at y=975 from x=55 to x=625 is the extension line / leader terminal. That horizontal line's left end at x=55 is the feature point (top of profile). In image 1, x=55 is inside the magenta rectangle (left edge 0). Good.
+
+In IMAGE 2, the same horizontal line at top: from x~185 (the vertical step) to x~1050 (where the angled leader meets). The left end at x~185 is the feature. That's inside the crop. Good. So the leader does not reach the left border.
+
+Now the hatched region: in image 2, the hatching extends to the left border x=0. That means the profile feature is cut on the left. But is the cut a problem? The rule says "a visible local portion of every component feature touched by those arrows." The arrows touch the horizontal lines (top step, middle step, bottom of hatched region, bottom line). Those are visible. The left cut of the hatched region is just the rest of the profile, not specifically touched by an arrow. So maybe it's fine.
+
+But hold on. Let's look at the (0.00) dimension. In image 1, the (0.00) text at x~810, y=1245. A line from left of (0.00) goes left to x~540, y=1245, which is a horizontal line that is the bottom of the profile (the bottom extension line). That horizontal line in image 1 extends left to x=0 (the left border of the image, and also the left border of the magenta rectangle). So the (0.00) leader's horizontal line reaches the left border of the magenta rectangle!
+
+Let me check. In image 1, the bottom horizontal line (for 0.00) at y~1245: it goes from x~540 leftward. Does it reach x=0? Looking at image 1, the hatched region's bottom line at y~1245 extends left to x=0. Yes, the line at the bottom of the hatched region (the (0.00) reference line) extends all the way to the left edge of the image/magenta rectangle.
+
+In IMAGE 2, the (0.00) horizontal line at y~1730 extends from x~920 leftward to x=0 (the left border of the crop). So the leader/extension line for (0.00) reaches the crop border!
+
+Hmm, but is that a "relevant leader reaching the crop border"? The (0.00) is part of the same annotation group (it's the datum/reference for the stack of dimensions). The horizontal line for (0.00) is the bottom reference line of the profile. In the crop, this line is cut at the left border.
+
+But wait, is the (0.00) line a leader or a feature line? It's the bottom surface of the profile (the reference plane). The leader from (0.00) text connects to this line. The line itself is a feature line (the bottom of the part). In the crop, this feature line is cut at the left border, meaning the feature is not fully shown but a portion is. The rule requires "a visible local portion of every component feature touched by those arrows." The (0.00) arrow/leader touches the bottom line; a portion is visible. So that's okay per that clause.
+
+But the clause "Reject it if a relevant leader reaches the crop border" - the leader line for (0.00) is the horizontal line from the text to the feature. If that horizontal line is the same as the feature line and it reaches the border, then the leader reaches the border.
+
+Hmm, this is getting too detailed. Let me look at the overall picture. The magenta rectangle in image 1 has its left edge at x=0. The cross-section profile is cut by this left edge. The profile's left part (the left vertical edge of the stepped shape and the left part of the hatching) is outside the crop (to the left, but the image is cut at x=0, so we can't see what's there). Actually the image 1 left edge is x=0, and the magenta rectangle left edge is also x=0. So we cannot see anything to the left of the magenta rectangle in image 1 either. The profile is cut at the image boundary.
+
+So in image 1, the profile's left extent is unknown (cut by image boundary). The magenta rectangle includes everything from x=0 rightward. So the crop (image 2) includes the same left extent as image 1's visible region for that area.
+
+Now, the question: is the crop valid? The crop must fully contain one coherent FAI annotation group. The red rectangle highlights FAI 100. The annotation group for FAI 100 includes: FAI 100 circle, SPC CO circle, the dimension 1.26 +0.19/-0.12, and the leader to the feature.
+
+But the magenta rectangle contains THREE FAI groups (76, 75, 100). The rule says "fully contains one coherent FAI annotation group." It doesn't say it must contain only one. But it says "Reject it if ... unrelated neighboring annotations dominate." Here the neighboring annotations (76, 75) are related (same feature stack, same profile). They don't "dominate" in a bad way; they're part of the same dimension stack.
+
+Hmm, but actually the typical interpretation: the crop should contain the selected FAI (100) and its associated annotation, plus the leaders and features. The presence of 76 and 75 is fine as long as they're not "dominating" or causing issues. They are part of the same coherent group of dimensions on the same profile.
+
+Now the key issue: do the leaders for FAI 100's dimension (1.26) reach the crop border or get clipped? The 1.26 leader in image 2: from text left-down to a horizontal line at the top of the hatched region (y~1310). That horizontal line in image 2 extends left to x=0 (the left border). So the leader/extension line for 1.26 reaches the left border!
+
+Wait, let me look again. In image 2, the 1.26 leader: text "1.26" at x~1230, y~1370. A line from left of "1.26" goes left to x~1130, y~1370, then angled down-left to x~1130? Hmm. Actually the angled line for 1.26 goes from x~1130,y~1370 down-left to x~1130? No.
+
+Let me look at the geometry in image 2. I see for 1.26: a horizontal segment from the text left edge to about x=1130, then an angled line going down-left to about x=1130, y=1430? Then a horizontal line at y=1430? Hmm, I'm confusing myself.
+
+Let me look at the image 2 layout row by row:
+Row 1 (top): "2.50 +0.19 / -0.10" with FAI 76 / SPC BS. Leader: from left of "2.50" a horizontal line to x~1050, then angled down-left to x~1050? then horizontal at y~510 from x~185 to x~1050.
+Row 2: "1.62 +0.19 / -0.12" with FAI 75 / SPC BR. Leader: horizontal at y~810 from x~225 to x~1050.
+Row 3: "1.26 +0.19 / -0.12" with FAI 100 / SPC CO. Leader: from left of "1.26" horizontal to x~1130, then angled down-left to x~1130, y~1430? then horizontal at y~1430 from x~920 to x~1130? Hmm.
+
+Actually, I realize the leaders in these drawings: the dimension text is to the right, and there's a leader line that goes from the text to the feature with a small horizontal tick at the feature. The horizontal line I see at the feature level (e.g., y~510, y~810, y~1310, y~1730) are the extension lines from the feature's horizontal surfaces, drawn to the right to meet the leader.
+
+Let me look at the hatched profile in image 2. The profile has horizontal surfaces at:
+- top of top step: y~510 (from x~185 rightward? no, the top step's top surface is at y~510 from x~185 to ... the profile's top step top surface goes from x~185 rightward to where? The profile is a cross section; the top step's top surface is a horizontal line. In image 2, I see a horizontal line at y~510 from x~185 to x~1050. But that long line is the extension line, not the actual feature surface (the feature surface would be short). Hmm, actually in these drawings the extension line is drawn from the feature surface extending right to the leader. The feature surface itself is part of the profile outline.
+
+This is too detailed. Let me step back and think about the intent of the task.
+
+The task is to validate a crop. The crop (image 2) shows the dimension stack with three FAI markers and the profile on the left. The profile is cut on the left (the hatching and the left outline are cut at the left border). The leaders for the dimensions point to the profile's horizontal surfaces.
+
+The critical question: does the crop fully contain the annotation group for FAI 100 (the selected one), including leaders, arrowheads, and the touched feature?
+
+Looking at image 2, the leaders for 1.26 (FAI 100) - the leader line and the horizontal extension line - the horizontal extension line at the 1.26 level (top of hatched region, y~1310) extends left to x=0 (the left border). So the extension line is cut at the left border. But the leader's terminal (where it points) - is it visible? The leader for 1.26 points to the top of the hatched region. The top of the hatched region in image 2 is at y~1310, and it's visible from x=0 to x~920. The leader's angled line meets this horizontal line at around x~920 (the right end of the hatched region's top). So the terminal is at x~920, visible. Good.
+
+But the horizontal line at y~1310 (the top of hatched region) is the feature surface. It's cut at left border but a portion is visible. The rule requires a visible local portion of the touched feature - satisfied.
+
+Now, does any leader reach the crop border? The leader lines (the angled + horizontal-from-text parts) are on the right side, not reaching the left border. The horizontal extension lines at the feature level reach the left border, but those are feature/extension lines, not the leader from the text. Hmm, but the rule says "every connected leader segment" must be contained. The leader segment from the text to the feature: in these drawings, the leader is the line from the text that ends at the feature with a small horizontal tick or arrow. Let me look at whether there's an arrowhead.
+
+Actually, I don't see arrowheads in these dimension leaders; they're just lines ending at the feature (the horizontal tick). The "terminal arrowhead" requirement might not apply if there's no arrowhead (these are dimension leaders, not feature-control-frame leaders). The feature-control-frame leader (the one with the triangle pointing to E) is in the lower part of image 1, outside the magenta rectangle. So that's not part of this crop's group.
+
+OK here's another consideration. The magenta rectangle's left edge cuts the profile. In image 1, to the left of the magenta rectangle (i.e., x<0) there's nothing visible (image boundary). So we can't see if the profile continues. But the profile's left outline (the stepped left edge) - in image 2, I see the stepped left edge: vertical line at x~185 (top step left), step to x~225, then the hatched region's left edge is at x~0? The hatching's leftmost diagonal lines go to x=0. The profile's actual left boundary (the outline) might be at x<0 (cut off). So the profile is cut.
+
+Is the profile's left boundary a "touched feature"? The leaders don't point to the left boundary; they point to the horizontal surfaces. So the left boundary being cut is not a problem for the "touched feature" requirement.
+
+But the rule also: "Reject it if ... the touched feature is absent." The touched features (horizontal surfaces) are present. Good.
+
+Now, "unrelated neighboring annotations dominate" - the neighboring annotations 76 and 75 are related (same stack). They don't dominate in a bad way. The crop is dominated by the dimension stack which is exactly the group. So that's fine.
+
+Hmm, but wait. Let me reconsider the left cut. The horizontal extension lines for the dimensions (the lines at y~510, y~810, y~1310, y~1730 that go from the feature to the leader) - in image 2, the line at y~510 goes from x~185 to x~1050. The line at y~810 from x~225 to x~1050. The line at y~1310 from x~0 to x~920 (cut at left). The line at y~1730 from x~0 to x~920 (cut at left).
+
+So the bottom two horizontal lines (for 1.26 and 0.00) are cut at the left border. These are the extension lines / feature surfaces for the 1.26 and 0.00 dimensions. The 1.26 dimension is the selected FAI 100's dimension. Its extension line is cut at the left border.
+
+Does that mean "a relevant leader reaches the crop border"? The extension line is part of the leader/annotation. If it's cut at the border, then the leader reaches the border. That would be a rejection criterion.
+
+Hmm, but actually the extension line at the feature level is the feature surface line, which is part of the drawing's profile, not strictly the leader. The leader is the line from the text. Let me look at how the leader connects. In image 2, for 1.26, the leader from the text goes left and then down-left (angled) to meet the horizontal line at y~1310 at its right end (x~920). So the leader's terminal is at x~920, which is the right end of the hatched region's top surface. The horizontal line at y~1310 from x=0 to x=920 is the feature surface (top of hatched region) plus maybe extension. The leader meets it at x~920. So the leader itself does NOT reach the left border; only the feature surface line extends to the left border.
+
+So the leader is fully contained. The feature surface is cut at left but a portion is visible. So per the rules, this might be acceptable.
+
+But hold on, the rule: "a visible local portion of every component feature touched by those arrows." The arrow/leader for 1.26 touches the top of the hatched region at x~920. A local portion around x~920 is visible. Good.
+
+Now what about the (0.00) line? The (0.00) is the reference. Its leader from text goes left to the horizontal line at y~1730 (bottom of profile). That line in image 2 goes from x~920 leftward to x=0 (cut). The leader's terminal is at x~920 (right end of bottom line). So leader contained. Feature portion visible.
+
+So actually all leaders are contained within the crop (their terminals are at the right ends of the horizontal lines, around x~920-1050, well inside the crop). The horizontal lines extend left and get cut, but those are feature lines, and a portion is visible.
+
+Thus the crop seems to contain the full annotation group for FAI 100 (and also 76, 75, which are fine).
+
+But wait, I need to double check the left edge of the magenta rectangle in image 1 vs the profile. In image 1, the magenta rectangle left edge is at x=0. The profile's hatched region in image 1 also starts at x=0 (cut by image boundary). So the crop (image 2) left edge corresponds to image 1's x=0. So the crop does not exclude any visible part of the profile from image 1. Good. So there's no "connected evidence immediately outside the magenta rectangle" that's missing, because outside (left) is just image boundary.
+
+But the rule says "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle." Outside the magenta rectangle on the left: nothing (image boundary). On the top: the text "SPC CONTROL FOR ALL HEAT STAKE POST..." is above the magenta rectangle, not connected to the FAI group. On the right: the other dimension stack (FAI 39, 40, 41) is outside, not connected. On the bottom: the "BJ-BJ" text and the feature-control frame are outside, not connected to this group.
+
+So the only connected evidence is the profile on the left, which is cut at the image boundary (and thus at the magenta rectangle's left edge). The profile's left part is not visible in image 1 either, so we can't say it's missing from the crop relative to image 1.
+
+Hmm, but the profile being cut means the "touched feature" might not be fully shown, but a portion is shown, which satisfies "visible local portion."
+
+Let me think about whether the crop is considered valid. The main concern in these tasks is usually that the crop cuts off a leader or arrowhead or the feature. Here, the leaders are intact. The feature is partially shown but the touched portions are shown.
+
+But there's a subtlety: the horizontal extension lines for 1.26 and 0.00 are cut at the left border. If we consider these extension lines as part of the "leader segment," then they reach the border. The rule: "every connected leader segment" must be contained, and "Reject it if a relevant leader reaches the crop border."
+
+In engineering drawing convention, the leader line for a dimension is the line from the text to the feature, often with a small arrow or tick at the feature. The extension line is a separate line from the feature extending to where the dimension line or leader is. Here, the layout is: dimension text on right, leader line (angled) from text to a point, and at that point a horizontal line (the extension line) goes left to the feature. Actually no.
+
+Let me look at the 2.50 case which is fully visible (not cut). In image 2, 2.50: text at right. From left of "2.50", a horizontal line goes left to x~1050, y~510? No wait, the text "2.50" is at y~110 (top row). The horizontal line at y~510 is below the text. So the leader from the text goes: from left of "2.50" (x~1130, y~110) left to x~1050, y~110, then angled down-left to x~1050, y~510? then horizontal left to x~185, y~510. Hmm, that would make the horizontal line at y~510 part of the leader. And that horizontal line's left end at x~185 is the feature (top step corner). For 2.50, x~185 is inside the crop, so the leader is fully contained. Good.
+
+For 1.26, the analogous horizontal line at y~1310 has its left end at x=0 (cut). So if that horizontal line is part of the leader, then the leader for 1.26 reaches the left border! That would be a rejection.
+
+Hmm, but is the horizontal line at y~1310 the leader or the feature surface? For 2.50, the horizontal line at y~510 from x~185 to x~1050: the feature surface (top of top step) is at y~510 from x~185 to ... the top step's top surface in the profile is from x~185 rightward to where the step ends. But the profile's top step top surface - looking at the profile shape, the top step is a thin horizontal band? Actually the profile is a cross-section of a part; the top step's top surface is a horizontal line of some length. In image 2, the profile's top step top surface appears to be from x~185 to x~? The hatched region is below. The top step (unhatched? or hatched?) Hmm.
+
+This is too uncertain. Let me look at the visual difference between image 1 and image 2 to see if the crop cut anything that was visible in image 1.
+
+In image 1, the magenta rectangle spans from x=0 to x~1355 (right edge), y~795 to y~1300 (top to bottom). The profile in image 1 within the magenta rectangle: the hatched region's left edge is at x=0 (cut by image boundary). The horizontal lines: top step line at y~975 from x~55 to x~625. Middle line at y~1065 from x~85 to x~625. Hatched top line at y~1105 from x~0 to x~540. Bottom line at y~1245 from x~0 to x~540.
+
+Wait, in image 1, the horizontal lines' left ends: top step line left end at x~55 (not 0). Middle line left end at x~85. Hatched top line left end at x~0. Bottom line left end at x~0.
+
+So in image 1, the hatched top line and bottom line are cut at x=0 (image boundary). The top step and middle lines are NOT cut (their left ends at x~55, x~85 are visible, inside the magenta rectangle).
+
+Now in image 2 (the crop), the same lines: top step line left end at x~185 (visible). Middle line left end at x~225 (visible). Hatched top line left end at x=0 (cut). Bottom line left end at x=0 (cut).
+
+So the crop (image 2) has the same left cut as image 1 for the hatched top and bottom lines (both cut at the left edge). So the crop did not cut anything extra relative to image 1; the cut was already at the image boundary in image 1.
+
+Therefore, the "connected evidence immediately outside the magenta rectangle" on the left is nothing (image boundary). So the crop is consistent with image 1.
+
+Now, the validation criteria: the crop must fully contain the FAI annotation group. The group for FAI 100 includes the leader for 1.26. The leader for 1.26 includes the horizontal line at the hatched top level, which is cut at the left border in both image 1 and image 2. So in image 1, that leader is also cut (by the image boundary). So the "true" full leader extends left beyond the image boundary, which we cannot see.
+
+Hmm, this is the crux. The hatched top line (feature surface for 1.26) - is it a leader segment or a feature line? If it's the feature surface (part of the profile outline), then it's a "component feature," and we need a visible local portion of it - which we have (from x=0 to x=920 in image 2). The leader (the line from the text) terminates at the right end of this surface (x~920), which is visible. So the leader is fully contained.
+
+If the hatched top line is considered a leader segment (extension line), then it's cut, and the crop is invalid.
+
+I think in standard dimensioning, the line from the feature surface extending to the leader is the "extension line," and the line from the text to the extension line is the "leader." But here the layout is unusual: the dimension text is to the right and the leader goes from the text to the feature with the horizontal line being the extension line drawn from the feature to the right to meet the angled leader.
+
+Actually, you know, I bet the horizontal lines at the feature levels ARE the extension lines, drawn from the feature's horizontal surface extending rightward to where the angled leader from the text meets. The feature's horizontal surface itself is the short part of the profile outline.
+
+Look at the profile in image 2: the hatched region's top surface is a horizontal line. The extension line for 1.26 would be drawn from that surface extending right. But the hatched region's top surface in the profile is from x=0 to x~920 (the whole top of the hatched region). The extension line would be a continuation to the right of x~920 to meet the leader. But the leader's angled line meets at x~920 (the right end of the hatched region). So there's no extension line to the right; the leader meets the feature surface directly at its right end.
+
+Hmm, I'm overanalyzing. Let's look at the 2.50 case to understand the convention. The top step's top surface in the profile: where is it? The profile's top step is the uppermost horizontal band. In image 2, the top step's top surface is at y~510, from x~185 to x~? The top step's right end - the profile's top step extends right to where? The profile is a cross-section; the top step might extend right to x~? But the hatched region (the main body) is below and to the right. The top step's top surface from x~185 rightward - but the hatched region's top is at y~1310, much lower. So the top step is a thin protrusion on the left? This is confusing.
+
+Let me look at the profile shape in image 2 from top to bottom on the left side:
+- At y~510, there's a horizontal line from x~185 rightward to x~1050 (this is long, so it's an extension line, not the feature surface, because the feature surface wouldn't be 865 px long in a 2337 px wide crop... well it could be).
+- At y~510, x~185, there's a vertical line going down to y~810 (the left edge of the top step).
+- At y~810, horizontal line from x~225 rightward to x~1050 (extension line).
+- At y~810, x~225, vertical line down to y~1310.
+- At y~1310, the hatched region top, from x~0 to x~920.
+- The hatched region from y~1310 to y~1730.
+- At y~1730, bottom line from x~0 to x~920.
+
+So the profile's left outline is: vertical at x~185 from y~510 to y~810, then step right to x~225, vertical from y~810 to y~1310, then the hatched region's left edge from y~1310 to y~1730 at x~0 (cut). So the profile's left edge for the hatched region is cut at x=0.
+
+The horizontal lines at

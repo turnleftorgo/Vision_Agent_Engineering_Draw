@@ -1,0 +1,144 @@
+The user wants me to validate a proposed crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context. There's a magenta rectangle (the proposed crop boundary) and a red rectangle (the selected FAI marker, which is "SPC AL" / "FAI 39").
+
+Let me look at the magenta rectangle in IMAGE 1. It's a vertical rectangle that spans from the top of the image down to about the bottom third. Let me trace its boundaries. The magenta rectangle's left edge is at the very left of the image (x=0), the right edge is around x=1350 (the vertical magenta line), the top edge is at the top of the image (y=0), and the bottom edge is around y=1700 (the horizontal magenta line).
+
+Wait, let me look more carefully. The magenta rectangle in IMAGE 1: I see a vertical magenta line on the right side at around x=1350, going from top to about y=1700. And a horizontal magenta line at the bottom at around y=1700, going from x=0 to x=1350. The left edge and top edge of the magenta rectangle appear to be at the image borders (x=0 and y=0). So the magenta rectangle is the region from (0,0) to (1350, 1700) approximately.
+
+Now the red rectangle (selected FAI marker) is at around (1100-1190, 1100-1200), containing "SPC AL" and adjacent "FAI 39".
+
+Now let's look at IMAGE 2, the proposed crop. IMAGE 2 shows: top has a partial feature control frame "0.25 A B C" with FAI 111 / SPC CZ, and a box "18", and a circle with crosshairs (a hole detail). Then "BM 20:1" text (part of "DETAIL BM SCALE 20:1"?). Then "SPC CONTROL FOR ALL HEAT S..." text. Then the dimension table: 2.50 +0.19/-0.10 FAI 76 SPC BS, FAI 39 SPC AL 2.50; 1.62 +0.19/-0.12 FAI 75 SPC BR, FAI 40 SPC AM 1.62; 1.26 +0.19/-0.12 FAI 100 SPC CO, FAI 41 SPC AN 1.26; (0.00).
+
+Hmm wait. Let me compare IMAGE 1 and IMAGE 2 carefully. In IMAGE 1, the magenta rectangle's right edge is at x~1350. The content inside the magenta rectangle in IMAGE 1 includes: the left part of the dimension table (2.50, 1.62, 1.26, (0.00) with their tolerances and FAI/SPC circles on the left side: FAI 76/SPC BS, FAI 75/SPC BR, FAI 100/SPC CO), AND the right column of FAI/SPC circles (FAI 39/SPC AL, FAI 40/SPC AM, FAI 41/SPC AN) which are at x~1030-1190, which is inside the magenta rectangle (since right edge is 1350). But the dimension values on the right side (2.50 +0.29/-0.07, 1.62 +0.26/-0.10, 1.26 +0.25/-0.10) are at x~1200-1550, which is OUTSIDE the magenta rectangle (to the right of x=1350).
+
+Wait, but in IMAGE 2, the right column shows "2.50" after FAI 39/SPC AL, "1.62" after FAI 40/SPC AM, "1.26" after FAI 41/SPC AN. But it does NOT show the +0.29/-0.07 etc. tolerances on the right. Let me look. In IMAGE 2, after "SPC AL 2.50" there's nothing else on that line to the right (the image cuts off). After "SPC AM 1.62" nothing. After "SPC AN 1.26" nothing. So the right-side tolerances (+0.29/-0.07 etc.) are NOT in IMAGE 2. That's consistent with the magenta right edge being at x~1350, which cuts off before those tolerances.
+
+Hmm, but wait. Let's look at the top of IMAGE 2. It shows a feature control frame "0.25 A B C" with FAI 111 / SPC CZ and a box "18", and a circle with crosshairs. In IMAGE 1, do we see that? In IMAGE 1, the top shows two circles with crosshairs (one at top-left partially cut, one at top-right "DETAIL BN SCALE 20:1"). The top-right circle in IMAGE 1 is at x~1350-2150, y~0-530. The top-left circle is at x~0-200, y~0-450.
+
+Hmm, but IMAGE 2's top shows a circle with crosshairs at the LEFT side (x~0-550, y~0-800) and a feature control frame at top with "0.25 A B C" and box "18". This doesn't match IMAGE 1's top region inside the magenta rectangle. In IMAGE 1, inside the magenta rectangle at the top, we have the top-left circle (partially) and the top-right circle (the BN detail). But the top-right circle in IMAGE 1 is centered around x~1750, which is OUTSIDE the magenta rectangle (right edge 1350). Only the left part of that circle (the dashed circle left edge at x~1350) would be inside.
+
+Wait, I'm confused. Let me look at IMAGE 2 more carefully. IMAGE 2's top-left shows a circle with crosshairs and a dashed circle around it, with an arrow pointing to it from the feature control frame "0.25 A B C" / box 18. This looks like a detail view reference. In IMAGE 1, the top-left circle (x~0-200) is partially visible. But the feature control frame "0.25 A B C" with box 18 — where is that in IMAGE 1? I don't see it in IMAGE 1 at all! IMAGE 1's top doesn't show a "0.25 A B C" frame or box 18.
+
+Hold on. Let me re-examine. Maybe IMAGE 2 is NOT a crop of IMAGE 1 from the magenta rectangle. Maybe IMAGE 2 is a crop from a DIFFERENT location, or the magenta rectangle in IMAGE 1 doesn't correspond to IMAGE 2's content.
+
+Actually wait. The task says: "IMAGE 1 is the wider candidate context. The MAGENTA rectangle is the proposed crop... IMAGE 2 is the proposed crop itself." So IMAGE 2 should be exactly the content inside the magenta rectangle of IMAGE 1. Let me check if they match.
+
+In IMAGE 1, the magenta rectangle region (0,0)-(1350,1700) contains:
+- Top-left: partial circle with crosshairs (the left circle, x 0-200, y 0-450).
+- Top-right: the left portion of the BN detail circle (the dashed circle's left edge at x~1350, and the solid circle's left part? The solid circle in BN detail is centered ~1750, radius ~450, so left edge ~1300. So a sliver of the solid circle's left edge might be inside).
+- Middle: "SPC CONTROL FOR ALL HEAT STAKE POST / ANSI-114X ISO-114X JIS-110X" text (x~390-1680). The part inside magenta (x<1350) would be "SPC CONTROL FOR ALL HEAT STAKE POST" mostly and "ANSI-114X ISO-114X JIS-110X" mostly (since that text ends at x~1380, slightly cut).
+- The dimension table left part: 2.50 +0.19/-0.10 FAI76/SPCBS, 1.62 +0.19/-0.12 FAI75/SPCBR, 1.26 +0.19/-0.12 FAI100/SPCCO, (0.00).
+- The right column of FAI/SPC circles: FAI39/SPCAL (with red box), FAI40/SPCAM, FAI41/SPCAN.
+- The dimension values 2.50, 1.62, 1.26 on the right (x~1200-1340) — these are inside magenta (since 1340 < 1350). Yes "2.50" at x~1200-1340 is inside.
+- The right-side tolerances +0.29/-0.07 etc. at x~1380-1550 are OUTSIDE.
+
+Now IMAGE 2 contains:
+- Top-left: a circle with crosshairs and dashed circle, with arrow from a feature control frame "0.25 A B C" / box 18 / FAI111/SPCCZ.
+- "BM 20:1" text (left side, x~0-300, y~950-1050).
+- "SPC CONTROL FOR ALL HEAT S..." text (right side, x~820-2280, y~1280-1380).
+- Dimension table: 2.50 +0.19/-0.10 FAI76/SPCBS, FAI39/SPCAL 2.50; 1.62 +0.19/-0.12 FAI75/SPCBR, FAI40/SPCAM 1.62; 1.26 +0.19/-0.12 FAI100/SPCCO, FAI41/SPCAN 1.26; (0.00).
+
+These do NOT match! In IMAGE 2, the "SPC CONTROL" text is on the RIGHT side, but in IMAGE 1 it's in the MIDDLE-LEFT. In IMAGE 2, the dimension table's left column (2.50, 1.62, 1.26, (0.00)) is in the MIDDLE, and the right column (FAI39/SPCAL 2.50 etc.) is on the RIGHT. In IMAGE 1, the left column is on the LEFT and the right column is in the MIDDLE.
+
+So IMAGE 2 appears to be shifted RIGHT relative to IMAGE 1's magenta rectangle. In IMAGE 2, we see "BM 20:1" on the left which in IMAGE 1 is at the top-right (the "DETAIL BN SCALE 20:1" — wait, "BM" vs "BN"? In IMAGE 1 it's "DETAIL BN SCALE 20:1". In IMAGE 2 it's "BM 20:1". Hmm, different letters. Actually maybe IMAGE 2's "BM" is from a different detail label "DETAIL BM SCALE 20:1" that is to the LEFT of the magenta rectangle in IMAGE 1? But IMAGE 1's left edge shows "M" at x~0, y~620-680 (a partial letter). That could be the end of "DETAIL BM SCALE 20:1" or "DETAIL AM" etc. Actually in IMAGE 1 at left edge y~620 there's "M" and below a dash. That's likely the tail of a detail label on the left, like "DETAIL ?M SCALE 20:1".
+
+Hmm, this is getting too detailed. Let me step back and think about what the validation is really asking.
+
+The key question: Does the magenta rectangle in IMAGE 1 fully contain one coherent FAI annotation group for the selected FAI marker (FAI 39 / SPC AL)?
+
+The selected FAI marker is FAI 39 / SPC AL, which is associated with the dimension 2.50 (the right-side 2.50 with tolerance +0.29/-0.07). Wait, which 2.50? In IMAGE 1, FAI 39/SPC AL is positioned between the left column and the right column. Let's look at the layout. The left column has 2.50 +0.19/-0.10 with FAI76/SPCBS. Then there's a gap, then FAI39/SPCAL, then 2.50 +0.29/-0.07. So FAI39/SPCAL is associated with the RIGHT 2.50 (the one with +0.29/-0.07). Similarly FAI40/SPCAM with right 1.62 (+0.26/-0.10), FAI41/SPCAN with right 1.26 (+0.25/-0.10).
+
+So the FAI 39 annotation group includes: FAI 39 circle, SPC AL circle, the dimension value 2.50, and the tolerance +0.29/-0.07, plus the leader line that connects to the feature.
+
+Now, the leader line for the right 2.50: In IMAGE 1, the right 2.50 +0.29/-0.07 has a leader line going from the text down-right to the feature (the hatched cross-section on the right). Let's trace: the leader for 2.50 right starts at around x~1580, y~1150 (after the tolerance) and goes down-right to x~1630, y~1270 then horizontal to the feature at x~2030, y~1270. So the leader and the feature are entirely to the RIGHT of the magenta rectangle (x>1350).
+
+Therefore, the magenta rectangle does NOT contain the leader line or the feature for FAI 39. The magenta rectangle cuts off at x=1350, which is before the right 2.50's tolerance and leader.
+
+Wait, but does the magenta rectangle even contain the right 2.50 value? The right 2.50 value is at x~1200-1340, which is inside (just barely). The tolerance +0.29/-0.07 is at x~1380-1550, outside. The leader is outside. The feature is outside.
+
+So the FAI 39 group is incomplete in the magenta crop: missing the tolerance, the leader, the arrowhead, and the feature.
+
+Now look at IMAGE 2 (the proposed crop). In IMAGE 2, the FAI 39/SPC AL is shown with "2.50" to its right, but NO tolerance, NO leader, NO arrowhead, NO feature. So IMAGE 2 indeed is missing the tolerance/leader/feature for FAI 39.
+
+Also, IMAGE 2's content doesn't even match the magenta rectangle of IMAGE 1 (as I noted, the layout is shifted). But regardless, the validation criterion is about whether the crop fully contains the coherent FAI group. It does not.
+
+Moreover, the rule says: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+In IMAGE 2, the FAI 39 group's leader/feature is absent. Also, the top of IMAGE 2 contains an unrelated feature control frame "0.25 A B C" / box 18 / FAI111/SPCCZ and a circle detail, which are unrelated neighboring annotations. And the "BM 20:1" detail label is also somewhat unrelated.
+
+Actually, wait. Let me reconsider whether IMAGE 2 matches the magenta rectangle. The fact that IMAGE 2's layout is shifted suggests that maybe the magenta rectangle in IMAGE 1 is NOT what produced IMAGE 2, OR I'm misreading the coordinates. Let me look at IMAGE 1's magenta rectangle right edge again. The vertical magenta line is at x~1350. In IMAGE 1, at x~1350, what's there vertically? At the top, it passes through the BN detail circle's left dashed edge. In the middle, it passes just right of the "SPC AL" red box (red box right edge ~1190) and just left of the right "2.50" value? The right "2.50" value in IMAGE 1 is at x~1200-1340. So the magenta line at 1350 is just right of that "2.50". Good. And the right tolerance +0.29 is at x~1380+, outside.
+
+Now in IMAGE 2, the right edge of the image is at x~2280 (in IMAGE 2's own coordinate). The content at the right edge of IMAGE 2 is "2.50" (after SPC AL), "1.62" (after SPC AM), "1.26" (after SPC AN), and the "SPC CONTROL FOR ALL HEAT S" text cut off at "S". So IMAGE 2's right edge corresponds to IMAGE 1's x~1350 (where the right 2.50/1.62/1.26 values are, and the SPC CONTROL text is cut at "S"? In IMAGE 1, the SPC CONTROL text "SPC CONTROL FOR ALL HEAT STAKE POST" spans x~390-1680. If IMAGE 2's right edge is at IMAGE 1's x~1350, then in IMAGE 2 the SPC CONTROL text would be cut at around the word "HEAT" or "STAKE". But IMAGE 2 shows "SPC CONTROL FOR ALL HEAT S" cut at "S" (start of STAKE). Hmm, that's roughly consistent if IMAGE 2's right edge ~ IMAGE 1's x~1350-1400.
+
+But then IMAGE 2's LEFT edge: in IMAGE 2, the left edge shows the circle detail with crosshairs and the "BM 20:1" text and the left column of the dimension table starting at "2.50" at x~580. In IMAGE 1, the left column "2.50" is at x~230-390. So IMAGE 2's left edge is NOT at IMAGE 1's x=0. If IMAGE 2's "2.50" left column is at IMAGE 2 x~580, and in IMAGE 1 it's at x~230, then IMAGE 2's left edge corresponds to IMAGE 1's x ~ 230 - 580 + (IMAGE2 left offset)... this is too confusing.
+
+Let me think differently. The point of the exercise is likely that the crop is INVALID because it's missing the leader/feature/tolerance for the selected FAI, and/or because it includes unrelated annotations, and/or because the layout in IMAGE 2 doesn't actually correspond to a coherent single FAI group.
+
+Actually, the most important observation: In IMAGE 2, the selected FAI marker is FAI 39 / SPC AL (the red box in IMAGE 1). In IMAGE 2, FAI 39/SPC AL is present with "2.50" but the tolerance and leader and feature are missing. The leader for that dimension in the full drawing goes to the right (to the hatched feature). In IMAGE 2, there's no leader at all on the right side of the 2.50/1.62/1.26 right column. So the leader is cut off / absent.
+
+Also, in IMAGE 2, the left column (2.50, 1.62, 1.26, (0.00)) has leader lines going to the LEFT (to the feature on the left, the hatched cross-section). In IMAGE 2, we see at the left edge some hatching (the cross-section) at y~1850-2050, and leader lines? The left column leaders in IMAGE 1 go left to the feature at x~0-200. In IMAGE 2, the left edge shows hatching at the bottom-left (y~1850-2050) which is the feature. But the leaders for the left column in IMAGE 2 — I see the dimension lines but the leaders going left are partially there. Hmm.
+
+But the SELECTED FAI is FAI 39 (right column). Its leader/feature is on the right, which is absent in IMAGE 2.
+
+Therefore the crop is INVALID.
+
+Now, what about expansion? The task asks to provide expand_norm if we want to expand to make it valid, but the format shows "valid": true with empty missing and zero expansion as the example. But we can return valid: false with missing list and possibly expansion. Actually the instructions: "Return JSON only: { "valid": true, "missing": [], "expand_norm": {...}, "confidence": 0.0 }". This is just the schema example. We should fill in appropriately. If invalid, valid: false, missing: list of missing elements, expand_norm: maybe the expansion needed, confidence.
+
+But wait — can we even make it valid by expansion? The selected FAI 39's leader and feature are to the right. To include them, we'd need to expand right significantly. But also the crop currently (IMAGE 2) seems to be a shifted view that doesn't match the magenta rectangle. Hmm.
+
+Actually, let's reconsider the whole thing. Maybe I'm overanalyzing the mismatch between IMAGE 1 magenta and IMAGE 2. Perhaps the magenta rectangle in IMAGE 1 is actually positioned such that its content equals IMAGE 2, and I'm misjudging pixel positions. Let's look at distinctive features.
+
+In IMAGE 1, the red box (SPC AL) is at approximately (1100-1190, 1100-1200). The magenta rectangle right edge is at x~1350. So the red box is near the right edge of the magenta rectangle, with about 160 px of margin to the right (containing the right "2.50" value at 1200-1340).
+
+In IMAGE 2, the SPC AL circle is at approximately (1960-2050, 1580-1660) in IMAGE 2's coordinates. The right edge of IMAGE 2 is at x~2280. So SPC AL is near the right edge with margin containing "2.50" at 2070-2240. That matches the relative layout! Good. So in IMAGE 2, the right edge corresponds to IMAGE 1's magenta right edge (x~1350). 
+
+Now the left edge: In IMAGE 1, magenta left edge = x=0. At x=0 in IMAGE 1, top has the left circle's left part (the left circle is centered ~ -? Actually the left circle in IMAGE 1 is mostly off-screen left; we see its right part at x 0-200). Middle-left at x=0 we see the leader lines and hatching of the left feature (the cross-section at x 0-200, y 1350-1500). Bottom-left at x=0 we see "X SURFACE" text? No, "X SURFACE" is at y~2130 which is below magenta bottom (1700). At y~1700 (magenta bottom) left edge we see the horizontal magenta line.
+
+In IMAGE 2, left edge at x=0: top has the circle detail (crosshairs) at x 0-550, y 0-800. Middle-left at x=0 has "BM 20:1" text at y~950-1050 and the left feature hatching at y~1850-2050. Hmm.
+
+So in IMAGE 1, at the left edge (x=0), do we have a circle detail at top with crosshairs? Yes, the top-left circle (x 0-200, y 0-450) — but in IMAGE 1 we only see the right portion of it (a partial circle arc and a crosshair fragment). In IMAGE 2, the top-left circle is more fully visible (we see a full circle with crosshairs and a dashed circle around it, plus an arrow). That suggests IMAGE 2's left edge is FURTHER LEFT than IMAGE 1's left edge (x=0), i.e., IMAGE 2 includes content that is to the left of IMAGE 1's visible area. But IMAGE 1's left edge is the image border; we can't see left of it. So IMAGE 2 cannot be a crop of IMAGE 1 if it shows more on the left than IMAGE 1 shows.
+
+Unless IMAGE 1's top-left circle is actually centered around x~ -100 (mostly off-screen) and IMAGE 2's top-left circle is the SAME circle but IMAGE 2's left edge is at IMAGE 1's x ~ -300 (off-screen). That's impossible for a crop of IMAGE 1.
+
+Therefore IMAGE 2 is NOT a consistent crop of IMAGE 1. This strongly indicates the proposed crop is invalid / mismatched. But the task framing says IMAGE 2 IS the proposed crop. The validation is about whether the crop (as shown in IMAGE 2, bounded by the magenta in IMAGE 1) is valid. Given the inconsistencies and the missing leader/feature for the selected FAI, the answer is invalid.
+
+Hmm, but actually maybe the magenta rectangle in IMAGE 1 is not (0,0)-(1350,1700). Let me look again at the magenta lines in IMAGE 1. I see a vertical magenta line at x~1350 from y=0 to y~1700. I see a horizontal magenta line at y~1700 from x=0 to x~1350. I do NOT see a magenta line at x=0 or y=0 (the image borders). So the magenta rectangle's left and top edges are at the image borders (open). So the magenta rectangle is the region [0,1350]x[0,1700]. That's what I had.
+
+Given all this, the crop is missing the right-side tolerance, leader, arrowhead, and feature for FAI 39. Also it includes unrelated top annotations (the 0.25 A B C frame, box 18, the circle detail, the BM label) which dominate the top portion.
+
+Thus valid = false.
+
+Now missing list: I'll list the missing elements for the selected FAI group: the tolerance (+0.29/-0.07) for the 2.50 dimension, the leader line, the arrowhead, and the touched feature (the hatched cross-section on the right). Also possibly note that the crop includes unrelated annotations.
+
+But the schema's "missing" is a list of strings. I'll provide concise strings.
+
+expand_norm: To make it valid, we'd need to expand right to include the tolerance, leader, arrowhead, and feature. In IMAGE 1, the feature for the right 2.50 leader is at x~2030-2280 (the hatched block). The magenta right edge is 1350. The crop width is 1350. To include up to x~2280, we need to add (2280-1350)/1350 = 930/1350 ≈ 0.689 = 689 (in normalized [0,1000] of crop width). Also we might need to expand top to include the full feature? The feature top is at y~1270 which is within [0,1700], so top is fine. The leader for 2.50 right goes from y~1150 to y~1270, within range. The feature hatched block spans y~1270-1550, within range. So only right expansion needed for the feature. But also the top of IMAGE 2 has unrelated stuff; expansion won't remove it. The rule says reject if unrelated neighboring annotations dominate. The top of IMAGE 2 (the circle detail + 0.25 frame + BM label) occupies a large portion (y 0-1100 out of 2280 height? IMAGE 2 height ~2280? Let's see IMAGE 2 dimensions: it's tall, maybe 2280x... Actually IMAGE 2 aspect looks like width ~2280, height ~2280? Hard to say. The top unrelated content occupies roughly the top half. That's "dominating"? Possibly.
+
+Given the multiple issues, I'll set valid=false. For expand_norm, since even expanding right won't fix the "unrelated annotations dominate" and the left-side leaders/feature for the left column might also be partially cut, and the crop is fundamentally mismatched, I think the appropriate response is valid=false with a missing list and maybe a suggested expansion that would at least capture the right feature. But the instructions say "Reject it if ... unrelated neighboring annotations dominate." So even with expansion it's invalid. The expand_norm field — what should it be? The example shows zeros. I think when invalid, we can still provide an expansion that would be needed, or zeros. The instructions: "Expansion values are normalized fractions [0,1000] of the current crop width or height." It doesn't say to set them only when valid. I think we should provide the expansion that would make the FAI group complete IF that's the only issue, but since unrelated annotations dominate, maybe we should still propose expansion to capture the missing leader/feature and note that the crop is invalid due to those plus domination. Hmm.
+
+Actually, re-reading: "The crop is valid only if it fully contains one coherent FAI annotation group: ... every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows. Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+So there are two independent reject conditions: (a) missing leader/arrowhead/feature, (b) unrelated annotations dominate. Both seem present.
+
+For the JSON, I'll set valid=false, missing = ["right-side tolerance +0.29/-0.07 for FAI 39 dimension 2.50", "leader line for FAI 39 dimension", "terminal arrowhead for FAI 39 leader", "touched feature (right hatched cross-section) for FAI 39", "unrelated top annotations (0.25 A B C FCF, box 18, detail circle, BM label) dominate crop"].
+
+Hmm but maybe the missing list should be more focused. Let me think about what's truly missing for the SELECTED FAI (FAI 39). The selected FAI's dimension is the right 2.50. Its tolerance, leader, arrowhead, feature are all missing. Yes.
+
+Now expand_norm: To capture the right feature, expand right by ~689. But that won't remove the unrelated top. Also, would expanding right also bring in the right column's full content? Yes. But the unrelated top annotations remain. So the crop would still be invalid due to domination. However, the task might expect us to give the expansion that addresses the missing leader/feature, and the validity is determined by the overall check. Since domination remains, valid stays false. But then providing an expansion is a bit contradictory. 
+
+Let me look at the example format again: it shows valid:true with empty missing and zero expansion. That's just the schema. I think the safest is: valid=false, missing=[...], expand_norm = the expansion needed to include the missing leader/feature (right expansion), confidence moderate.
+
+But wait, maybe I should reconsider whether the right 2.50 is actually the dimension for FAI 39, or whether FAI 39 is associated with the LEFT 2.50. Let's look at the layout convention. Typically the FAI/SPC circles are placed next to the dimension they reference. In IMAGE 1, the left column: "2.50 +0.19/-0.10 [FAI76][SPCBS]". So FAI76/SPCBS is right after the left 2.50's tolerance. Then there's a gap, then "[FAI39][SPCAL] 2.50 +0.29/-0.07". So FAI39/SPCAL is BEFORE the right 2.50. So FAI39 references the right 2.50. Yes.
+
+Thus the right 2.50's tolerance/leader/feature belong to FAI39. Confirmed missing.
+
+Now, is the right 2.50 value itself inside the magenta crop? In IMAGE 1, right 2.50 at x~1200-1340, magenta right edge 1350 → inside. In IMAGE 2, right 2.50 is present. Good. So only tolerance/leader/feature missing.
+
+Now the leader for right 2.50 in IMAGE 1: starts after the tolerance at x~1580,y~1150, goes to x~1630,y~1270, then horizontal to x~2030,y~1270 (the feature's top edge). The arrowhead? I don't see an explicit arrowhead; the leader just touches the feature line. The "terminal arrowhead" might be the point where it meets the feature. Anyway it's outside the crop.
+
+So to include the leader and feature, expand right to x~2280 (the feature's right extent in the visible area; the hatched block extends to the right edge of IMAGE 1 at x~2280). Actually the hatched block in IMAGE 1 right side extends from x~1770 to x~2280 (off-screen right). The leader touches it at x~2030. So we need right edge at least ~2030 to include the touch point and a visible portion of the feature. (2030-1350)/1350 = 680/1350 ≈ 0.504 = 504. To include a good visible portion of the feature, maybe up to 2280 → 689. I'll say right ~ 700.
+
+But also, the top of the crop currently includes unrelated stuff. Expanding won't help. So even after expansion, invalid due to domination. Hmm, but maybe the "domination" is judged on the final crop; if we expand right a lot, the unrelated top becomes a smaller fraction? The top unrelated content height ~1100 (in IMAGE 2 coords) out of total height ~2280. If we expand right, width increases but height same, so the top unrelated region's area fraction = (1100*new_width)/(new_width*2280) = 1100/2280 ≈ 0.48, unchanged. So still dominates. So invalid regardless.
+
+Given that, perhaps the intended answer is valid=false with expand_norm zeros (since expansion can't fix it) or with the right expansion (to show what's missing). The instructions don't strictly define expand_norm semantics for invalid crops. I think providing the expansion that would capture

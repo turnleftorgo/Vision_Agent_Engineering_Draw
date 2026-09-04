@@ -1,0 +1,35 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle highlights the FAI circle with number 59, which is part of the "SECOND TERRACE" annotation group.
+
+Let me look at the SECOND TERRACE group in IMAGE 1. It contains:
+- "SECOND TERRACE" text at top
+- A feature control frame with 0.10
+- A row: [15] [FAI 59] [SPC BF] [100% triangle]
+- A row: [16] [FAI 208]
+
+Now let me look at the magenta rectangle boundaries in IMAGE 1. The magenta rectangle's top edge is around the "FIRST TERRACE / SECOND TERRACE" text line. Let me look carefully. The magenta top edge appears to be at the level of the text "FIRST TERRACE" and "SECOND TERRACE". Actually, looking at the coordinates, the magenta rectangle top is at about y=980 (in the image's pixel space). The text "SECOND TERRACE" is at about y=985. So the text "SECOND TERRACE" is partially cut off at the top? Let me look.
+
+In IMAGE 1, the magenta rectangle top edge is at approximately y=980. The text "SECOND TERRACE" baseline is around y=990-1000. Hmm, the text "SECOND TERRACE" appears to be right at the top edge of the magenta rectangle. Let me look at IMAGE 2 to see what's included.
+
+In IMAGE 2, the top shows "TERRACE" (cut off, the "FIRST" part is cut) on the left and "SECOND TERRACE" on the right but the top of the letters might be slightly cut. Actually in IMAGE 2, the top line reads "TERRACE" on left (part of FIRST TERRACE) and "SECOND TERRACE" on right. The text appears mostly visible but the very top might be slightly clipped. Let's look: in IMAGE 2 the top text "SECOND TERRACE" - the tops of the letters look like they might be slightly cut. Hard to say.
+
+Now the key question: does the crop fully contain the coherent FAI annotation group for FAI 59?
+
+The FAI 59 group is the SECOND TERRACE group. Let's list its components:
+- "SECOND TERRACE" description text
+- feature control frame 0.10
+- [15] box
+- [FAI 59] circle
+- [SPC BF] circle
+- 100% triangle
+- [16] box
+- [FAI 208] circle
+
+Now, are there leader lines connecting this group to a feature? In IMAGE 1, I need to look for leader segments. The SECOND TERRACE group - is there a leader line? Looking at IMAGE 1, I see the THIRD TERRACE group has a leader line going down-left to the hatched feature at the bottom. The FIRST TERRACE group on the left - I don't see an obvious leader. The SECOND TERRACE group - I don't see a leader line in IMAGE 1 either. Hmm.
+
+Wait, but the requirement says "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows." If there's no leader, then maybe that's fine. But the requirement also says "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent."
+
+Let me look more carefully at IMAGE 1 for leaders. The THIRD TERRACE has a leader line that goes from the text down to the bottom hatched feature. That leader line is at around x=530-560 in IMAGE 1, going from y=1350 down to y=1880. This leader line passes through the magenta rectangle! The magenta rectangle left edge is at about x=250, right edge at about x=1550, top at y=980, bottom at y=1750. The THIRD TERRACE leader line at x~530-560 goes from y=1350 (inside magenta) down to y=1880 (outside magenta, below the bottom edge at y=1750). So the leader line for THIRD TERRACE exits the magenta rectangle at the bottom.
+
+But wait, the THIRD TERRACE group is a different FAI group (FAI 68, FAI 209). The selected FAI marker

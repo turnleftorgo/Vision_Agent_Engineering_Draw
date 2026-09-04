@@ -1,0 +1,179 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. The red rectangle highlights the SPC BR marker (FAI 75). Let me look at what's inside the magenta rectangle.
+
+The magenta rectangle in IMAGE 1 spans roughly from the left edge (x=0) to about x=1250 (in pixel coordinates of the image), and vertically from about y=1040 to y=1450.
+
+Let me look at the content inside the magenta rectangle. I see:
+- The top row: "2.50 +0.19 -0.10" with FAI 76 and SPC BS circles. But wait, the top of the magenta rectangle cuts through this row. Let me look. The magenta top edge is at about y=1040. The "2.50 +0.19" text is at y~990, and "-0.10" is at y~1040, partially cut. The FAI 76 / SPC BS circles are at y~1000, partially cut by the top edge.
+
+Actually, looking carefully, the magenta rectangle's top edge passes right through the "2.50" row. The "2.50" text and the FAI 76/SPC BS circles are mostly above the magenta top edge. So the top row is clipped.
+
+- The middle row: "1.62 +0.19 -0.12" with FAI 75 and SPC BR (the red highlighted one). This row is fully inside.
+
+- The bottom row: "1.26 +0.19 -0.12" with FAI 100 and SPC CO. This is inside.
+
+- The bottom row: "(0.00)" is inside.
+
+Now the leaders: The leaders on the left side connect to the part geometry. Let me look. The leader for "1.62" goes left and then up to a horizontal line. The leader for "1.26" goes left to the hatched feature. The leader for "(0.00)" goes left to the bottom line.
+
+In IMAGE 2, the proposed crop shows:
+- Top: a partial "-0.10" and partial circles at the very top (clipped).
+- "1.62 +0.19 -0.12 FAI 75 SPC BR"
+- "1.26 +0.19 -0.12 FAI 100 SPC CO"
+- "(0.00)"
+- On the left, the leaders and part geometry.
+
+Now, the question is whether the crop is valid. The selected FAI marker is the red rectangle = SPC BR / FAI 75. So the relevant annotation group is the FAI 75 / SPC BR group with the 1.62 dimension.
+
+Let me check the leader for the 1.62 row. In IMAGE 1, the leader for 1.62 goes from the text leftward, then there's a diagonal segment going up-left to a horizontal line at around y=1110. Let me trace. The "1.62" text is at y~1145. The leader line goes left from the text to about x=560, then diagonally up to x=540, y=1110, then horizontal left to x=0 (the left edge of the image? or to the part?).
+
+Hmm, actually in IMAGE 1, the horizontal line at y~1110 extends from x=0 to x=540. So the leader's horizontal segment reaches the left edge of the image (x=0). But the magenta rectangle's left edge is also at x=0. So the leader's horizontal segment touches the left border of the crop.
+
+Wait, but the part geometry on the left - where is the feature that the leader points to? The leader for 1.62 in a typical drawing points to a horizontal surface of the part. Let me look at the left side of IMAGE 1. There's a horizontal line at y~1110 that is the top of a step in the part? Actually the part cross-section on the left shows hatching at the bottom (y~1250-1400) and some horizontal lines above.
+
+Let me look at the structure. On the left of IMAGE 1, I see horizontal lines at:
+- y~1040 (top of magenta, this is a part line? Actually it's the magenta line itself overlapping)
+- y~1110 (a horizontal line from x=0 to x=540)
+- y~1210 (a horizontal line from x=0 to x=520)
+- y~1250-1400 hatched region
+
+Hmm, this is the part cross-section. The leaders point to these horizontal lines (surfaces). The leader for 1.62 points to the line at y~1110? Or y~1210? Let's look at the diagonal. The 1.62 leader: text at y~1145, horizontal segment at y~1145 from x=560 to x=580, then diagonal up-left to (540, 1110), then horizontal at y~1110 leftward. So it points to the surface at y~1110.
+
+But wait, in IMAGE 2, the top shows a diagonal line going up-right at the top, and a horizontal line at the top. Let me look at IMAGE 2's left side. I see at the top a diagonal line (the leader for the clipped 2.50 row?) going up. Then a horizontal line at y~110 (in image 2 coords) which is the 1.62 leader's horizontal? Hmm.
+
+Let me look at IMAGE 2 more carefully. IMAGE 2 left side from top to bottom:
+- A diagonal line at top going from (880, 0) down-left to (830, 110) - this is the leader diagonal for the 2.50 row probably, or for 1.62?
+- A horizontal line at y~110 from x=0 to x=830.
+- A vertical line at x=0 from y~110 to y~210 (the left edge of part).
+- A horizontal line at y~210 from x=0 to x=880 (the 1.62 leader horizontal? with diagonal at right going up to (880,110)?).
+
+Hmm, this is getting too detailed. Let me think about the validity criteria.
+
+The crop must fully contain one coherent FAI annotation group. The selected marker is FAI 75 / SPC BR (the 1.62 row). For this group, we need:
+- FAI circle with number 75: present in IMAGE 2.
+- SPC letter BR: present.
+- parameter/tolerance: 1.62 +0.19 -0.12: present.
+- every connected leader segment: The leader for 1.62 must be fully inside.
+- every terminal arrowhead: Hmm, do these leaders have arrowheads? Looking at IMAGE 1, the leaders for the dimensions (2.50, 1.62, 1.26, 0.00) are just lines pointing to surfaces, no arrowheads visible. They are dimension leaders/pointers. Actually they look like simple leader lines without arrowheads (the line just touches the surface). Let me look. The 1.26 leader ends at the hatched feature with a horizontal segment, no arrowhead. The (0.00) leader ends with horizontal segment, no arrowhead. So no arrowheads to clip.
+
+- a visible local portion of every component feature touched by those arrows: The leader for 1.62 touches a horizontal surface. In IMAGE 2, is that surface visible? The horizontal line at the top of the part on the left - yes there's a horizontal line.
+
+Now the problem: The magenta rectangle's top edge clips the 2.50 row (FAI 76 / SPC BS). But that's a *different* FAI group, not the selected one. The criteria say "Reject it if ... unrelated neighboring annotations dominate." The 2.50 row is partially clipped at the top of IMAGE 2 (we see "-0.10" and partial circles). Does that "dominate"? It's a small sliver at the top. Hmm.
+
+But more importantly, the criteria: "The crop is valid only if it fully contains one coherent FAI annotation group." The selected group is FAI 75. Does the crop fully contain it? Let's check the leader for 1.62. In IMAGE 1, the 1.62 leader's horizontal segment at y~1110 extends from x=540 leftward to x=0 (the image left edge). The magenta rectangle left edge is at x=0. So the leader's horizontal segment reaches the left border of the crop! That means a relevant leader reaches the crop border.
+
+Wait, but does it reach the border or does it terminate at the part surface which is at x=0? Let's look. In IMAGE 1, the part cross-section's left edge - where is it? The hatched region on the left starts at x=0 (the image is cut off on the left). The horizontal lines at y~1110 and y~1210 start at x=0. So the part geometry itself is cut off at the left edge of the image. That means the leader's terminal (where it touches the feature) is at the left edge, possibly clipped.
+
+Hmm, but actually the leader line for 1.62 - the horizontal segment at y~1110 - does it terminate at the part surface or continue to x=0? In a typical drawing, the leader line points to a surface and stops at the surface. The surface here is the top of the part step. But the part's left extent is beyond the image (the image is a crop of a larger drawing). So we can't see where the leader terminates. The horizontal line at y~1110 in IMAGE 1 goes all the way to x=0, meaning it's cut off by the image border, not by the part surface. So the leader's terminal is not visible / is at the border.
+
+Actually wait. Let's look at the geometry. The horizontal line at y~1110 from x=0 to x=540 - is this a part surface line or the leader line? In these drawings, the dimension leader typically has a horizontal segment that aligns with the surface it's pointing to, and the surface line is drawn separately. Hmm.
+
+Let me look at the 1.26 row. The leader for 1.26: text at y~1295, horizontal segment from x=560 to x=520 at y~1295, then diagonal down-left to (480, 1295)? Actually it shows a diagonal from (480,1250) to (560,1295)? Let me look. The 1.26 leader in IMAGE 1: there's a line from the text going left, then a diagonal down-left to the hatched feature top at around (480, 1250). The hatched feature top is at y~1250. So the leader points to the top surface of the hatched region. That top surface line is visible in IMAGE 2 (the hatched region's top edge). Good.
+
+The (0.00) leader: horizontal line at y~1395 from x=450 to x=0? It points to the bottom line of the part. In IMAGE 2, the bottom line is visible.
+
+Now for 1.62: the leader points to a surface at y~1110. Is that surface visible in IMAGE 2? In IMAGE 2, at the top we have a horizontal line at y~110 (image2 coords) which corresponds to y~1110 in image1. Yes that's visible. But does the leader's horizontal segment terminate at a visible feature or run off the left edge?
+
+Look at IMAGE 2 left side. The horizontal line at y~110 (image2) goes from x=0 to x=830 (where the diagonal is). At x=0, it's cut off. So the surface line at y~1110 is cut off at the left edge of the crop. That means the feature (the surface) is only partially visible - we see a portion of it. The criteria say "a visible local portion of every component feature touched by those arrows." So a local portion is enough. The surface line at y~1110 is visible (a portion). OK.
+
+But the leader segment: "every connected leader segment" must be fully contained. The leader for 1.62 consists of: the diagonal from text to the horizontal, and the horizontal segment. The horizontal segment in IMAGE 1 goes from x=540 to x=0 (image border). In the crop (magenta left edge = x=0), the horizontal segment is fully contained? It ends at x=0 which is the crop border. So it touches the border but is it "reaching the crop border" in a way that's clipped? The line ends exactly at the border because the image is cut there. We don't know if the leader continues beyond. Hmm.
+
+Actually, I think the leader line for a dimension like this typically does NOT extend to the part's left edge; it points to the surface and the surface line is the part outline. Let me reconsider what the horizontal line at y~1110 is.
+
+Let me look at the part cross-section shape on the left of IMAGE 1. I'll describe the lines I see on the left (x from 0 to ~450):
+- y~1040: magenta top line (also maybe a part line? The magenta line is drawn over it)
+- y~1110: horizontal line x=0..540
+- y~1210: horizontal line x=0..520
+- y~1250: top of hatched region, x=0..430 (with diagonal hatching)
+- y~1350: a thin line
+- y~1395: bottom line x=0..430
+
+Hmm, so the part has steps. The leader for 1.62 (diagonal up to y~1110) points to the surface at y~1110. The leader for 1.26 points to y~1250 (top of hatch). The leader for 0.00 points to y~1395 (bottom). The leader for 2.50 points to y~1040 (top).
+
+So the surface at y~1110 is a part outline line. In the crop, this line is visible from x=0 to x=540 (image1) which in image2 is from x=0 to x=830. So we see a portion of it. Good, the feature is touched and a local portion is visible.
+
+Now the leader segment for 1.62: the diagonal + the horizontal part of the leader. But wait, is the horizontal line at y~1110 the leader or the part outline? If it's the part outline, then the leader is just the diagonal from the text to that outline. Let's look at the diagonal. In IMAGE 1, the 1.62 leader: from text "1.62" at (620,1145) a line goes left to (560,1145) then diagonal up-left to (540,1110) then... does it continue horizontal as the leader or stop at the outline? Typically the leader line ends at the surface. So the leader is: horizontal from text to (560,1145), diagonal to (540,1110), and that's where it meets the surface line y~1110. So the leader terminates at the surface at x~540. That's well inside the crop. 
+
+But then what is the horizontal line at y~1110 from x=0 to x=540? That's the part outline (the surface). And the leader's diagonal meets it at x~540. Hmm but in the image, the diagonal seems to connect to the horizontal line and the horizontal line continues left. Yes that's consistent: the surface line is at y~1110, the leader diagonal touches it at x~540.
+
+Wait, but look at the 2.50 leader: text at (620,990), line left to (560,990), diagonal up-left to (540,950)? then horizontal at y~950? But the magenta top is at y~1040, so the 2.50 leader's horizontal at y~950 is above the crop. In IMAGE 2 we see at the very top a diagonal line going up-right (the 2.50 leader diagonal) and a horizontal line at top (the 2.50 surface? or the 1.62 surface?). This is confusing.
+
+Let me look at IMAGE 2 top region. I see:
+- At the very top, partial text "-0.10" and partial circles (the 2.50 row's bottom tolerance and the FAI76/SPCBS circles' bottoms).
+- A diagonal line from top edge (x~880,y=0) going down-left to (x~830, y~110).
+- A horizontal line at y~110 from x=0 to x~830.
+- A vertical line at x=0 from y~110 to y~210.
+- A horizontal line at y~210 from x=0 to x~880, with a diagonal at right from (880,210) up to (880? no)...
+
+Hmm wait, in IMAGE 2 the diagonal at top (880,0)->(830,110) and the horizontal at y~110. Then below, the 1.62 text is at y~145. The 1.62 leader: from text left to (830,145)? then diagonal up-left to (810,110)? then horizontal at y~110? That would mean the 1.62 leader's horizontal is at y~110, same as the line I called the 2.50 surface. I'm overanalyzing pixel positions.
+
+Let's step back and think about the intent of the task. The task is to detect whether the crop is valid. The magenta rectangle in IMAGE 1 clearly cuts through the top row (2.50 / FAI76 / SPC BS). The top edge of the magenta rectangle passes through the middle of that row's text and circles. So in IMAGE 2, the top shows a clipped row. This is a "neighboring annotation" that is partially included and clipped. The criteria: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+The clipped 2.50 row at the top - does it "dominate"? It's a thin sliver, not dominating. But the more serious issue: the top edge of the crop cuts through the 2.50 row, meaning the crop's top border intersects the 2.50 annotation. But the 2.50 annotation is NOT the selected group, so we don't need to fully contain it. However, the rule "unrelated neighboring annotations dominate" - a clipped sliver doesn't dominate.
+
+But wait, there's another issue. Look at the left edge of the magenta rectangle. It's at x=0, the image's left edge. The part geometry (the cross-section) is cut off at the left. The leaders' horizontal segments and the part outline lines all run off the left edge. So the "touched feature" for the 1.62 leader - the surface line - is cut off at the left; we only see a portion. That's allowed ("visible local portion").
+
+Hmm, but the leader for 1.62 - does its horizontal segment (if it has one) run off the left edge? If the leader is just the diagonal meeting the surface at x~540, then it's fine. But if the leader includes a horizontal segment that aligns with the surface and extends left to the part's left edge (which is off-crop), then the leader is clipped.
+
+Let me look at typical ASME dimension leaders for these "stack-up" dimension chains. Usually each dimension has a leader line that points to the surface, often with a small horizontal tick or just a diagonal. In the image, the leaders look like: a horizontal line from the number, then a 45-degree diagonal to the surface. The horizontal line from the number is the leader's "elbow". The diagonal connects to the surface. There's no long horizontal segment along the surface that's part of the leader; the surface line is the part outline.
+
+Look at the 1.26 leader in IMAGE 1: number "1.26" at (620,1295). Line left to (560,1295). Then diagonal down-left to (480,1250) which is the top of the hatched region. So the leader is horizontal+diagonal, terminating at the hatch top at x~480. Good, fully inside.
+
+The (0.00) leader: number at (620,1395). Line left to (450,1395). That's a horizontal line that is the leader, terminating at x~450? Or does it point to the bottom surface? The bottom surface line is at y~1395 from x=0 to x=430. So the leader horizontal at y~1395 from x=450 to x=430 meets the surface. So leader terminates at x~430-450, inside crop. Good.
+
+The 1.62 leader: number at (620,1145). Line left to (560,1145). Diagonal up-left to (540,1110) meeting the surface at y~1110. So leader terminates at x~540, inside crop. Good.
+
+So all leaders for the selected group (1.62) and the other fully-inside groups (1.26, 0.00) terminate inside the crop. The part surfaces they touch are visible (portions). 
+
+Now the only problem is the top clipped row (2.50). Is that a problem? The selected group is 1.62 (FAI75). The crop fully contains the 1.62 group. The 2.50 group is partially clipped at top. The rule says reject if "unrelated neighboring annotations dominate." A clipped sliver of the 2.50 row at the top - is that dominating? I'd say no, it's minor. But the rule also says "Reject it if a relevant leader reaches the crop border." The 2.50 leader is not relevant (not selected). The 1.62 leader does not reach the border.
+
+Hmm, but actually wait. Let's look at the top of IMAGE 2 again. The top shows the diagonal line and the horizontal line at y~110. If that horizontal line at y~110 is actually the 1.62 surface (the part outline at y~1110 in image1), then it's fine. But the diagonal at the very top (880,0)->(830,110) would be the 2.50 leader's diagonal, which is clipped (its top is cut). That's the 2.50 leader, not relevant.
+
+But here's a subtle point: the magenta top edge in IMAGE 1 is at y~1040. The 1.62 surface line is at y~1110, which is below 1040, so fully inside. The 2.50 surface line is at y~950 (above 1040), so it's outside the crop (above). The 2.50 leader diagonal goes from (540,950) down-right to (560,990) then horizontal to text. The part of the 2.50 leader below y~1040 would be... the diagonal from (540,950) to (560,990) is entirely above 1040? 990 < 1040, yes above. So the 2.50 leader is entirely above the crop? Then why do we see a diagonal at the top of IMAGE 2?
+
+Let me recompute pixel coordinates. I need to look at the actual image more carefully. The image is 2337 x 2337 maybe. Let me estimate from the layout. The magenta rectangle top edge - I'll trust it's around the middle of the 2.50 row. In IMAGE 1, the "2.50" text baseline is around y=1010, "+0.19" at y=985, "-0.10" at y=1045. The FAI76 circle center at y=1010. The magenta top line appears to be at about y=1055 (just below the "2.50" text, cutting through "-0.10" and the bottom of the circles). Yes in IMAGE 1 the magenta top line passes right at the level of "-0.10" and the bottom halves of FAI76/SPCBS circles. So in IMAGE 2, the top shows the bottom halves of those circles and the "-0.10" text partially. That matches IMAGE 2 top: I see "-0.10" cut at top and two circle bottoms.
+
+So the 2.50 leader (diagonal + horizontal) is at y~950-990, which is above the magenta top (1055). So the 2.50 leader is NOT in the crop at all. Good. Then what's the diagonal at the top of IMAGE 2? Let me look at IMAGE 2 top-left. There's a diagonal line from (880,0) to (830,110). Hmm. And a horizontal line at y~110 from 0 to 830. And the 1.62 text is at y~145. The 1.62 leader diagonal would be from (830,145) up-left to (810,110)? and the horizontal at y~110 is the 1.62 surface? But then the diagonal at top (880,0)->(830,110) is something else - maybe the 2.50 leader's diagonal after all, if my y-estimates are off.
+
+This is too uncertain. Let me think about the overall judgment. The crop includes the selected FAI75 group fully (FAI circle, SPC BR, 1.62 +0.19 -0.12, leader, surface). It also includes FAI100/SPC CO group fully and the (0.00) reference. It clips the FAI76/SPC BS group at the top (a sliver). 
+
+The question: is the crop valid? The main concern per the instructions: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." and "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle."
+
+Immediately outside the magenta rectangle at the top, there's the rest of the 2.50 row (the top halves of FAI76/SPCBS circles and the "+0.19" and "2.50" text and the 2.50 leader). So the 2.50 annotation is split by the crop border. That means the crop border cuts through an annotation (the 2.50 one). The rule about "relevant leader reaches the crop border" - the 2.50 leader is not relevant. But the rule "unrelated neighboring annotations dominate" - the 2.50 annotation is partially inside (clipped) and partially outside. Does it dominate? It's at the top edge, a thin strip. I'd argue it doesn't dominate the crop; the crop is mostly the 1.62/1.26/0.00 groups.
+
+However, there's a stronger issue: the left edge of the magenta rectangle is at the image's left border (x=0). The part cross-section is cut off. The leaders' surfaces are cut off. But we see local portions, which is allowed.
+
+Hmm, but consider the 1.62 leader's surface line at y~1110. In IMAGE 1, this line goes from x=0 to x=540. The left part (x<0) is outside the image (and outside the crop). So the surface line is cut at the left crop border. The leader touches it at x~540 (inside). The "touched feature" = the surface; we see a local portion (x=0..540). OK allowed.
+
+So by the letter of the rules, the selected group (1.62) is fully contained: FAI circle yes, SPC yes, tolerance yes, leader yes (terminates inside), no arrowheads, touched feature visible portion yes. The clipped 2.50 row is an unrelated neighboring annotation that is partially present but does it "dominate"? I think a thin clipped strip at the top is borderline. The instructions seem to want us to reject crops that cut through annotations in a way that the relevant group's evidence is incomplete OR that unrelated stuff dominates.
+
+Let me look at the proportions. The magenta rectangle height in IMAGE 1 is from y~1055 to y~1455, about 400 px. The clipped 2.50 sliver at top is from y~1055 to maybe y~1075 (the bottom of the circles), about 20-40 px, less than 10% of height. So it doesn't dominate.
+
+But wait, the rule also: "Reject it if a relevant leader reaches the crop border." For the selected group 1.62, does any leader reach the border? The 1.62 leader terminates at x~540 (inside). The surface line it touches reaches the left border, but the surface line is the feature, not the leader. The feature reaching the border is fine as long as a local portion is visible (it is). So no relevant leader reaches the border.
+
+Hmm, but actually, I realize I should double check whether the 1.62 leader's horizontal segment (the elbow from the number) might extend left beyond the crop. No, the elbow is from the number (x~560) leftward a tiny bit then diagonal; it's on the right side, well inside.
+
+Thus, by strict reading, the crop might be considered valid for the selected group, with the only blemish being the clipped 2.50 sliver at top.
+
+But the task's spirit: "The crop is valid only if it fully contains one coherent FAI annotation group." It does fully contain the 1.62 group. The presence of a clipped neighboring group at the top is not explicitly a rejection criterion unless it "dominates." 
+
+However, I'm now worried about the left edge. Let's look at IMAGE 2's left edge. The part outline vertical line at x=0 (the left edge of the part) - is it visible? In IMAGE 2, at the left I see a vertical line at x=0 from y~110 to y~210. That's the part's left edge (a step). And the hatched region's left edge is also at x=0 (cut off). So the part is cut at the left. The leaders for 1.26 and 0.00 point to surfaces that are cut at the left. We see portions. OK.
+
+I think the intended answer here might be that the crop is INVALID because the top edge cuts through the 2.50 annotation (FAI76/SPC BS), meaning the crop does not cleanly contain a single coherent group without cutting a neighbor, OR because the left edge cuts the part geometry such that the leaders' terminals / features are not properly shown.
+
+Let me look at the example expansion values hint: they want us to possibly expand. If the crop is invalid due to the top clipping the 2.50 row, we might need to expand top to include the full 2.50 row, but that would then include two groups (2.50 and 1.62) which is fine? The rule says "fully contains one coherent FAI annotation group" - it doesn't forbid containing more, but it says reject if unrelated neighboring annotations dominate. If we expand top to include 2.50 fully, then we have 2.50, 1.62, 1.26, 0.00 all in the crop - that's a coherent stack of the left-side dimension chain. That might be acceptable. But the selected marker is 1.62; including 2.50 fully would make the crop contain the 2.50 group too, which is "neighboring" but then fully contained, not dominating.
+
+Hmm, but the left edge: the part geometry is cut. To include the full part feature touched by the leaders, we'd need to expand left, but the image itself is cut at x=0 (the original drawing continues left but we don't have it). Actually IMAGE 1 is the "wider candidate context" - it's already a crop of the full drawing? The left edge of IMAGE 1 shows the part cut off (hatching goes to x=0). So we cannot expand left beyond IMAGE 1's content. So the left cut is unavoidable.
+
+Given the left cut is unavoidable and the rules allow "visible local portion" of touched features, the left cut is acceptable.
+
+So the only fixable issue is the top clipping of 2.50. But do we need to fix it? The selected group is 1.62, fully contained. The 2.50 is a neighbor that's clipped. The rule "unrelated neighboring annotations dominate" - I keep going back and forth.
+
+Let me look at how much of the 2.50 row is in IMAGE 2. In IMAGE 2 top, I see "-0.10" (the bottom tolerance of 2.50) and the bottom halves of FAI76 and SPC BS circles. That's a meaningful chunk of the 2.50 annotation - the FAI circle is half visible, the SPC circle half visible, the tolerance partially. That's not just a sliver; it's about half of those circles. So a neighboring FAI annotation is half-present and clipped. This is exactly the kind of thing the instructions warn about: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." Because IMAGE 2 contains TWO FAI circles that are clipped (76, BS) at the top plus the full 75, 100. The clipped 76/BS could be mistaken as part of the group.
+
+I think the intended answer is INVALID, and we should expand top to fully include the 2.50 row (so the 76/BS circles are complete) OR the crop should be tightened to exclude them. But we can't tighten because the magenta is the proposed crop and we can only expand (the expand_norm values are additions). Actually we can only expand, not shrink. So to fix the top clipping, we expand top to include the full 2.50 row.
+
+But if we expand top to include 2.50 fully, then the crop contains 2.50, 1.62, 1.26, 0.00 - four groups. Is that "one coherent FAI annotation group"? The left dimension chain could be considered a coherent group (a stack-up). The selected marker 1.62 is within it. The 2.50 would then be fully contained, not dominating. That might be acceptable.
+
+Alternatively, maybe the intended valid crop

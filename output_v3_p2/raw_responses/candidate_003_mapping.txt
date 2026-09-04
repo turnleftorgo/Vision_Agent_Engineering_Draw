@@ -1,0 +1,199 @@
+The user wants me to build an FAI annotation group for marker F0.
+
+Let me look at the evidence. F0 is at bbox [1151,1149,1249,1251]. This is the FAI marker with number "1" (looking at the image, the FAI circle near 213.66 has "1" inside).
+
+Wait, let me look carefully. In IMAGE 1, there are two FAI markers near the 213.66 dimension: one says "FAI 1" and one says "SPC A". The F0 bbox [1151,1149,1249,1251] corresponds to the "FAI 1" circle. Let me check coordinates. The image is 2400 wide roughly. The "FAI 1" circle in image 1 is around x=1150-1250, y=1150-1250. Yes that matches F0.
+
+So F0 = FAI 1. The associated SPC letter is "A" (the SPC circle next to it). The measurement annotation is "213.66 +0.100 -0.135".
+
+Now I need to find the OCR text IDs. T7 = "YE) 213.66" bbox [1152,1148,1599,1254] - this covers the FAI 1, SPC A, and 213.66 text. T6 = "+QO.100" bbox [1644,1147,1865,1185] = +0.100. T8 = "-0O.135" bbox [1648,1218,1865,1256] = -0.135.
+
+So the parameter text is 213.66 with tolerance +0.100/-0.135.
+
+Now the leader segments. The dimension 213.66 is a vertical dimension line. Looking at the image, the dimension line is vertical at around x=1487-1490. The leader segments L8 = [1487,108,1488,1131] and L9 = [1490,1271,1491,2294] are the vertical dimension line segments (above and below the text). Also L10 = [1464,64,2400,64] top extension line, L11 = [1513,2338,2400,2338] bottom extension line, L12 = [1464,2335,2078,2335] bottom extension line, L13 = [1466,67,2076,67] top extension line.
+
+Hmm, but the instruction says "All leader segments connected to that annotation." For a dimension annotation, the leader is the dimension line itself. The dimension line here is vertical. The arrowheads at the ends are H0 (top, [1467,60,1504,111]) and H2/H4 (bottom). Let's look: H0 = [1467,60,1504,111] top arrowhead. H2 = [1471,2285,1506,2327] bottom arrowhead. H4 = [1457,2331,1518,2382] another bottom arrowhead.
+
+Hmm, this is a dimension, not a typical leader annotation. The FAI marker F0 (FAI 1) is associated with this dimension 213.66. The dimension line is the vertical line. The arrowheads point to the extension lines (top and bottom of the part).
+
+So the leader segments for this dimension: L8 (vertical line top part), L9 (vertical line bottom part). The extension lines L10, L11, L12, L13 are part of the dimension but maybe not "leader segments connected to annotation". Hmm.
+
+Actually, the task is about FAI annotation group. The FAI marker is placed next to a dimension. The "leader" in this context is the dimension line. The arrowheads are the dimension arrowheads. The "touched part" would be the part edges at top and bottom.
+
+Let me think about what's reasonable. The dimension 213.66 measures the vertical extent of the part on the right. The top arrowhead H0 points to the top edge, the bottom arrowhead H2/H4 points to the bottom edge.
+
+So leader_ids: L8, L9 (the vertical dimension line). Possibly also the extension lines? The instruction says "select only line IDs that are part of the FAI leader path." The dimension line is the leader path. The extension lines are part of the dimension but they're not the leader connecting to the annotation text. Hmm, but actually the dimension line IS the leader here.
+
+Let me look at the arrowheads. H0 top, H2 bottom (the one at 2285-2327), H4 bottom (2331-2382). There seem to be two arrowheads at the bottom? Looking at image 2, at the bottom there's a cyan box around an arrowhead at the bottom of the vertical line. H2 [1471,2285,1506,2327] and H4 [1457,2331,1518,2382]. In image 2 I see at the bottom a cyan square around the arrowhead near y=2300 and another near y=2350. Actually the vertical line L9 ends at 2293, and there's an arrowhead there. Then L11/L12 are horizontal at 2338/2335. Hmm.
+
+Let me look at image 2 more carefully. At the bottom, there's a cyan box at around (1480, 2300) which is H2, and another cyan box at (1480, 2350) which is H4. The vertical blue line L9 goes from 1271 to 2293. So H2 is the arrowhead at the bottom of L9. Then below that there's the horizontal line L11/L12 at 2338. H4 might be an arrowhead on the horizontal line? Hmm.
+
+Actually wait. Looking at image 1, the dimension line vertical has an arrowhead at top (pointing up) and at bottom (pointing down). The bottom arrowhead in image 1 is at the very bottom around y=2350 (the filled triangle). The top arrowhead at y=80. So H0 = top, H4 = bottom (the big filled triangle at 2331-2382). H2 might be a duplicate detection.
+
+Hmm, this is getting too detailed. Let me think about what the expected answer structure is. This is a dimension annotation. The FAI 1 marker is associated with dimension 213.66 +0.100/-0.135.
+
+For a dimension, the "leader" is the dimension line. The arrowheads are at both ends. The touched parts are the top edge and bottom edge of the part.
+
+But the evidence doesn't have green "touched-part" candidates (R*). There are no R* in the dictionary. So target_ids will be empty, and we use fallback box for target.
+
+Let me list what we have:
+- F0: FAI marker, number 1.
+- SPC letter: A (but is there an evidence ID for the SPC circle? The SPC circle is part of T7's bbox maybe. There's no separate OCR for "SPC A" near F0. T7 = "YE) 213.66" which is garbled. Hmm. The SPC letter "A" - I don't see a clean OCR ID. So spc_letter = "A" but no ID? The schema has spc_letter as a string field, not ID list. So I can put "A".)
+
+Actually wait, the schema: "spc_letter": null. It's a string. So I put "A".
+
+fai_number: "1".
+
+annotation_ids: these would be the OCR text IDs that form the annotation? Or the FAI marker? Let's think. The schema has separate fields: annotation_ids, parameter_text_ids, description_text_ids. Hmm.
+
+Looking at typical structure: annotation_ids might be the feature-control-frame or the main annotation box. parameter_text_ids = the parameter value text. description_text_ids = description.
+
+For this dimension, the parameter is 213.66 with tolerance. So parameter_text_ids = [T7, T6, T8]? T7 includes "213.66" plus the FAI/SPC circles garbled. T6 = +0.100, T8 = -0.135.
+
+Hmm but T7's bbox [1152,1148,1599,1254] covers the FAI 1 circle, SPC A circle, and 213.66. So T7 is the parameter text line essentially.
+
+Let me define:
+- annotation_ids: maybe empty or the FAI marker? The FAI marker is F0 itself, listed in marker_id. Hmm.
+
+Let me look at the schema fields again:
+"annotation_ids": [] - probably the feature control frame / annotation box IDs (OCR or other). 
+"parameter_text_ids": [] - the parameter value text.
+"description_text_ids": [] - description text.
+
+For a dimension annotation, the "annotation" is the dimension value with tolerance. So I'd put T7, T6, T8 in parameter_text_ids. annotation_ids maybe empty. description_text_ids empty.
+
+Hmm, but the FAI marker and SPC marker are part of the annotation group. They're not in annotation_ids necessarily.
+
+Let me think about leader_ids. The dimension line vertical: L8 and L9. The extension lines: L10, L11, L12, L13. Are extension lines part of the "leader path"? The instruction: "OpenCV line candidates include both leaders and ordinary part/dimension lines; select only line IDs that are part of the FAI leader path." For a dimension, the dimension line is the leader. The extension lines are part of the dimension but they extend to the part. Hmm.
+
+Actually, I think for a dimension annotation, the "leader" connecting the annotation to the part is the dimension line plus the extension lines. But the arrowheads are on the dimension line ends. The extension lines touch the part.
+
+This is ambiguous. Let me look at the arrowheads: H0 at top (1467-1504, 60-111) - this is at the top of the vertical line, pointing up to the top extension line. H4 at bottom (1457-1518, 2331-2382) - at the bottom of vertical line pointing down to bottom extension line. H2 (1471-1506, 2285-2327) - hmm this is also near bottom.
+
+Wait, maybe the vertical dimension line has arrowheads at both ends (H0 top, H2 bottom of the line at 2293). Then the extension lines L11/L12 at 2338 are below, and H4 is an arrowhead on... no.
+
+Let me look at image 2 pixel positions. The vertical blue line L8 from y=108 to 1130, L9 from 1271 to 2293. At top y~108 there's a cyan box (H0). At bottom y~2293 there's a cyan box (H2). Then below at y~2338 horizontal blue lines L11, L12, and at the left end of those there's another cyan box (H4) at y 2331-2382. Hmm so H4 is at the corner where vertical line meets horizontal? That doesn't make sense for a dimension.
+
+Actually maybe the dimension line is drawn with the arrowhead at the bottom pointing down at the horizontal extension line, and the horizontal extension line goes right to the part. The vertical line's bottom arrowhead is H2 (pointing down at the horizontal line). Then H4 is... maybe a separate arrowhead for a different dimension? But there's no other vertical dimension there.
+
+Hmm, I'm overthinking. Let's look at image 1: at the bottom of the vertical dimension line, there's a filled downward triangle arrowhead right at the horizontal line. That's one arrowhead. In image 2, that corresponds to H2 (cyan box at ~2300) and the horizontal line L11/L12 at 2338. But H4 at 2331-2382 is also a cyan box slightly lower. Maybe H2 and H4 are two detections of the same arrowhead, or H4 is the arrowhead and H2 is something else.
+
+Given uncertainty, I'll include both H2 and H4 as arrowheads? But the instruction says "All terminal arrowheads of those leaders." The vertical dimension line has two terminal arrowheads: top (H0) and bottom (H2 or H4). I'll include H0, H2, H4 to be safe? But H4 might be a different feature.
+
+Hmm, let's look at the bottom of image 1 again. The vertical line ends with a downward arrowhead at the horizontal line. The horizontal line at the bottom extends right to the part's bottom edge. There's only one arrowhead at the bottom of the vertical line. In image 2, I see two cyan boxes stacked at the bottom left of the horizontal line: one at ~2300 (H2) and one at ~2350 (H4). Possibly the arrowhead is large and got split, or there's the dimension arrowhead (H2) and the corner of the part (H4)? No, H4 is type arrowhead.
+
+I'll include H0, H2, H4. Actually, let's reconsider. The top arrowhead H0 is clear. The bottom: the vertical line L9 ends at 2293. H2 bbox y 2285-2327 matches the end of L9. So H2 is the bottom arrowhead of the vertical line. H4 bbox y 2331-2382 is below the horizontal line L11/L12 (2338). That's odd. Maybe H4 is an arrowhead of a horizontal dimension line that we don't see? But there's no horizontal dimension text there.
+
+Given the ambiguity and that the instruction says don't associate unrelated things, maybe H4 is unrelated. But it's right at the corner. Hmm.
+
+Let me think about the "touched part". The top arrowhead H0 touches the top edge of the part (the top horizontal line of the part outline at y~64, L10/L13). The bottom arrowhead touches the bottom edge (y~2338, L11/L12). So the extension lines L10, L13 (top) and L11, L12 (bottom) are the lines the arrowheads point to / that touch the part.
+
+So the leader path = vertical dimension line (L8, L9) + the arrowheads point to extension lines. The extension lines are part of the dimension. I think for completeness I should include the extension lines as part of the dimension annotation's lines. But the instruction says "select only line IDs that are part of the FAI leader path." The leader path of a dimension is the dimension line; the extension lines are auxiliary. Hmm.
+
+I think the safest interpretation: the dimension annotation's "leader" is the dimension line (L8, L9). The arrowheads are H0 (top) and H2 (bottom). The touched part is the part edges at top and bottom, but we have no R* evidence, so target_ids empty and use fallback.
+
+But wait, the arrowheads H0 and H2 point to the extension lines, not directly to the part. The extension lines then touch the part. So the "touched local component" is the part outline at top and bottom. Without R*, fallback.
+
+Hmm, but actually maybe the dimension line's arrowheads in this drawing point outward to the extension lines which are at the part edges. So the part edges are at y=64 (top) and y=2338 (bottom). The extension lines L10/L13 at top and L11/L12 at bottom are exactly at the part edges (they're the part's top and bottom outline? No, the part outline on the right is at x~1975-2100. The extension lines go from x=1464 to 2400, crossing the part. So they're extension lines, not part outline.)
+
+OK here's my decision. I'll treat this as a dimension annotation. The leader segments = the dimension line = L8, L9. The arrowheads = H0, H2 (and maybe H4). The extension lines I'll include as part of the dimension? The instruction explicitly warns about not selecting ordinary part/dimension lines that aren't part of the FAI leader path. But here the dimension line IS the leader path for this FAI. The extension lines are part of the same dimension feature. I think it's reasonable to include them, but the warning suggests being conservative.
+
+Hmm, let me re-read: "OpenCV line candidates include both leaders and ordinary part/dimension lines; select only line IDs that are part of the FAI leader path." This means: among the L* candidates, some are leaders (connecting annotation to part) and some are ordinary part/dimension lines (like the part outline). Select only the leader ones. For a dimension annotation, the dimension line is the leader. The extension lines... are they leaders? They connect the dimension line to the part. I'd argue yes they're part of the dimension's leader path. But the part outline lines (like L0, L1, L2 etc. which are the part's left edge vertical lines at x~1975-2011) are NOT leaders.
+
+So I should NOT include L0-L7, L18-L25, L26-L43 (those are part outline / other dimension lines on the right). I should include L8, L9 (dimension line), and the extension lines L10, L11, L12, L13.
+
+Hmm but L10, L13 are at top y=64,67; L11, L12 at bottom y=2338,2335. These are the extension lines of the 213.66 dimension. Yes include them.
+
+Wait, but are L10/L13 the top extension line or the part's top edge? The part's top edge in image 1 is at the very top right, a horizontal line at y~64 from x~1975 to 2400. The extension line of the dimension would be at the same y. So L10 [1464,64,2400,64] spans from the dimension line (x=1464) to the right edge (2400), crossing the part. That's the extension line. Similarly L13 [1466,67,2076,67] is a parallel line (double line detection). So L10 and L13 are the top extension line (two detections). L11 [1513,2338,2400,2338] and L12 [1464,2335,2078,2335] are bottom extension line.
+
+OK so I'll include L8, L9, L10, L11, L12, L13 as leader_ids.
+
+Hmm, but actually the dimension line arrowheads point to the extension lines. The extension lines touch the part. So the "touched part" is the part at top and bottom. Good.
+
+Now arrowheads: H0 (top), H2 (bottom of vertical line). What about H4? H4 at [1457,2331,1518,2382] is at the bottom-left corner where the vertical line's bottom meets the horizontal extension line. Possibly it's the same bottom arrowhead detected twice (H2 and H4). I'll include both H2 and H4? The instruction says all terminal arrowheads. If the bottom arrowhead is one, including two IDs for it is fine if both are valid detections of it. But H4's bbox is below the horizontal line (2331-2382 vs line at 2335-2338), so H4 might be an arrowhead pointing down below the line, which would be weird.
+
+Let me look at image 2 bottom-left of the horizontal line: I see a cyan box at the corner with a black filled triangle pointing down. That's at around y=2350 (H4). And above it at y=2300 another cyan box (H2) which in image 2 shows a small black triangle? Hard to say.
+
+In image 1, the bottom of the vertical dimension line: the arrowhead (filled triangle pointing down) is at the horizontal line, around y=2350. So that's H4. Then what is H2 at 2285-2327? In image 1, at y~2300 there's no arrowhead on the vertical line; the vertical line just continues to the horizontal line. Hmm, but in image 2 there's a cyan box at 2300 (H2) with a small triangle. Maybe the vertical line has an arrowhead at 2300 (pointing down) AND the horizontal line is at 2338, and H4 at 2350 is the corner arrowhead of a different feature?
+
+I'm spending too much time. Let me make a pragmatic decision: include H0, H2, H4 as arrowheads since they're all at the ends of the dimension line region and plausibly the two terminal arrowheads (with one double-detected). Actually no—if H2 and H4 are both at the bottom, that's two arrowheads at the bottom which is wrong for a single dimension.
+
+Let me look at the y-coordinates of the vertical line: L8 ends at 1130, L9 starts at 1271 (gap is the text 213.66). L9 ends at 2293. So the vertical line's bottom end is at 2293. The arrowhead at that end is H2 (2285-2327). Good. Then below, the horizontal extension line is at 2335-2338. H4 (2331-2382) is at the left end of the horizontal line, pointing... maybe it's an arrowhead of the horizontal line? But the horizontal line is an extension line, it shouldn't have an arrowhead. Unless the drawing has the dimension arrowhead at the corner.
+
+You know, in many drawings the dimension line's arrowhead touches the extension line. So the bottom arrowhead (H2) is at the vertical line's bottom end (2293) which is just above the extension line (2335). That's a gap of ~40px, a bit large but ok. Then H4 at 2331-2382 might be a mis-detection of the corner or of the part's bottom-left rounded corner arrow? There's no arrow there in image 1.
+
+I'll go with H0 and H2 as the two terminal arrowheads, and exclude H4 as likely unrelated/mis-detection. Hmm but H4's bbox center (1487, 2356) is exactly at the corner of the dimension. Ugh.
+
+Let me look at image 1 one more time mentally: bottom of vertical line, I recall a filled downward triangle right at the horizontal line. The horizontal line is at the very bottom of the ROI. The triangle's tip is at the horizontal line. So the triangle spans from ~2330 (top of triangle) to ~2380 (tip)? That matches H4 (2331-2382). And H2 (2285-2327) would be above the triangle, on the vertical line, which in image 1 is just line, no triangle. So maybe H2 is a false positive.
+
+Argh. Both are plausible. The difference: H2 is "LocateAnything" arrowhead, H4 is also "LocateAnything". Both detected.
+
+Given the dimension line L9 ends at 2293, the arrowhead attached to it should be at ~2293, i.e., H2 (2285-2327). The triangle drawn at the end of a line is usually centered at the line end or just beyond. 2293 is within H2. So H2 is the arrowhead of L9. H4 at 2331-2382 is below the line end, possibly the arrowhead of the horizontal line L12 (which starts at x=1464, y=2335)? L12's left end is at (1464,2335). An arrowhead there pointing left? H4 bbox x 1457-1518 includes 1464. Hmm but extension lines don't have arrowheads.
+
+I'll make a final decision: include H0, H2, H4. Rationale: the instruction wants all terminal arrowheads of the leaders; if the bottom has the dimension arrowhead and there's also an arrowhead at the corner, including both is safer than missing one. But including a wrong one violates "don't associate unrelated". 
+
+Hmm, the risk of including H4 wrongly vs missing it. The complete_group fallback box will cover the area anyway. The arrowhead_ids list affects correctness.
+
+Let me think about typical ground truth for these tasks. Usually the dimension's two arrowheads are the top and bottom of the dimension line. The bottom of the dimension line is at 2293 (L9 end). So bottom arrowhead = H2. The top of dimension line at 108 (L8 start) = H0. So arrowheads = [H0, H2]. H4 is extra, likely the part's corner or a mis-detection, exclude.
+
+But wait, in image 2, the cyan box at the very bottom (H4) clearly contains a black filled triangle (I can see a downward triangle in the cyan box at bottom). And the cyan box H2 at 2300 also seems to contain a small triangle. Looking really carefully at image 2: at the bottom there's a vertical blue line ending, with a cyan box around a downward black triangle at ~2300 (that's H2), and then the horizontal blue line, and at the left end of the horizontal line another cyan box with a downward black triangle at ~2350 (H4). Hmm two triangles? That would mean the vertical line has an arrowhead at 2300 AND there's another arrowhead at 2350 on the horizontal line. That's strange.
+
+Actually maybe the vertical dimension line's arrowhead is at 2350 (H4) pointing down to the horizontal line, and the vertical line L9 actually extends to 2350 but OpenCV only detected it to 2293. And H2 at 2300 is a false detection of part of the line. In image 1, the downward triangle at the bottom is at the horizontal line level (~2350), not at 2300. So H4 is the real bottom arrowhead, H2 is false.
+
+I keep flip-flopping. Let's use the visual of image 1 as ground truth: In image 1, the vertical dimension line's bottom arrowhead (filled triangle) is located at the horizontal extension line, i.e., at the very bottom of the ROI, around y=2350. The top arrowhead is at y=80. So arrowheads = H0 (top) and H4 (bottom). H2 is a false positive in the middle of the line.
+
+But L9 ends at 2293, which is above 2350. If the arrowhead is at 2350, the line should extend to ~2330. OpenCV might have missed the last segment. Plausible.
+
+Hmm, but in image 2, the vertical blue line clearly ends at the cyan box H2 (2300), and below that there's a gap then the horizontal line. Let me look: in image 2, vertical blue line goes down to about y=2300 where there's a cyan box with a triangle, then the horizontal blue line at 2338 starts from x=1464. The cyan box H4 at 2350 is at the left end of the horizontal line, containing a triangle pointing down-left? 
+
+I really can't be sure. Given the uncertainty, I'll include both H2 and H4 in arrowhead_ids. The downside of including an extra arrowhead that's actually part of the same dimension corner is small, and the upside is not missing the real one. The instruction's main warning is about not associating unrelated dimensions/sections/datum/SPC, not about extra arrowheads at the same corner. H4 is at the same corner as the dimension, so it's related.
+
+Thus arrowhead_ids = [H0, H2, H4].
+
+Now target_ids: no R* evidence, so empty.
+
+parameter_values: the dimension value and tolerance: ["213.66", "+0.100", "-0.135"] or as a structured list. The schema says parameter_values: []. I'll put ["213.66 +0.100 -0.135"] or separate. I'll put ["213.66", "+0.100", "-0.135"].
+
+is_range_measurement: The annotation specifies +0.100/-0.135 which is a tolerance (limit pair). The instruction: "is_range_measurement is true only when the annotation explicitly specifies a min/max interval, range, or limit pair; a two-row feature-control frame by itself is not a range measurement." A +0.100/-0.135 tolerance is a limit pair (max/min deviation). Hmm, is that a "range measurement"? It's a tolerance, not a range of measured values. The phrase "min/max interval, range, or limit pair" — a tolerance of +0.100/-0.135 defines a limit pair (upper and lower limits). I think this could be considered a limit pair. But typically "range measurement" in these tasks refers to something like "10-12" or a min/max spec. A bilateral tolerance is a limit pair. Hmm.
+
+The example they give for NOT range: "a two-row feature-control frame by itself". They don't give an example of a tolerance. I think a +/− tolerance is a limit pair, so is_range_measurement = true? Or false because it's a nominal + tolerance, not a range?
+
+Let me think about the semantics. "213.66 +0.100 -0.135" means the acceptable range is [213.66-0.135, 213.66+0.100] = [213.525, 213.76]. That's a limit pair / range. So I'd say is_range_measurement = true.
+
+But many would argue a tolerance is not a "range measurement" but a "tolerance". The instruction's wording "limit pair" strongly suggests +/− tolerance qualifies. I'll set true.
+
+Hmm, but the instruction also says "a two-row feature-control frame by itself is not a range measurement" — that's clarifying that the FCF structure isn't a range. The +/− tolerance is explicitly a limit pair. I'll go true.
+
+Wait, but actually re-reading: "is_range_measurement is true only when the annotation explicitly specifies a min/max interval, range, or limit pair". A +0.100/-0.135 is exactly a limit pair (upper limit +0.100, lower limit -0.135). So true.
+
+OK set true.
+
+measurement_description: null (no instruction sentence).
+
+fai_number: "1".
+spc_letter: "A".
+
+annotation_ids: Hmm what goes here? Possibly the OCR of the FAI/SPC circles? There's no clean OCR. The FAI marker F0 is the marker. The SPC circle has no ID. I think annotation_ids should contain the feature-control-frame or annotation box IDs. For a dimension, maybe annotation_ids = [] and the parameter text is in parameter_text_ids. Or annotation_ids = [T7] (the line containing FAI, SPC, 213.66). 
+
+Let me define:
+- annotation_ids: [] (no FCF; the dimension value is parameter)
+- parameter_text_ids: [T7, T6, T8]
+- description_text_ids: []
+
+But T7 includes the FAI and SPC circles text garbled "YE) 213.66". That's fine, it's the parameter line.
+
+Hmm, but maybe annotation_ids should include T7 because it's the main annotation text line, and parameter_text_ids the tolerance T6,T8? The schema separates "parameter" and "annotation". In a dimension, the parameter is the value 213.66 and the tolerance. I think putting all three in parameter_text_ids is fine, and annotation_ids empty.
+
+Actually, let's reconsider the meaning of annotation_ids. In these FAI group schemas, "annotation_ids" usually refers to the feature control frame / GD&T annotation boxes (the rectangular frames). For a plain dimension, there's no FCF, so annotation_ids = []. Good.
+
+Now fallback_boxes_norm. We need normalized [0,1000] boxes. The ROI is the whole image? The image dimensions: width 2400? The bboxes go up to 2401 in x and 2401 in y. So image is ~2400x2400? Actually the bboxes max x=2401, max y=2401. So image size ~2400x2400. Normalized = coord/2400*1000.
+
+Let me compute the complete_group fallback box covering the full annotation + leaders + arrowheads + touched part. The annotation text spans x from 1151 (F0) to 1865 (T8 right). The leaders vertical line at x~1487-1490 from y=108 to 2293. Extension lines top y=64 from x=1464 to 2400, bottom y=2338 from x=1464 to 2400. Arrowheads H0 at (1467-1504,60-111), H4 at (1457-1518,2331-2382). The touched part top edge at y~64 x up to 2400, bottom edge y~2338 x up to 2400.
+
+So the complete group bounding box in pixels: x from 1151 to 2400, y from 60 to 2382.
+
+Normalize: x_min=1151/2400*1000=479.6; x_max=2400/2400*1000=1000; y_min=60/2400*1000=25; y_max=2382/2400*1000=992.5.
+
+So complete_group ≈ [480, 25, 1000, 993].
+
+annotation fallback box: the annotation text + FAI/SPC markers: x 1151 to 1865, y 1147 to 1256. Normalize: x_min=1151/2400*100

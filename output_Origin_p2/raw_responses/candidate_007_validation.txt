@@ -1,0 +1,8 @@
+Looking at IMAGE 1, the magenta crop's top edge slices through the "PD" label box (and the "SCALE 20:1" text). In IMAGE 2 the top border of that "PD" box is missing, so the leader's origin label is not fully captured. The rest of the group (FAI 111 circle, SPC CZ circle, Ø1.60 box, profile FCF 0.25 A B C, the "18" box, the leader chain with both arrowheads, and the touched circular feature) is fully inside, and no relevant leader or arrowhead is clipped at the other three borders. The only defect is the truncated "PD" box at the top, which requires a small top expansion.
+
+{
+  "valid": false,
+  "missing": ["PD label box top border (leader origin label truncated at top edge)"],
+  "expand_norm": {"left": 0, "top": 60, "right": 0, "bottom": 0},
+  "confidence": 0.78
+}

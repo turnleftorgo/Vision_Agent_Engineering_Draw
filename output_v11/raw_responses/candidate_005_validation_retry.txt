@@ -1,0 +1,33 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle is around the FAI 204 circle, which is associated with the "16" box.
+
+Let me look at the structure. In IMAGE 1, the magenta rectangle contains:
+- "15" and "16" boxes at top left (partially? Let's check)
+- "4X 0.49 ±0.10" with FAI 191 and SPC GE circles
+- T4 (-125.75) and T5 (-133.75)
+- "SECOND TERRACE" text with -0.21 +0.15 -0.08
+- Box 15 with FAI 69, SPC BL, 100% triangle
+- Box 16 with FAI 204 (the red rectangle)
+- A leader line on the left going down to a feature (the section K-K feature)
+- The "K-K" text is partially visible at left edge
+
+Now let's look at the leader lines. There's a leader line on the left side: "4X 0.49 ±0.10" has a leader that goes down-left to a feature. In IMAGE 1, the leader line from "4X 0.49" goes left then down with an arrowhead pointing to a feature (the section line / feature at left). Let's trace it. The leader starts at the text "4X 0.49 ±0.10", goes left a bit, then down vertically, ending with an arrowhead at a horizontal line (the feature). In IMAGE 1, this arrowhead is at around y=770-850, x=175. The feature it points to is at the left edge, partially cut off.
+
+Now in IMAGE 2 (the crop), let's see what's included. IMAGE 2 shows:
+- Top left: "009 +0.15 -0.16" with FAI 66, SPC BJ, 100% triangle, FAI 67
+- "4X 0.49 ±0.10" with FAI 191, SPC GE
+- T4, T5
+- SECOND TERRACE with -0.21 +0.15 -0.08
+- Box 15 with FAI 69, SPC BL, 100%
+- Box 16 with FAI 204
+- "ECTION K-K" text at left
+- A leader line from "4X 0.49" going down to an arrowhead at a feature (the section feature at left, which is now visible as a hatched profile)
+
+Wait, but the crop in IMAGE 2 seems to be shifted relative to IMAGE 1's magenta rectangle. Let me compare. In IMAGE 1, the magenta rectangle's left edge is at x=0 (the very left of the image). The top edge is at y~290. The bottom edge is at y~1320. The right edge is at x~2190.
+
+In IMAGE 2, the content appears to be a different region. IMAGE 2 shows "ECTION K-K" which in IMAGE 1 is "K-K" at the left edge around y=1030. Hmm, but in IMAGE 1 the magenta rectangle's left edge cuts off the "K-K" text (we see "K-K" partially? Actually in IMAGE 1 we see "K - K" at left around y=1030, but the magenta rectangle left edge is at x=0, so the "K-K" is inside? Let's look. In IMAGE 1, at left edge y=1030 we see "K - K". The magenta rectangle left edge is at x=0, so the K-K text starting at x~20 is inside the rectangle. But wait, the magenta rectangle in IMAGE 1 spans from x=0 to x=2190. The "K-K" text is at x~20-210, y~1030, which is inside.
+
+Hmm, but IMAGE 2 shows "ECTION K-K" which is "SECTION K-K" cut off on the left. That means IMAGE 2's left edge is further left than IMAGE 1's magenta rectangle? Or IMAGE 2 is a different crop.
+
+Wait, I need to look more carefully

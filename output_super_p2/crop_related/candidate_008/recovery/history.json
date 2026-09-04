@@ -1,0 +1,91 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    6343,
+    2471,
+    7463,
+    3391
+  ],
+  "current_crop": [
+    6343,
+    2471,
+    7463,
+    3391
+  ],
+  "best_crop": [
+    6343,
+    2471,
+    7463,
+    3391
+  ],
+  "best_score": 99.7252,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6343,
+        2471,
+        7463,
+        3391
+      ],
+      "crop_after": [
+        6343,
+        2471,
+        7463,
+        3391
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5735,
+          "completion_tokens": 102,
+          "total_tokens": 5837,
+          "finish_reason": "stop",
+          "elapsed_seconds": 24.93301620800048,
+          "content_bytes": 212,
+          "content_chars": 212,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5767,
+          "completion_tokens": 56,
+          "total_tokens": 5823,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.532016167009715,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.7252,
+      "score_after": 99.7252,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

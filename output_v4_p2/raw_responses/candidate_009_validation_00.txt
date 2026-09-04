@@ -1,0 +1,225 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The FAI marker is "FAI 2" with an SPC "B" circle next to it. Above it is the dimension "278.06 +0.10 -0.20".
+
+Now I need to look at the leader lines. In IMAGE 1, there's a label "BN" with a leader line. Let me trace it. The "BN" text is at the top-left of the magenta rectangle area. There's a leader line going from "BN" up-left to a small circle/feature on the left side of the drawing (around the hinge area, a small circle with an arrow pointing to it).
+
+Wait, let me look carefully. The "BN" text is positioned above the magenta rectangle, partially outside it. The leader line from "BN" goes up and to the left, ending in an arrowhead at a small circle feature (the hinge pin or something) located above the magenta rectangle, outside it.
+
+Let me look at the magenta rectangle boundaries. The magenta rectangle's top edge is just below the "BN" text. Actually, looking at IMAGE 1, the "BN" text appears to be partly above the magenta rectangle's top edge. Let me look at the coordinates.
+
+In IMAGE 1, the magenta rectangle spans roughly from y=975 to y=1240 (in pixel coordinates of the image). The "BN" text is at around y=950-1010, so it's partly above the top edge. The leader line from "BN" goes up-left to the arrowhead at the small circle at around (245, 785), which is well above the magenta rectangle.
+
+Now, the question is: is the "BN" label and its leader part of the FAI annotation group? The FAI group is the dimension 278.06 with FAI 2 / SPC B. The "BN" label seems to be a separate annotation pointing to a feature (the hinge pin circle). Hmm.
+
+Wait, but the dimension line for 278.06 - where does it go? The dimension 278.06 is a horizontal dimension. The dimension line extends horizontally. In IMAGE 1, the dimension line for 278.06 is at around y=1050, extending left and right. The left extension line... Let's see. The dimension line goes left to about x=10 (the left edge of the magenta rectangle) and continues? Actually the dimension line in IMAGE 1 at y=1050 extends from the left edge of the image to the right edge. Hmm.
+
+Let me think about what the FAI annotation group consists of. The FAI circle (FAI 2), SPC B, the dimension 278.06 +0.10 -0.20. The dimension line is the horizontal line at y=1050. The dimension line's extension lines would go up to the features being measured. But here the dimension line seems to just be a horizontal line.
+
+Now the "BN" label with its leader to the arrowhead at the small circle - is that part of this FAI group? The "BN" might be a feature identifier (like a hole or boss designation) that is associated with the dimension? Or it might be a separate annotation.
+
+Hmm, the semantic context says: semantic_missing includes "A* annotation region for F0", "terminal arrowhead for F0 leader", "R* target region for F0". This suggests that there's a leader (F0) whose terminal arrowhead is missing from the crop, and the target region is missing.
+
+Looking at IMAGE 1, the leader from "BN" goes to an arrowhead at the small circle at top-left. That arrowhead and the small circle feature are OUTSIDE the magenta rectangle (above it). So if "BN" is part of the FAI group, then the crop is missing the arrowhead and the target feature.
+
+But wait, is "BN" part of the FAI group? The "BN" text in IMAGE 1 is at the top-left, and the magenta rectangle's top edge cuts through or just below the "BN" text. Let me look at IMAGE 2 (the crop). In IMAGE 2, at the top we see "-BN" partially - actually we see the bottom of "BN" text? Let's look. IMAGE 2 top shows "-BN" - it looks like the bottom half of "BN" letters, with the "B" and "N" cut off at the top. Actually it shows "BN" but the top is cut. Hmm, in IMAGE 2 the top shows what looks like the bottom portion of "BN" - we see "-BN" where the left part is cut. Actually it shows the letters "BN" but only the lower halves are visible? Let me look: the top of IMAGE 2 shows "-BN" - I see a horizontal line (the dimension line) and above it the bottom of "BN" text. The "B" and "N" are partially visible - the tops are cut off.
+
+So the "BN" text is partially inside the crop (its bottom part) but its top is cut. And the leader line from "BN" goes up-left out of the crop, and the arrowhead and target feature are outside.
+
+Now, the key question: does the FAI annotation group include the "BN" leader and its arrowhead? The dimension 278.06 is a horizontal dimension. Typically a dimension has two extension lines going to the features. But here, the "BN" might be a label for one of the features, with a leader pointing to it. Hmm.
+
+Actually, let's reconsider. The "BN" with a leader to a small circle - this looks like a feature callout (like a hole callout or a reference feature). The dimension 278.06 might be measuring the distance to that feature or between features. The "BN" could be the feature identifier that the dimension references.
+
+Hmm, but actually the leader from "BN" points to a small circle at the top-left which is a hinge pin or a hole. The dimension 278.06 horizontal line - its left extension line might align with that feature? Hard to say.
+
+Let's look at the structure. In many engineering drawings, a dimension like 278.06 would have extension lines. The horizontal dimension line at y=1050 - I see it extends across. The left end of the dimension line in IMAGE 1 is at the left edge of the image (x=0). The right end is at the right edge. So the dimension line is longer than the magenta rectangle. The magenta rectangle's left edge is at x=10, right edge at x=1570. The dimension line in IMAGE 1 at y=1050 goes from x=0 to x=2337 (full width). So the dimension line extends beyond the magenta rectangle on both sides!
+
+Wait, but in IMAGE 2 (the crop), the dimension line at the top goes from left edge to right edge of the crop, and the "278.06" is on the right side. So the dimension line is cut at both ends of the crop. That means the extension lines / feature touches are outside the crop.
+
+Hmm, but the rules say: "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows." This is about leaders with arrowheads, not dimension extension lines necessarily. But also "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent".
+
+So the dimension line reaching the crop border - is that a "leader"? A dimension line isn't typically a leader. But the extension lines that touch features... Hmm.
+
+Let's focus on the "BN" leader. The "BN" text has a leader line that goes up-left to an arrowhead at the small circle. This leader line clearly exits the magenta rectangle at the top (and left). The arrowhead is outside. The target feature (small circle) is outside. So if "BN" is part of the FAI group, the crop is invalid and we need to expand top and left.
+
+But is "BN" part of the FAI group? The semantic context lists selected_component_ids: T11, T12, L17. And semantic_missing includes "terminal arrowhead for F0 leader" and "R* target region for F0" and "A* annotation region for F0". This strongly suggests that there IS a leader (F0) associated with this FAI group, and its arrowhead and target are missing. The "A* annotation region" might be the "BN" text region (the annotation that the leader comes from).
+
+So the semantic association is telling us that the FAI group includes a leader whose source annotation is "BN" (or some A* region), and the arrowhead + target are missing.
+
+Therefore, the crop is missing: the "BN" annotation (partially cut), the leader segment, the terminal arrowhead, and the target feature (small circle).
+
+Thus the crop is INVALID. We need to expand to include the "BN" text fully, the leader, the arrowhead, and the target feature.
+
+Let's look at the positions in IMAGE 1 to compute expansion.
+
+The magenta rectangle in IMAGE 1: Let me estimate pixel coordinates. The image is 2337 wide (approx) and 2337 tall? Let's assume the image dimensions. Actually I don't know exact pixel dimensions. Let me look at the layout. The magenta rectangle left edge ~ x=10, right edge ~ x=1570, top edge ~ y=990, bottom edge ~ y=1255. (These are rough.)
+
+The "BN" text is at around x=440-580, y=950-1020. The top of "BN" is at y~950, which is above the magenta top (990). So we need to expand top a bit to include "BN" fully.
+
+The leader from "BN" goes from around (370, 990) up-left to the arrowhead at (255, 810). The arrowhead is at y~810, x~255. The target small circle is at (245, 785).
+
+So to include the arrowhead and target, we need to expand top significantly (to y~770) and left (to x~230, but the magenta left is already at x=10, so left is fine; the target x=245 is within the magenta left-right range? magenta left=10, right=1570, so x=245 is inside horizontally. Good. So left expansion not needed for the target. But the leader line at its top is at x~255, also inside horizontally. So left is fine.
+
+Wait but the "BN" text left edge is at x~440, inside. So left expansion not needed.
+
+Top expansion: need to go from y=990 up to y~770. The magenta height is 1255-990 = 265. The amount to add at top is 990-770 = 220. As a fraction of crop height: 220/265 = 0.83 = 830. Hmm that's a lot.
+
+But wait, also the dimension line extends beyond the magenta on left and right. The dimension line at y=1050 in IMAGE 1 goes from x=0 to x=2337. The magenta right edge is 1570. So the dimension line continues to the right beyond the crop. Does the dimension line have an arrowhead or touch a feature on the right? In IMAGE 1, on the right side at y=1050, the line continues to the right edge. There's no visible arrowhead or feature touch within the image on the right? Actually the dimension line might have extension lines going up to features. Hard to see.
+
+Hmm, but the rules about "relevant leader reaches the crop border" - the dimension line is not a leader. The leaders are the callout lines with arrowheads. The "BN" leader is the relevant one.
+
+But also, the dimension 278.06 - the dimension line itself, if it's cut at the border, does that matter? The rules mention "parameter/tolerance/feature-control-frame and description text" must be fully contained. The dimension value 278.06 +0.10 -0.20 is fully inside the crop (in IMAGE 2 we see it fully). Good. The dimension line is just a line; its ends touching features via extension lines - the extension lines would be vertical lines going up from the dimension line to the features. In IMAGE 1, do we see vertical extension lines at the ends of the 278.06 dimension? The dimension line is horizontal at y=1050. I don't see clear vertical extension lines in the magenta region. The dimension might be referencing the overall width with extension lines at the far left and far right of the part, which are outside the crop.
+
+Hmm, this is getting too detailed. Let's think about the intent of the task. The semantic_missing clearly indicates a leader arrowhead and target region are missing. The visual evidence in IMAGE 1 shows the "BN" leader going up-left to an arrowhead and a small circle feature, all above the magenta rectangle. The "BN" text is also partially cut at the top of the crop (IMAGE 2 shows the bottom of "BN").
+
+Therefore the crop is invalid. We need to expand top to include the "BN" text, the leader, the arrowhead, and the target feature.
+
+Now, is the "BN" annotation actually part of the FAI group, or is it a separate annotation that "dominates" or is unrelated? The rules say "Reject it if ... unrelated neighboring annotations dominate." But here the "BN" is connected via a leader to a feature, and the dimension 278.06 might be associated. Hmm.
+
+Actually, wait. Let's look more carefully at the geometry. The "BN" leader points to a small circle at the top-left (the hinge pin). The dimension 278.06 is a horizontal dimension. Could the 278.06 be the distance from the left edge (or some datum) to that hinge pin? Possibly. In that case, the "BN" feature is one of the features the dimension measures, and the dimension's left extension line would align with that feature. But the leader from "BN" is a separate callout identifying the feature as "BN".
+
+Hmm, but actually the "BN" might just be a label for the hinge feature, unrelated to the 278.06 dimension. The 278.06 dimension might measure the width of the palm rest or something.
+
+Let's look at the dimension line endpoints. In IMAGE 1, the horizontal line at y=1050 (the dimension line) - on the left it goes to x=0 (image edge). On the right it goes to x=2337 (image edge). So we can't see where it terminates. The extension lines would be vertical. I don't see vertical extension lines clearly.
+
+This is too uncertain. Let's think about what the expected answer is. The semantic context is diagnostic and says semantic_complete=false with missing items including the leader arrowhead and target region. The instructions say: "if a reported missing item is visible outside the magenta rectangle and belongs to this FAI group, return valid=false and request expansion toward it."
+
+So I need to determine if the missing leader arrowhead and target region belong to this FAI group. The leader in question is the "BN" leader. Does it belong to the FAI group? The FAI group is the dimension 278.06 with FAI 2. The "BN" leader points to a feature. If the dimension 278.06 is measuring a distance that involves that feature, then yes.
+
+Hmm, but actually, maybe the "BN" leader is NOT part of the FAI group. Maybe the FAI group's leader is something else. Let's look at the FAI circle position. The FAI 2 circle is at around (1150, 1150) in IMAGE 1. The dimension 278.06 is at (1200, 1060). The "BN" is at (510, 980). The leader from "BN" goes to the top-left feature.
+
+Is there any leader from the FAI circle or the dimension that goes somewhere? The dimension line is horizontal. The FAI circle is just below the dimension. I don't see a leader from the FAI circle.
+
+So the only leader in this region is the "BN" leader. The semantic_missing mentions "terminal arrowhead for F0 leader" - F0 is probably the leader ID. So the leader F0 is the "BN" leader. And its arrowhead and target are missing. And "A* annotation region for F0" is the "BN" text region (the annotation that the leader originates from).
+
+Thus the semantic association is saying: the FAI group includes the "BN" annotation and its leader, and these are missing/cut.
+
+Given that, the crop is invalid, and we should expand to include the "BN" text fully, the leader, the arrowhead, and the target feature.
+
+But wait, the "BN" text in IMAGE 2 is partially visible (the bottom half). The instructions say: "if the supposedly missing item is already sufficiently visible inside IMAGE 2, do not expand solely because semantic association failed to select its ID." But the "BN" text is NOT sufficiently visible - it's cut at the top. And the leader and arrowhead and target are completely outside. So we must expand.
+
+Now compute expansion. Let's define the magenta rectangle in normalized terms. I need pixel coordinates. Let me look at IMAGE 1 more carefully and estimate.
+
+I'll assume IMAGE 1 is 2337 x 2337 (square-ish). Actually the displayed image might be a certain size. Let me just estimate proportions.
+
+Looking at IMAGE 1, the magenta rectangle:
+- Left edge: very close to left, maybe 0.5% of width.
+- Right edge: about 67% of width.
+- Top edge: about 42% of height.
+- Bottom edge: about 54% of height.
+
+Hmm, let me look at vertical positions. The image has the keyboard at top (0-12%), then the hinge area (12-38%), then the magenta rectangle region (42-54%), then a gap, then "CORE SIDE" text (68-73%), then the bottom grille (83-100%).
+
+Let me look at the magenta rectangle top edge relative to the "BN" text. The "BN" text baseline is around the magenta top edge. The top of "BN" letters is above the magenta top edge by maybe the height of the letters.
+
+The arrowhead at the small circle is at about y=34% of height (the small circle with arrow is at the left, around the hinge bottom). Let's look: the small circle with the arrow (the "BN" target) is at around y=34-35% of height. The magenta top is at ~42%. So we need to expand top from 42% to ~33%, i.e., add ~9% of total height. As a fraction of crop height (which is ~12% of total), 9/12 = 0.75 = 750.
+
+Hmm, but the expansion values are normalized fractions of the current crop width or height. So top expansion = (amount to add at top) / (crop height) * 1000.
+
+Let me get better pixel estimates. I'll mentally overlay a grid. The image height H. Let's say H = 2337 (just a guess; the actual might be different but ratios matter).
+
+Magenta rectangle: top y1, bottom y2. Let me look at the "CORE SIDE" text which is at about 70% height. The magenta bottom is at about 54%. The magenta top at about 42.5%. So crop height = 11.5% of H.
+
+The "BN" target small circle is at about 34.5% of H. The arrowhead tip at about 35%. The top of "BN" text at about 41% of H (just above magenta top 42.5%).
+
+So to include the target, we need top to reach 34% of H. Current top = 42.5% of H. Amount to add = 8.5% of H. As fraction of crop height (11.5% of H): 8.5/11.5 = 0.739 = 739.
+
+So top expansion ~ 740.
+
+Left expansion: the target x is at about 10.5% of width. The magenta left is at about 0.4% of width. So the target is inside horizontally. The leader line at its top is at x~11%, inside. The "BN" text left at ~19%, inside. So left expansion = 0.
+
+Right expansion: The dimension line extends to the right beyond the magenta right edge. But does it have a feature touch or arrowhead on the right that's part of the FAI group? The dimension line is a dimension line, not a leader. The rules about leaders/arrowheads don't apply to dimension lines per se. But the rule "a visible local portion of every component feature touched by those arrows" - the arrows are leader arrowheads. The dimension line doesn't have arrowheads typically (or has them at the ends pointing to extension lines). Hmm.
+
+Actually, in many drawings, dimension lines have arrowheads at both ends pointing to the extension lines. If the dimension line's right arrowhead is outside the crop, that might be a problem. But the dimension line in IMAGE 1 at y=1050 - I see it as a plain line without visible arrowheads in the magenta region. The arrowheads would be at the far ends (outside the image maybe). This is too speculative.
+
+Let's think about the typical expected answer for these tasks. Usually, the crop is invalid if a leader with arrowhead is cut. Here the "BN" leader is clearly cut (the leader line exits the top of the magenta rectangle, and the arrowhead + target are outside). So the crop is invalid, and we expand top.
+
+But hold on - is the "BN" leader really part of the FAI group, or is it a separate annotation that we should NOT include (and its presence partially in the crop is just "unrelated neighboring annotation")? The rules say reject if "unrelated neighboring annotations dominate." The "BN" annotation does not dominate the crop; it's a small part at the top-left. And the FAI circle + dimension are the main content.
+
+Hmm, but the semantic_missing explicitly lists the leader arrowhead and target as missing for "F0", implying the system thinks F0 leader belongs to this FAI group. The instructions say to check the images: if the missing item is visible outside and belongs to this group, return valid=false and expand.
+
+So I need to judge: does the "BN" leader belong to the FAI group? The "BN" is a feature label. The dimension 278.06 - what does it measure? If it measures the distance to the "BN" feature, then the "BN" feature is the target of the dimension's extension line, and the "BN" label is the identifier of that feature. In that case, the "BN" label + leader is part of the annotation describing the feature that the dimension references. So yes, it belongs.
+
+Alternatively, the "BN" might be a completely separate callout (e.g., a hole callout "BN" with its own leader to the hole), and the dimension 278.06 measures something else (like the overall width). In that case, the "BN" leader is unrelated, and we should NOT expand to include it; instead, the crop might be valid (since the FAI group = dimension + FAI circle + SPC, all inside), and the "BN" is just a neighboring annotation that's partially cut but unrelated.
+
+This is the crux. Let's look at the geometry of the dimension line vs the "BN" target.
+
+The "BN" target small circle is at the left, at the bottom of the left hinge area, around (245, 785) in pixel terms (top-left region). The dimension line is at y=1050, horizontal. The dimension line's left end - if it has an extension line going up, where would it go? The extension line for a horizontal dimension is vertical. If the left extension line is at x=245 (aligned with the "BN" target), then it would go up from y=1050 to the feature at y=785. But I don't see a vertical line at x=245 in IMAGE 1 between y=785 and y=1050. The "BN" leader is a diagonal line from (370,990) to (255,810), not vertical.
+
+Hmm, so the dimension line's left extension line is probably not at the "BN" target. The dimension line might extend to the left edge of the part (x=0) which is the left edge of the palm rest. And the right extension line to the right edge of the part. So 278.06 is the overall width of the palm rest / core side. In that case, the "BN" feature (a hinge pin) is unrelated to the 278.06 dimension.
+
+If that's the case, then the "BN" leader is an unrelated neighboring annotation. The crop includes part of "BN" text (the bottom) but that's just a neighboring annotation being cut, which is acceptable as long as it doesn't "dominate." The FAI group (dimension + FAI circle + SPC) is fully inside. So the crop would be VALID.
+
+But wait, the dimension line itself extends beyond the crop on left and right (to the part edges). The rules: "Reject it if a relevant leader reaches the crop border." The dimension line is not a leader. But the dimension line reaching the border means the extension lines / feature touches are outside. The rules also say "a visible local portion of every component feature touched by those arrows" - "those arrows" refers to leader arrowheads. The dimension line doesn't have leader arrowheads.
+
+Hmm, but actually, do dimension lines count? The list of required items: "the FAI circle and readable inspection number; associated SPC letter if present; parameter/tolerance/feature-control-frame and description text; every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+So the required items are about leaders and arrowheads, not dimension extension lines. The dimension value (parameter) is required and is inside. The FAI circle and SPC are inside. So if there are no leaders in the FAI group, then the crop is valid as long as the dimension value, FAI circle, SPC are inside.
+
+But the semantic_missing says there IS a leader (F0) with missing arrowhead and target. So the semantic system detected a leader associated with this FAI. Which leader? The only leader in the vicinity is the "BN" leader. So the semantic system associated the "BN" leader with this FAI group.
+
+But the semantic system is "diagnostic context, not ground truth." I must check the images. The question is whether the "BN" leader visually belongs to the FAI group.
+
+Let's look at the connection. The "BN" leader originates from the "BN" text. The "BN" text is positioned right at the top-left of the magenta rectangle, near the dimension line. Is the "BN" text connected to the dimension line? In IMAGE 1, the "BN" text is above the dimension line, and the leader goes up-left from the "BN" text. The "BN" text is not on the dimension line.
+
+Hmm, in many drawings, a feature label like "BN" would be placed near the feature with a leader. The "BN" here is placed in the middle of the drawing (in the palm rest area) with a leader going up-left to the hinge pin. That's a long leader, which is a bit unusual but possible.
+
+Actually, wait. Let me look again at the leader. The leader line in IMAGE 1: I see a line from around (370, 990) going up-left to (255, 810) where there's an arrowhead pointing to the small circle at (245, 785). And the "BN" text is at (440-580, 950-1020). So the leader line's lower end is at (370, 990), which is to the left of the "BN" text and slightly below it. So the leader connects the "BN" text to the small circle. Yes.
+
+Now, is this "BN" callout part of the FAI dimension group? I think it's actually a separate feature callout. The FAI dimension 278.06 is a width dimension. The "BN" is a feature identifier for the hinge pin (or some hole). They are separate annotations that happen to be near each other.
+
+But then why does the semantic system list the leader as missing for this FAI? Because the semantic system's region for the FAI group might have included the "BN" text (since it's near the dimension), and then it found a leader from that text and considered it part of the group. This is a false association.
+
+The instructions say: "ignore a reported missing item if the pixels show that it belongs to a different annotation group."
+
+So I need to decide based on pixels whether the "BN" leader belongs to a different annotation group.
+
+Hmm. This is really ambiguous. Let's look at the visual layout once more. The "BN" text and its leader to the hinge pin - this is a feature callout. The dimension 278.06 with FAI 2 / SPC B is a dimension annotation. These are two distinct annotations. The "BN" callout is not part of the dimension annotation.
+
+But the crop's magenta rectangle was drawn to include the dimension annotation (FAI 2, SPC B, 278.06). The magenta rectangle's top edge happens to cut through the "BN" text (which is just above the dimension line). So the "BN" text is partially in the crop, but it's a separate annotation.
+
+Now, the rule: "Reject it if ... unrelated neighboring annotations dominate." The "BN" annotation does not dominate; it's a small sliver at the top. So that's not a rejection reason.
+
+The rule: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent." The "relevant leader" - relevant to the FAI group. If the "BN" leader is NOT part of the FAI group, then it's not a "relevant leader," and its being cut is not a rejection reason.
+
+So the key is: is the "BN" leader relevant to the FAI group? I lean towards NO, it's a separate feature callout.
+
+But then the semantic_missing would be a false positive, and I should ignore it.
+
+Hmm, but the dimension line itself extends beyond the crop on both sides. Does that matter? The dimension line is part of the FAI group (it's the dimension). If the dimension line is cut at the crop border, then the dimension's extension lines / feature touches are outside. But the rules don't explicitly require the dimension line's full extent or its extension lines. They require "parameter/tolerance/feature-control-frame and description text" (the value 278.06 +0.10 -0.20, which is inside) and leaders/arrowheads (none in the FAI group if "BN" is separate).
+
+Wait, but actually, maybe the dimension line's ends DO have arrowheads that point to extension lines, and those are part of the dimension annotation. If the dimension line is cut, the arrowheads at its ends are outside. But typically dimension arrowheads point inward to the extension lines, and the extension lines are at the features. If the features are far outside the crop, then the dimension annotation's full extent is not in the crop. But the rules seem focused on leaders (callout lines with arrowheads to features), not dimension lines.
+
+Hmm, let's re-read the rules carefully:
+
+"The crop is valid only if it fully contains one coherent FAI annotation group:
+- the FAI circle and readable inspection number;
+- associated SPC letter if present;
+- parameter/tolerance/feature-control-frame and description text;
+- every connected leader segment;
+- every terminal arrowhead;
+- a visible local portion of every component feature touched by those arrows.
+
+Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+So "every connected leader segment" - connected to what? Connected to the FAI annotation group. The FAI annotation group includes the FAI circle, SPC, parameter text. Are there leaders connected to these? The FAI circle is just a circle with text, no leader. The parameter text 278.06 is on a dimension line, no leader. So if "BN" is separate, there are no leaders in the FAI group, and the crop is valid (assuming the dimension value, FAI circle, SPC are fully inside, which they are).
+
+But the dimension line - is it a "leader"? No, a leader is a callout line. A dimension line is different.
+
+OK here's another consideration. Look at IMAGE 2 (the crop). At the top, we see the bottom of "BN" text and the dimension line. The dimension line in IMAGE 2 goes from the left edge to the right edge (cut at both borders). The "278.06" is on the right. The FAI 2 and SPC B circles are at the bottom-right of the crop.
+
+Now, the dimension line being cut at the left border of the crop - in IMAGE 1, the dimension line continues left beyond the magenta left edge to x=0. So the dimension line reaches the crop's left border. Is the dimension line a "relevant leader"? If we consider the dimension line as part of the annotation, then it reaching the border might be a problem. But the rules specifically say "leader," and a dimension line is not a leader.
+
+Hmm, but actually, maybe in this drawing, the horizontal line at y=1050 is NOT a dimension line but a leader line? No, it has the dimension value 278.06 with tolerances on it, so it's a dimension line.
+
+I'm now fairly torn. Let's think about the typical design of these validation tasks. The magenta rectangle is a "proposed crop" that someone (an algorithm) generated. The task is to check if it's a good crop of the FAI annotation. The red rectangle marks the FAI circle that the algorithm selected. The algorithm's crop (magenta) includes the FAI circle, SPC, dimension value, but it also accidentally includes part of the "BN" text and cuts the "BN" leader.
+
+The semantic association (also from the algorithm) says the FAI group is missing the leader arrowhead and target. This suggests the algorithm thinks the "BN" leader is part of the group (because the "BN" text is within the crop's bounding region, and the algorithm associated the leader with the text).
+
+Now, the human/validator (me) must decide. The instructions strongly hint: "Do not declare the crop valid merely because IMAGE 2 contains an FAI circle and some numbers." and "Inspect IMAGE 1 for connected evidence immediately outside the magenta rectangle."
+
+This hint suggests that there IS connected evidence outside the magenta rectangle that belongs to the FAI group, and I should notice it. The connected evidence outside is the "BN" leader's arrowhead and target (and the top of "BN" text). So the intended answer is probably that the crop is INVALID and needs expansion to include the "BN" leader and target.
+
+But wait, the hint "connected evidence immediately outside the magenta rectangle" - the "BN" leader's arrowhead is at the top-left, which is outside the magenta rectangle (above it). The leader line crosses the magenta top border. So there's a leader segment inside the crop (the part from "BN" text to the top border) and the rest outside. So the leader is cut at the border. That matches "a relevant leader reaches the crop border."
+
+So if the "BN" leader is considered part of the FAI group, then the crop is invalid because

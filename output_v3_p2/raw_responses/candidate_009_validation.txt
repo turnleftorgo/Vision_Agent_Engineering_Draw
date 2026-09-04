@@ -1,0 +1,181 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. Inside it, I see a dimension "4.46 +0.16 -0.11" with an FAI circle "198" (highlighted in red) and an SPC circle "G-". There's a vertical dimension line with two arrowheads pointing to two horizontal lines (a feature, looks like a slot or edge).
+
+Let me look at the leader segments and arrowheads. The dimension "4.46" has a leader line going left from the text, then down, with an arrowhead pointing down to the upper horizontal line. There's also an arrowhead pointing up to the lower horizontal line. So the dimension line is vertical, between two horizontal lines.
+
+Now, look at the top of the magenta rectangle. There's a horizontal line with an arrowhead pointing right (a leader arrow) that enters the magenta rectangle from the left, near the top. Wait, let me look. In IMAGE 1, at the top-left of the magenta rectangle, there's a horizontal line with an arrowhead pointing right, ending at a vertical line. This vertical line extends up out of the magenta rectangle. This appears to be a leader from the feature-control frame "1.675" above? Let's trace.
+
+Actually, look at the top of IMAGE 1. There's a feature control frame with flatness symbol and "1.675", with FAI 5 and SPC E and 100% triangle. Below it is a datum "A" box. There's a leader line from the flatness frame going down-left to a point on the part (the dot). Hmm.
+
+But there's also a vertical line that goes from the top area down through the magenta rectangle. Let's look. In IMAGE 1, there's a vertical line at around x=550 (in the image coordinates) that starts near the top (around the feature control frame area) and goes down. At the top of the magenta rectangle, there's a horizontal line with an arrowhead pointing right that meets this vertical line. This looks like a leader arrow pointing to the vertical line.
+
+Wait, let me look more carefully. The magenta rectangle's top edge is at around y=970 (in some coordinate). Just above the top edge, there's a horizontal line with an arrowhead pointing right, ending at a vertical line. The vertical line continues up to about y=700 where it meets... hmm.
+
+Actually, let's look at the structure. There's a vertical line that goes from the top (around the "1.675" frame's left side? No). Let's look at the dot at (370, 540). A leader line goes from that dot up-right to the flatness frame. That's one leader.
+
+Then there's a vertical line at x~550 that goes from y~270 (top of image, the part outline) down to y~1050. At y~1030, there's a horizontal line with arrowhead pointing right ending at this vertical line. This horizontal line comes from the left edge of the image.
+
+Hmm, this is confusing. Let me think about what the dimension 4.46 is measuring. The vertical dimension line with two arrowheads (down arrow at upper horizontal line, up arrow at lower horizontal line) measures the vertical distance between two horizontal lines. The upper horizontal line is at y~1310, the lower at y~1350. These are part of a slot/feature on the left.
+
+The leader from the "4.46" text goes left then down to the upper arrowhead. So the dimension line is the vertical line at x~710 with arrowheads at top (pointing down to upper line) and bottom (pointing up to lower line). Good.
+
+Now the horizontal line with arrowhead at the top of the magenta box (y~1030, pointing right to vertical line at x~550) — what is that? That vertical line at x~550 goes up to the top of the image. This might be a leader for the flatness feature control frame? Or it might be a separate dimension/leader that is NOT part of the 4.46 group.
+
+Actually, look: the vertical line at x~550 in IMAGE 1 starts at the top edge of the part (y~270) and goes down to y~1050. At y~1030 a horizontal arrow points to it. This looks like it could be a leader line for some annotation that's off to the left (cut off). The horizontal line at y~1030 comes from the left edge of the image (x=0). So there's an annotation to the left that's cut off, with a leader arrow pointing right to this vertical line.
+
+Hmm, but is this vertical line part of the 4.46 dimension group? The 4.46 dimension's vertical line is at x~710, not x~550. So the vertical line at x~550 is a different feature/leader.
+
+Wait, but the magenta rectangle's left edge is at x~440. The vertical line at x~550 is inside the magenta rectangle (since left edge 440 < 550). The horizontal arrow at y~1030 starts at x=0 (outside) and ends at x~550 (inside). So this leader arrow crosses the magenta rectangle's left border! The arrowhead is inside, but the leader segment extends outside the crop to the left.
+
+Let me check IMAGE 2. In IMAGE 2, at the top-left, I see a horizontal line with an arrowhead pointing right, ending at a vertical line that goes up out of the top of the crop. Yes! In IMAGE 2, top-left corner, there's a horizontal line with arrowhead pointing right, and a vertical line going up. This is the same leader. In IMAGE 2, the vertical line is cut off at the top (it goes to the top border). And the horizontal line is cut off at the left border.
+
+So this leader/arrow is NOT part of the 4.46 FAI group. It's a separate annotation whose leader reaches the crop border (left and top). According to the rules: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+Hmm, but is this leader "relevant" to the FAI group? The rule says reject if a relevant leader reaches the crop border. The relevant leaders are those connected to the FAI annotation group. The 4.46 group's leaders are the dimension line (vertical at x~710) and the leader from text to dimension line. Those are fully inside.
+
+But the horizontal arrow at top-left is a different leader. Is it "unrelated neighboring annotation"? It might be considered an unrelated annotation that's partially in the crop. The rule says "unrelated neighboring annotations dominate" — does it dominate? It's just a small arrow in the corner, not dominating.
+
+But also the rule: "every connected leader segment" and "every terminal arrowhead" must be fully contained. The 4.46 group's leaders are contained. The top-left arrow is not part of the 4.46 group.
+
+Hmm, but wait. Let me look again. Maybe the vertical line at x~550 IS connected to the 4.46 dimension? Let's look at the geometry. The 4.46 dimension vertical line is at x~710. The vertical line at x~550 is separate. They don't connect.
+
+Actually, let me look at the top of the magenta box in IMAGE 1 again. The horizontal arrow at y~1030 points right to the vertical line at x~550. The vertical line at x~550 continues up to the top of the image (y~270). This vertical line might be a centerline or a leader for the flatness frame? The flatness frame is at x~650-1000, y~460-520. The leader from the flatness frame goes to the dot at (370,540). Not to x~550.
+
+Hmm, what is the vertical line at x~550? It might be a leader line from some annotation on the left (cut off) pointing to a feature. The horizontal arrow at y~1030 is the terminal of that leader. So that leader's arrowhead is at (550, 1030), inside the crop, but the leader line extends left out of the crop. So this is a leader that reaches the crop border (left border). But is it part of the FAI group? No.
+
+The instructions: "Reject it if a relevant leader reaches the crop border". The relevant leader is the one for the FAI group. The top-left leader is not relevant to the FAI group. So maybe it's not a rejection on that basis.
+
+But then: "unrelated neighboring annotations dominate" — the top-left arrow is an unrelated annotation fragment. Does it dominate? It's small. Probably not dominating.
+
+Hmm, but the bigger issue: the vertical line at x~550 in IMAGE 2 goes off the top of the crop. In IMAGE 1, that vertical line continues up to the top of the part. So in the crop, we have a vertical line that's cut at the top. This vertical line is part of some other annotation/feature. Is it "touched" by an arrowhead in the crop? The horizontal arrow at top-left points to it. So we have an arrowhead (the horizontal one) that points to a vertical line that is cut at the top. The arrowhead itself is fully visible in IMAGE 2 (the horizontal arrow at top-left is fully visible? Let's check. In IMAGE 2, top-left, I see a horizontal line with an arrowhead pointing right, and the vertical line. The horizontal line starts at the left border (cut). The arrowhead is visible. The vertical line goes up to the top border (cut).
+
+So we have a leader segment (horizontal) that reaches the left border. This is a leader that is not part of the FAI group but is present in the crop and is cut. The rule about "relevant leader reaches the crop border" — if we consider this leader as not relevant, then it's an unrelated annotation fragment.
+
+Let's think about the intent. The crop is supposed to contain ONE coherent FAI annotation group. The 4.46 group is the FAI 198 group. The crop contains it fully: FAI circle 198, SPC G-, the dimension 4.46 +0.16 -0.11, the leader from text to dimension line, the two arrowheads on the dimension line, and the touched feature (the two horizontal lines of the slot). Let's verify the touched feature is visible. In IMAGE 2, the two horizontal lines (the slot) are visible at the bottom-left, with the arrowheads pointing to them. Yes, the slot feature is visible (a horizontal rectangle/slot). Good.
+
+Now the extra stuff: the top-left horizontal arrow + vertical line. This is an unrelated annotation fragment. Does it "dominate"? It's in the corner, small. I'd say it doesn't dominate. But it does have a leader reaching the border (left and top). The rule says reject if a relevant leader reaches the border. This leader is not relevant to the FAI group. Hmm.
+
+But wait, maybe I'm misreading the geometry. Let me look at IMAGE 1 very carefully around the top of the magenta box.
+
+In IMAGE 1, the magenta box top edge is at y~970. Just above it, at y~1030, there's a horizontal line from x=0 to x~550 with an arrowhead at the right end (pointing right). At x~550, a vertical line goes from y~270 (top) down to y~1050. So the vertical line's bottom end is at y~1050, just below the horizontal arrow. So the vertical line and horizontal arrow form an L or T? The horizontal arrow points right and ends at the vertical line. The vertical line continues up. So it's like a leader that comes from the left horizontally, then... no, the arrowhead is at the end of the horizontal line pointing right into the vertical line. That's odd for a leader.
+
+Actually maybe the vertical line at x~550 is a dimension extension line or a leader for the flatness? Let's look at the flatness frame leader again. The dot is at (370,540). The leader from the dot goes up-right to the flatness frame's left side at (640,490). So that's a diagonal line. Not vertical.
+
+Hmm, what about the vertical line at x~550 from y~270 to y~1050? At the top y~270, that's the part's right edge outline? The part outline on the right is at x~550? Let's look. The part (the rounded rectangle) right edge is at x~550 in the top portion. Yes! The part's right vertical edge is at x~550 from y~270 down to where it curves at y~800. So the vertical line at x~550 from y~270 to y~800 is the part outline (right edge). Then below the curve, from y~800 to y~1050, is there a vertical line? The part's bottom-right curve ends around y~850. Below that, the part outline goes left. So at x~550 below y~850, is there a line? Looking at IMAGE 1, I see a vertical line at x~550 continuing down to y~1050. Hmm, that might be a centerline or a leader.
+
+Actually, you know, this is getting too detailed. Let's look at IMAGE 2 to see what's actually in the crop. In IMAGE 2, top-left, I see: a vertical line at the very top going down a bit, and a horizontal line with arrowhead pointing right meeting it. The vertical line is short (cut at top). This matches the top of the magenta box in IMAGE 1 where the vertical line at x~550 enters the box from the top and the horizontal arrow at y~1030 is just inside the top.
+
+Wait, in IMAGE 1, the horizontal arrow at y~1030 is INSIDE the magenta box? The magenta box top is y~970. y~1030 > 970, so yes inside. And the vertical line at x~550 enters the box from the top (y~970) and goes down to y~1050. So inside the box we have a vertical segment from y~970 to y~1050 and a horizontal arrow from x~440 (left border) to x~550 at y~1030. So the horizontal arrow's left end is at the left border (cut). In IMAGE 2, indeed the horizontal line at top-left starts at the left border.
+
+So this is a leader/arrow that is cut at the left border. This leader is NOT part of the 4.46 FAI group. It's an unrelated annotation (probably a leader from a dimension on the left that's cut off).
+
+Now, the validation criteria: "The crop is valid only if it fully contains one coherent FAI annotation group: ... every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows."
+
+The "those arrows" refers to the arrows of the FAI group. The 4.46 group's arrows are the two on the dimension line. Their touched feature (the slot) is visible. Good.
+
+"Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+The top-left leader is not relevant to the FAI group, so "relevant leader reaches border" doesn't apply to it. But it IS an unrelated neighboring annotation fragment. Does it "dominate"? It's a small fragment in the corner. I'd argue it does not dominate the crop. The crop is dominated by the 4.46 dimension and FAI 198.
+
+Hmm, but the presence of a cut leader arrow in the corner is a bit messy. However, the rule specifically says "unrelated neighboring annotations dominate" — the threshold is "dominate", not "present". A small corner fragment doesn't dominate.
+
+But wait, there's another consideration. The vertical line at x~550 in the crop — is it part of the touched feature of the 4.46 group? No, the 4.46 group's arrows point to the horizontal slot lines at x~710, not to x~550.
+
+Let me double check the 4.46 dimension line x position. In IMAGE 1, the dimension vertical line with the two arrowheads is at x~710. The leader from "4.46" text goes left to x~710 then down. Yes. The slot horizontal lines are at x from 0 to ~740. The arrowheads at x~710 point to the slot's top and bottom edges. Good, the slot is visible in the crop (the horizontal rectangle at bottom-left of IMAGE 2). Yes.
+
+So the 4.46 FAI group is fully contained and coherent. The only issue is the stray top-left leader fragment.
+
+Now, is that stray fragment a problem? Let's think about whether it's actually connected to the 4.46 group in some way I'm missing. The vertical line at x~550 — could it be the extension line for the 4.46 dimension? No, the 4.46 dimension is vertical, its extension lines would be horizontal (the slot edges). The vertical line at x~550 is unrelated.
+
+Could the horizontal arrow at top-left be the leader for the flatness frame? The flatness frame's leader goes to the dot at (370,540), which is outside the crop (top-left of crop). So no.
+
+Thus the top-left fragment is an unrelated annotation (a leader from something on the left, cut off). It's small.
+
+Given the rules, I think the crop might still be considered valid because the FAI group is fully contained and the unrelated fragment doesn't dominate. But the rule "Reject it if a relevant leader reaches the crop border" — the relevant leader of the FAI group does NOT reach the border. Good.
+
+But hold on. Let's look at the top of the magenta box in IMAGE 1 once more. Is there any part of the 4.46 group that extends above the magenta box? The leader from "4.46" text goes left to x~710 then down to the arrowhead at y~1310. The text "4.46" is at y~1140, inside the box (box top 970). The horizontal part of that leader is at y~1140 from x~710 to x~790 (the text). Inside. Good. Nothing of the 4.46 group is above the box.
+
+What about the SPC circle "G-"? In IMAGE 1, the SPC circle is at x~1350, y~1140. The magenta box right edge is at x~1370. So the SPC circle is mostly inside but its right edge might be at the border. In IMAGE 2, the SPC circle is cut off at the right! I see "SP" and "G" partially, the circle is cut at the right border. Let's look. In IMAGE 2, the right side shows the FAI 198 circle fully, then to its right a circle with "SP" and "G" but it's cut off at the right edge of the image. Yes! In IMAGE 2, the SPC circle is clipped at the right border.
+
+Let me verify with IMAGE 1. Magenta box right edge x~1370. The SPC circle center is at x~1350, radius ~50, so it spans x~1300 to x~1400. So the right part (x~1370 to 1400) is outside the magenta box. Thus in the crop, the SPC circle is clipped.
+
+The rule requires "associated SPC letter if present" to be fully contained. The SPC letter is "G-" (or "G"). In IMAGE 2, we see "SP" and "G" but the circle is cut and the letter might be partially cut. Let's look at IMAGE 2: the right circle shows "SP" on top and "G" on bottom but the right side of the circle is cut, and the letter after G (the minus or another char) is cut. In IMAGE 1, the SPC circle shows "SPC" top and "G-" bottom. In IMAGE 2, we see "SP" (C cut) and "G" (- cut). So the SPC circle is clipped.
+
+Therefore the crop does NOT fully contain the SPC circle. This is a missing element: the SPC letter/circle is clipped.
+
+Thus the crop is invalid. We need to expand the right side to include the full SPC circle.
+
+Also the top-left stray leader: that's an unrelated annotation fragment. But the main rejection reason is the SPC circle being clipped.
+
+Let's also check the FAI 198 circle: in IMAGE 2 it's fully visible (red box in IMAGE 1 is around it, and in IMAGE 2 it's complete). Good.
+
+The dimension text "4.46 +0.16 -0.11" fully visible in IMAGE 2. Good.
+
+The leader from text to dimension line: in IMAGE 2, the leader goes left from "4.46" then down to the down-arrow. Fully visible. Good. The down-arrow at the slot top edge visible. The up-arrow at slot bottom edge visible. The slot feature visible. Good.
+
+So the only missing/clipped element is the SPC circle on the right. Also possibly the top-left stray leader is a concern but it's unrelated; however the rule about "unrelated neighboring annotations dominate" — the top-left fragment is small, not dominating. But the SPC clipping is a clear violation.
+
+Wait, but also the top-left: the horizontal arrow's leader reaches the left border. Is that arrow "relevant"? It's not part of the FAI group. So it's an unrelated annotation. The rule says reject if unrelated annotations dominate. They don't dominate. But also, the presence of a cut leader might be considered as the crop including a partial unrelated annotation, which is generally undesirable but the explicit rejection criteria are: relevant leader reaches border, arrowhead clipped, touched feature absent, unrelated dominate. The top-left arrowhead is not clipped (it's fully visible in IMAGE 2? Let's check. In IMAGE 2 top-left, the horizontal arrow pointing right — the arrowhead is at the right end, fully visible. The horizontal line is cut at left. So the arrowhead is not clipped, but the leader segment reaches the left border. Since it's not a relevant leader, the "relevant leader reaches border" criterion doesn't trigger. Hmm.
+
+But actually, maybe I should consider whether that top-left arrow is actually the leader for the 4.46 dimension? No, the 4.46 dimension's leader is the one from the text. The top-left arrow points to a vertical line, not to the dimension.
+
+Let me look at what the top-left arrow in IMAGE 1 points to. It points right to the vertical line at x~550. That vertical line, as I noted, might be the part's right edge outline extended, or a centerline. The arrow pointing to it suggests it's a leader for some dimension/annotation on the left (cut off). So it's an unrelated annotation's leader, cut at left border.
+
+Given the ambiguity, the safest and most correct rejection is the SPC circle clipping. So valid = false.
+
+Now expansion: we need to expand right to include the full SPC circle. In IMAGE 1, the SPC circle right edge is at x~1400, magenta right edge at x~1370. The crop width in IMAGE 1 is from x~440 to x~1370 = 930 px. The SPC circle extends to x~1400, which is 30 px beyond the right edge. 30/930 ≈ 0.032 = 32 in normalized (per 1000). But we also want some margin. Also the top-left stray leader: should we expand left/top to include it? It's unrelated, so we don't need to include it; including it would add an unrelated annotation. Better to NOT include it. But it's already partially in the crop. We can't remove it without shrinking, but shrinking might cut the FAI group. The left edge of the crop is at x~440; the 4.46 group's leftmost element is the leader horizontal line at x~710 and the slot at x~0? Wait the slot horizontal lines extend to x~0 (left edge of image). In IMAGE 2, the slot is cut at the left border! Let's check. In IMAGE 2, the slot (horizontal rectangle) at bottom-left: its left end is cut at the left border. In IMAGE 1, the slot extends from x~0 to x~550 (the rounded end at x~550). The magenta box left edge is x~440. So the slot portion from x~440 to x~550 is inside the crop, and the part from x~0 to x~440 is outside. The arrowheads of the 4.46 dimension are at x~710, which is inside the crop. The touched feature (the slot) — we need "a visible local portion of every component feature touched by those arrows". The arrows touch the slot at x~710. The local portion of the slot around x~710 is inside the crop (since slot spans x~0 to 550? wait that doesn't include 710).
+
+Hold on, I need to re-examine the slot geometry. Let's look at IMAGE 1. The horizontal lines that the 4.46 arrowheads point to: the upper horizontal line at y~1310 and lower at y~1350. Where do they span in x? I see a horizontal rectangle (slot) from x~0 to x~550 at y~1310-1350? Let's look. In IMAGE 1, at y~1310-1350, there's a horizontal line from x~0 to about x~550 (with a rounded/vertical end at x~550). Then from x~550 to x~740, there are also horizontal lines? The arrowheads at x~710 point to horizontal lines at y~1310 and y~1350. So the horizontal lines extend from x~0 to at least x~740. Let's look: I see at y~1310 a line from x~0 to x~740, and at y~1350 a line from x~0 to x~740. And there's a vertical line at x~360 (a divider) and at x~550 (the slot end?). Hmm.
+
+Actually the slot might be the rectangle from x~0 to x~550 (the thick-walled rectangle), and the lines from x~550 to x~740 are extension lines or the part outline. This is too detailed.
+
+The key point: the arrowheads at x~710 touch horizontal lines that are visible in the crop (the crop left edge is x~440, so x~710 is well inside, and the horizontal lines at x~710 are visible in IMAGE 2). In IMAGE 2, I see the horizontal lines at the bottom with the arrowheads, and to the left a rectangle (the slot) that is cut at the left border. So the local portion of the feature touched by the arrows (around x~710) is visible. Good. The fact that the slot's left part is cut doesn't matter because we only need a visible local portion at the touch point.
+
+So the left side is fine for the FAI group.
+
+Thus the only real problem is the right side SPC circle clipping.
+
+Therefore expand right by enough to include the SPC circle fully plus margin. The SPC circle right edge is ~30 px beyond current right edge; crop width ~930 px. 30/930*1000 ≈ 32. Add margin, say 80-100. Let's compute more precisely using pixel coordinates from IMAGE 1.
+
+Let me estimate pixel coordinates in IMAGE 1. The image is 2337 x 2337? Not sure. Let's just use relative. The magenta box: left ~440, right ~1370, top ~970, bottom ~1510 (in some pixel scale). Width = 930. The SPC circle center ~1350, right edge ~1400. So beyond right edge by 30. 30/930 = 0.0322 → 32 per 1000. To be safe and include the full circle with a little margin, expand right by ~100 (10%). That would add 93 px, covering the 30 px overflow plus margin. Good.
+
+But also, do we need to expand top to include the top-left stray leader's origin? No, it's unrelated; we don't want to include more of it. And we can't remove the part already in the crop. The top-left fragment is small and doesn't dominate, so it's acceptable. But wait, the rule "Reject it if ... unrelated neighboring annotations dominate." The top-left fragment plus the cut vertical line — do they dominate? No.
+
+However, I realize the top-left horizontal arrow might actually be considered a "relevant leader" if it's connected to the 4.46 group via the vertical line? No, the vertical line at x~550 is not connected to the 4.46 dimension line at x~710.
+
+Let me double check there's no connection. In IMAGE 1, between x~550 and x~710 at the top, is there a horizontal line connecting them? At y~1030, the horizontal line goes from x~0 to x~550 only (ends with arrow at 550). At y~1140, the leader from 4.46 goes from x~710 to x~790. No connection between 550 and 710. So separate.
+
+Thus top-left is unrelated.
+
+Given that, the crop's invalidity is due to SPC clipping. So valid=false, missing=["SPC circle/letter (clipped at right)"], expand right.
+
+But the instructions for "missing" — list what's missing. I'll put "SPC circle (right side clipped)".
+
+Now, should I also expand top to avoid the cut vertical line / stray arrow? The stray arrow's leader reaches the left border, which is a "leader reaches crop border" but it's not relevant. The rule's first rejection clause is about relevant leaders. The stray is unrelated. The "unrelated dominate" clause not met. So I think we don't need to expand for it. But the cut vertical line at top in IMAGE 2 — that vertical line is part of the unrelated annotation (or part outline). It's cut at top. Not relevant.
+
+Hmm, but actually, maybe the vertical line at x~550 IS the part outline (right edge of the part) and the horizontal arrow at y~1030 is a leader from a left-side dimension pointing to that edge. In that case, the touched feature (the edge) is the vertical line, which is cut at top in the crop. But that's an unrelated annotation, so we don't care about its touched feature.
+
+OK here's another thought: maybe the intended reading is that the top-left arrow and vertical line ARE part of the same annotation group as the 4.46? Like, maybe the 4.46 dimension is actually associated with that vertical line? No, the 4.46 is clearly a vertical dimension between two horizontal lines, with its own leader.
+
+I'll commit to: invalid because SPC circle clipped on right. Expand right.
+
+Let me also double check the FAI 198 circle is fully inside. In IMAGE 1, red box around FAI 198 at x~1210-1320, y~1100-1200. Magenta right edge 1370, so FAI circle fully inside. In IMAGE 2, FAI 198 fully visible. Good.
+
+Now compute expand_norm. Right expansion: need to cover from current right edge (1370) to SPC circle right edge (1400) plus margin. Overflow = 30 px. Crop width = 930 px. 30/930 = 0.0322 → 32. Add margin ~50 → total ~80-100. I'll set right = 100.
+
+Do we need any other expansion? Top: the top-left stray vertical line is cut, but unrelated; not required. However, to be safe and to make the crop "coherent" without a dangling cut line, maybe expand top a bit? But expanding top would include more of the unrelated vertical line and possibly the flatness frame leader? The flatness frame is at y~460-520, far above. Expanding top by, say, 100 (10% of height ~540*0.1=54 px) would bring top from 970 to 916, still not reaching the flatness frame. It would include more of the vertical line at x~550 (which goes up to 270). That doesn't help; the vertical line would still be cut. To fully include that vertical line we'd need to expand top by (1050-270)/540*1000 ≈ 1444, way too much, and would include the flatness frame and dot, making unrelated annotations dominate. So we should NOT expand top. The top-left fragment is just an unavoidable small artifact; since it's unrelated and doesn't dominate, it's acceptable per the rules (the rules only reject if unrelated dominate, which they don't).
+
+Hmm wait, but the rule also says "Reject it if a relevant leader reaches the crop border". The top-left horizontal leader reaches the left border. If a grader considers that leader as "relevant" (maybe they think it's part of the group?), then we'd need to expand left. But it's clearly not part of the 4.46 group. I'll trust my analysis.
+
+Actually, let's look at IMAGE 2 once more for the top-left. The horizontal line with arrowhead: in IMAGE 2 it's at the very top-left, the horizontal line is short and the arrowhead points right to a vertical line that goes up out of frame. This is exactly the fragment. It's small.
+
+I think the dominant, clear error is the SPC clipping. So I'll mark invalid, missing SPC, expand right.
+
+Let me set confidence moderate-high, like 0.8.
+
+Let me reconsider whether the SPC circle is truly clipped in IMAGE 2. Looking at IMAGE 2: right side shows two circles. The left one (FAI 198) is complete. The right one shows "SP" on top line and "G" on bottom line, and the circle's right arc is cut by the image border. Yes, clipped. In IMAGE 1, that circle reads "SPC / G-". So in the crop we lose the "C" and the "-" and the right arc. So the SPC letter is not fully readable. Violation.
+
+Thus expand right.
+
+Compute right expansion more carefully. Let's define crop width W = right - left = 1370 - 440 = 930 (in IMAGE 1 pixel units, approximate). The SPC circle right edge at ~1400. Need to extend right by (1400 - 1370) = 30 plus margin. 30/930 = 0.03225 → 32.3 per 1000. With margin to

@@ -1,0 +1,145 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "fai_number": "1",
+    "spc_letter": "A",
+    "annotation_ids": [],
+    "parameter_text_ids": [
+      "T7",
+      "T6",
+      "T8"
+    ],
+    "description_text_ids": [],
+    "leader_ids": [
+      "L4"
+    ],
+    "arrowhead_ids": [],
+    "target_ids": [],
+    "parameter_values": [
+      "213.66",
+      "+0.100",
+      "-0.135"
+    ],
+    "measurement_description": null,
+    "is_range_measurement": false,
+    "complete": false,
+    "missing": [
+      "terminal arrowhead for dimension line L4",
+      "target region R*"
+    ],
+    "confidence": 0.7
+  },
+  "response_metadata": {
+    "finish_reason": "stop",
+    "elapsed_seconds": 55.619,
+    "prompt_tokens": 15790,
+    "completion_tokens": 116,
+    "total_tokens": 15906,
+    "reasoning_chars": 0,
+    "content_chars": 441,
+    "content_present": true,
+    "structured_output": "json_schema",
+    "max_tokens": 16384,
+    "mapping_valid": true,
+    "mapping_validation_errors": []
+  },
+  "selected_evidence_ids": [
+    "F0",
+    "T7",
+    "T6",
+    "T8",
+    "L4"
+  ],
+  "selected_evidence": [
+    {
+      "id": "F0",
+      "type": "fai_marker",
+      "bbox": [
+        1150,
+        1150,
+        1250,
+        1250
+      ],
+      "source": "LocateAnything"
+    },
+    {
+      "id": "T7",
+      "type": "ocr_text",
+      "bbox": [
+        1151,
+        1148,
+        1598,
+        1254
+      ],
+      "source": "Tesseract",
+      "text": "YE) 213.66",
+      "confidence": 0.639
+    },
+    {
+      "id": "T6",
+      "type": "ocr_text",
+      "bbox": [
+        1643,
+        1147,
+        1864,
+        1185
+      ],
+      "source": "Tesseract",
+      "text": "+QO.100",
+      "confidence": 0.178
+    },
+    {
+      "id": "T8",
+      "type": "ocr_text",
+      "bbox": [
+        1647,
+        1218,
+        1864,
+        1256
+      ],
+      "source": "Tesseract",
+      "text": "-0O.135",
+      "confidence": 0.315
+    },
+    {
+      "id": "L4",
+      "type": "leader_segment",
+      "bbox": [
+        1486,
+        108,
+        1487,
+        1132
+      ],
+      "source": "OpenCV-HoughLinesP-merged",
+      "points": [
+        [
+          1486,
+          108
+        ],
+        [
+          1486,
+          1131
+        ]
+      ]
+    }
+  ],
+  "selected_exact_union_roi_bbox": [
+    1150,
+    108,
+    1864,
+    1256
+  ],
+  "minimum_crop_roi_bbox": [
+    1089,
+    46,
+    1926,
+    1318
+  ],
+  "minimum_crop_full_image_bbox": [
+    4696,
+    357,
+    5533,
+    1628
+  ],
+  "coordinate_owner": "Python"
+}

@@ -1,0 +1,176 @@
+Let me carefully analyze this engineering drawing ROI.
+
+The selected marker is F0, with bbox [1150,1150,1250,1250]. Looking at image 2, F0 is the red box around the "FAI 111" circle. Wait, let me look. In image 2, there's a red rectangle around the "FAI 111" circle at approximately [1150,1150,1250,1250]. Yes, F0 is the FAI marker with inspection number "111".
+
+Next to it is the "SPC CZ" circle. The SPC letter is "CZ".
+
+Now the annotation: The FAI marker F0 is associated with a feature control frame. Looking at the drawing, the FAI 111 and SPC CZ circles are to the right of the feature control frame that reads: [profile symbol] 0.25 A B C, with a "18" below the profile symbol, and above it "2X ⌀1.60".
+
+Wait, but the instruction says: "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation."
+
+The FAI marker is placed next to the SPC marker, both associated with the feature control frame. The FAI number 111 refers to the measurement of the feature control frame (profile of surface 0.25 A B C on the 2X ⌀1.60 feature).
+
+Let me look at the leader. The leader line goes from the feature control frame area down-left to the part. In image 2, there's a blue line L42 (or L29/L32) going from around (524,1167) down to (440,1300), with arrowhead H3 at [410,1291,452,1345]. Also there's a vertical line from the "PB" box down to the triangle at (557,1058)-(610,1112) which is H2? Wait H2 is at [557,1058,610,1112] which is the black triangle (filled triangle) below the PB box. Hmm.
+
+Let me look at the geometry. The "PB" box is at around (520,880)-(620,940). Below it a vertical line goes down to a filled black triangle at about (557,1058)-(610,1112)? Actually the filled triangle in image 1 is at about (540,1020)-(580,1060). Hmm.
+
+Let me look at image 1 coordinates. The "PB" box is around x=510-620, y=875-940. A vertical line from PB goes down to a black filled triangle at about (540,1020)-(580,1060). Then from that triangle, a leader line goes down-left to the part (the circle in detail BM) ending in an arrowhead at about (410,1291)-(452,1345) which is H3.
+
+Wait, but in image 2, H2 is at [557,1058,610,1112] which is the cyan box around the black filled triangle. And H3 is at [410,1291,452,1345] which is the cyan box around the arrowhead at the part.
+
+Hmm, but the black filled triangle is actually the start of the leader? In many drawings, the leader line starts at the feature control frame and the triangle is... Actually wait. Let me look more carefully.
+
+In image 1, the structure is: "PB" box at top. Vertical line down to a black filled triangle (pointing up). To the right of the triangle is "2X ⌀1.60". Below that is the feature control frame [profile] 0.25 A B C with 18 below. The leader line goes from the triangle down-left to the part with an arrowhead.
+
+Hmm, actually the black filled triangle might be the arrowhead of a leader pointing up to the PB? No.
+
+Let me think about typical FAI annotation. The "PB" might be a label. Actually "PB" could be a process step or a label for the feature. The leader line connects the feature control frame to the part.
+
+Actually, looking again: The vertical line from PB goes down to the black triangle. The black triangle is at the top of the diagonal leader line. The diagonal leader line goes from the triangle (top) down-left to the part (arrowhead H3). So the leader path is: triangle (H2) -> diagonal line (L42/L29/L32) -> arrowhead (H3) at part.
+
+But wait, the feature control frame is to the right of the triangle. The leader line typically connects the FCF to the part. Here the leader seems to start at the triangle which is between PB and the FCF.
+
+Hmm, this is confusing. Let me look at the line segments. L42: points [[440,1300],[523,1167]]. L29: [[443,1302],[563,1110]]. L32: [[444,1294],[551,1123]]. These are the diagonal leader lines from the part (around 440,1300) up to around (523-563, 1110-1167). The top end is near the triangle H2 (557,1058-610,1112) and near the FCF left edge.
+
+Actually the FCF left edge is at x~580 (the profile symbol box). The "2X" text is at x~600-670. The triangle is at x~540-580.
+
+Hmm, the diagonal line top end at (523-563, 1110-1167) is just left of the FCF and below the triangle. So the leader connects the FCF/triangle area to the part.
+
+So the leader segments for this annotation: L42 (and maybe L29, L32 as duplicates). The arrowhead at the part: H3. The arrowhead at the top: H2 (the black triangle). Hmm but H2 is a filled triangle which is unusual for a leader arrowhead. Actually in the image, the black filled triangle points up. It might be the arrowhead of the leader pointing to the PB box? Or it's a marker.
+
+Wait, maybe I'm misreading the structure. Let me look at image 1 again. The "PB" box has a vertical line going down. At the bottom of that vertical line is a black filled triangle pointing up (toward PB). Then from the same point, a diagonal line goes down-left to the part with an open arrowhead.
+
+Hmm, actually maybe the black triangle is the arrowhead of the leader that points UP to the PB box, meaning the leader goes from the part up to PB? That doesn't make sense for an FCF.
+
+Let me reconsider. Perhaps the structure is: The FCF [profile] 0.25 A B C applies to the 2X ⌀1.60 holes. The leader line from the FCF goes to the hole (the part in detail BM). The "PB" box with vertical line and triangle is a separate callout? But the triangle is right at the junction.
+
+Actually, you know, in many drawings, the leader line for an FCF starts at the FCF and the line goes to the feature. The "2X ⌀1.60" is the feature size. The leader line in the image: I see a diagonal line from the part going up-right to a point near the triangle/FCF. The triangle might just be where the leader line meets the FCF's left side, drawn as a filled triangle? Unlikely.
+
+Let me look at the cyan boxes in image 2: H2 cyan box is around the black triangle at (557,1058)-(610,1112). H3 cyan box around the arrowhead at part (410,1291)-(452,1345). So both are considered arrowhead candidates.
+
+The leader line L42 connects (440,1300) to (523,1167). The top (523,1167) is near the bottom of H2 (1112)? H2 bottom is 1112, L42 top is 1167, gap of ~55. L29 top is (563,1110) which is right at H2's bottom. L32 top (551,1123) near H2 bottom. So the leader line top connects to H2.
+
+So the leader path: H2 (top arrowhead/triangle) - L29/L32/L42 - H3 (bottom arrowhead at part).
+
+Hmm but H2 pointing up to PB... Actually maybe the black triangle is the arrowhead pointing to the "2X ⌀1.60" / FCF? No, it points up.
+
+Let me think about what's standard. Actually I recall some drawings use a filled triangle as the leader arrowhead when pointing to a surface? No.
+
+Let me look at the original image 1 more carefully in my mind. The black triangle is filled and points up. Above it is the vertical line to PB. So the vertical line + triangle form a leader from the FCF area up to PB? Or PB is the label and the triangle is the arrowhead of a leader from the part to PB?
+
+Honestly, for the purpose of this task, the FAI marker F0 (FAI 111) is associated with the FCF [profile] 0.25 A B C and the 2X ⌀1.60. The leader that connects this annotation to the part is the diagonal line with arrowhead H3 at the part. The top of that leader is at the triangle H2 / near the FCF.
+
+The instruction: "All leader segments connected to that annotation. All terminal arrowheads of those leaders. The smallest useful local component/cross-section touched by each arrowhead."
+
+So the leader segments: the diagonal line(s) L42 (and duplicates L29, L32). The terminal arrowheads: H3 (at part) and possibly H2 (at top). The touched part: the circle in detail BM (the hole). There's no R* (green) evidence in the dictionary! Let me check. The evidence dictionary has no R* entries. So target_ids will be empty and we use fallback box for target.
+
+Wait, the legend says R*: local touched-part candidate (green). But the dictionary has no R entries. So we must leave target_ids empty and use fallback box.
+
+Now, what about the vertical line from PB to the triangle? Is that part of the leader? The vertical line in image 2 — is there a blue line for it? Looking at image 2, I see the vertical line from PB box down to the triangle is black (not highlighted blue). Actually in image 2, the line from PB to triangle appears black. The diagonal line is blue (L42 etc). So the vertical line is not in the line candidates? Let me check the line list for a vertical line around x=560, y=940-1060. I don't see one. L66 is [717,1168,720,1296] vertical but that's at x=717 (the FCF internal divider). So the vertical PB line is not captured. That's fine.
+
+So the leader for the FCF annotation is the diagonal line. The top terminal is the triangle H2? But H2 points up to PB, not to the FCF. Hmm.
+
+Actually wait. Let me reconsider the whole layout. Maybe the "PB" box is the label for the feature, and the leader line goes from PB down through the triangle to the part? No, the FCF is to the right.
+
+Let me look at the position of the FCF relative to the triangle. The triangle is at x~540-580, y~1020-1060 (image 1). The "2X" text is at x~600-670, y~1030-1070. The FCF top row "2X ⌀1.60" box is at y~1010-1090. The FCF bottom row [profile]0.25 A B C is at y~1110-1190. The "18" box is at y~1190-1260.
+
+The diagonal leader line top end is at (523-563, 1110-1167), which is at the left of the FCF bottom row, below the triangle. So the leader line emanates from the left side of the FCF (bottom row) and goes down-left to the part. The triangle H2 is above that, between PB and the FCF top row.
+
+Hmm, so maybe the triangle H2 is NOT part of this leader. The triangle might be the arrowhead of a separate leader from PB? But there's no line from triangle to part other than the diagonal which we said starts at FCF left.
+
+This is too detailed. Let me think about what the expected answer is. The task is to build the FAI annotation group for F0. The FAI marker F0 is the "FAI 111" circle. Its associated annotation is the FCF [profile] 0.25 A B C with the 2X ⌀1.60 and the 18 (which is a note reference below the profile symbol, maybe a note number). The SPC letter is CZ.
+
+The leader connecting this FCF to the part: the diagonal line L42 (and its duplicates L29, L32) with arrowhead H3 at the part. The top of the leader connects to the FCF (no arrowhead at FCF side typically, but here there's the triangle H2? or the leader just touches the FCF).
+
+Given the evidence, the arrowhead candidates near this leader are H2 and H3. H3 is clearly the arrowhead at the part. H2 is the black triangle at the top. Is H2 a terminal arrowhead of the leader? The leader's top end is at the FCF/PB junction. The black triangle points up to PB. So maybe the leader actually goes from the part up to PB, and the FCF is just placed alongside? That would mean the annotation's leader terminal arrowheads are H3 (part) and H2 (PB). But PB is a label box, not a part.
+
+Hmm, the instruction says "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation." PB is a label. But the leader is connected to the FCF which is the measurement annotation. The triangle H2 is at the junction of the leader and the FCF/PB.
+
+I think the safest interpretation: The leader line for the FCF is the diagonal line. Its terminal arrowhead at the part is H3. The other end touches the FCF (the annotation itself), so no separate arrowhead needed there, but the black triangle H2 is right there and is a candidate arrowhead. Since the leader line's top connects to H2 (L29 top at (563,1110) ~ H2 bottom (557-610,1112)), H2 is a terminal of the leader. So include H2.
+
+But wait, does the leader connect to the FCF or to PB? The vertical line from PB to triangle is black (not a leader candidate). The diagonal line is the leader. The triangle is at the junction. So the leader's top terminal is the triangle H2. Whether it points to PB or FCF, it's the terminal arrowhead of the leader. So include H2.
+
+Thus leader_ids: L42 (and duplicates L29, L32? They are nearly identical lines; the pipeline might have multiple Hough segments for the same line. We should select the ones that are part of the leader path. L29, L32, L42 all represent the same diagonal leader. I'll include all three? The instruction: "select only line IDs that are part of the FAI leader path." All three are the same leader line, so include them. But maybe better to include the most complete one. Hmm. Typically we'd include all that lie on the leader. L29: (443,1302)-(563,1110). L32: (444,1294)-(551,1123). L42: (440,1300)-(523,1167). These are collinear-ish segments of the same line. I'll include L29, L32, L42.
+
+Wait, but L42 top is (523,1167) which is lower than L29 top (563,1110). The full leader from part (440,1300) to triangle (563,1110) is best represented by L29. L42 is a sub-segment. Including all is fine.
+
+Now the touched part: the circle in detail BM (the hole at center ~ (300,1450)). There's no R* evidence. So target_ids empty, fallback target box around that circle.
+
+Now annotation_ids: The FCF and the 2X ⌀1.60 and the 18. These are OCR text? The OCR texts: T8 = "2x [B85]" bbox [627,1058,997,1150] which is the "2X ⌀1.60" line (OCR misread). T10 = "GD)" bbox [1172,1149,1350,1267] which is the FCF? Hmm T10 bbox is at x 1172-1350 which is the FCF area? Wait the FCF in image is at x~580-1080. Let me check coordinates. The image width is ~2400. The FCF [profile]0.25 A B C in image 1 is at x~580-1080, y~1110-1190. But T10 bbox is [1172,1149,1350,1267] which is to the right, that's the FAI/SPC circles area? The FAI 111 circle is at x~1110-1210, SPC CZ at x~1210-1310. Hmm T10 [1172,1149,1350,1267] covers the SPC CZ circle and part of FAI. OCR text "GD)" low confidence.
+
+Hmm, the OCR didn't capture the FCF text "0.25 A B C" as a separate line? Let me look. There's no OCR text for "0.25 A B C" in the list. T8 is "2x [B85]" which is the "2X ⌀1.60". The FCF row "0.25 A B C" — I don't see it. Maybe it's not in OCR. So parameter_text_ids might be empty or include T8.
+
+Wait, the FCF is the feature control frame. The "parameter" is the profile symbol + 0.25 + datums A B C. The "2X ⌀1.60" is the feature size (the holes). The "18" is a note reference.
+
+Given OCR limitations, the annotation_ids (the FCF boxes) — there are no OCR text IDs for the FCF row. But the FCF is drawn with lines L10-L13 (the horizontal lines of the FCF) and L66 (vertical divider). Hmm.
+
+Actually, the task says "Prefer selecting evidence IDs." For annotation_ids, we should select the OCR text lines that constitute the annotation. The annotation here is the FCF + 2X ⌀1.60 + 18. The OCR captured T8 for "2X ⌀1.60". The FCF row not captured. The "18" not captured (maybe part of T8? no).
+
+Hmm, this is getting too deep. Let me look at what's reasonable. The FAI marker F0's measurement annotation is the FCF. The associated text we have: T8 (2X ⌀1.60). The FCF itself has no OCR. So annotation_ids could be [T8]? But T8 is the feature size, which is part of the annotation group (the FCF applies to the 2X ⌀1.60 feature). Actually the FCF and the 2X ⌀1.60 together form the annotation.
+
+Let me look at the purple boxes in image 2 to see which OCR lines are highlighted. In image 2, I see purple boxes around: "DETAIL A", "SCALE 20:1", "2X" (the T8 left part?), the FCF? Let me look. There's a purple box around "2X" at (627,1058)-(733,1150)? And a blue box around "⌀1.60"? Hmm.
+
+Actually in image 2, the "2X ⌀1.60" has a purple box around "2X" and a blue box around "⌀1.60"? The blue boxes are line segments (L*). The purple boxes are OCR text. I see a purple box around the "2X" region (T8 maybe split). And a purple box around the FCF? There's a purple box around the SPC/FAI circles (T10). And purple box around "18"? I see a purple box at (606,1167)-(733,1235)? That's the profile symbol box maybe.
+
+This is too uncertain. Let me step back and think about the expected structure of the answer. The pipeline expects us to map the FAI marker to its annotation group. The key fields:
+
+- marker_id: F0
+- fai_number: "111" (from the FAI circle). But is there an OCR for "111"? The FAI circle text "111" — T10 is "GD)" at [1172,1149,1350,1267] which might be the SPC CZ circle region, not the FAI 111. Hmm. The FAI 111 circle is at x~1110-1210. T10 starts at 1172. So T10 might cover the right part of FAI circle and the SPC circle. The text "GD)" is garbage.
+
+Actually, the FAI number "111" is visible in the image. But OCR didn't produce a clean "111". The F0 marker bbox is [1150,1150,1250,1250] which is the FAI circle. The inspection number is "111". We can set fai_number = "111" as a string (it's read from the image, not from an ID). The schema allows fai_number to be a string or null. We'll put "111".
+
+- spc_letter: "CZ" (from the SPC circle). There's no clean OCR for "CZ" either (T10 garbage). But we read it from image: "CZ". Set spc_letter = "CZ".
+
+- annotation_ids: the FCF and feature size text. We have T8 for "2X ⌀1.60". The FCF row not in OCR. So annotation_ids = [T8]? But T8 is more the feature size. Hmm. Actually the FCF is the measurement annotation. The 2X ⌀1.60 is the feature it applies to. Both are part of the annotation group. I'll include T8.
+
+But wait, maybe the FCF row "0.25 A B C" is captured by some OCR I missed. Let me scan all T: T0 "1.54", T1 "ae", T2 "RQ", T3 "--", T4 "DETAIL", T5 "DETAIL /A\", T6 "SCALE 15", T7 "SCALE 20:1", T8 "2x [B85]", T9 "--—", T10 "GD)", T11 "ao OUTS", T12 "a", T13 "— — + —", T14 "\\", T15 "LL Oe", T16 "-- + —_--", T17 "DETAIL BM", T18 "DETAIL E", T19 "SCALE 20:1", T20 "SCALE 20", T21 "SPC CONTROL FOR ALL HEAT STAKE POST", T22 "TaN —", T23 "T-~11aY". None is "0.25 A B C". So the FCF row is not OCR'd. So annotation_ids for the FCF text is empty; we rely on fallback box for annotation.
+
+Hmm but the FCF is drawn with lines. The lines L10-L13 are the horizontal borders of the FCF (top and bottom of the bottom row). L66 is a vertical divider. These are part of the FCF drawing but they're "leader_segment" type from Hough. The instruction says select only line IDs that are part of the FAI leader path. The FCF borders are not leader path. So we don't include them in leader_ids. They could be considered part of annotation but annotation_ids is for text/OCR? The schema's annotation_ids likely refers to OCR text IDs of the annotation. Since FCF not OCR'd, annotation_ids might be empty or include T8.
+
+Let me think about the meaning of each field:
+- annotation_ids: probably the OCR text IDs that make up the measurement annotation (the FCF text, the size, etc.)
+- parameter_text_ids: the parameter values text (e.g., "0.25", "A B C", "⌀1.60")
+- description_text_ids: instruction sentence text.
+
+Given OCR is poor, maybe the intended answer is mostly empty with fallback boxes, and complete=false, missing list populated.
+
+Hmm, but the FAI marker F0 is clearly associated with the FCF. The pipeline's "LocateAnything" found F0 at the FAI circle. The expected group should include the FCF, the SPC, the leader, the arrowhead, the target.
+
+Let me look at the purple boxes in image 2 once more to infer which OCR lines the system considers part of this annotation. In image 2, around the FCF area I see: a purple box around "2X" (left of the ⌀1.60 box) — that's T8? T8 bbox [627,1058,997,1150] spans both "2X" and "⌀1.60". In image 2, the purple box seems to be only around "2X" (627-733) and the blue box (L23/L24/L25/L26) around "⌀1.60" box borders. Hmm.
+
+Actually the blue boxes around the "⌀1.60" rectangle are L23, L24 (top/bottom of that box) and the box left/right? L25, L26 are at y~1058-1062 which is the top of the ⌀1.60 box. L23, L24 at y~1146-1150 bottom of ⌀1.60 box. So the ⌀1.60 box borders are L23-26. These are not leader lines; they're the box of the feature size. So we should NOT include them in leader_ids.
+
+OK here's my decision. I'll construct the group as:
+
+- marker_id: F0
+- fai_number: "111"
+- spc_letter: "CZ"
+- annotation_ids: [T8]  (the "2X ⌀1.60" feature size text, which is part of the annotation; the FCF row has no OCR)
+- parameter_text_ids: [T8]  (the parameter values: 2X, ⌀1.60; the 0.25 and datums not OCR'd)
+- description_text_ids: []  (no instruction sentence)
+- leader_ids: [L29, L32, L42]  (the diagonal leader from FCF to part)
+- arrowhead_ids: [H2, H3]  (top triangle and bottom arrowhead)
+- target_ids: []  (no R* evidence)
+- parameter_values: ["2X", "⌀1.60", "0.25", "A", "B", "C"]? Hmm parameter_values should be the values we can read. The FCF shows profile 0.25 A B C and 2X ⌀1.60 and 18. I'll put ["0.25", "A", "B", "C", "2X", "1.60"]? But these aren't from OCR IDs. The schema example shows parameter_values as a list. I think it's fine to put the readable values. But to be safe and consistent with "prefer evidence IDs", maybe parameter_values should reflect the parameter text. I'll include the values I can read from the image: "0.25", "A", "B", "C", "2X", "1.60". Hmm but the instruction says never invent IDs, but parameter_values are values not IDs. I'll include them.
+
+Actually, let me reconsider. The "18" below the profile symbol is likely a note reference (note 18), not a parameter. The "2X" is quantity, "⌀1.60" is the hole diameter (the feature). The FCF parameter is profile of surface 0.25 relative to datums A, B, C.
+
+I'll set parameter_values = ["0.25", "A", "B", "C"]. And the feature size 2X ⌀1.60 is the feature, maybe also a parameter. I'll include "2X", "1.60" too. Let's just include all: ["2X", "1.60", "0.25", "A", "B", "C"].
+
+- measurement_description: null (no instruction sentence; T21 "SPC CONTROL FOR ALL HEAT STAKE POST" is a general note, not directly associated with this FAI measurement? Actually it might be associated. But it's a general SPC control note at the bottom. The instruction says measurement_description is an instruction sentence directly associated with the FAI measurement. The SPC control note is a general note, not specific to this FAI. I'll leave null.)
+
+- is_range_measurement: false.
+
+- fallback_boxes_norm: We need normalized [0,1000] boxes. The ROI is the whole image? The image dimensions: let's estimate. The image appears to be 2400x2400? The coordinates go up to ~2400 in x and ~2400 in y. Let's assume ROI width=2400, height=2400? Actually the bottom text T21 is at y~2322-2401, so height ~2400. Width: T4 at x~2116-2340, T18 at 2077-2401, so width ~2400. Let's assume 2400x2400. Hmm but the image might be 2338x2338 or something. The normalized coords are [0,1000]. I'll compute using width=2400, height=2400 as approximation. Actually I should look at the max coordinate. T18 x2=2401, T21 x2=2221, T4 x2=2340. The right edge of image likely 2400. The bottom T21 y2=2401, T22 y2=2401. So height ~2400. Good, assume 2400x2400.
+
+Wait, but the ROI might be the full image. The normalized box = [x1/W*1000, y1/H*1000, x2/W*1000, y2/H*1000].
+
+Let me compute fallback boxes.
+
+annotation fallback: should cover the FCF + 2X ⌀1.60 + 18 + FAI + SPC? The "annotation" fallback is the measurement annotation (the FCF and associated text). I'll box from the 2X ⌀1.60 box left to the SPC circle right, top of 2X box to bottom of 18 box. Coordinates: x from ~600 (2X) to ~1350 (SPC right). y from ~1010 (top of 2X box) to ~1260 (bottom of 18 box / FAI circle). Let's use [600,1010,1350,1260]. Normalize: x1=600/2400*1000=250, y1=1010/2400*1000=421, x2=1350/2400*1000=562, y2=1260/2400*1000=525. So [250,421,562,525].
+
+Hmm but the FAI marker F0 is at [1150,1150,1250,1250] which is within that. Good.
+
+target fallback: the circle in detail BM that the arrowhead H3 touches. H3 at [410,1291,452,1345]. The circle center ~ (300,1450), radius ~230. The arrowhead touches the circle at upper-right. The "smallest useful local component" is the hole circle. Box around that circle: [60,1290,540,1740]? The circle in detail BM spans roughly x 60-540, y 1290-1740. Let's look: the inner solid circle in detail BM is at center (300,1450) radius ~230, so x 70-530, y 1220-1680. The arrowhead at (410-452,1291-1345) is on the upper-right of that circle. So target box ~ [70,1220,530,1680]. Normalize: x1=70/2400*1000=29, y1=1220/2400*1000=508, x2=530/2400*1000=221, y2=1680/2400*1000=700. So [29,508,221,700].
+
+complete_group fallback: envelope including annotation + leader + arrowheads + target. So from top of annotation (y~1010) to bottom of target (y~1680), x from left of target (70) to right of annotation (1350). Also include the PB box? The leader top is at the triangle which is below PB. The PB box is at y~875-940. The leader doesn't include PB (the vertical line not a leader). But

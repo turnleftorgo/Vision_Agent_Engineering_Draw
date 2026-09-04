@@ -1,0 +1,27 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine IMAGE 1 and IMAGE 2.
+
+In IMAGE 1, the magenta rectangle is the proposed crop. Inside it, I see:
+- "4X 3.009 +0.15 -0.16" text
+- Boxes "15" and "16"
+- FAI circle "66" (highlighted in red)
+- SPC circle "BJ"
+- Triangle "100%"
+- FAI circle "67"
+- A leader line going down from "4X 3.009" to a dimension arrow
+- A dimension arrow (vertical double arrow) on the left
+- A leader line on the right going to "4X" but the "4X 0.49 ±0.10" text and FAI 191 / SPC GE circles are OUTSIDE the magenta rectangle (to the right)
+- A vertical dimension arrow on the right side
+
+Let me look carefully. The right leader line: there's a horizontal line at the top right of the crop that goes to "4X" which is at the right edge. In IMAGE 1, the text "4X 0.49 ±0.10" with FAI 191 and SPC GE is to the RIGHT of the magenta rectangle. The leader line from the right dimension arrow goes up and then right, exiting the magenta rectangle at the right border. Let me check.
+
+Looking at IMAGE 1, the right vertical dimension arrow is at around x=1450 (in image coordinates). The leader line goes up from the top of that arrow to about y=1130, then horizontally right to about x=1490 where it meets "4X". The magenta rectangle's right edge is at about x=1590. So the "4X" text at x=1590-1595 is right at the border? Let's look. The magenta rectangle right edge appears to be at x=1590. The "4X" text starts at about x=1595, just outside. Actually in IMAGE 1, the "4X" appears to be just at the right edge, partially inside? Let's look at the magenta rectangle boundaries. The magenta rectangle spans from about x=430 to x=1590 horizontally, and y=995 to y=1595 vertically.
+
+In IMAGE 1, the right leader: vertical line at x=1450 from y=1130 to y=1530 (the dimension arrow). The horizontal segment at top goes from x=1450 to x=1490, then "4X" text. Hmm, but in IMAGE 2, the right leader shows "4X" at the right edge, cut off. In IMAGE 2, the right side shows the vertical dimension arrow and the leader going up and right to "4X" which is at the very right edge, partially cut. The "0.49 ±0.10" and FAI 191 / SPC GE are NOT in IMAGE 2.
+
+So the question: is the FAI 66/67 group coherent and fully contained? The FAI 66 and 67 are associated with the "4X 3.009" dimension (the left dimension). The right dimension "4X 0.49 ±0.10" with FAI 191 is a SEPARATE annotation group. So the right leader line in the crop belongs to FAI 191, not to FAI 66/67.
+
+Wait, but the crop includes the right vertical dimension arrow and its leader. Is that part of the FAI 66/67 group? The FAI 66/67 group is the "4X 3.009" dimension. The right dimension is "4X 0.49" which has its own FAI 191. So the right dimension arrow in the crop is actually a neighboring annotation that's partially included.
+
+Hmm, but the rule says: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+Let's think about what the FAI 66/67 group requires. The FAI 66/67 circles are next to the "4X 3.009 +0.15 -0.16" text and the SPC BJ and 100% triangle. The leader for this dimension goes from the text down to the left

@@ -1,0 +1,104 @@
+The user wants me to build an FAI annotation group for marker F0.
+
+Let me look at the evidence. F0 is at bbox [1149,1150,1251,1250]. Looking at IMAGE 2, F0 is the red box around the FAI marker that contains "FAI 205" (the circle next to the "16" box in the middle of the drawing, below the "15 / FAI 176 / SPC FP / 100%" group).
+
+Wait, let me look carefully. In IMAGE 2, there's a red box labeled F0 around a circle. Let me check the coordinates. F0 bbox is [1149,1150,1251,1250]. In the image, the "16" box with "FAI 205" circle is around the middle. Let me look at the layout.
+
+In IMAGE 1, the middle section has:
+- "FOURTH TERRACE"
+- "4X -0.60 +0.26 / -0.34"
+- "15 [FAI 176] [SPC FP] [100%]"
+- "16 [FAI 205]"
+
+Then below:
+- "3X 0.18 ±0.10"
+- "15 [FAI 178] [SPC FR] [100%]"
+- "16 [FAI 206]"
+
+Now F0 bbox [1149,1150,1251,1250]. Let's map to image coordinates. The image is 2400-ish wide? The T2 bbox is [1912,682,2401,835] which is the T7 circle area on the right. The "16 [FAI 205]" in image 1 is around x=995-1250, y=1150-1250 roughly. Let's check: in image 1, the "16" box for FAI 205 is at approximately x=995-1110, y=1165-1240, and the FAI 205 circle is at x=1145-1250, y=1150-1250. Yes! That matches F0 bbox [1149,1150,1251,1250]. So F0 = FAI 205.
+
+So the FAI number is 205.
+
+Now, what is associated with FAI 205? In the drawing, the "16 [FAI 205]" line is part of the annotation block for the "FOURTH TERRACE / 4X -0.60 +0.26 -0.34" measurement. The "15 [FAI 176] [SPC FP] [100%]" and "16 [FAI 205]" are the two rows of the FAI/SPC block associated with that measurement.
+
+Wait, but the instruction says: "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation."
+
+Hmm. The SPC marker is associated with the "15" row (FAI 176 / SPC FP). The "16" row (FAI 205) has no SPC letter. So for F0 (FAI 205), the SPC letter is null.
+
+Now the measurement annotation: The block "FOURTH TERRACE / 4X -0.60 +0.26 -0.34" is the measurement. The leader line goes from this text to the part. Let's look at the leader.
+
+In IMAGE 2, there's a blue line L0/L1 going horizontally from the part to the text "FOURTH TERRACE". Actually the leader for "FOURTH TERRACE" is the horizontal line at y~804-807 (L0, L1) which goes from the part (around x=765) to the text at x=928. Hmm, but actually the leader arrowhead... Let's look.
+
+Actually, looking at the drawing, the "FOURTH TERRACE" text has a leader line that points to the part. The horizontal line L0/L1 at y=804-807 spans from x=10 to x=968. That's the horizontal line that the part's top surface aligns with, and the text "FOURTH TERRACE" is to the right. Hmm.
+
+Wait, let's look at the structure. The part cross-section is on the left. The top horizontal surface of the part is at y~804-862 (the hatched region top). The line L0/L1 at y=804-807 is the top surface line extended to the right to the text "FOURTH TERRACE". So that's a leader line pointing to the top surface.
+
+But actually, the measurement "4X -0.60 +0.26 -0.34" with "FOURTH TERRACE" is the description. The leader connects the text to the part.
+
+Hmm, but the question is about F0 = FAI 205. The FAI 205 is in the "16" row. The "16" row is associated with the same measurement block as the "15" row (FAI 176). So the measurement annotation for F0 includes the "FOURTH TERRACE" text and the "4X -0.60 +0.26 -0.34" parameter.
+
+Wait, but is that right? Let's think about the structure of these FAI blocks. Typically each measurement has a "15" row (with FAI number, SPC letter, 100% triangle) and a "16" row (with another FAI number). Actually no. Let me look at the top of the image: there's "15 [FAI 69] [SPC BL] [100%]" and "16 [FAI 204]". That's a separate block at the top (cut off, associated with some measurement above the ROI). Then in the middle we have "15 [FAI 176] [SPC FP] [100%]" and "16 [FAI 205]". Then below "15 [FAI 178] [SPC FR] [100%]" and "16 [FAI 206]".
+
+So each measurement block has two FAI numbers: one in row 15 and one in row 16. The row 15 has the SPC letter and 100% triangle. The row 16 has just an FAI number.
+
+So for F0 = FAI 205 (row 16 of the middle block), the associated measurement is the middle block: "FOURTH TERRACE / 4X -0.60 +0.26 -0.34". The SPC letter for this block is FP (but that's in row 15). Hmm.
+
+The instruction: "Associated SPC letter if present." For F0 specifically, the SPC letter is in the same block. But the SPC letter FP is associated with FAI 176 (row 15), not FAI 205 (row 16). However, the block as a whole has SPC FP.
+
+Hmm, this is tricky. Let's think about what the pipeline expects. The "complete FAI annotation group for F0" should contain F0 and its inspection number (205), associated SPC letter if present, parameter/tolerance/description text, leader segments, arrowheads, touched part.
+
+I think the SPC letter is part of the block. But the SPC letter is on the row 15 line. The instruction says "Do not associate a nearby ... SPC marker unless it is connected to F0's measurement annotation." The SPC marker FP is connected to the same measurement annotation (FOURTH TERRACE / 4X -0.60). So I think we should include it? But the SPC letter is "FP".
+
+Hmm, but actually the SPC letter is tied to the FAI 176 row. The FAI 205 row is a separate inspection. In many of these drawings, the "15" and "16" are two different inspection stations or two different FAI numbers for the same feature. The SPC letter might apply to the whole feature.
+
+Let me look at the structure more carefully. Actually, I recall these are "FAI" (First Article Inspection) markers. The number in the box (15, 16) might be a row index or a category. The circle with FAI/number is the inspection point. The SPC circle is the SPC chart letter. The triangle 100% is the sampling.
+
+Hmm, I think the safest interpretation: The measurement annotation block for F0 (FAI 205) is the middle block. The SPC letter present in that block is FP. But is FP "associated" with F0 or with FAI 176?
+
+Let's look at the visual layout. In the middle block:
+Row 15: [15] (FAI 176) (SPC FP) (100% triangle)
+Row 16: [16] (FAI 205)
+
+The SPC FP circle is on the same horizontal line as FAI 176, not FAI 205. So visually, SPC FP is paired with FAI 176.
+
+Given the instruction "Associated SPC letter if present" — for F0, the SPC letter on its own row is absent. So spc_letter should be null.
+
+But then the "annotation_ids" — what text belongs to F0's annotation? The measurement text "FOURTH TERRACE", "4X -0.60", "+0.26", "-0.34" are the parameter/description. These are shared by both FAI 176 and FAI 205 because they're the same feature.
+
+Hmm, but wait. Let's reconsider. Maybe the structure is: each "15/16" pair is one annotation. The "15" row gives the primary FAI + SPC + sampling, the "16" row gives a secondary FAI. Both refer to the same measurement text. So the measurement text is associated with both.
+
+OK here's my decision. I'll treat the middle block as the annotation group for F0. The measurement text = "FOURTH TERRACE" (description) and "4X -0.60 +0.26 -0.34" (parameter). The SPC letter: I'll set to null because it's on the FAI 176 row, not F0's row. Hmm but the instruction says "Associated SPC letter if present" in the complete crop. The complete crop must contain "Associated SPC letter if present." This suggests if the block has an SPC letter, include it.
+
+This is genuinely ambiguous. Let me look at the leader lines to disambiguate which measurement the leader points to.
+
+The leader for the middle block: In IMAGE 2, I see blue lines. The horizontal line L0/L1 at y~804-807 goes from x=10 to x=968. That's the line that the "FOURTH TERRACE" text sits on (the text T3 is at y=787-826, so the line at y=804-807 passes through the text). And on the left, this line is the top surface of the part. So the leader is the horizontal line from the part's top surface to the text. But where's the arrowhead? The arrowhead would be at the part end.
+
+Hmm, actually look at the part. The top horizontal surface of the part (the flat terrace) is at y~804-862 (the hatched band). The line L0/L1 at y=804-807 is the top edge of that band, extended right to the text. So the "leader" is just this horizontal line, and the arrowhead... I don't see a clear arrowhead at the left end. Actually the left end at x=10 is the edge of the image (the part continues off-screen). Hmm.
+
+Wait, maybe the leader is different. Let's look at the diagonal lines L6, L7, L8, L11, L13 which are the hatching lines of the part (the 45-degree hatch). Those are part lines, not leaders.
+
+The vertical line L21 at x~594-597, y=468-636 is the left edge of the vertical part of the cross-section. L14-L17 are the top horizontal edges of the vertical part. L31/L32 at y=755-758 are a small horizontal step. L34 at x~751-766, y=724-862 is the right edge of the small bump.
+
+Hmm, so where is the leader arrowhead for the "FOURTH TERRACE" measurement? Looking at IMAGE 1, the line from the part to "FOURTH TERRACE" is just a horizontal line at the level of the top surface, no arrowhead visible. Actually in many section drawings, the dimension/leader line just touches the surface without an arrowhead, or the arrowhead is at the text side.
+
+Let me look at the arrowhead candidates H0, H1, H2. H0 bbox [588,460,795,752] — that's a big region covering the vertical part of the cross-section. That's probably a false arrowhead (the contour of the part). H1 bbox [0,780,37,822] — left edge, small. H2 bbox [756,811,795,865] — that's at the right end of the top surface, near the bump. Hmm.
+
+Actually, I think the leader for "FOURTH TERRACE" might not have a detected arrowhead, or the arrowhead is H2? H2 at [756,811,795,865] is around the bump on the right of the terrace. Hmm.
+
+This is getting too detailed. Let me step back and think about what the expected answer structure is. The pipeline likely has a "ground truth" grouping. Given F0 = FAI 205, the annotation group is the middle block. The leader that connects this block to the part is the horizontal line L0/L1 (the line at the terrace level that extends to the text). The arrowhead at the part end... maybe none detected, or H2.
+
+Hmm wait, but actually maybe I'm misreading which block F0 belongs to. Let me double check F0 coordinates against the image. The image height: T10 is at y=2005-2078 (SECTION BZ-BZ at bottom). The image is about 2300 tall. F0 at y=1150-1250 is in the middle. In IMAGE 1, at y~1150-1250, what's there? The "16 [FAI 205]" row. Yes. The "16" box is at x~995-1110, the FAI 205 circle at x~1145-1250. F0 bbox [1149,1251] matches the FAI 205 circle. Good.
+
+So F0 = FAI 205, middle block.
+
+Now the middle block's measurement text: T3 "FOURTH TERRACE", T5 "4X -O.60", T4 "+0.26", T6 "-0.34". These are at y=787-967, which is above the "15/16" rows (y~1000-1250). Yes that's the measurement for this block.
+
+The leader: the horizontal line connecting the part to "FOURTH TERRACE" text. That's L0/L1 (y=804-807). But wait, L0/L1 spans x=10 to 968, which is the top surface line of the part extended to the text. Actually the text T3 starts at x=928. So the line L0/L1 from x=10 to 968 includes the part's top surface (x=10 to ~765) and the leader extension (x=765 to 928) to the text. So L0/L1 is both a part line and the leader. Hmm.
+
+But the instruction: "OpenCV line candidates include both leaders and ordinary part/dimension lines; select only line IDs that are part of the FAI leader path." So I should select the leader portion. But the leader portion and the part top surface are the same line segment in the detection (L0/L1). Hmm.
+
+Actually, maybe the leader is a separate line. Let me look at IMAGE 2 again. The blue line at the terrace level: I see a thick blue horizontal line from x=0 to about x=928 at y~804-807 (that's L0/L1). And the text "FOURTH TERRACE" is in a purple box T3 at x=928-1460. So the line touches the left of the text. On the part side, the line is the top surface.
+
+Hmm, I think in this drawing, the "leader" is essentially the horizontal reference line at the terrace level, and there's no separate arrowhead — the line just points to the surface. But the spec requires arrowheads. If no arrowhead is detected for this leader, then arrowhead_ids is empty and we use fallback.
+
+Wait, but maybe the leader for this measurement is actually a different line. Let's look at the part shape. The cross-section shows a vertical wall on the right

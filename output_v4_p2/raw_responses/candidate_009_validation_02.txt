@@ -1,0 +1,176 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine the images.
+
+IMAGE 1 shows a wider context. There's a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The FAI marker is "FAI 2" with an SPC "B" circle next to it. Above it is the dimension "278.06 +0.10 -0.20".
+
+Now I need to look at the leader lines. In IMAGE 1, there's a leader line that goes from the dimension line area. Let me trace it. The dimension line "278.06" has a horizontal line. On the left side, there's a leader that goes up-left to a point labeled "BN" with an arrowhead pointing to a small circle/feature on the left side of the drawing (the small circle with crosshairs near the left edge, around the hinge area).
+
+Wait, let me look carefully. In IMAGE 1, the magenta rectangle contains the dimension "278.06 +0.10 -0.20" and the FAI 2 / SPC B circles. The horizontal dimension line extends to the left and right. On the left, the line goes to a leader that bends up to "BN" and then there's an arrowhead pointing to a feature (the small circle with crosshairs at the left, around coordinates (240, 780) in the image).
+
+Let me look at the leader structure. The "BN" label has a leader line. Actually, looking at IMAGE 1, there's a leader line that starts at the small circle feature (top left, around (240, 780)), goes down-right to a horizontal segment, then to "BN". Hmm.
+
+Let me look at the dimension line. The dimension line for 278.06 is horizontal. On the left end, it connects to a vertical line? In IMAGE 2, I see on the left a vertical line with an arrowhead pointing left into a box (the box is partially cut off, showing "C" or part of a rectangle). And the "BN" leader comes from the top.
+
+Let me look at IMAGE 2 more carefully. In IMAGE 2, top-left there's a vertical line going up (cut off at top). There's a leader from "BN" going down-left to a point on the horizontal dimension line. There's an arrowhead on the horizontal line pointing left, into a small box that's cut off at the left edge (we see "C" or part of a rectangle).
+
+So in IMAGE 2, the left edge cuts off a box/feature. The arrowhead points left into that box which is partially visible (we see a "C" shape, the right edge of a rectangle). The vertical line at top-left is cut off at the top.
+
+Now, the question: does the crop fully contain the FAI annotation group? The group includes the FAI circle, SPC letter, parameter/tolerance, leader segments, terminal arrowheads, and the touched feature.
+
+Let's trace the leaders in IMAGE 1. The dimension line 278.06 is a horizontal line. It has extension lines? Actually it's a dimension line with the value. The left end of the dimension line: in IMAGE 1, the horizontal line at the level of "278.06" extends left to about x=1080 (in image 1 coordinates). At that point, there's a vertical line going up? Let's look. In IMAGE 1, at the left of the dimension line, around (1080, 1050), the line seems to connect to a vertical line going up to the "BN" leader? Hmm.
+
+Actually, let's look at the structure. The "BN" label is at around (500, 970). There's a leader line from "BN" going left to about (390, 970), then a diagonal line going up-left to the small circle feature at (240, 780). So the "BN" leader points to that small circle feature (a hole or marker).
+
+Now the dimension line 278.06: the horizontal line is at y~1050. On the left, it goes to x~1080 where there's a vertical line? In IMAGE 1, I see at (1080, 1050) the horizontal line meets a vertical line that goes up to about (1080, 970)? Hmm, hard to say.
+
+Let's look at IMAGE 2 to understand the left structure. In IMAGE 2, the horizontal dimension line is at the middle. On the left, there's an arrowhead pointing left at around (160, 130) in image 2 coords. To the left of that arrowhead is a box (cut off, showing right edge and a "C" inside maybe). Above, there's a vertical line at x~210 going from top edge down to the horizontal line. And the "BN" leader diagonal comes from top to a point on the horizontal line at around (700, 130)? Hmm.
+
+Wait, I'm confusing myself. Let me look at IMAGE 1 coordinates more systematically.
+
+In IMAGE 1, the magenta rectangle spans roughly x from 0 to 1850, y from 930 to 1290. Inside it: "BN" at (500, 970), dimension "278.06" at (1200, 1050), tolerances at (1430, 1020-1080), FAI 2 circle at (1140, 1140), SPC B circle at (1250, 1140).
+
+Now the leader for "BN": from "BN" left to (390, 970), then diagonal up-left to (240, 780) where there's a small circle with crosshairs (the feature). That diagonal line and the small circle feature are OUTSIDE the magenta rectangle (above it, since y=780 < 930). So the leader that the "BN" annotation points to is outside the crop.
+
+But wait—is the "BN" annotation part of the FAI group? The FAI group is the FAI 2 marker with its dimension. The "BN" might be a separate annotation (a note label) that happens to be near. Hmm.
+
+Actually, in engineering drawings, "BN" and "BH" are likely note references (like "B" note numbers) pointing to features. The dimension 278.06 with FAI 2 is the measurement. The leader for the dimension: a dimension line typically has two extension lines at each end pointing to the features being measured. The dimension 278.06 measures a horizontal distance. The left extension line and right extension line.
+
+In IMAGE 1, the horizontal dimension line at y~1050 extends from x~1080 to x~1900 (and beyond). At the left end (1080, 1050), is there an extension line going up to a feature? Looking at IMAGE 1, at x~1080, the horizontal line meets... hmm, I see the line just ends or connects to a vertical line. Actually the vertical line at the left of the dimension in IMAGE 1: I see at around (1080, 1050) the horizontal line, and there's a vertical line going up from there? Not clear.
+
+Let's look at IMAGE 2 left side again. In IMAGE 2, the horizontal line at left has an arrowhead pointing left into a box. That box is the feature? The box with "C" might be a feature-control frame or a note box. The vertical line at top-left of IMAGE 2 (x~210) goes up out of the crop. That vertical line in IMAGE 1 corresponds to x~? The magenta left edge is x=0 in image 1. IMAGE 2 is the crop, so its left edge = image 1 left edge = 0. The vertical line in IMAGE 2 at x~210 (in image 2 coords) corresponds to image 1 x~210? But image 2 width is the crop width. The crop in image 1 is from x=0 to x=1850, width 1850. IMAGE 2 width appears to be ~2337 pixels (the displayed image). Hmm, scaling.
+
+This is getting too detailed. Let's think about the semantic_missing: ["A* annotation region for F0", "terminal arrowhead for F0 leader", "R* target region for F0"]. This suggests the leader's terminal arrowhead and target region are missing from the crop.
+
+Looking at IMAGE 1, the leader that connects to the dimension/FAI group: The "BN" leader points to the small circle feature at top-left (240, 780), which is OUTSIDE the magenta rectangle (above it). Also, in IMAGE 2, the left side shows an arrowhead pointing left into a box that is cut off at the left edge, and a vertical line cut off at the top.
+
+So the crop is missing: the terminal arrowhead / target feature on the left (the small circle feature and the box), and the leader segment that goes up to "BN" / to the feature.
+
+Actually wait. Let's reconsider what the "FAI annotation group" is. The FAI marker (FAI 2) is associated with the dimension 278.06. The dimension line has extension lines / leaders that point to the features being measured. In IMAGE 1, the dimension line's left end: I need to see where it points. The horizontal line at y~1050 left end at x~1080. Above that, is there a vertical extension line? In IMAGE 1, I see at x~1080 a vertical line? Let's look: there's a vertical line at the left of the magenta box? The magenta box left edge is x=0. Inside, at the left, the horizontal dimension line starts at x~1080 (where "278.06" text begins, the line is to the left of the text). Actually the line is to the left of "278.06" from x~1080 to x~1070? The text "278.06" is centered around x~1200. The line to the left of the text goes from x~1080 to x~1070? Hmm.
+
+Let me look at the leader from "BN" again. In IMAGE 1, "BN" at (500,970). The line from BN goes left to (390,970) then diagonal up-left to (240,780). This diagonal line crosses the top edge of the magenta rectangle (y=930) at around x~330. So part of this leader is inside the magenta box (the segment from (390,970) to (330,930)) and part is outside (above). The terminal arrowhead at (240,780) is outside.
+
+But is this "BN" leader part of the FAI group? The "BN" is a note label. The FAI group's leaders are the dimension extension lines. Hmm.
+
+Actually, maybe the dimension 278.06 is associated with the "BN" feature? Like the dimension measures from the BN feature to something on the right. The left extension line of the dimension would be a vertical line at the BN feature's x position. The BN feature is at x~240. But the dimension line left end is at x~1080, not 240. So that doesn't match.
+
+I think I'm overanalyzing the geometry. Let's look at the visual evidence in IMAGE 2: the left edge clearly cuts through a box (we see a partial rectangle with a "C" or "G" inside) and a vertical line is cut at the top. The arrowhead on the horizontal line points left into that cut-off box. So a terminal arrowhead's target feature is partially outside / the box is clipped. Also the vertical line at top is cut.
+
+The instructions: "Reject it if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate."
+
+In IMAGE 2, the left border: the horizontal line with arrowhead reaches the left border (the arrowhead points into a box that is at the border, partially cut). The vertical line reaches the top border. So a relevant leader reaches the crop border. The touched feature (the box / the small circle) is absent or clipped.
+
+Also in IMAGE 1, the "BN" leader's terminal arrowhead and target (small circle) are above the magenta rectangle, outside the crop. If that leader is part of the FAI group (the dimension's left reference), then it's missing.
+
+Given the semantic_missing mentions "terminal arrowhead for F0 leader" and "R* target region for F0", and we can see in IMAGE 1 that the leader goes up-left to a feature outside the magenta box, the crop is missing that.
+
+Thus the crop is INVALID. We need to expand left and top to include the leader and the target feature.
+
+Let's determine expansion. The magenta rectangle in IMAGE 1: left=0, top=930, right=1850, bottom=1290 (approx). Width=1850, height=360.
+
+The missing feature (small circle) is at (240, 780). That's above the top edge (930) by 150 pixels, and to the right of left edge (0) by 240 (so within left). The "BN" label is at (500,970) which is inside. The diagonal leader from (390,970) to (240,780) is partly above.
+
+But also the left box in IMAGE 2: that box at the left edge of the crop corresponds to image 1 x~0-? In IMAGE 1, at the left edge y~1050, is there a box? Looking at IMAGE 1, at the far left around (100, 850) there's a small rectangle (the hinge latch feature with two circles). Hmm, that's at y~850, above the magenta box. The horizontal line at y~1050 left end... in IMAGE 1 I see at the left a horizontal line at y~850 (the latch) and the magenta box top at 930. The dimension line at 1050 left end at x~1080.
+
+Wait, in IMAGE 2, the box at left with arrowhead: maybe that's the latch rectangle at (100,850)? But that's above the magenta box, not at the dimension line level. Hmm, but in IMAGE 2 the box is at the same vertical level as the dimension line (middle of image 2). Image 2 height corresponds to magenta height 360 (y 930-1290). The middle of image 2 is y~1110 in image 1. At (100, 1110) in image 1, is there a box? I don't see one. Hmm.
+
+Let me look at IMAGE 2 dimensions. IMAGE 2 displayed size maybe 2337x683. The magenta crop in image 1 is 1850x360, aspect ratio 5.14. IMAGE 2 aspect ratio 2337/683 = 3.42. Not matching. So IMAGE 2 might not be exactly the magenta crop? Or my pixel estimates are off.
+
+Hmm, the problem says IMAGE 2 is the proposed crop itself. So IMAGE 2 = magenta rectangle content. Let's recompute magenta rectangle in image 1. The magenta rectangle: I'll estimate from the image. The image 1 is 2337 wide? Actually both images might be same width 2337. Let's assume image 1 width = 2337 (same as image 2 width). Then magenta left edge x=0, right edge x~1850? In image 1 the magenta right edge is at about 80% of width = 0.8*2337=1870. OK. Magenta top y~930, bottom y~1290. Height 360.
+
+IMAGE 2 width 2337 would correspond to crop width 1870, so scale = 2337/1870 = 1.25. IMAGE 2 height should be 360*1.25=450. But image 2 looks taller, maybe 683. Hmm.
+
+I'll not rely on exact pixels. The key qualitative findings:
+
+1. In IMAGE 2, the left edge cuts a box/feature and a vertical line; an arrowhead points left into the cut region. So a leader/arrowhead reaches the border and the touched feature is clipped/absent.
+
+2. In IMAGE 1, the "BN" leader (which is connected to the dimension line via the left vertical line? or is it the dimension's left extension?) goes up to a feature outside the magenta box.
+
+Actually, look at IMAGE 1: the horizontal dimension line at y~1050, its left end at x~1080 connects via a vertical line going UP to y~970 where it meets the "BN" horizontal segment? Let's see: "BN" horizontal segment is at y~970 from x~390 to x~430 (the dash before BN). The diagonal goes from (390,970) up-left. The vertical line at x~1080 from y~1050 up to y~970? Then horizontal from (1080,970) to (390,970)? That would connect the dimension line to the BN leader. Hmm, but I see in IMAGE 1 the horizontal line at y~970 only near BN (short dash). Not a long line to 1080.
+
+Let's look at IMAGE 2 to see the connection. In IMAGE 2, the "BN" diagonal comes down to a point on the horizontal dimension line at around x~700 (image2). To the left of that point, the horizontal line continues left with an arrowhead at x~160 pointing into the box. To the right, the line continues to "278.06". So the "BN" leader's diagonal terminates ON the dimension line (at the point where it bends). And the dimension line's left portion has an arrowhead pointing left into the box.
+
+So the structure: dimension line horizontal. At left end, arrowhead points left into a box (the box is the left reference feature, partially cut). The "BN" diagonal is a separate leader that points from the dimension line up to... wait the diagonal in image 2 goes from the dimension line UP to the top edge (cut). In image 1, that diagonal goes from (390,970) up-left to (240,780) the small circle. So the "BN" leader's target (small circle) is above the magenta box.
+
+Hmm, but is the "BN" leader part of the FAI group? The FAI group is the dimension 278.06 + FAI2 + SPC B. The "BN" is a note that points to a feature. The dimension line might be the leader for the dimension, and the "BN" is a separate annotation that happens to share the line? This is confusing.
+
+Given the diagnostic semantic_missing lists "terminal arrowhead for F0 leader" and "R* target region for F0" and "A* annotation region for F0", it's telling us that the leader's arrowhead and target are missing. In IMAGE 1, we can see the leader (the diagonal + the left arrowhead into box) extends outside the magenta box (the diagonal goes above, the box is at left edge cut). So the crop is missing these.
+
+Therefore valid = false. We need to expand left and top.
+
+How much? The missing target small circle is at image1 (240,780). Magenta top=930, so need to expand top by (930-780)=150 px. Magenta height=360. 150/360 = 0.416 = 416 in normalized (per 1000). The left: the box in image2 is at left edge; in image1 the box left edge might be at x~70 (the latch rectangle at (70,850)? but that's at y850 not 1050). Hmm.
+
+Actually the left arrowhead in image2 points into a box that in image1 is at the left edge of magenta (x=0) at y~1050. But in image1 at (0-100, 1050) I don't see a box; the magenta left edge is at x=0 and the image left edge is also 0. So the box is cut by the image boundary too? In image1, the leftmost content at y~1050: I see the magenta line at x=0. To the left there's nothing (image edge). So the box that the arrowhead points to is actually outside the image? That can't be; the crop can't include what's not in the image.
+
+Wait, maybe I mis-identified. Let's look at image1 left side at y~850: there's a small rectangle (latch) from x~70 to x~300, with two small circles inside, and a leader from its right end going up to the small circle at (240,780)? Hmm the leader from (240,780) goes down-right to (390,970) then to BN. And the latch rectangle at (70-300, 850) is separate.
+
+In image2, the box at left with arrowhead: maybe that's the latch rectangle? But the latch is at y850 which is above magenta top 930, so it wouldn't appear in image2 at the middle. Unless my magenta top estimate is wrong.
+
+Let's re-examine image1 magenta rectangle vertical position. The magenta top line is just below the "BN" text? No, "BN" is inside the magenta box (the text BN at y~970 is below the magenta top line at y~930). The latch rectangle at y~850 is above the magenta top line. The small circle at (240,780) is above that.
+
+In image2, the "BN" text is at top, partially cut? In image2, "BN" appears at top with the diagonal line going up-left out of the top edge. So the diagonal's upper part (toward the small circle) is cut at top. Good, that matches: small circle outside (above).
+
+The box at left in image2 at middle height: in image1 that middle height is y~1110. At (0-100,1110) in image1, I see... the magenta left edge and to the left nothing. Hmm but image2 shows a box there. Contradiction.
+
+Maybe image2 is not exactly the magenta crop but a slightly different region? The problem statement says IMAGE 2 is the proposed crop itself. So it should match. My pixel reading of image1 must be off.
+
+Let's look at image1 again at the left, around the dimension line level. The dimension line "278.06" is at y~1050. To the left of "278.06", the line goes to x~1080. At x~1080, is there a vertical line? In image1 I think I see the horizontal line just stop at x~1080 (a T-junction with a vertical line going up to the BN diagonal's lower point?). Hmm.
+
+I'll step back. The exact geometry is too uncertain. The decisive qualitative facts:
+
+- In IMAGE 2, the top edge cuts the "BN" leader diagonal (the line goes out the top). So a leader reaches the crop border (top). The terminal arrowhead / target of that leader (the small circle feature) is absent from the crop.
+- In IMAGE 2, the left edge cuts a box and the horizontal line's left arrowhead points into it; the box is clipped. So a leader/arrowhead reaches the left border and the touched feature is clipped.
+
+Both indicate the crop is incomplete. The instructions say reject if a relevant leader reaches the crop border or an arrowhead is clipped or the touched feature is absent.
+
+Thus valid = false.
+
+Now expansion: we need to expand top to include the small circle feature and the full BN leader, and left to include the box/feature at left.
+
+In image1, the small circle is at y~780, magenta top 930 → expand top by 150 px. Magenta height ~360 → 150/360 ≈ 417.
+
+The left box: in image2 it's at the very left, so in image1 it's at x~0 or slightly negative? If it's at the image left edge, we can't expand left beyond image. But maybe the box in image2 corresponds to the latch rectangle at image1 (70-300, 850)? If the crop's left edge in image1 is actually at x~0 and the latch is at x70, then the latch would be inside the crop horizontally but above vertically (y850 < 930). So in image2 the latch would appear at top-left, not middle-left. But image2 shows the box at middle-left. Argh.
+
+Let's look at image2 vertical layout: top has "BN" and the diagonal and a vertical line. Middle has the horizontal dimension line with left arrowhead+box and the "278.06" and FAI/SPC circles below. So the box is at the same y as the dimension line. In image1, the dimension line y~1050. At left of dimension line, the line goes to x~1080 (not to x0). So the box at left in image2 must correspond to image1 x~1080? But image2 left edge = image1 magenta left = 0. The box in image2 is at the left edge, so image1 x~0. But the dimension line in image1 doesn't reach x0; it stops at 1080. Unless the dimension line in image1 actually does reach x0 but is hidden by the magenta line? The magenta left edge is a vertical line at x0 from y930 to1290. The dimension line at y1050 from x0 to1080 would be inside the magenta box and visible. In image1, do I see a horizontal line at y1050 from x0 to1080? Looking... I see the magenta box interior is mostly empty on the left half except "BN" at top-left. I don't see a horizontal line at y1050 on the left half. Hmm. But in image2 there is a horizontal line across the whole width at the dimension level. So image2's horizontal line spans the full crop width, meaning in image1 the dimension line spans from x0 to x1850 at y1050. But I thought it stopped at 1080. Let me look again at image1: the line to the left of "278.06" — I see a horizontal line from about x1080 leftwards... to where? It might continue to x0 but I mis-saw. Possibly yes, the line continues left to the magenta edge. And at the left edge there's the box (cut). And the vertical line at top-left of image2 corresponds to a vertical line at image1 x~? In image2 the vertical line is at x~210 (out of 2337) → fraction 0.09 → image1 x = 0.09*1850 = 166. At image1 (166, 930-1050) is there a vertical line? Possibly the line from the latch? The latch rectangle right end is at x~300. Hmm.
+
+OK given uncertainty, the left feature (box) is at the left edge of the crop and is clipped, so we must expand left. But if it's at image1 x0 (image boundary), we cannot expand left (no pixels). However the box might extend left of x0? No.
+
+Wait, maybe the magenta rectangle left edge is not at image x0. Let's look: in image1, the magenta left vertical line — is it at the very left edge of the image or inset? It looks like it's at the very left edge (x=0). The magenta top line starts at x0. So left edge = 0.
+
+If the box the arrowhead points to is at x0 and clipped, and there's no pixel left of 0, then we cannot include it; but the rule says reject if touched feature absent. But we can't fix by expansion if it's beyond image. However, maybe the box is actually fully within image but the magenta left edge cut it because magenta left =0 and box left <0? Not possible.
+
+Hmm, maybe I have the magenta left edge wrong; maybe it's inset a bit and the box is to the left of it but still in image. Look at image1: at the left, above the magenta box, there's the latch rectangle at x70-300, y850. The magenta top line at y930 spans x0-1850. The magenta left line at x0. The latch at x70 is to the right of x0, so inside horizontally. But latch y850 is above magenta top, so outside vertically.
+
+In image2, the box at left-middle: maybe it's actually the latch but my vertical mapping is wrong because image2 height is larger than I think, making the latch (y850) map to middle of image2? If image2 corresponds to a taller region than the magenta box... but it's supposed to be the magenta crop.
+
+I'm spending too much time. Let's make a decision based on clear evidence:
+
+Clear evidence of invalidity:
+- The "BN" leader diagonal is cut at the top of image2 (the line exits the top edge). Its target (small circle feature) is outside the crop (visible in image1 above the magenta box). So a relevant leader reaches the crop border and the touched feature is absent. → invalid, expand top.
+- The left side of image2 shows an arrowhead pointing left into a box that is cut at the left edge. → leader/arrowhead at border, feature clipped. → invalid, expand left.
+
+Thus valid=false. Expand top and left.
+
+For expansion values, I'll estimate. Top: need to include small circle at y780 and the latch maybe. Magenta top 930, height 360. To include y780, expand top by (930-780)/360 = 150/360 = 0.4167 → 417. But also the small circle's leader and the latch at y850; the topmost relevant is y780. So top expand ~420.
+
+Left: need to include the box at left. If the box left edge in image1 is at x~70 (latch) and magenta left=0, then it's already inside horizontally, no left expand needed. But the box in image2 is cut at left, meaning in image1 the box left edge is at x<0? Not possible. So maybe the box in image2 is the latch and it's cut at left because the latch left edge (x70) maps to image2 left edge? That would mean image2 left edge = image1 x70, i.e., magenta left edge =70, not 0. Possibly the magenta left edge is inset at x~70? Look at image1: the magenta left vertical line — I'll trust it's near x0 but maybe x~0. Hard.
+
+Given the ambiguity, and that the left feature is clipped in image2, I'll request a left expansion too, modest, say 150.
+
+But wait, the rule: "if a reported missing item is visible outside the magenta rectangle and belongs to this FAI group, return valid=false and request expansion toward it". The small circle (target of BN leader) is visible outside (above) the magenta rectangle. Does it belong to this FAI group? The BN leader is connected to the dimension line (the diagonal meets the dimension line). So yes, it's part of the annotation group's leader structure. So expand top.
+
+The left box: is it visible outside the magenta rectangle? In image1, at the left of magenta (x<0) there's nothing. So the box is not visible outside; it's clipped at the image edge. Hmm. But maybe the box is the latch which is visible above the magenta (y850). If the left arrowhead in image2 actually points to the latch (which is above-left), then the latch is outside the magenta (above) and we should expand top-left.
+
+I think the safest: expand top significantly and left moderately.
+
+Let's look at image2 once more: the vertical line at top-left goes from top edge down to the horizontal line. In image1, that vertical line would be at some x, from y930 (top edge) down to y1050 (horizontal line). And above y930 it continues to the latch or small circle. The latch is at y850, x70-300. The vertical line at x~? If the vertical line is at x~166 (from earlier fraction), the latch spans x70-300 so x166 is within latch. So the vertical line connects the dimension line up to the latch! And the latch is the left reference feature. The latch is at y850, above magenta top 930. So the latch (touched feature) is outside the crop (above). And the vertical leader from dimension line to latch is partly outside (the part y850-930). So we must expand top to include the latch.
+
+And the "BN" diagonal: from the dimension line at x~? up-left to small circle at (240,780). The small circle is also above.
+
+So both the latch and the small circle are above the magenta box. So expand top to include y~780.
+
+Left: the latch left edge x70; if magenta left=0, latch is inside horizontally. The small circle x240 inside. So no left expansion needed? But image2 shows a box cut at left edge. That box might be the latch cut at left because magenta left edge >70? If magenta left edge is at x~100, then latch (70-300) is cut at left. Hmm.
+
+Look at image1 magenta left edge vs latch left edge. The latch left edge x~70. The magenta left vertical line — compare horizontally: the magenta left line appears to be at the very left of the image, left of the latch. So magenta left <70, so latch fully inside horizontally. Then in image2 the latch would not be cut at left. But image2 shows a box cut at left. Contradiction again.
+
+Maybe the box cut at left in image2 is not the latch but something else at the dimension line level that is at x<0 (off image). Then we can't include it; but then the crop is invalid and unfixable on left. But the rule says reject if touched feature absent. We'd still return valid=false with expansion left maybe 0 (can't). Hmm but we should still try to expand left as much as possible? The expansion is normalized; if the feature is off-image, expanding left won't help but we can still request some left expansion? The instructions: "request expansion toward it". If it's off-image, we can't. But maybe it's not off-image; maybe my magenta left estimate is wrong and there is image content left of magenta.
+
+Let's look at image1 left margin: is

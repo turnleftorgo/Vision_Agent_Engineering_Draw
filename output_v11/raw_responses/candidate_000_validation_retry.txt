@@ -1,0 +1,22 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 shows the wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker, FAI 63).
+
+Let me look at the magenta rectangle boundaries in IMAGE 1. The magenta rectangle spans roughly from x=620 to x=1560, y=860 to y=2080 (in pixel coordinates of the image).
+
+Inside the magenta rectangle, I see:
+- "THIRD TERRACE" text (partially, the top of it might be cut? Let's check. The text "THIRD TERRACE" appears at the top, around y=860. The magenta top edge is at about y=860. The text seems to be just at the top edge, possibly slightly clipped. Actually looking carefully, the text "THIRD TERRACE" baseline is around y=880, and the top of the letters is around y=850. The magenta line is at y=860. So the top of the text might be slightly clipped. Hmm.
+- The feature control frame with parallelism symbol and 0.33
+- The "15" box, FAI 63 circle (red), SPC BH circle
+- The "16" box, FAI 211 circle
+- A leader line going from a dot at the bottom (around x=830, y=1960) up to the "THIRD TERRACE" text. The leader line goes from the dot up and to the right, ending near the text.
+- Two arrowheads: one at around x=760, y=1920 (pointing up), and one at around x=1420, y=1920 (pointing up).
+- A dashed line connecting the arrowheads at the bottom.
+- The "BX" labels at the bottom (partially? The "BX" text is at y=2180, which is below the magenta bottom edge at y=2080. So the BX labels are outside the crop, below it.)
+
+Now let's look at IMAGE 2, the proposed crop. In IMAGE 2, I see:
+- "THIRD TERR..." text at top (clipped on the right! The text is cut off, showing "THIRD TERR" only, missing "RACE"). Wait, but the magenta rectangle in IMAGE 1 right edge is at x=1560, and "THIRD TERRACE" text ends at about x=1680. So the text "RACE" is cut off in the crop. Hmm, but is the description text required to be fully readable? The requirement says "parameter/tolerance/feature-control-frame and description text". The description text "THIRD TERRACE" is partially clipped.
+
+Wait, let me look at IMAGE 2 more carefully. The top shows "THIRD TERR" - yes it's clipped on the right. Actually the image 2 width corresponds to the magenta width. Let me check the right edge of image 2. In image 2, the right side shows the SPC BH circle partially? Let's see. In image 2, top right shows "SPC BH" circle but it might be cut. Actually in image 2 I see "SPC BH" circle fully? The circle appears at the right edge, possibly clipped. Let's look: in image 2, the SPC BH circle is at the right, and there's a tiny triangle fragment at the very right edge (the 100% triangle is mostly cut). Hmm.
+
+Let me look at the leader line and arrowheads in IMAGE 2. The leader line from the dot goes up to the top, but in IMAGE 2 the leader line goes off the top edge! Look: the leader line in image 2 starts at the dot (around x=220, y=1730 in image 2 coords) and goes up-right, exiting the top of the image at around x=430, y=0. So the leader line's terminal (the part connecting to the text) is at the top, but the text "THIRD TERRACE" is at the top. Actually the leader line in image 1 connects the dot to the text "THIRD TERRACE" via a horizontal segment at the top. In image 1, the leader line goes from the dot up to about y=860 (the top of magenta) then there's a horizontal line to the text. Let's look: in image 1, the leader line from the dot (x=830,y=1960) goes up

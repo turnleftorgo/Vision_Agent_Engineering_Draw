@@ -1,0 +1,238 @@
+The user wants me to act as the semantic association stage of an engineering-drawing pipeline. I need to look at the two images and the evidence dictionary to build a complete FAI annotation group for marker F0.
+
+Let me carefully examine the images.
+
+IMAGE 1 (clean): I see a laptop drawing. There's a dimension "278.06" with tolerance "+0.10 / -0.20". Below it are two circles: "FAI 2" and "SPC B". The FAI marker F0 in the evidence dictionary has bbox [1150,1150,1250,1250]. Let me check the coordinates. The image is 2400 wide presumably. The FAI 2 circle in image 1 is around x=1150-1250, y=1150-1250? Let's look. In image 1, the "FAI 2" circle is at roughly the center-left of the dimension area. The dimension 278.06 is at around y=1050-1100. The FAI/SPC circles are below at around y=1150-1250. Yes, F0 bbox [1150,1150,1250,1250] corresponds to the "FAI 2" circle. Good.
+
+So F0 is the FAI marker with inspection number 2. The associated SPC letter is B (the SPC B circle next to it).
+
+Now the measurement annotation: The dimension is 278.06 with +0.10 / -0.20. This is the parameter/tolerance associated with FAI 2.
+
+Let's look at the OCR text IDs:
+- T11: "2/8.06" bbox [1133,1086,1357,1124] - this is the "278.06" text (OCR misread as 2/8.06).
+- T12: "-0.20" bbox [1404,1122,1582,1160] - the lower tolerance.
+- T9: "2 lO" bbox [1484,1051,1582,1089] - this might be the "+0.10" text (OCR misread).
+- T10: "oS" bbox [1152,1058,1420,1250] - this is a big box covering the FAI/SPC area? Hmm.
+
+Let's look at image 2 to see the purple (T*) boxes. In image 2, I see purple boxes around:
+- "BN" text (T8? no, T8 is "CON" at [463,989,600,1062]... wait the BN text in image 1 is at around x=450-600, y=950-1050. Hmm T8 "CON" bbox [463,989,600,1062] - that's the "BN" text misread as CON? Actually in image 2 the purple box around "BN" is at left. Let's check. In image 2, there's a purple box around "BN" at around x=460-600, y=990-1060. Yes that's T8.
+
+Wait but the prompt says T* is OCR text line. The "BN" is a label with a leader arrow pointing to a small feature. That's not part of the FAI annotation. So I should NOT include T8.
+
+Let's look at the purple boxes in image 2 around the dimension area:
+- There's a purple box around "278.06" (T11).
+- A purple box around "+0.10" (T9? "2 lO" at [1484,1051,1582,1089] - hmm that's at the top right of the dimension).
+- A purple box around "-0.20" (T12).
+- A purple box around the FAI/SPC circles region (T10 "oS" at [1152,1058,1420,1250]).
+- A red box around the FAI 2 circle (F0).
+
+So the annotation group for F0 includes:
+- F0 (FAI marker, number 2)
+- SPC letter B (the SPC B circle). Is there an OCR text for "SPC B"? Looking at the evidence, I don't see a specific T for "SPC B". T10 "oS" bbox [1152,1058,1420,1250] covers both circles maybe. Hmm. Actually T10 bbox is [1152,1058,1420,1250] which spans from the dimension down to the circles. That's a weird OCR box.
+
+Let me look more carefully at image 2. The purple boxes I can identify in the central area:
+- Around "278.06": purple box (T11).
+- Around "+0.10": purple box at top right (T9 "2 lO"? but T9 bbox is [1484,1051,1582,1089] which is to the right of 278.06, at the top. In image 1, "+0.10" is at top right of 278.06. Yes.)
+- Around "-0.20": purple box (T12).
+- Around the FAI/SPC circles: there's a purple box that seems to enclose both circles? In image 2 I see a purple rectangle around the FAI 2 and SPC B circles area, plus a red rectangle around FAI 2 specifically. The purple one might be T10.
+
+Hmm, but T10 bbox [1152,1058,1420,1250] - x from 1152 to 1420, y from 1058 to 1250. The FAI 2 circle is at x~1150-1250, the SPC B circle at x~1250-1350. The dimension 278.06 is at x~1133-1357, y~1086-1124. So T10's box overlaps the dimension and the circles. That's a messy OCR box.
+
+Actually, let's look at the purple boxes in image 2 more carefully. I'll describe what I see in the central region of image 2:
+- A purple box around "278.06" (the digits).
+- A purple box around "+0.10" (top right).
+- A purple box around "-0.20" (bottom right).
+- A purple box around the two circles (FAI 2 and SPC B) - it looks like one big purple rectangle enclosing both, with a red rectangle inside around FAI 2.
+
+Hmm, but the evidence only has T10 as a box in that region besides T11, T12, T9. Let's list T boxes near center:
+T9 [1484,1051,1582,1089]
+T10 [1152,1058,1420,1250]
+T11 [1133,1086,1357,1124]
+T12 [1404,1122,1582,1160]
+
+So T10 is the big box. In image 2, the purple box around the circles - is it T10? T10's y range 1058-1250 includes the circles (which are at y~1150-1250) and also the dimension (y~1086-1124). Hmm.
+
+Actually wait. Let me look at image 2 again. I see in the center:
+- purple box around "278.06"
+- purple box around "+0.10" (the "0.10" part, the + might be outside)
+- purple box around "-0.20"
+- a purple box that goes around the FAI/SPC circles AND seems to also include part of the dimension? Hard to say.
+
+Given the ambiguity, the safest approach: The annotation for F0 (FAI 2) is the dimension 278.06 +0.10/-0.20 plus the SPC B. The FAI marker itself is the circle with "2". The SPC letter is "B".
+
+Now, what about leader segments? In image 1, the dimension 278.06 has horizontal extension lines on both sides (the long horizontal lines at y~1050). Those are dimension lines, not leaders to the FAI marker. The FAI marker (FAI 2 circle) is placed directly below the dimension, no leader arrow connecting them. So there's no leader arrow from the FAI marker to a feature. Hmm.
+
+Wait, but the prompt's structure expects leader segments and arrowheads. Let's think. In many FAI drawings, the FAI circle is placed near the dimension it references, without a leader. The dimension itself has extension lines. So the "leader" concept here might not apply, or the dimension lines might be considered.
+
+Actually, re-reading the prompt: "4. All leader segments connected to that annotation. 5. All terminal arrowheads of those leaders. 6. The smallest useful local component/cross-section touched by each arrowhead."
+
+If there's no leader, then leader_ids, arrowhead_ids, target_ids are empty, and we use fallback boxes.
+
+But wait, look at image 1: the dimension 278.06 has horizontal lines extending left and right (the dimension line with the value in the middle, broken). These are dimension lines, not leaders with arrowheads. There are no arrowheads on them in image 1 (the lines just go off to the sides). Actually in image 1, the line at y~1050 goes from left edge to the "278.06" text, then from after the tolerance to the right edge. These are dimension/extension lines. No arrowheads visible.
+
+Hmm, but the OpenCV line candidates L* include many horizontal lines. The dimension line at y~1050-1106? Let's check L36: [0,1106,1115,1107] points [[0,1106],[1114,1106]]. That's a horizontal line at y=1106 from x=0 to x=1114. In image 1, the dimension line for 278.06 is at around y=1050? Let's look. The "278.06" text baseline is around y=1080. The horizontal line through it... In image 1, I see a horizontal line at the level of "278.06" going left from the text to the left edge, and right from the tolerance to the right edge. That line is at y~1050. Hmm L36 is at y=1106. Let's look at image 2: there's a blue line L36 at y~1106 going from left to the "278.06" box. Yes I see in image 2 a blue line at the level just below "278.06"? Actually the blue line L36 in image 2 appears at y around 1106, which is the dimension line. And on the right side, the dimension line continues but it's black (not detected as blue?) Hmm in image 2 the right side line at that level is black.
+
+This is getting too detailed. Let's step back and think about what the expected answer is.
+
+The key insight: This is a FAI marker (FAI 2) associated with a dimension 278.06 +0.10/-0.20 and SPC B. There is NO leader arrow from the FAI marker to a feature; the FAI circle sits right under the dimension. So the "annotation" is the dimension + tolerance + SPC. The "target" (touched part) would be... the dimension measures the width of the laptop (the overall width). The extension lines of the dimension touch the left and right edges of the laptop body. But there are no arrowheads.
+
+Given the prompt's instruction: "If evidence is missing, provide a fallback box... If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box; never invent IDs."
+
+So for leader_ids, arrowhead_ids, target_ids: if there are no leaders/arrowheads/targets in the evidence that connect to F0, leave them empty and provide fallback boxes.
+
+But wait, are there leaders? Let's look at the "BN" label. The BN label has a leader arrow pointing to a small feature on the left (the small rectangle with circles). That's a separate annotation (BN), not connected to F0. So we must NOT include it. Good, the prompt explicitly warns: "Do not associate a nearby dimension, section arrow, grid label, datum, or SPC marker unless it is connected to F0's measurement annotation."
+
+Hmm wait, but the SPC marker IS connected to F0's measurement annotation (SPC B is the SPC letter for FAI 2). So we include SPC B. But there's no OCR text ID for "SPC B" specifically. The SPC B circle in image 1 is at around x=1250-1350, y=1150-1250. Is there a T box there? T10 [1152,1058,1420,1250] covers it. Hmm.
+
+Actually, maybe I'm overthinking the OCR. Let's look at the purple boxes in image 2 one more time, focusing on the central cluster. I'll mentally zoom into image 2 center:
+
+I see:
+- A purple rectangle tightly around "278.06" (the digits, no tolerance).
+- A purple rectangle around "0.10" (the +0.10, top right).
+- A purple rectangle around "0.20" (the -0.20, bottom right).
+- A purple rectangle around the FAI 2 circle AND the SPC B circle? It looks like there's a purple rectangle that encloses both circles (a wide box), and inside it a red rectangle around FAI 2.
+
+Hmm, but the evidence T10 is [1152,1058,1420,1250]. That box's top is 1058 (above the circles, at the dimension level) and bottom 1250 (below circles). Left 1152 (left of FAI circle), right 1420 (right of SPC circle). So T10 actually encloses the FAI circle, the SPC circle, AND the right part of the dimension? No, the dimension 278.06 is at x 1133-1357, so T10's left 1152 would cut into the dimension. This is just a bad OCR box.
+
+OK here's my decision. I think the intended association is:
+- marker_id: F0
+- fai_number: "2"
+- spc_letter: "B"
+- annotation_ids: the OCR texts for the dimension and tolerance: T11 (278.06), T9 (+0.10), T12 (-0.20). Possibly T10 too? T10 is "oS" which is garbage covering the circles. Hmm.
+
+Actually, the SPC letter "B" - is it captured by any T? The SPC B circle text "SPC" and "B" - I don't see a T for it. T10 "oS" might be a misread of the circles' content. Hard to say.
+
+Let's look at the purple boxes in image 2 around the circles. I'll trust that the purple box around the circles corresponds to T10. But T10's text is "oS" which doesn't match "FAI 2 SPC B". OCR is unreliable.
+
+Hmm, I realize I should look at the actual pixel positions in image 2 to map purple boxes to T IDs. The T IDs have bboxes. Let me list the T bboxes that are in the central cluster and see which purple boxes they correspond to:
+
+T9 [1484,1051,1582,1089]: x 1484-1582, y 1051-1089. In image 1, "+0.10" is at approximately x 1400-1580, y 1010-1050? Let's look. In image 1, the "+0.10" text is above the "-0.20" text, to the right of "278.06". The "278.06" is at y~1050-1100. The "+0.10" is at y~1010-1050 (above), and "-0.20" at y~1080-1120 (below). Hmm.
+
+Let me look at image 1 coordinates more carefully by examining the layout. The image is 2400x2400 (square). The dimension "278.06" appears at vertical position roughly 46% down? The image height 2400, 46% = ~1100. Yes "278.06" center y ~1080. The "+0.10" is above it at y~1030, "-0.20" below at y~1110. The FAI/SPC circles are below at y~1190.
+
+Now T9 [1484,1051,1582,1089] y 1051-1089 - that's around the "+0.10" level? In image 1 "+0.10" x range is about 1400-1580. T9 x 1484-1582 is the right portion. Plausible T9 = "+0.10" (partial).
+
+T12 [1404,1122,1582,1160] y 1122-1160 - that's the "-0.20" level. x 1404-1582. Plausible T12 = "-0.20".
+
+T11 [1133,1086,1357,1124] y 1086-1124 - that's the "278.06" level. x 1133-1357. Plausible T11 = "278.06".
+
+T10 [1152,1058,1420,1250] y 1058-1250 - spans from dimension level down to circles. x 1152-1420. This is a tall box. In image 2, is there a tall purple box there? Looking at image 2, I think I see a purple box around the FAI/SPC circles that is roughly square, not tall. And a separate purple box around "278.06". Hmm.
+
+Actually you know, maybe T10 corresponds to the purple box that in image 2 encloses the FAI 2 circle and SPC B circle together (the wide box at the bottom of the cluster). Its y 1058-1250 might be an overestimate by OCR. The text "oS" is garbage.
+
+I think for the purpose of this task, the exact mapping of T10 is uncertain. The safest is to include the clearly-relevant dimension/tolerance texts (T11, T9, T12) as parameter_text_ids, and treat the SPC letter as known from the drawing (B) but since there's no clean OCR ID for it, maybe T10 is the box that contains the SPC B? But T10 also contains the FAI circle which is F0 itself.
+
+Hmm, let's look at the prompt's required fields:
+- annotation_ids: probably the OCR text lines that form the annotation (dimension, tolerance, SPC, FAI number text). 
+- parameter_text_ids: the parameter value texts (278.06, +0.10, -0.20).
+- description_text_ids: instruction sentence (none here).
+
+The FAI number "2" and SPC letter "B" are inside the circles. The OCR for those circles is T10 ("oS")? Or maybe not captured.
+
+Given the uncertainty, I'll make a reasonable choice:
+- annotation_ids: [T10, T11, T9, T12] (the whole annotation cluster including the circles box and the dimension/tolerance).
+- parameter_text_ids: [T11, T9, T12] (the numeric parameter and tolerances).
+- description_text_ids: [] (none).
+- fai_number: "2"
+- spc_letter: "B"
+- parameter_values: ["278.06", "+0.10", "-0.20"]
+- is_range_measurement: true? The annotation specifies +0.10/-0.20 which is a tolerance range (min/max limits). The prompt says: "is_range_measurement is true only when the annotation explicitly specifies a min/max interval, range, or limit pair; a two-row feature-control frame by itself is not a range measurement." A +0.10/-0.20 tolerance IS a limit pair (upper and lower deviation). So is_range_measurement = true. Hmm, but is a tolerance a "range measurement"? The dimension 278.06 +0.10/-0.20 means the acceptable range is 277.86 to 278.16. That's a min/max interval. I'd say yes, it's a range/limit pair. So true.
+
+Wait, but the prompt distinguishes "range measurement" from a feature-control frame. A tolerance with +/− is exactly a limit pair. I'll set is_range_measurement = true.
+
+Hmm, but actually re-reading: "is_range_measurement is true only when the annotation explicitly specifies a min/max interval, range, or limit pair". The +0.10/-0.20 is a limit pair (upper limit +0.10, lower limit -0.20). Yes. So true.
+
+Now leaders/arrowheads/targets: There's no leader from the FAI marker. The dimension lines are not leaders with arrowheads. So leader_ids = [], arrowhead_ids = [], target_ids = [].
+
+But wait, the dimension has extension lines that touch the part edges. But there are no arrowheads (the dimension line in image 1 doesn't show arrowheads; it's a broken dimension line). Actually, looking at image 1, the horizontal line at the dimension level: on the left it goes from the left edge to the "278.06", on the right from the tolerance to the right edge. These are the dimension line segments. They don't have arrowheads in this view (the arrowheads would be at the extension lines which are at the far left/right edges, off the visible part? Actually the dimension measures the full width, the extension lines are at the left and right edges of the laptop). In image 1, at the left edge there's the laptop edge; the dimension line meets it. No visible arrowhead.
+
+So no arrowheads. Good.
+
+Thus target_ids empty, and we need fallback boxes for target and complete_group and annotation.
+
+Now fallback boxes in normalized ROI coordinates [0,1000]. The ROI is the whole image (2400x2400)? The normalized coordinates are [0,1000] meaning we map pixel (x,y) to (x/2400*1000, y/2400*1000). Let's assume the ROI is the full image 2400x2400.
+
+Let me compute normalized boxes.
+
+First, the annotation box (the dimension + tolerance + FAI/SPC circles cluster). In pixels, the cluster spans roughly:
+- left: the "278.06" left ~1133, but the dimension line extends left to 0. Hmm, the annotation as a text cluster is around x 1133-1582, y 1010-1250. But the dimension line extends across. For the "annotation" fallback box, I think we want the text cluster (dimension value + tolerance + FAI/SPC circles). Let's define pixel box: x from ~1100 to ~1600, y from ~1000 to ~1260.
+
+Let me look at the actual extents. T11 left 1133, T9 right 1582, T12 right 1582, T10 bottom 1250, T9 top 1051. The "+0.10" top in image 1 is around y 1010. Let's use y top ~1000. So pixel box approx [1100, 1000, 1600, 1260].
+
+Normalize: x1=1100/2400*1000=458, y1=1000/2400*1000=417, x2=1600/2400*1000=667, y2=1260/2400*1000=525.
+
+Hmm but the dimension line extends to the edges; should the annotation box include the dimension line? The "annotation" is the measurement annotation which includes the dimension line. But the dimension line spans the whole width. That would make the box huge. The prompt says fallback annotation box should include the full annotation. The dimension line is part of the annotation. But including the full-width line would make the box span x 0-1000. That seems too big and would include unrelated stuff.
+
+I think the "annotation" box should be the text + circles cluster, not the full dimension line, because the dimension line is just a line. Hmm, but the dimension line is what carries the measurement. This is ambiguous.
+
+Let's look at how the prompt defines complete_group: "a safety envelope that includes the full annotation, every connected leader/arrowhead, and the touched local part." Since there are no leaders/arrowheads/touched parts, complete_group ≈ annotation box (maybe slightly expanded).
+
+I'll make the annotation box cover the text cluster including the dimension line segments that are near the text? The dimension line in image 1 at the text level: left segment from x=0 to x~1115 (L36), right segment from x~1582 to x=2400. So the dimension line is full width. If I include it, the box is full width.
+
+Hmm. I think for a "measurement annotation" the relevant visual is the number + tolerance + the FAI/SPC circles. The dimension line is a separate graphical element. I'll keep the annotation box to the text/circle cluster. That's the most useful.
+
+Actually, let's reconsider whether there's a leader. Look at image 1 again: Is there any arrow from the FAI circle to somewhere? No. The FAI circle just sits there. The "BN" has an arrow but that's separate. The "BH" has an arrow (dashed leader) at the bottom right, separate.
+
+So no leader for F0.
+
+Thus:
+- leader_ids: []
+- arrowhead_ids: []
+- target_ids: []
+- fallback_boxes_norm.annotation: box around the text/circle cluster.
+- fallback_boxes_norm.target: null (no target touched).
+- fallback_boxes_norm.complete_group: same as annotation (since no leaders/targets).
+
+Now, the prompt says: "If a required evidence type is absent, leave its ID list empty and use the corresponding fallback box". For target, the fallback box should be the touched local part. But there's no touched part (no arrowhead). So target fallback = null? Or should it be the part that the dimension measures (the laptop width edges)? The dimension's extension lines touch the left and right edges of the laptop. But there's no arrowhead, so per the rules, target is "touched by each arrowhead" - no arrowhead, no target. So target fallback null.
+
+Hmm, but maybe the dimension line endpoints count as touching the part? The dimension line in image 1 left segment ends at x=0 (left edge of image) which is the laptop's left edge? The laptop left edge in image 1 is at x~0 (the body outline). Actually the laptop body left edge is at x~0-10. The dimension line left segment L36 goes from x=0 to 1114. So it touches the left edge at x=0. And the right segment touches the right edge at x=2400. So the dimension measures the full width, touching both edges. But these are dimension line endpoints, not arrowheads. The rules specifically say "touched by each arrowhead". No arrowhead → no target.
+
+I'll set target fallback to null and target_ids empty.
+
+Now missing: what's missing? The leader/arrowhead/target are missing (no evidence). Also the SPC letter OCR and FAI number OCR might be considered missing as separate IDs, but we have the values from the drawing. The prompt's "missing" list should enumerate required evidence types that are absent. I'd list: leader, arrowhead, target. Possibly also "spc_text" and "fai_number_text" if we consider them required OCR. But we derived fai_number and spc_letter from the image visually (the circles clearly show "2" and "B"). The evidence dictionary doesn't have a clean OCR for them, but we can still state the values. The "missing" field is about evidence IDs absent. I'll list ["leader", "arrowhead", "target"].
+
+Hmm, but the prompt examples of missing might be like ["leader_ids","arrowhead_ids","target_ids"]. I'll use descriptive strings.
+
+Let me think about confidence. The association of F0 to the dimension 278.06 +0.10/-0.20 and SPC B is fairly high because the FAI 2 circle is directly under the dimension and the SPC B circle is right next to it. That's a standard FAI layout. So confidence ~0.8. But the lack of leader and the messy OCR lowers it a bit. I'll say 0.75.
+
+Now complete: false (because leaders/targets missing).
+
+Let me double check the SPC letter. In image 1, the circle next to FAI 2 says "SPC" on top and "B" on bottom. Yes SPC B. Good.
+
+FAI number: the FAI circle says "FAI" top, "2" bottom. So fai_number = "2". Good.
+
+Now parameter_values: ["278.06", "+0.10", "-0.20"].
+
+measurement_description: null (no instruction sentence).
+
+Now let's also double check: should annotation_ids include T10? T10 is the box that (per my mapping) covers the circles. The circles contain the FAI number and SPC letter, which are part of the annotation. So including T10 in annotation_ids makes sense (it's the OCR box for the circle region). But T10's bbox also overlaps the dimension. It's messy but it's the only OCR covering the circles. I'll include T10 in annotation_ids but not in parameter_text_ids (since it's not a parameter value).
+
+Actually wait, but if T10 covers the circles AND part of the dimension, and T11 covers the dimension, there's overlap. That's fine; annotation_ids can have overlapping boxes.
+
+Let me finalize annotation_ids = [T10, T11, T9, T12]. parameter_text_ids = [T11, T9, T12].
+
+Hmm, but is T9 really "+0.10"? T9 text "2 lO" confidence 0.192, bbox [1484,1051,1582,1089]. In image 1, the "+0.10" is at the top right. The "0.10" digits would be at x~1450-1580, y~1010-1050. T9 y 1051-1089 is a bit low for "+0.10" (which is above the dimension). Hmm. Let's look at image 1 vertical positions again. I'll look at the y of "278.06" vs "+0.10" vs "-0.20". In image 1, "278.06" and "+0.10" and "-0.20": The "+0.10" is on the upper line, "-0.20" on the lower line, and "278.06" is vertically centered between them? Actually typically the nominal is centered, + on top, - on bottom. In image 1, "278.06" appears at the same vertical level as the gap between +0.10 and -0.20? Let's look: I see "278.06" then to its right "+0.10" on top and "-0.20" on bottom. The "278.06" baseline aligns roughly with the middle. So "278.06" y ~1080, "+0.10" y ~1030, "-0.20" y ~1110.
+
+T11 y 1086-1124 → that's lower, matches "-0.20" level? Hmm. T12 y 1122-1160 → even lower. T9 y 1051-1089 → middle.
+
+This is too uncertain. The OCR bboxes don't perfectly align with my visual estimate. Let's look at image 2's purple boxes to disambiguate, since image 2 shows the actual purple rectangles.
+
+In image 2, central cluster purple boxes (I'll describe by relative position):
+- Box A: around "278.06" (the digits). 
+- Box B: around "0.10" (top right).
+- Box C: around "0.20" (bottom right).
+- Box D: around the FAI/SPC circles (bottom).
+
+Now map to T bboxes by y:
+The "278.06" digits in image 2 - their purple box vertical center should match T11 or T9 or T12.
+
+Ugh, I can't be precise. Let's think about x ranges to disambiguate:
+"278.06" x range ~1133-1357 (T11 x 1133-1357). 
+"+0.10" x range ~1400-1580.
+"-0.20" x range ~1400-1580.
+T9 x 1484-1582 (right part of +0.10 or -0.20).
+T12 x 1404-1582 (full -0.20 or +0.10).
+T11 x 1133-1357 (the 278.06).
+
+So T11 = 278.06 (x matches). Good.
+T9 and T12 both x ~1400-1582, the tolerance

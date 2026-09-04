@@ -1,0 +1,91 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "validated",
+  "initial_crop": [
+    4078,
+    1300,
+    5780,
+    2560
+  ],
+  "current_crop": [
+    4078,
+    1300,
+    5780,
+    2560
+  ],
+  "best_crop": [
+    4078,
+    1300,
+    5780,
+    2560
+  ],
+  "best_score": 99.4278,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        4078,
+        1300,
+        5780,
+        2560
+      ],
+      "crop_after": [
+        4078,
+        1300,
+        5780,
+        2560
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 6993,
+          "completion_tokens": 113,
+          "total_tokens": 7106,
+          "finish_reason": "stop",
+          "elapsed_seconds": 28.065033874998335,
+          "content_bytes": 197,
+          "content_chars": 197,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 7025,
+          "completion_tokens": 95,
+          "total_tokens": 7120,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.510827541002072,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.4278,
+      "score_after": 99.4278,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

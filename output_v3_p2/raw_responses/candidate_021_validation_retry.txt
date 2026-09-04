@@ -1,0 +1,145 @@
+The user wants me to validate a proposed crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle highlights the "SPC AN" circle, which is paired with "FAI 41".
+
+Let me look at the magenta rectangle boundaries in IMAGE 1. The magenta rectangle's top edge is near the top of the image (around y=0), the bottom edge is around y=1240 (the horizontal magenta line), the left edge is at x=0, and the right edge is around x=1920 (the vertical magenta line).
+
+Now let me look at what's inside the magenta rectangle. The selected FAI marker is "FAI 41 / SPC AN". This is part of a group on the right side of the dimension table. The group includes:
+- FAI 41 circle
+- SPC AN circle (red highlighted)
+- The dimension "1.26 +0.25 -0.10"
+- A leader line going from this dimension to the feature on the right.
+
+Let me trace the leader line for the 1.26 dimension on the right side. In IMAGE 1, the dimension "1.26 +0.25 -0.10" is at around x=1230-1570, y=1130-1190. The leader line goes from the right side of this text. Let me look. There's a leader line that goes from the dimension text to the right and down to the feature.
+
+Looking at IMAGE 1, the leader for the right-side 1.26 dimension: I see a line starting around x=1570, y=1140 going right and then... Let me look carefully. Actually the leader lines on the right side: For 2.50, the leader goes from x=1570,y=790 right to x=1630,y=910 then horizontal to the feature. For 1.62, the leader goes from x=1570,y=1000 horizontal to the feature. For 1.26, the leader goes from x=1570,y=1140 right to x=1630,y=1050 then horizontal to the feature.
+
+Now the magenta rectangle's right edge is at x=1920. The feature (the hatched cross-section) is at x=1770 onwards. So the leader lines and the feature are partially inside the magenta rectangle? Let's check. The magenta right edge is at x=1920. The hatched feature starts at around x=1770 (the vertical line of the cross-section). So part of the feature is inside (x=1770 to 1920) and part is outside (x>1920).
+
+Hmm, but the requirement says "a visible local portion of every component feature touched by those arrows." So we need a visible local portion of the feature. The feature is the hatched cross-section. In IMAGE 2 (the crop), let's see what's visible.
+
+Wait, IMAGE 2 is the proposed crop itself. Let me look at IMAGE 2. In IMAGE 2, the right side shows the leader lines going off to the right edge. The hatched feature is partially visible at the right edge of IMAGE 2. Let me look. In IMAGE 2, at the right edge, I see hatching lines starting around x=2130 (in IMAGE 2 coordinates). The leader lines for 2.50, 1.62, 1.26 go to the right edge.
+
+Hmm, but wait. The crop in IMAGE 2 - let me look at the dimensions. IMAGE 2 appears to be a crop of IMAGE 1 but maybe shifted. Let me compare. In IMAGE 1, the magenta rectangle spans from x=0 to x=1920 and y=0 to y=1240. In IMAGE 2, the content shown: top has "DETAIL BN SCALE 20:1" at top right, "SPC CONTROL FOR ALL HEAT STAKE POST" in middle, the dimension table, and at the bottom the leaders go to the right edge with hatching partially visible.
+
+Actually IMAGE 2 looks like it's the crop but the crop's right edge cuts through the leader lines and the feature. Let me look at the leaders in IMAGE 2. The leader for 2.50 goes from x=1930,y=1450 right to x=1990,y=1630 then horizontal to the right edge (x=2300+). The horizontal segment is cut off at the right edge. The leader for 1.62 goes horizontal to the right edge. The leader for 1.26 goes from x=1930,y=1990 right to x=1990,y=1850 then horizontal to the right edge.
+
+So in IMAGE 2, the leader lines reach the crop border (right edge) without showing the terminal arrowhead or the feature they point to. The hatching at the right edge of IMAGE 2 - is that the feature? Let me look. At the bottom right of IMAGE 2, there's hatching (diagonal lines) starting around x=2130,y=1850. That's the cross-section feature. But the leaders' horizontal segments - do they connect to it within the crop? The horizontal leader for 1.62 at y=1850 goes to the right edge x=2300. The hatching at y=1850 starts at x=2130. So the leader line at y=1850 would pass through the hatching region? Hmm, this is getting too detailed.
+
+Let me think about the validation criteria more holistically. The key issue: the selected FAI marker is "FAI 41 / SPC AN". The associated dimension is "1.26 +0.25 -0.10" on the right side. The leader for this dimension must be fully contained, including its terminal arrowhead and the touched feature.
+
+In IMAGE 1, the leader for the right 1.26 dimension: Let me trace it precisely. The text "1.26 +0.25 -0.10" is at x=1230-1570, y=1130-1190. The leader line: I see a line from about (1570, 1140) going right-down to (1630, 1050) then horizontal right to about (1770, 1050) where it meets the feature? Actually let me look at the geometry. The feature cross-section has a step. The horizontal line at y=1050 (the top of the lower step) - the leader for 1.26 might point to the bottom surface.
+
+Hmm, actually let's look at the left side for analogy. On the left, the 1.26 dimension has a leader from the text going left-down to the feature at the left edge (the hatched cross-section at x=0-90, y=1010-1180). The leader for left 1.26 goes from (210,1050) left to (90,1050) then... actually it points to the surface.
+
+OK this is too detailed. Let me focus on the magenta rectangle boundaries and what's cut off.
+
+The magenta rectangle right edge is at x=1920 in IMAGE 1. The leader lines for the right-side dimensions extend to the right of x=1920? Let's see. The horizontal leader segments: For 2.50, the horizontal segment is at y=910 from x=1630 to x=2050 (the feature). So it crosses x=1920. For 1.62, horizontal at y=1000 from x=1570 to x=2050, crosses 1920. For 1.26, horizontal at y=1050 from x=1630 to x=1770? or to 2050?
+
+Looking at IMAGE 1, the hatched feature's left boundary (the vertical line of the cross-section profile) is at around x=1770 (the step) and x=2050 (the right vertical line). Actually the cross-section profile: there's a vertical line at x=1770 from y=910 to y=1010 (the step), then horizontal at y=1010 from x=1770 to x=2050, then vertical at x=2050 from y=910 to y=1010. Hmm.
+
+Let me look at the leaders more carefully in IMAGE 1. The leader for 2.50 (right): from text right edge (1570, 790) diagonal to (1630, 910) then horizontal right. The horizontal line at y=910 goes from x=1630 to x=2050 (touching the top surface of the feature). This horizontal line crosses the magenta right edge at x=1920. So in the crop, this leader is cut off at the right edge.
+
+The leader for 1.62 (right): from text right edge (1570, 1000) horizontal right to x=2050 (touching the surface at y=1000). Crosses magenta edge at 1920.
+
+The leader for 1.26 (right): from text right edge (1570, 1140) diagonal to (1630, 1050) then horizontal right to x=1770 (touching the step surface at y=1050)? Or to 2050? Looking at the image, the horizontal line at y=1050 from x=1630 goes to about x=1770 where there's the step. Hmm, but actually the leader for 1.26 on the right seems to point to the bottom surface of the lower step. Let me look at the left side: left 1.26 leader points to the surface at y=1050 (the top of the lower hatched region). On the right, the corresponding surface is at y=1050 too. The horizontal leader at y=1050 from x=1630 to x=1770 (the step vertical line). That's within the magenta rectangle (1770 < 1920). So that leader might be fully inside.
+
+But the leaders for 2.50 and 1.62 on the right cross the magenta edge. However, those are NOT the selected FAI marker's leaders. The selected FAI marker is FAI 41 / SPC AN, which corresponds to the 1.26 dimension on the right.
+
+Wait, but the validation criteria say the crop must fully contain "one coherent FAI annotation group". The group is the selected FAI marker (FAI 41/SPC AN) plus its associated dimension and leader. The other FAI markers (FAI 39/SPC AL for 2.50, FAI 40/SPC AM for 1.62) are neighboring annotations. The criteria say "Reject it if ... unrelated neighboring annotations dominate." They don't dominate here; they're partially present.
+
+Hmm, but the criteria also say the crop must contain "every connected leader segment" and "every terminal arrowhead" and "a visible local portion of every component feature touched by those arrows." The "those arrows" refers to the leaders of the coherent group (the selected FAI marker's group). So we need the leader for the 1.26 right dimension to be fully contained with its arrowhead and the touched feature.
+
+Let me look at the 1.26 right leader in IMAGE 1. The horizontal segment at y=1050 from x=1630 to where? If it ends at x=1770 (the step), that's inside the magenta rectangle (right edge 1920). The arrowhead would be at x=1770. The touched feature (the step surface / hatched region) at x=1770-1920 is partially visible inside the magenta rectangle. So that might be OK.
+
+But wait, in IMAGE 2 (the actual crop), let's look at the bottom right. I see hatching at the bottom right corner. The leader for 1.26 in IMAGE 2: from text (1930, 1990) diagonal to (1990, 1850) then horizontal right to the right edge (x=2300). The horizontal line at y=1850 in IMAGE 2 goes all the way to the right edge and is cut off. The hatching at the bottom right of IMAGE 2 is at y=1850-2130, x=2130-2300. So the leader's horizontal segment at y=1850 passes through the hatching? Hmm.
+
+Actually, I realize IMAGE 2 might not be exactly the magenta rectangle of IMAGE 1. Let me compare coordinates. In IMAGE 1, the magenta rectangle is x:0-1920, y:0-1240. The aspect ratio is 1920:1240 ≈ 1.55. IMAGE 2 dimensions: let's estimate. IMAGE 2 looks like 2338 x 1558 maybe? The aspect ratio 2338/1558 ≈ 1.5. Close-ish.
+
+Hmm, but the content in IMAGE 2: the "DETAIL BN SCALE 20:1" is at top right, fully visible (the "1" is visible at the right edge). In IMAGE 1, "DETAIL BN SCALE 20:" is at top right and the magenta vertical line cuts through "BN" and "20:". So in IMAGE 1, the magenta right edge is at x=1920 which cuts through the "BN" text (the N is at x=1920-1960). In IMAGE 2, the "BN" is fully visible with the "1" of "20:1" at the right edge. So IMAGE 2's right edge is further right than IMAGE 1's magenta right edge!
+
+Wait, that means IMAGE 2 is NOT the magenta rectangle of IMAGE 1? Or maybe IMAGE 2 is a different crop. Let me re-read the problem. "IMAGE 1 is the wider candidate context. The MAGENTA rectangle is the proposed crop and the RED rectangle is the selected FAI marker. IMAGE 2 is the proposed crop itself."
+
+So IMAGE 2 should equal the magenta rectangle region of IMAGE 1. But the content doesn't match perfectly. Let me look again.
+
+In IMAGE 1, top right: "DETAIL BN" with magenta line through the N. "SCALE 20:" with magenta line after the colon. So the magenta right edge cuts the text.
+
+In IMAGE 2, top right: "DETAIL BN" fully, "SCALE 20:1" fully (the 1 at the very right edge). So IMAGE 2's right edge is to the right of the magenta line in IMAGE 1.
+
+Hmm, that's a discrepancy. Unless I'm misreading IMAGE 1. Let me look at IMAGE 1 again. The magenta vertical line is at x≈1920. The text "DETAIL BN" - the D is at x≈1550, E at 1590, T at 1630, A at 1670, I at 1710, L at 1750, space, B at 1810, N at 1870-1920. So the N is right at the magenta line, partially cut. In IMAGE 2, "DETAIL BN" the N is fully visible and there's space after it. And "SCALE 20:1" the 1 is at the right edge.
+
+So IMAGE 2's right edge corresponds to about x=1960-2000 in IMAGE 1 coordinates? That's slightly right of the magenta line. This is confusing.
+
+Maybe the images are just rendered at different scales and my pixel reading is off. Let me not over-rely on exact pixel alignment. The key conceptual question: does the crop contain the full coherent group for the selected FAI marker (FAI 41/SPC AN)?
+
+Let me look at IMAGE 2's right edge for the leaders. In IMAGE 2, the leaders for the right-side dimensions (2.50, 1.62, 1.26) all have their horizontal segments reaching the right edge and being cut off. The hatched feature is only partially visible at the bottom right corner (a small triangle of hatching). The terminal arrowheads of these leaders are NOT visible in IMAGE 2 because they're cut off at the right edge.
+
+Specifically for the selected FAI 41/SPC AN group (1.26 right dimension): its leader's horizontal segment in IMAGE 2 reaches the right edge and is cut off. The arrowhead is not visible. The touched feature (the cross-section surface) is mostly absent (only a tiny bit of hatching at the corner, which may not even be the touched surface).
+
+Therefore the crop is INVALID because the leader for the selected FAI marker reaches the crop border, the arrowhead is clipped, and the touched feature is absent.
+
+Let me double check by looking at IMAGE 2 bottom right. I see at the very bottom right a hatched region (diagonal lines) from about x=2130 to 2300, y=1850 to 2130. The leader for 1.26 horizontal at y=1850 goes from x=1990 to x=2300 (right edge). So it's cut off. The arrowhead would be at the feature surface which is at x>2300 (outside). So yes, clipped.
+
+Thus the crop is invalid. We need to expand the right side to include the leaders' arrowheads and the touched feature.
+
+How much to expand? The magenta rectangle in IMAGE 1 right edge is at x=1920. The feature's relevant surface (where the 1.26 leader points) is at around x=1770-2050. The leaders' horizontal segments extend to about x=2050. The hatched feature extends to about x=2300+ (in IMAGE 1, the hatching goes to the right edge of the image which is x=2338). Actually in IMAGE 1, the hatched cross-section extends from x=1770 to x=2338 (right edge of image). The leaders point to surfaces within x=1770-2050.
+
+Hmm, but the crop in IMAGE 2 already seems to extend to about x=2000-2050 in IMAGE 1 coords (since it shows "20:1" fully). Wait I'm getting confused again.
+
+Let me think about expansion in normalized terms relative to the current crop (IMAGE 2). The current crop width in IMAGE 2 is, say, W. The right edge of IMAGE 2 cuts the leaders. We need to extend right to include the arrowheads and a portion of the feature.
+
+Looking at IMAGE 1, the magenta right edge (x=1920) to the feature surface for 1.26 (let's say x=2050) is 130 pixels. The crop width in IMAGE 1 is 1920. So 130/1920 ≈ 0.068 = 68 normalized. But the leaders' arrowheads might be at x=2050, and we also want a visible portion of the feature, which is at x=2050-2300. So we might need to extend to x=2300, which is 380 pixels beyond 1920, = 380/1920 ≈ 198 normalized.
+
+But wait, IMAGE 2's right edge might already be at x=2000 or so. Ugh.
+
+Let me look at the relationship between IMAGE 1 and IMAGE 2 more carefully using a landmark. The "SPC CONTROL FOR ALL HEAT STAKE POST" text. In IMAGE 1, it spans x=393 to x=1683, y=510-610. In IMAGE 2, it spans x=537 to x=2053, y=683-783. So the text width in IMAGE 1 is 1683-393=1290. In IMAGE 2 it's 2053-537=1516. So IMAGE 2 is scaled up by factor 1516/1290 ≈ 1.175 relative to IMAGE 1.
+
+Now the magenta right edge in IMAGE 1 is at x=1920. In IMAGE 2's coordinate system (scaled by 1.175 and shifted), where would that be? The left edge of IMAGE 1 magenta is x=0. In IMAGE 2, the left edge of the crop corresponds to IMAGE 1 x=0. The "SPC CONTROL" text left edge in IMAGE 1 is x=393, in IMAGE 2 is x=537. So offset: IMAGE2_x = 1.175 * IMAGE1_x + c. 537 = 1.175*393 + c => 537 = 461.8 + c => c = 75.2. So IMAGE2_x = 1.175*IMAGE1_x + 75.2.
+
+The magenta right edge IMAGE1_x=1920 => IMAGE2_x = 1.175*1920 + 75.2 = 2256 + 75.2 = 2331. So the magenta right edge in IMAGE 2 coordinates is at x=2331, which is essentially the right edge of IMAGE 2 (if IMAGE 2 width is ~2338). Good, that's consistent! So IMAGE 2's right edge ≈ magenta right edge. My earlier reading of "20:1" being fully visible must be wrong; probably the "1" is cut or I misread. Let me look at IMAGE 2 top right: "SCALE 20:1" - the 1 might be at the very edge, partially. And "DETAIL BN" the N might be at the edge. OK so it's consistent. Good.
+
+So in IMAGE 2, the right edge = magenta right edge = IMAGE1 x=1920. The leaders' horizontal segments for the right dimensions extend beyond x=1920 in IMAGE 1 (to x=2050 for arrowheads, and the feature to x=2338). So in IMAGE 2 they're cut off at the right edge. Confirmed.
+
+Thus the crop is invalid. We need to expand right.
+
+How much? In IMAGE 1, we need to include up to the feature surface touched by the 1.26 leader plus a visible portion of the feature. The 1.26 leader arrowhead: let's determine. On the left side, the 1.26 leader points to the surface at the left cross-section. On the right side, by symmetry, the 1.26 leader points to the corresponding surface. Looking at IMAGE 1, the right cross-section profile: top surface at y=910 (from x=2050 rightward? or from x=1770?). Hmm.
+
+Let me look at the right cross-section shape in IMAGE 1. I see a vertical line at x=2050 from y=910 to y=1010 (the right edge of the upper step). A horizontal line at y=910 from x=2050 rightward (top surface). A horizontal line at y=1010 from x=1770 to x=2050 (the step). A vertical line at x=1770 from y=910 to y=1010. Then below y=1010, the hatched region (the lower part) from x=1770? Actually the hatching (diagonal lines) is in the region x=1770-2338, y=910-1180 roughly. And there's a bottom surface at y=1180.
+
+Hmm, the leaders: 2.50 leader horizontal at y=910 points to top surface (x=2050+). 1.62 leader horizontal at y=1000 points to ... the step? but the step is at y=1010. Hmm 1.62 leader at y=1000 - maybe points to the surface at y=1000 which is the top of the lower step? I'm overanalyzing.
+
+The point is, the leaders' arrowheads are at x ≥ 1770, and the feature extends to x=2338. The magenta right edge is 1920. So part of the feature (x=1770-1920) is inside, but the arrowheads for 2.50 (at x=2050) and 1.62 (at x=2050) are outside. For 1.26, the arrowhead might be at x=1770 (inside) or x=2050 (outside).
+
+Given the selected marker is 1.26 (FAI 41), we need its leader fully inside. If its arrowhead is at x=1770, that's inside the magenta rectangle (1770<1920). But in IMAGE 2, does the 1.26 leader's horizontal segment appear cut off? In IMAGE 2, the 1.26 leader horizontal at y=1850 (IMAGE2 coords) goes from x=1990 to the right edge x=2331. If the arrowhead in IMAGE1 is at x=1770, then in IMAGE2 that's 1.175*1770+75.2 = 2080+75 = 2155. So the arrowhead would be at IMAGE2 x=2155, which is inside IMAGE 2 (since right edge is 2331). So in IMAGE 2, the 1.26 leader horizontal segment from x=1990 to x=2155 with arrowhead at 2155 should be visible, and beyond 2155 the line shouldn't continue (it's the arrowhead). But in IMAGE 2 I see the horizontal line at y=1850 continuing to the right edge? Let me look. In IMAGE 2 bottom right, the horizontal line at y=1850 (the 1.26 leader) - I see it go from x=1990 rightward and there's hatching starting at x=2130. The line might end at the hatching boundary (the step vertical line at x=2130 in IMAGE2 = IMAGE1 x=(2130-75.2)/1.175=1749). Yes! So the arrowhead is at the step vertical line, which is at IMAGE2 x≈2130, inside the crop. Good. So the 1.26 leader IS fully inside IMAGE 2, with arrowhead at the step, and the touched feature (the hatched region to the right of the step) is partially visible (x=2130-2331 in IMAGE2). 
+
+Hmm wait, but then is the 1.26 group actually complete in IMAGE 2? Let's look at the hatched region in IMAGE 2 bottom right. I see diagonal hatching lines in a region roughly x=2130-2331, y=1850-2130. That's a visible local portion of the feature. The arrowhead of the 1.26 leader points to the step surface at x=2130. So the touched feature is visible.
+
+But hold on, the leaders for 2.50 and 1.62 (the neighboring FAI markers 39 and 40) are cut off at the right edge in IMAGE 2. But those are NOT the selected marker's group. The criteria say reject if "unrelated neighboring annotations dominate" - they don't dominate, they're just partially present. And the criteria about leaders reaching the border: "Reject it if a relevant leader reaches the crop border". The relevant leader is the one for the selected FAI marker (1.26). If that one is fully inside, then the 2.50 and 1.62 leaders reaching the border are not "relevant" to the selected group.
+
+Hmm, but this is ambiguous. The phrase "a relevant leader reaches the crop border" - relevant meaning belonging to the coherent group we're trying to capture. The coherent group is the selected FAI marker's annotation. So only the 1.26 leader matters.
+
+But wait, also the criteria: "every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows." The "those arrows" = the arrows of the coherent group = the 1.26 leader. So we need the 1.26 leader's arrowhead and the touched feature. If both are present in IMAGE 2, then the group is complete.
+
+Let me look really carefully at IMAGE 2 bottom right to see if the 1.26 leader has a visible arrowhead and the feature.
+
+In IMAGE 2, I'll describe the bottom right region. There's the dimension text "1.26 +0.25 -0.10" at x=1490-1880, y=1990-2090. To its right, a leader line: from (1880, 2040) diagonal up-right to (1940, 1850)? then horizontal right. The horizontal line at y=1850 goes from x=1940 to ... I see it go to about x=2130 where there's a vertical line (the step). At x=2130 there's the start of hatching. So the arrowhead would be at x=2130 pointing right into the hatched region. Is the arrowhead visible? It's small but the line ends at the vertical step line which is inside the crop. The hatched region (feature) is visible from x=2130 to x=2331 (right edge). So a local portion of the feature is visible.
+
+Hmm, but actually wait. Let me look at the hatching in IMAGE 2 bottom right. The hatching region's left boundary - is it at x=2130 (the step) or further right? In IMAGE 1, the hatching (diagonal lines) for the right cross-section: I see diagonal lines filling the region from x=1770 (the step vertical) rightward to x=2338, between y=910 and y=1180, but with the step cutout. Actually the hatching in IMAGE 1 right side: there's a region with diagonal lines from x=2050 to 2338 (the upper right block) and from x=1770 to 2338 lower? This is too detailed.
+
+Let me step back and think about the intent of this task. The task is to validate crops. The selected FAI marker is FAI 41/SPC AN. The crop should contain the full annotation group for that marker. The typical failure mode they want us to catch is when the leader/arrowhead/feature is cut off.
+
+Looking at IMAGE 2, the right side clearly has leader lines that run off the right edge (the horizontal segments for 2.50 and 1.62 definitely run off the edge; the 1.26 one is borderline). The hatched feature is only a tiny sliver at the corner. This looks like a crop that's too narrow on the right - the feature is mostly cut off.
+
+Moreover, consider the left side of the crop. The selected marker FAI 41 is on the right side of the dimension table. Its leader goes to the right. The left side of the crop contains the other dimension table (left side: 2.50, 1.62, 1.26 with FAI 76,75,100) and their leaders going to the left cross-section. In IMAGE 2, the left cross-section is partially visible at the left edge (hatching at x=0-180, y=1280-1450). The left leaders for 1.26 etc. - are they cut off at the left edge? In IMAGE 2, the left 1.26 leader goes from text left edge (370, 1330) diagonal to (210, 1330) then horizontal left to x=0 (cut off). So the left leaders are cut off at the left edge. But those are not the selected marker's group.
+
+So the crop contains two partial groups (left and right) plus the selected marker's group on the right. The selected marker's group (right 1.26) - is it complete? The leader goes right and the feature is at the right edge, partially visible.
+
+I think the safest interpretation: The crop is invalid because the feature touched by the selected marker's leader is mostly cut off (only a sliver), and the leaders (including possibly the selected one) reach the border. Also, the crop includes a lot of unrelated neighboring annotations (the entire left dimension table and the right 2.50/1.62 groups) which arguably "dominate" or at least the crop is not tightly focused. But the criteria for "dominate" is about unrelated annotations dominating - here the selected marker is present but the crop is wide.
+
+Hmm, but actually the criteria say "Reject it if ... unrelated neighboring annotations dominate." In IMAGE 2, the selected FAI 41/SPC AN is present (bottom middle-right). The neighboring FAI 39, 40, 76, 75, 100 are also present. They don't "dominate" in the sense of being more prominent; they're all similar. So that criterion might not trigger.
+
+The main trigger is the leader/arrowhead/feature being cut off. Let me look one more time at IMAGE 2's right edge for the 1.26 leader.
+
+I'll trust my reading: in IMAGE 2, the horizontal leader line for 1.26 at y≈1850 extends to the right edge and is cut off (I see it crossing into the hatching and the hatching is cut at the right edge). Actually if the arrowhead is at the step (x=2130) and the hatching is to the right of the step, then the leader line ends at x=2130 (arrowhead) and does NOT continue to the right edge. The hatching from 2130 to 2331 is the feature, cut at the right edge but a portion is visible. That would satisfy "visible local portion of the feature."
+
+But for the 2.50 and 1.62 leaders, their horizontal lines at y=1450 and y=1850 (wait 1.62 is at y=1850 too? no). Let me recompute IMAGE2 y-coords. In IMAGE 1, right 2.50 leader horizontal at y=910. In IMAGE2, y = 1.175*910 + c_y. Need c_y. The "SPC CONTROL" text top in IMAGE1 y=510, in IMAGE2 y=683. So 683 = 1.175*510 + c_y => 683 = 599 + c_y => c_y = 84. So

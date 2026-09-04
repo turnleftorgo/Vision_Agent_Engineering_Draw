@@ -1,0 +1,37 @@
+The user wants me to validate a crop from an engineering drawing. Let me carefully examine both images.
+
+IMAGE 1 is the wider context with a magenta rectangle (proposed crop) and a red rectangle (selected FAI marker). The red rectangle highlights the FAI circle with number 69.
+
+IMAGE 2 is the proposed crop itself.
+
+Let me look at what's inside the magenta rectangle in IMAGE 1. The magenta rectangle spans from the left edge (x=0) to about x=2030 (in pixel coordinates of image 1), and vertically from about y=490 to y=1250.
+
+Inside the magenta rectangle, I see:
+- "4X 0.49 ±0.10" with FAI 191 and SPC GE circles (top area)
+- "SECOND TERRACE" text
+- "-0.21 +0.15 -0.08" tolerance values
+- "15" in a box
+- FAI 69 circle (the red highlighted one)
+- SPC BL circle
+- 100% triangle
+- "16" box partially at the bottom (the FAI 204 circle is cut off at the bottom edge)
+- T4, T5 circles with values (-125.75), (-133.75)
+- A leader arrow on the right side pointing up to the magenta border? Let me look.
+
+Now let's look at the FAI 69 annotation group. The FAI 69 circle is associated with the "SECOND TERRACE" feature. The tolerance values -0.21 +0.15 -0.08 are above it. The "15" box is to the left. The SPC BL circle is to the right. The 100% triangle is to the right.
+
+But wait, what about the leader lines and arrowheads? Let me look at the SECOND TERRACE annotation. In IMAGE 1, the "SECOND TERRACE" text has a leader line going left to a small cross-section drawing (the hatched shape). That leader line and the cross-section drawing are inside the magenta rectangle. Good.
+
+But the FAI 69 marker itself - does it have a leader line? Looking at the layout, the FAI 69, SPC BL, 100% triangle, and the "15" box are all part of the annotation group for the SECOND TERRACE feature. The tolerance values -0.21 +0.15 -0.08 are above.
+
+Now, the question is whether the crop fully contains the coherent FAI annotation group. Let me look at the bottom edge of the magenta rectangle. The "16" box and FAI 204 circle are at the bottom. In IMAGE 1, the magenta rectangle's bottom edge is at about y=1250. The "16" box top is at about y=1265, and the FAI 204 circle is at y=1290. So the "16" box and FAI 204 are mostly OUTSIDE the magenta rectangle (below it). In IMAGE 2, I see at the very bottom a partial "16" box and a partial FAI circle (cut off). So the crop includes a sliver of the 16/FAI 204 group at the bottom, which is a neighboring annotation that's being clipped.
+
+Hmm, but the rule says "Reject it if ... unrelated neighboring annotations dominate." The 16/FAI 204 is a neighboring annotation. In IMAGE 2, it's just a tiny sliver at the bottom, not dominating. But it's clipped. The rule about clipping applies to "a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent." The 16/FAI 204 is not part of the FAI 69 group, so its clipping might not be a rejection criterion per se, but it's a partial annotation.
+
+Wait, let me re-read the criteria. The crop is valid only if it fully contains one coherent FAI annotation group: the FAI circle and readable inspection number; associated SPC letter if present; parameter/tolerance/feature-control-frame and description text; every connected leader segment; every terminal arrowhead; a visible local portion of every component feature touched by those arrows.
+
+Reject if a relevant leader reaches the crop border, an arrowhead is clipped, the touched feature is absent, or unrelated neighboring annotations dominate.
+
+So for the FAI 69 group, I need to check:
+- FAI circle 69: present and readable in IMAGE 2. Yes.
+- S

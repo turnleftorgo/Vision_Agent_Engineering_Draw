@@ -1,0 +1,27 @@
+Let me carefully analyze this engineering drawing crop validation task.
+
+IMAGE 1 shows the wider context with a magenta rectangle (proposed crop) and a red rectangle highlighting the selected FAI marker (FAI 211).
+
+Looking at IMAGE 1:
+- The magenta rectangle roughly spans from x=270 to x=685, y=420 to y=850 (in image coordinates).
+- Inside the magenta rectangle: FAI 63 circle (partially? let me check), SPC BH circle, box "15", box "16", FAI 211 circle (red rectangle), leader line from "THIRD TERRACE" text going down to a dot near the bottom, two arrowheads (one at about (335, 790), one at about (620, 780)), dashed line, "BX" labels at the bottom, part of the feature (rounded rectangle shape).
+
+Wait, let me look more carefully. The "THIRD TERRACE" text and the feature control frame (parallelogram symbol 0.33) are above the magenta rectangle (y ~350-400, magenta top edge is ~420). So the description text "THIRD TERRACE" and the tolerance frame are outside the crop (above it).
+
+The leader line from the THIRD TERRACE text goes down through the magenta rectangle to a dot at about (365, 805). The leader line crosses the top edge of the magenta rectangle. So the leader segment is partially outside the crop — the upper part of the leader connecting to the "THIRD TERRACE" text and the FCF is outside.
+
+The requirement: the crop must fully contain one coherent FAI annotation group: FAI circle and readable inspection number; associated SPC letter if present; parameter/tolerance/feature control frame and description text; all connected leader segments; all terminal arrowheads; visible local portion of every component feature touched by those arrows.
+
+So the group includes the description text "THIRD TERRACE" and the FCF "0.33". These are above the magenta rectangle, outside the crop. Therefore the crop is missing the description text and FCF.
+
+Also, the leader line from the text to the dot: the leader starts at the text (above the crop) and goes down to the dot inside the crop. The leader crosses the crop boundary at the top. So a relevant leader reaches the crop boundary → reject.
+
+Also, the arrowheads: two arrows at (335, 790) and (620, 780) point upward. The left arrow points to... the horizontal line at about y=785 (the top edge of the lower feature?). The right arrow points to the vertical line at about x=560 (the vertical feature line). The dashed line connects the arrows. The touched features: the left arrow touches the horizontal line (top of the rounded rectangle feature?), the right arrow touches the vertical line (the vertical strip at x~545-560). In IMAGE 2, the left arrow is present, the right arrow is present, the dashed line is present, the rounded rectangle feature is present, the vertical strip is present.
+
+But the description text and FCF are missing. Also, the leader from the text to the dot: in IMAGE 2, the leader line goes from the top edge (clipped at the top) down to the dot. So the leader is clipped at the top boundary.
+
+Therefore the crop is invalid. Missing: description text "THIRD TERRACE", feature control frame (0.33), and the upper part of the leader.
+
+Now, expansion: we need to expand the crop to include the text and FCF. The top of the magenta rectangle is at y≈420. The "THIRD TERRACE" text is at y≈355, the FCF box is at y≈370-400. So we need to expand the top to include up to y≈345. The crop height is 850-420 = 430. The required top expansion is 420-345 = 75 pixels ≈ 75/430 ≈ 174 in normalized units (fraction of crop height). Let me compute more precisely.
+
+Let me estimate coordinates from IMAGE 1. The image is probably 1800x2200? Let me guess based on typical rendering. Actually, I need to estimate pixel coordinates. Let me look at the layout: the magenta rectangle top edge is at about y=420 (just below the "15" box? no, the "15" box is at y≈41
