@@ -1,0 +1,91 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "validated",
+  "initial_crop": [
+    1120,
+    604,
+    1884,
+    1592
+  ],
+  "current_crop": [
+    1120,
+    604,
+    1884,
+    1592
+  ],
+  "best_crop": [
+    1120,
+    604,
+    1884,
+    1592
+  ],
+  "best_score": 95.476,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        1120,
+        604,
+        1884,
+        1592
+      ],
+      "crop_after": [
+        1120,
+        604,
+        1884,
+        1592
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3123,
+          "completion_tokens": 98,
+          "total_tokens": 3221,
+          "finish_reason": "stop",
+          "elapsed_seconds": 13.62256579194218,
+          "content_bytes": 197,
+          "content_chars": 197,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 3155,
+          "completion_tokens": 91,
+          "total_tokens": 3246,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.8580816249595955,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 95.476,
+      "score_after": 95.476,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

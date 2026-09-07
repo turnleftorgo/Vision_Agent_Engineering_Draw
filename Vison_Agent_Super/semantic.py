@@ -11,8 +11,8 @@ from typing import Any, Iterable
 
 from PIL import Image, ImageDraw
 
-import FAI_DET_CROP_3 as core
 from recovery.agents import call_structured_agent
+from vision.models import BBox, Primitive
 
 
 SEMANTIC_FIELDS = {
@@ -90,7 +90,7 @@ class LeaderPath:
     id: str
     segment_ids: tuple[str, ...]
     segments: tuple[tuple[tuple[int, int], tuple[int, int]], ...]
-    bbox: core.BBox
+    bbox: BBox
     score: float
 
 
@@ -98,7 +98,7 @@ class LeaderPath:
 class CompactSemanticEvidence:
     image: Image.Image
     records: list[dict[str, Any]]
-    visible_primitives: list[core.Primitive]
+    visible_primitives: list[Primitive]
     paths: list[LeaderPath]
 
     @property
@@ -130,7 +130,7 @@ def build_compact_selection_image(
     return image
 
 
-def _bbox_gap(first: core.BBox, second: core.BBox) -> float:
+def _bbox_gap(first: BBox, second: BBox) -> float:
     a = first.ordered()
     b = second.ordered()
     dx = max(a.x1 - b.x2, b.x1 - a.x2, 0.0)
@@ -142,9 +142,9 @@ def _line_length(segment: tuple[tuple[int, int], tuple[int, int]]) -> float:
     return math.dist(segment[0], segment[1])
 
 
-def _line_bbox(segment: tuple[tuple[int, int], tuple[int, int]]) -> core.BBox:
+def _line_bbox(segment: tuple[tuple[int, int], tuple[int, int]]) -> BBox:
     first, second = segment
-    return core.BBox(
+    return BBox(
         min(first[0], second[0]),
         min(first[1], second[1]),
         max(first[0], second[0]) + 1,
@@ -221,10 +221,10 @@ def _projected_overlap_ratio(
 
 
 def _deduplicate_lines(
-    lines: list[tuple[core.Primitive, tuple[tuple[int, int], tuple[int, int]]]],
+    lines: list[tuple[Primitive, tuple[tuple[int, int], tuple[int, int]]]],
     tolerance: float,
-) -> list[tuple[core.Primitive, tuple[tuple[int, int], tuple[int, int]]]]:
-    retained: list[tuple[core.Primitive, tuple[tuple[int, int], tuple[int, int]]]] = []
+) -> list[tuple[Primitive, tuple[tuple[int, int], tuple[int, int]]]]:
+    retained: list[tuple[Primitive, tuple[tuple[int, int], tuple[int, int]]]] = []
     for item in sorted(lines, key=lambda pair: _line_length(pair[1]), reverse=True):
         duplicate = any(
             _direction_difference(item[1], existing[1]) <= 6.0
@@ -239,7 +239,7 @@ def _deduplicate_lines(
 
 def _inside_annotation_geometry(
     segment: tuple[tuple[int, int], tuple[int, int]],
-    annotation_boxes: list[core.BBox],
+    annotation_boxes: list[BBox],
 ) -> bool:
     for box in annotation_boxes:
         margin = max(5.0, min(20.0, math.hypot(box.width, box.height) * 0.025))
@@ -266,7 +266,7 @@ def _segments_connect(
 
 def _inside_text_stroke(
     segment: tuple[tuple[int, int], tuple[int, int]],
-    text_boxes: list[core.BBox],
+    text_boxes: list[BBox],
 ) -> bool:
     midpoint = (
         round((segment[0][0] + segment[1][0]) / 2),
@@ -283,8 +283,8 @@ def _inside_text_stroke(
 
 
 def _annotation_hint(
-    annotation: core.Primitive,
-    text_primitives: list[core.Primitive],
+    annotation: Primitive,
+    text_primitives: list[Primitive],
 ) -> str:
     nearby = sorted(
         text_primitives, key=lambda item: _bbox_gap(item.bbox, annotation.bbox)
@@ -314,13 +314,13 @@ def _is_heading(text: str) -> bool:
 
 
 def select_annotation_candidates(
-    primitives: list[core.Primitive],
-    marker: core.Primitive,
+    primitives: list[Primitive],
+    marker: Primitive,
     *,
     limit: int = 8,
-) -> list[core.Primitive]:
+) -> list[Primitive]:
     text = [item for item in primitives if item.kind == "ocr_text"]
-    scored: list[tuple[float, core.Primitive]] = []
+    scored: list[tuple[float, Primitive]] = []
     for item in primitives:
         if item.kind != "annotation":
             continue
@@ -341,9 +341,9 @@ def select_annotation_candidates(
 
 
 def build_leader_paths(
-    primitives: list[core.Primitive],
-    anchors: list[core.Primitive],
-    terminal_candidates: list[core.Primitive],
+    primitives: list[Primitive],
+    anchors: list[Primitive],
+    terminal_candidates: list[Primitive],
     roi: Image.Image,
     *,
     max_paths: int = 12,
@@ -352,7 +352,7 @@ def build_leader_paths(
     text_boxes = [item.bbox for item in primitives if item.kind == "ocr_text"]
     annotation_boxes = [item.bbox for item in anchors if item.kind == "annotation"]
     line_items: list[
-        tuple[core.Primitive, tuple[tuple[int, int], tuple[int, int]]]
+        tuple[Primitive, tuple[tuple[int, int], tuple[int, int]]]
     ] = []
     for item in primitives:
         if item.kind != "leader_segment" or len(item.points) < 2:
@@ -397,7 +397,7 @@ def build_leader_paths(
     ranked: list[tuple[float, list[int]]] = []
     for component in components:
         component_boxes = [_line_bbox(line_items[index][1]) for index in component]
-        union = core.BBox.union(component_boxes)
+        union = BBox.union(component_boxes)
         if union is None:
             continue
         anchor_distance = min(
@@ -427,7 +427,7 @@ def build_leader_paths(
         )
         chosen = component[:max_segments_per_path]
         segments = tuple(line_items[index][1] for index in chosen)
-        union = core.BBox.union([_line_bbox(segment) for segment in segments])
+        union = BBox.union([_line_bbox(segment) for segment in segments])
         if union is None:
             continue
         paths.append(
@@ -443,10 +443,10 @@ def build_leader_paths(
 
 
 def _limited_by_reference(
-    primitives: Iterable[core.Primitive],
-    references: list[core.BBox],
+    primitives: Iterable[Primitive],
+    references: list[BBox],
     limit: int,
-) -> list[core.Primitive]:
+) -> list[Primitive]:
     values = list(primitives)
     values.sort(
         key=lambda item: min(
@@ -472,7 +472,7 @@ def _draw_label(
 
 def build_compact_semantic_evidence(
     roi: Image.Image,
-    primitives: list[core.Primitive],
+    primitives: list[Primitive],
 ) -> CompactSemanticEvidence:
     marker = next(item for item in primitives if item.id == "F0")
     annotations = select_annotation_candidates(primitives, marker)

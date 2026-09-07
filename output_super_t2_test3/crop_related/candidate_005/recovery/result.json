@@ -1,0 +1,96 @@
+{
+  "status": "validated",
+  "final_crop": [
+    138,
+    1155,
+    1105,
+    1592
+  ],
+  "best_crop": [
+    138,
+    1155,
+    1105,
+    1592
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 97.4714,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_t2_test3/crop_related/candidate_005/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        138,
+        1155,
+        1105,
+        1592
+      ],
+      "crop_after": [
+        138,
+        1155,
+        1105,
+        1592
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 2140,
+          "completion_tokens": 90,
+          "total_tokens": 2230,
+          "finish_reason": "stop",
+          "elapsed_seconds": 10.48692083300557,
+          "content_bytes": 189,
+          "content_chars": 189,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 2172,
+          "completion_tokens": 91,
+          "total_tokens": 2263,
+          "finish_reason": "stop",
+          "elapsed_seconds": 10.142308166017756,
+          "content_bytes": 189,
+          "content_chars": 189,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 2172,
+          "completion_tokens": 95,
+          "total_tokens": 2267,
+          "finish_reason": "stop",
+          "elapsed_seconds": 5.711807833053172,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 97.4714,
+      "score_after": 97.4714,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

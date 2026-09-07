@@ -7,33 +7,41 @@ import argparse
 import json
 import math
 import os
-import sys
 from pathlib import Path
 from typing import Any, Iterable
 
-from openai import OpenAI
 from PIL import Image, ImageDraw
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = SCRIPT_DIR.parent
-if str(PROJECT_DIR) not in sys.path:
-    sys.path.insert(0, str(PROJECT_DIR))
-
-import FAI_DET_CROP_3 as core  # noqa: E402
-
-from recovery import (  # noqa: E402
+from recovery import (
     CropBox,
     EvidenceBox,
     RecoveryConfig,
     load_recovery_skill,
     run_crop_recovery,
 )
-from semantic import (  # noqa: E402
+from semantic import (
     build_compact_selection_image,
     build_compact_semantic_evidence,
     run_compact_semantic_mapping,
 )
+from vision.detection import (
+    DEFAULT_API_KEY,
+    DEFAULT_ENDPOINT,
+    DEFAULT_LOCATE_MODEL,
+    DEFAULT_QWEN_MODEL,
+    candidate_roi,
+    circle_pair_marker_boxes,
+    deduplicate_boxes,
+    detect_circle_pair_candidates,
+    detect_fai_candidates,
+    qwen_fai_fallback,
+)
+from vision.evidence import create_candidate_evidence
+from vision.inference import create_vision_client
+from vision.models import BBox, Primitive
+from vision.utils import log, mapping_selected_ids, safe_fai_name
 
 
 def save_json(path: Path, value: Any) -> None:
@@ -41,7 +49,7 @@ def save_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def bbox_gap(first: core.BBox, second: core.BBox) -> float:
+def bbox_gap(first: BBox, second: BBox) -> float:
     a = first.ordered()
     b = second.ordered()
     dx = max(a.x1 - b.x2, b.x1 - a.x2, 0.0)
@@ -67,13 +75,13 @@ def selected_component_ids(mapping: dict[str, Any]) -> list[str]:
 
 def exact_or_bootstrap_crop(
     mapping: dict[str, Any],
-    primitives: list[core.Primitive],
-    roi_bbox: core.BBox,
+    primitives: list[Primitive],
+    roi_bbox: BBox,
     image_size: tuple[int, int],
-) -> tuple[core.BBox, str, list[str]]:
+) -> tuple[BBox, str, list[str]]:
     """Build an exact semantic union or deterministic V5 evidence bootstrap."""
     by_id = {item.id: item for item in primitives}
-    chosen_ids = [item for item in core.mapping_selected_ids(mapping) if item in by_id]
+    chosen_ids = [item for item in mapping_selected_ids(mapping) if item in by_id]
     component_ids = [item for item in chosen_ids if item != "F0"]
     diagonal = math.hypot(roi_bbox.width, roi_bbox.height)
 
@@ -95,8 +103,8 @@ def exact_or_bootstrap_crop(
         selected_ids = ["F0"]
 
         def take(
-            kinds: set[str], limit: int, reference: core.BBox
-        ) -> list[core.Primitive]:
+            kinds: set[str], limit: int, reference: BBox
+        ) -> list[Primitive]:
             candidates = [item for item in primitives if item.kind in kinds]
             candidates.sort(
                 key=lambda item: (bbox_gap(item.bbox, reference), -item.bbox.area)
@@ -106,33 +114,33 @@ def exact_or_bootstrap_crop(
         annotation = take({"annotation"}, 5, marker.bbox)
         boxes.extend(item.bbox for item in annotation)
         selected_ids.extend(item.id for item in annotation)
-        anchor = core.BBox.union(boxes) or marker.bbox
+        anchor = BBox.union(boxes) or marker.bbox
         text = take({"ocr_text"}, 8, anchor)
         boxes.extend(item.bbox for item in text)
         selected_ids.extend(item.id for item in text)
-        anchor = core.BBox.union(boxes) or marker.bbox
+        anchor = BBox.union(boxes) or marker.bbox
         leaders = take({"leader_segment"}, 24, anchor)
         boxes.extend(item.bbox for item in leaders)
         selected_ids.extend(item.id for item in leaders)
-        anchor = core.BBox.union(boxes) or marker.bbox
+        anchor = BBox.union(boxes) or marker.bbox
         terminals = take({"arrowhead", "triangle", "target_part"}, 12, anchor)
         boxes.extend(item.bbox for item in terminals)
         selected_ids.extend(item.id for item in terminals)
         chosen_ids = list(dict.fromkeys(selected_ids))
         source = "evidence_bootstrap"
 
-    union = core.BBox.union(boxes)
+    union = BBox.union(boxes)
     if union is None:
-        union = core.BBox(0, 0, roi_bbox.width, roi_bbox.height)
+        union = BBox(0, 0, roi_bbox.width, roi_bbox.height)
     marker_box = by_id["F0"].bbox
     cx, cy = marker_box.center
-    minimum = core.BBox(
+    minimum = BBox(
         cx - max(180.0, marker_box.width * 5.0),
         cy - max(140.0, marker_box.height * 4.0),
         cx + max(180.0, marker_box.width * 5.0),
         cy + max(140.0, marker_box.height * 4.0),
     ).clamp(round(roi_bbox.width), round(roi_bbox.height))
-    union = core.BBox.union([union, minimum]) or union
+    union = BBox.union([union, minimum]) or union
     padding = max(12.0, diagonal * 0.018)
     local = union.expand(padding, padding, padding, padding).clamp(
         round(roi_bbox.width), round(roi_bbox.height)
@@ -142,8 +150,8 @@ def exact_or_bootstrap_crop(
 
 
 def global_evidence(
-    primitives: list[core.Primitive],
-    roi_bbox: core.BBox,
+    primitives: list[Primitive],
+    roi_bbox: BBox,
     selected_ids: Iterable[str],
 ) -> list[EvidenceBox]:
     selected = set(selected_ids)
@@ -233,12 +241,12 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
         directory.mkdir(parents=True, exist_ok=True)
 
     image = Image.open(input_path).convert("RGB")
-    client = OpenAI(base_url=args.endpoint, api_key=args.api_key, timeout=args.timeout)
+    client = create_vision_client(args.endpoint, args.api_key, args.timeout)
     skill = None
     if not args.no_verify:
         skill = load_recovery_skill(Path(args.recovery_skill))
 
-    marker_boxes = core.detect_fai_candidates(
+    marker_boxes = detect_fai_candidates(
         client,
         args.locate_model,
         image,
@@ -247,33 +255,26 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
         raw_dir,
         debug_dir / "tiles" if args.debug else None,
     )
-    core.log("[1/8] OpenCV circle-pair proposals + Qwen magnified validation")
-    circle_pairs = core.detect_circle_pair_candidates(image)
-    circle_boxes = core.qwen_validate_circle_pairs(
-        client,
-        args.qwen_model,
-        image,
-        circle_pairs,
-        raw_dir / "circle_pair_validation.txt",
-        debug_dir / "circle_pair_contact_sheet.png" if args.debug else None,
-    )
-    marker_boxes = core.deduplicate_boxes(marker_boxes + circle_boxes)
+    log("[1/8] OpenCV circle-pair proposals")
+    circle_pairs = detect_circle_pair_candidates(image)
+    circle_boxes = circle_pair_marker_boxes(circle_pairs)
+    marker_boxes = deduplicate_boxes(marker_boxes + circle_boxes)
     if not marker_boxes:
-        core.log("[1/8] Hybrid proposals empty; trying full-page Qwen fallback")
-        marker_boxes = core.qwen_fai_fallback(
+        log("[1/8] Hybrid proposals empty; trying full-page Qwen fallback")
+        marker_boxes = qwen_fai_fallback(
             client, args.qwen_model, image, raw_dir / "qwen_fai_fallback.txt"
         )
     if not marker_boxes:
         raise RuntimeError("No FAI marker candidates were found")
     marker_boxes = marker_boxes[: args.max_candidates]
-    core.log(f"[1/8] Found {len(marker_boxes)} deduplicated FAI candidate(s)")
+    log(f"[1/8] Found {len(marker_boxes)} deduplicated FAI candidate(s)")
 
     records: list[dict[str, Any]] = []
     manifest_path = output_dir / "results.json"
     for index, marker_box in enumerate(marker_boxes):
-        marker = core.Primitive("F0", "fai_marker", marker_box, "LocateAnything")
-        roi_bbox = core.candidate_roi(marker_box, image.width, image.height)
-        raw_roi, primitives, evidence_overlay = core.create_candidate_evidence(
+        marker = Primitive("F0", "fai_marker", marker_box, "LocateAnything")
+        roi_bbox = candidate_roi(marker_box, image.width, image.height)
+        raw_roi, primitives, evidence_overlay = create_candidate_evidence(
             client,
             args.locate_model,
             image,
@@ -303,7 +304,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
             },
         )
 
-        core.log(
+        log(
             f"[4/8] Candidate {index}: one Qwen semantic association "
             f"({len(primitives)} primitives -> {len(compact_evidence.records)} compact "
             f"records, {len(compact_evidence.paths)} LP path(s), 1 image)"
@@ -317,14 +318,14 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
             max_tokens=args.semantic_max_tokens,
         )
         semantic_ids = selected_component_ids(mapping)
-        core.log(
+        log(
             f"[4/8] Candidate {index}: Qwen selected {len(semantic_ids)} compact "
             f"component(s): {', '.join(semantic_ids) if semantic_ids else 'none'}"
         )
         minimum_crop, minimum_source, chosen_ids = exact_or_bootstrap_crop(
             mapping, primitives, roi_bbox, image.size
         )
-        fai_name = core.safe_fai_name(mapping.get("fai_number"))
+        fai_name = safe_fai_name(mapping.get("fai_number"))
         base = f"FAI{fai_name}_{index:03d}"
         selected_overlay = build_compact_selection_image(
             compact_evidence,
@@ -348,7 +349,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
                 "minimum_crop_bbox": minimum_crop.to_list(),
             },
         )
-        core.log(
+        log(
             f"[5/8] Candidate {index}: {minimum_source} saved "
             f"with {len(chosen_ids) - 1} component(s)"
         )
@@ -383,7 +384,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
             )
         else:
             assert skill is not None
-            core.log(f"[6/8] Candidate {index}: starting agentic crop recovery")
+            log(f"[6/8] Candidate {index}: starting agentic crop recovery")
             evidence = global_evidence(primitives, roi_bbox, chosen_ids)
             config = RecoveryConfig(
                 max_turns=args.max_turns,
@@ -411,12 +412,12 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
                 config,
                 related_candidate_dir / "recovery",
                 debug=args.debug,
-                logger=lambda message, idx=index: core.log(
+                logger=lambda message, idx=index: log(
                     f"[7/8] Candidate {idx}: {message}"
                 ),
                 expansion_output_dir=expansion_candidate_dir,
             )
-            final_box = core.BBox(*recovery.final_crop.to_int_tuple())
+            final_box = BBox(*recovery.final_crop.to_int_tuple())
             if recovery.rejected:
                 final_path = crop_dir / f"Candidate{index:03d}_rejected_not_fai.png"
             elif recovery.valid:
@@ -443,7 +444,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
             )
         records.append(record)
         save_json(manifest_path, manifest_base(input_path, image, args, skill, records))
-        core.log(
+        log(
             f"[8/8] Candidate {index}: {record['status']} -> {record['final_crop_path']}"
         )
 
@@ -459,12 +460,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("image", help="Path to the input PNG")
     parser.add_argument("-o", "--output", default="output_super_v5")
-    parser.add_argument("--endpoint", default=core.DEFAULT_ENDPOINT)
+    parser.add_argument("--endpoint", default=DEFAULT_ENDPOINT)
     parser.add_argument(
-        "--api-key", default=os.environ.get("LOCAL_VLM_API_KEY", core.DEFAULT_API_KEY)
+        "--api-key", default=os.environ.get("LOCAL_VLM_API_KEY", DEFAULT_API_KEY)
     )
-    parser.add_argument("--locate-model", default=core.DEFAULT_LOCATE_MODEL)
-    parser.add_argument("--qwen-model", default=core.DEFAULT_QWEN_MODEL)
+    parser.add_argument("--locate-model", default=DEFAULT_LOCATE_MODEL)
+    parser.add_argument("--qwen-model", default=DEFAULT_QWEN_MODEL)
     parser.add_argument("--tile-size", type=int, default=1200)
     parser.add_argument("--tile-overlap", type=float, default=0.20)
     parser.add_argument("--max-candidates", type=int, default=50)
@@ -531,7 +532,7 @@ def main() -> int:
     try:
         process_image_v5(args)
     except Exception as exc:
-        core.log(f"ERROR: {exc}")
+        log(f"ERROR: {exc}")
         if args.debug:
             raise
         return 1

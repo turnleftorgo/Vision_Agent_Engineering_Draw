@@ -11,17 +11,16 @@ from PIL import Image
 
 
 SUPER_DIR = Path(__file__).resolve().parents[1]
-PROJECT_DIR = SUPER_DIR.parent
-for path in (str(SUPER_DIR), str(PROJECT_DIR)):
+for path in (str(SUPER_DIR),):
     if path not in sys.path:
         sys.path.insert(0, path)
 
-import FAI_DET_CROP_3 as core  # noqa: E402
 from semantic import (  # noqa: E402
     build_compact_semantic_evidence,
     compact_semantic_prompt,
     run_compact_semantic_mapping,
 )
+from vision.models import BBox, Primitive  # noqa: E402
 
 
 def primitive(
@@ -31,11 +30,11 @@ def primitive(
     *,
     text: str = "",
     points: list[tuple[int, int]] | None = None,
-) -> core.Primitive:
-    return core.Primitive(
+) -> Primitive:
+    return Primitive(
         item_id,
         kind,
-        core.BBox(*bbox),
+        BBox(*bbox),
         "test",
         text=text,
         points=points or [],
