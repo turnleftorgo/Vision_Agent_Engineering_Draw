@@ -1,0 +1,226 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "rejected_not_fai",
+  "initial_crop": [
+    3777,
+    4667,
+    4901,
+    6252
+  ],
+  "current_crop": [
+    3777,
+    4667,
+    4901,
+    6252
+  ],
+  "best_crop": [
+    3777,
+    4667,
+    4901,
+    6252
+  ],
+  "best_score": 99.4656,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        3777,
+        4667,
+        4901,
+        6252
+      ],
+      "crop_after": [
+        3777,
+        4667,
+        4901,
+        6252
+      ],
+      "action": {
+        "action": "reject_candidate",
+        "valid": false,
+        "candidate_valid": false,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 6835,
+          "completion_tokens": 106,
+          "total_tokens": 6941,
+          "finish_reason": "stop",
+          "elapsed_seconds": 25.705215957947075,
+          "content_bytes": 187,
+          "content_chars": 187,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "reject_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 6866,
+          "completion_tokens": 100,
+          "total_tokens": 6966,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.902935583028011,
+          "content_bytes": 187,
+          "content_chars": 187,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "reject_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 6866,
+          "completion_tokens": 103,
+          "total_tokens": 6969,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.99345208297018,
+          "content_bytes": 187,
+          "content_chars": 187,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "reject_cross_field_violation"
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.4656,
+      "score_after": 99.4656,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 6774,
+            "completion_tokens": 113,
+            "total_tokens": 6887,
+            "finish_reason": "stop",
+            "elapsed_seconds": 56.734467791975476,
+            "content_bytes": 284,
+            "content_chars": 284,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": false,
+            "crop_complete": false,
+            "missing": [
+              "FAI marker text",
+              "SPC marker text",
+              "parameter value",
+              "tolerance",
+              "measurement description",
+              "leader line",
+              "arrowhead",
+              "target feature"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "adversarial_verifier"
+          }
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 6780,
+            "completion_tokens": 99,
+            "total_tokens": 6879,
+            "finish_reason": "stop",
+            "elapsed_seconds": 55.71784149995074,
+            "content_bytes": 228,
+            "content_chars": 228,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": false,
+            "crop_complete": false,
+            "missing": [
+              "FAI marker",
+              "SPC marker",
+              "parameter text",
+              "leader",
+              "arrowhead",
+              "target feature"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "completeness_auditor"
+          }
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 6766,
+            "completion_tokens": 117,
+            "total_tokens": 6883,
+            "finish_reason": "stop",
+            "elapsed_seconds": 56.920505707967095,
+            "content_bytes": 284,
+            "content_chars": 284,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": false,
+            "crop_complete": false,
+            "missing": [
+              "FAI marker text",
+              "SPC marker text",
+              "parameter value",
+              "tolerance",
+              "measurement description",
+              "leader line",
+              "arrowhead",
+              "target feature"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "geometry_tracer"
+          }
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 6906,
+            "completion_tokens": 89,
+            "total_tokens": 6995,
+            "finish_reason": "stop",
+            "elapsed_seconds": 21.48805225000251,
+            "content_bytes": 188,
+            "content_chars": 188,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": null
+          }
+        ]
+      },
+      "decision_source": "coordinator"
+    }
+  ]
+}

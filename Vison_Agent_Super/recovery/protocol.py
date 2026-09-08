@@ -41,9 +41,22 @@ RECOVERY_ACTION_SCHEMA: dict[str, Any] = {
         "action": {
             "type": "string",
             "enum": ["expand_crop", "finish", "reject_candidate"],
+            "description": "Choose exactly one crop-recovery action.",
         },
-        "valid": {"type": "boolean"},
-        "candidate_valid": {"type": "boolean"},
+        "valid": {
+            "type": "boolean",
+            "description": (
+                "Whether the current crop is complete and can be accepted as "
+                "final without expansion; this is not marker validity."
+            ),
+        },
+        "candidate_valid": {
+            "type": "boolean",
+            "description": (
+                "Whether the selected red rectangle contains a real FAI marker; "
+                "this does not mean the current crop is complete."
+            ),
+        },
         "missing": {
             "type": "array",
             "maxItems": 12,
@@ -54,7 +67,15 @@ RECOVERY_ACTION_SCHEMA: dict[str, Any] = {
             "additionalProperties": False,
             "required": sorted(ARGUMENT_FIELDS),
             "properties": {
-                name: {"type": "integer", "minimum": 0, "maximum": 500}
+                name: {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 500,
+                    "description": (
+                        "Normalized outward expansion amount. For expand_crop, "
+                        "at least one direction must be greater than zero."
+                    ),
+                }
                 for name in ARGUMENT_FIELDS
             },
         },
@@ -68,8 +89,19 @@ RECOVERY_RECOMMENDATION_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
     "required": sorted(RECOMMENDATION_FIELDS),
     "properties": {
-        "candidate_valid": {"type": "boolean"},
-        "crop_complete": {"type": "boolean"},
+        "candidate_valid": {
+            "type": "boolean",
+            "description": (
+                "Whether the selected red rectangle contains a real FAI marker."
+            ),
+        },
+        "crop_complete": {
+            "type": "boolean",
+            "description": (
+                "Whether the current crop contains the complete coherent FAI "
+                "group and needs no expansion."
+            ),
+        },
         "missing": {
             "type": "array",
             "maxItems": 12,
@@ -80,7 +112,16 @@ RECOVERY_RECOMMENDATION_SCHEMA: dict[str, Any] = {
             "additionalProperties": False,
             "required": sorted(RECOMMENDATION_EXPAND_FIELDS),
             "properties": {
-                name: {"type": "integer", "minimum": 0, "maximum": 500}
+                name: {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 500,
+                    "description": (
+                        "Normalized outward expansion amount. When a real FAI "
+                        "crop is incomplete, at least one direction must be "
+                        "greater than zero."
+                    ),
+                }
                 for name in RECOMMENDATION_EXPAND_FIELDS
             },
         },

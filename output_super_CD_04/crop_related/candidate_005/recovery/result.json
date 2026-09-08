@@ -1,0 +1,83 @@
+{
+  "status": "rejected_not_fai",
+  "final_crop": [
+    2451,
+    937,
+    4074,
+    1909
+  ],
+  "best_crop": [
+    2451,
+    937,
+    4074,
+    1909
+  ],
+  "rejected": true,
+  "valid": false,
+  "best_score": 99.5269,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_04/crop_related/candidate_005/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2451,
+        937,
+        4074,
+        1909
+      ],
+      "crop_after": [
+        2451,
+        937,
+        4074,
+        1909
+      ],
+      "action": {
+        "action": "reject_candidate",
+        "valid": false,
+        "candidate_valid": false,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5876,
+          "completion_tokens": 81,
+          "total_tokens": 5957,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.94162837509066,
+          "content_bytes": 336,
+          "content_chars": 336,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5908,
+          "completion_tokens": 82,
+          "total_tokens": 5990,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.262166458065622,
+          "content_bytes": 188,
+          "content_chars": 188,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.5269,
+      "score_after": 99.5269,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

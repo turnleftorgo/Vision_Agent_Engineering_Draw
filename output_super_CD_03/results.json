@@ -28,37 +28,47 @@
     {
       "candidate_index": 0,
       "marker_bbox": [
-        7113,
-        3196,
-        7182,
-        3264
+        6461,
+        3100,
+        6521,
+        3160
       ],
       "roi_bbox": [
-        5947,
-        2030,
-        8348,
-        4431
+        5291,
+        1930,
+        7691,
+        4330
       ],
       "mapping": {
         "marker_id": "F0",
         "candidate_valid": true,
-        "fai_number": "223",
-        "spc_letter": "ABR",
+        "fai_number": "222",
+        "spc_letter": "OH",
         "annotation_ids": [],
         "text_ids": [
-          "T33",
-          "T34"
+          "T16",
+          "T15",
+          "T18",
+          "T19",
+          "T24",
+          "T25",
+          "T27"
         ],
         "parameter_text_ids": [
-          "T33",
-          "T34"
+          "T16",
+          "T15",
+          "T18",
+          "T19",
+          "T24",
+          "T25",
+          "T27"
         ],
         "description_text_ids": [],
         "leader_path_ids": [
-          "LP0"
+          "LP1"
         ],
         "leader_ids": [
-          "L0"
+          "L4"
         ],
         "arrowhead_ids": [],
         "target_ids": [],
@@ -71,78 +81,88 @@
         "compact_semantic": true
       },
       "qwen_selected_compact_ids": [
-        "T33",
-        "T34",
-        "LP0"
+        "T16",
+        "T15",
+        "T18",
+        "T19",
+        "T24",
+        "T25",
+        "T27",
+        "LP1"
       ],
       "semantic_selected_ids": [
         "F0",
-        "T33",
-        "T34",
-        "L0"
+        "T16",
+        "T15",
+        "T18",
+        "T19",
+        "T24",
+        "T25",
+        "T27",
+        "L4"
       ],
       "minimum_source": "semantic_exact_union",
       "minimum_crop_bbox": [
-        6744,
-        2030,
-        7551,
-        3561
+        6129,
+        1930,
+        6911,
+        3468
       ],
       "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_000",
       "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_000/qwen_selected.png",
       "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_000/minimum.png",
       "status": "protocol_failed",
       "final_crop_bbox": [
-        6744,
-        2030,
-        7551,
-        3561
+        6129,
+        1930,
+        6911,
+        3468
       ],
-      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/FAI223_000_best_unvalidated.png",
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/FAI222_000_best_unvalidated.png",
       "expansion_dir": null,
       "expansion_count": 0,
       "recovery": {
         "status": "protocol_failed",
         "final_crop": [
-          6744,
-          2030,
-          7551,
-          3561
+          6129,
+          1930,
+          6911,
+          3468
         ],
         "best_crop": [
-          6744,
-          2030,
-          7551,
-          3561
+          6129,
+          1930,
+          6911,
+          3468
         ],
         "rejected": false,
         "valid": false,
-        "best_score": 97.129,
+        "best_score": 97.1393,
         "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_000/recovery/history.json",
         "turns": [
           {
             "turn": 1,
             "crop_before": [
-              6744,
-              2030,
-              7551,
-              3561
+              6129,
+              1930,
+              6911,
+              3468
             ],
             "crop_after": [
-              6744,
-              2030,
-              7551,
-              3561
+              6129,
+              1930,
+              6911,
+              3468
             ],
             "action": null,
             "format_attempts": [
               {
                 "attempt": 0,
-                "prompt_tokens": 4931,
+                "prompt_tokens": 4732,
                 "completion_tokens": 98,
-                "total_tokens": 5029,
+                "total_tokens": 4830,
                 "finish_reason": "stop",
-                "elapsed_seconds": 19.06982054200489,
+                "elapsed_seconds": 18.54380737489555,
                 "content_bytes": 202,
                 "content_chars": 202,
                 "reasoning_chars": 0,
@@ -151,45 +171,45 @@
               },
               {
                 "attempt": 1,
-                "prompt_tokens": 4963,
-                "completion_tokens": 62,
-                "total_tokens": 5025,
+                "prompt_tokens": 4764,
+                "completion_tokens": 64,
+                "total_tokens": 4828,
                 "finish_reason": "stop",
-                "elapsed_seconds": 5.981695041060448,
-                "content_bytes": 202,
-                "content_chars": 202,
+                "elapsed_seconds": 5.578920666011982,
+                "content_bytes": 201,
+                "content_chars": 201,
                 "reasoning_chars": 0,
                 "error": null,
                 "protocol_error": "expand_crop_cross_field_violation"
               },
               {
                 "attempt": 2,
-                "prompt_tokens": 4963,
-                "completion_tokens": 62,
-                "total_tokens": 5025,
+                "prompt_tokens": 4764,
+                "completion_tokens": 64,
+                "total_tokens": 4828,
                 "finish_reason": "stop",
-                "elapsed_seconds": 6.023512665997259,
-                "content_bytes": 202,
-                "content_chars": 202,
+                "elapsed_seconds": 5.600700832903385,
+                "content_bytes": 201,
+                "content_chars": 201,
                 "reasoning_chars": 0,
                 "error": null,
                 "protocol_error": "expand_crop_cross_field_violation"
               }
             ],
             "expansion": null,
-            "score_before": 97.129,
-            "score_after": 97.129,
+            "score_before": 97.1393,
+            "score_after": 97.1393,
             "used_subagents": true,
             "subagents": {
               "adversarial_verifier": {
                 "call": {
-                  "prompt_tokens": 4870,
-                  "completion_tokens": 88,
-                  "total_tokens": 4958,
+                  "prompt_tokens": 4671,
+                  "completion_tokens": 77,
+                  "total_tokens": 4748,
                   "finish_reason": "stop",
-                  "elapsed_seconds": 41.01722854108084,
-                  "content_bytes": 178,
-                  "content_chars": 178,
+                  "elapsed_seconds": 39.057298584026285,
+                  "content_bytes": 163,
+                  "content_chars": 163,
                   "reasoning_chars": 0,
                   "error": null
                 },
@@ -198,11 +218,1588 @@
               },
               "completeness_auditor": {
                 "call": {
-                  "prompt_tokens": 4876,
-                  "completion_tokens": 82,
-                  "total_tokens": 4958,
+                  "prompt_tokens": 4677,
+                  "completion_tokens": 79,
+                  "total_tokens": 4756,
                   "finish_reason": "stop",
-                  "elapsed_seconds": 40.51715266704559,
+                  "elapsed_seconds": 38.82972408400383,
+                  "content_bytes": 160,
+                  "content_chars": 160,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": "incomplete_recommendation_without_expansion",
+                "result": null
+              },
+              "geometry_tracer": {
+                "call": {
+                  "prompt_tokens": 4663,
+                  "completion_tokens": 87,
+                  "total_tokens": 4750,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 39.71363220794592,
+                  "content_bytes": 178,
+                  "content_chars": 178,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": "incomplete_recommendation_without_expansion",
+                "result": null
+              }
+            },
+            "decision_source": "subagents_failed"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 1,
+      "marker_bbox": [
+        7113,
+        3196,
+        7184,
+        3264
+      ],
+      "roi_bbox": [
+        5948,
+        2030,
+        8349,
+        4431
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "223",
+        "spc_letter": "ABR",
+        "annotation_ids": [],
+        "text_ids": [
+          "T30",
+          "T31"
+        ],
+        "parameter_text_ids": [
+          "T30",
+          "T31"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [],
+        "leader_ids": [],
+        "arrowhead_ids": [],
+        "target_ids": [],
+        "complete": false,
+        "missing": [
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "confidence": 0.95,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T30",
+        "T31"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T30",
+        "T31"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        6739,
+        2900,
+        7558,
+        3561
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_001",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_001/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_001/minimum.png",
+      "status": "validated_from_incomplete_mapping",
+      "final_crop_bbox": [
+        6739,
+        2900,
+        7558,
+        3561
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/FAI223_001_validated.png",
+      "expansion_dir": null,
+      "expansion_count": 0,
+      "recovery": {
+        "status": "validated_from_incomplete_mapping",
+        "final_crop": [
+          6739,
+          2900,
+          7558,
+          3561
+        ],
+        "best_crop": [
+          6739,
+          2900,
+          7558,
+          3561
+        ],
+        "rejected": false,
+        "valid": true,
+        "best_score": 99.8376,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_001/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              6739,
+              2900,
+              7558,
+              3561
+            ],
+            "crop_after": [
+              6739,
+              2900,
+              7558,
+              3561
+            ],
+            "action": {
+              "action": "finish",
+              "valid": true,
+              "candidate_valid": true,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.95
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 3370,
+                "completion_tokens": 102,
+                "total_tokens": 3472,
+                "finish_reason": "stop",
+                "elapsed_seconds": 14.582507374929264,
+                "content_bytes": 212,
+                "content_chars": 212,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "expand_crop_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 3402,
+                "completion_tokens": 62,
+                "total_tokens": 3464,
+                "finish_reason": "stop",
+                "elapsed_seconds": 6.936324334004894,
+                "content_bytes": 176,
+                "content_chars": 176,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": null
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.8376,
+            "score_after": 99.8376,
+            "used_subagents": false,
+            "subagents": {},
+            "decision_source": "main"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 2,
+      "marker_bbox": [
+        4289,
+        5079,
+        4389,
+        5179
+      ],
+      "roi_bbox": [
+        3139,
+        3929,
+        5539,
+        6329
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "221",
+        "spc_letter": "ABQ",
+        "annotation_ids": [],
+        "text_ids": [
+          "T24"
+        ],
+        "parameter_text_ids": [
+          "T24"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [],
+        "leader_ids": [],
+        "arrowhead_ids": [],
+        "target_ids": [],
+        "complete": false,
+        "missing": [
+          "annotation",
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "confidence": 0.4,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T24"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T24"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        3777,
+        4667,
+        4901,
+        6252
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_002",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_002/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_002/minimum.png",
+      "status": "rejected_not_fai",
+      "final_crop_bbox": [
+        3777,
+        4667,
+        4901,
+        6252
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/Candidate002_rejected_not_fai.png",
+      "expansion_dir": null,
+      "expansion_count": 0,
+      "recovery": {
+        "status": "rejected_not_fai",
+        "final_crop": [
+          3777,
+          4667,
+          4901,
+          6252
+        ],
+        "best_crop": [
+          3777,
+          4667,
+          4901,
+          6252
+        ],
+        "rejected": true,
+        "valid": false,
+        "best_score": 99.4656,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_002/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              3777,
+              4667,
+              4901,
+              6252
+            ],
+            "crop_after": [
+              3777,
+              4667,
+              4901,
+              6252
+            ],
+            "action": {
+              "action": "reject_candidate",
+              "valid": false,
+              "candidate_valid": false,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.95
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 6835,
+                "completion_tokens": 106,
+                "total_tokens": 6941,
+                "finish_reason": "stop",
+                "elapsed_seconds": 25.705215957947075,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 6866,
+                "completion_tokens": 100,
+                "total_tokens": 6966,
+                "finish_reason": "stop",
+                "elapsed_seconds": 7.902935583028011,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 2,
+                "prompt_tokens": 6866,
+                "completion_tokens": 103,
+                "total_tokens": 6969,
+                "finish_reason": "stop",
+                "elapsed_seconds": 7.99345208297018,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.4656,
+            "score_after": 99.4656,
+            "used_subagents": true,
+            "subagents": {
+              "adversarial_verifier": {
+                "call": {
+                  "prompt_tokens": 6774,
+                  "completion_tokens": 113,
+                  "total_tokens": 6887,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 56.734467791975476,
+                  "content_bytes": 284,
+                  "content_chars": 284,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker text",
+                    "SPC marker text",
+                    "parameter value",
+                    "tolerance",
+                    "measurement description",
+                    "leader line",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "adversarial_verifier"
+                }
+              },
+              "completeness_auditor": {
+                "call": {
+                  "prompt_tokens": 6780,
+                  "completion_tokens": 99,
+                  "total_tokens": 6879,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 55.71784149995074,
+                  "content_bytes": 228,
+                  "content_chars": 228,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker",
+                    "SPC marker",
+                    "parameter text",
+                    "leader",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "completeness_auditor"
+                }
+              },
+              "geometry_tracer": {
+                "call": {
+                  "prompt_tokens": 6766,
+                  "completion_tokens": 117,
+                  "total_tokens": 6883,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 56.920505707967095,
+                  "content_bytes": 284,
+                  "content_chars": 284,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker text",
+                    "SPC marker text",
+                    "parameter value",
+                    "tolerance",
+                    "measurement description",
+                    "leader line",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "geometry_tracer"
+                }
+              },
+              "coordinator_attempts": [
+                {
+                  "attempt": 0,
+                  "prompt_tokens": 6906,
+                  "completion_tokens": 89,
+                  "total_tokens": 6995,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 21.48805225000251,
+                  "content_bytes": 188,
+                  "content_chars": 188,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": null
+                }
+              ]
+            },
+            "decision_source": "coordinator"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 3,
+      "marker_bbox": [
+        3484,
+        5174,
+        3598,
+        5288
+      ],
+      "roi_bbox": [
+        2341,
+        4031,
+        4741,
+        6431
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "220",
+        "spc_letter": "OG",
+        "annotation_ids": [],
+        "text_ids": [
+          "T39"
+        ],
+        "parameter_text_ids": [
+          "T39"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [
+          "LP2"
+        ],
+        "leader_ids": [
+          "L19",
+          "L20",
+          "L34",
+          "L37",
+          "L51",
+          "L69",
+          "L65"
+        ],
+        "arrowhead_ids": [
+          "H3"
+        ],
+        "target_ids": [],
+        "complete": true,
+        "missing": [
+          "target"
+        ],
+        "confidence": 0.95,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T39",
+        "LP2",
+        "H3"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T39",
+        "L19",
+        "L20",
+        "L34",
+        "L37",
+        "L51",
+        "L69",
+        "L65",
+        "H3"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        2789,
+        4645,
+        4173,
+        5749
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_003",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_003/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_003/minimum.png",
+      "status": "rejected_not_fai",
+      "final_crop_bbox": [
+        2789,
+        4645,
+        4173,
+        5749
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/Candidate003_rejected_not_fai.png",
+      "expansion_dir": null,
+      "expansion_count": 0,
+      "recovery": {
+        "status": "rejected_not_fai",
+        "final_crop": [
+          2789,
+          4645,
+          4173,
+          5749
+        ],
+        "best_crop": [
+          2789,
+          4645,
+          4173,
+          5749
+        ],
+        "rejected": true,
+        "valid": false,
+        "best_score": 99.5415,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_003/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              2789,
+              4645,
+              4173,
+              5749
+            ],
+            "crop_after": [
+              2789,
+              4645,
+              4173,
+              5749
+            ],
+            "action": {
+              "action": "reject_candidate",
+              "valid": false,
+              "candidate_valid": false,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.95
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 6689,
+                "completion_tokens": 89,
+                "total_tokens": 6778,
+                "finish_reason": "stop",
+                "elapsed_seconds": 24.294397666002624,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 6720,
+                "completion_tokens": 55,
+                "total_tokens": 6775,
+                "finish_reason": "stop",
+                "elapsed_seconds": 5.057493125088513,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 2,
+                "prompt_tokens": 6720,
+                "completion_tokens": 98,
+                "total_tokens": 6818,
+                "finish_reason": "stop",
+                "elapsed_seconds": 7.438385584042408,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.5415,
+            "score_after": 99.5415,
+            "used_subagents": true,
+            "subagents": {
+              "adversarial_verifier": {
+                "call": {
+                  "prompt_tokens": 6628,
+                  "completion_tokens": 107,
+                  "total_tokens": 6735,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 55.32057733309921,
+                  "content_bytes": 275,
+                  "content_chars": 275,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker",
+                    "SPC marker",
+                    "parameter text",
+                    "tolerance text",
+                    "feature-control frame",
+                    "measurement description",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "adversarial_verifier"
+                }
+              },
+              "completeness_auditor": {
+                "call": {
+                  "prompt_tokens": 6634,
+                  "completion_tokens": 104,
+                  "total_tokens": 6738,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 55.01568270800635,
+                  "content_bytes": 238,
+                  "content_chars": 238,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker",
+                    "SPC marker",
+                    "parameter text",
+                    "tolerance text",
+                    "leader line",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "completeness_auditor"
+                }
+              },
+              "geometry_tracer": {
+                "call": {
+                  "prompt_tokens": 6620,
+                  "completion_tokens": 63,
+                  "total_tokens": 6683,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 52.236954499967396,
+                  "content_bytes": 234,
+                  "content_chars": 234,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": "rejected_recommendation_expands",
+                "result": null
+              },
+              "coordinator_attempts": [
+                {
+                  "attempt": 0,
+                  "prompt_tokens": 6696,
+                  "completion_tokens": 91,
+                  "total_tokens": 6787,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 21.35962133400608,
+                  "content_bytes": 188,
+                  "content_chars": 188,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": null
+                }
+              ]
+            },
+            "decision_source": "coordinator"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 4,
+      "marker_bbox": [
+        4588,
+        5174,
+        4702,
+        5288
+      ],
+      "roi_bbox": [
+        3445,
+        4031,
+        5845,
+        6431
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "221",
+        "spc_letter": "ABQ",
+        "annotation_ids": [],
+        "text_ids": [
+          "T26",
+          "T27"
+        ],
+        "parameter_text_ids": [
+          "T26",
+          "T27"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [],
+        "leader_ids": [],
+        "arrowhead_ids": [],
+        "target_ids": [],
+        "complete": false,
+        "missing": [
+          "annotation",
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "confidence": 0.55,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T26",
+        "T27"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T26",
+        "T27"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        4013,
+        4713,
+        5277,
+        6253
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_004",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_004/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_004/minimum.png",
+      "status": "rejected_not_fai",
+      "final_crop_bbox": [
+        4013,
+        4713,
+        5277,
+        6253
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/Candidate004_rejected_not_fai.png",
+      "expansion_dir": null,
+      "expansion_count": 0,
+      "recovery": {
+        "status": "rejected_not_fai",
+        "final_crop": [
+          4013,
+          4713,
+          5277,
+          6253
+        ],
+        "best_crop": [
+          4013,
+          4713,
+          5277,
+          6253
+        ],
+        "rejected": true,
+        "valid": false,
+        "best_score": 99.416,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_004/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              4013,
+              4713,
+              5277,
+              6253
+            ],
+            "crop_after": [
+              4013,
+              4713,
+              5277,
+              6253
+            ],
+            "action": {
+              "action": "reject_candidate",
+              "valid": false,
+              "candidate_valid": false,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.99
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 7605,
+                "completion_tokens": 102,
+                "total_tokens": 7707,
+                "finish_reason": "stop",
+                "elapsed_seconds": 28.203973708907142,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 7636,
+                "completion_tokens": 99,
+                "total_tokens": 7735,
+                "finish_reason": "stop",
+                "elapsed_seconds": 9.785064334049821,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 2,
+                "prompt_tokens": 7636,
+                "completion_tokens": 100,
+                "total_tokens": 7736,
+                "finish_reason": "stop",
+                "elapsed_seconds": 9.888538375031203,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.416,
+            "score_after": 99.416,
+            "used_subagents": true,
+            "subagents": {
+              "adversarial_verifier": {
+                "call": {
+                  "prompt_tokens": 7544,
+                  "completion_tokens": 117,
+                  "total_tokens": 7661,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 62.546927292016335,
+                  "content_bytes": 311,
+                  "content_chars": 311,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker text",
+                    "inspection number",
+                    "parameter value",
+                    "tolerance",
+                    "feature-control frame",
+                    "measurement description",
+                    "leader line",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "adversarial_verifier"
+                }
+              },
+              "completeness_auditor": {
+                "call": {
+                  "prompt_tokens": 7550,
+                  "completion_tokens": 99,
+                  "total_tokens": 7649,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 61.274959124973975,
+                  "content_bytes": 228,
+                  "content_chars": 228,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker",
+                    "SPC marker",
+                    "parameter text",
+                    "leader",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "completeness_auditor"
+                }
+              },
+              "geometry_tracer": {
+                "call": {
+                  "prompt_tokens": 7536,
+                  "completion_tokens": 107,
+                  "total_tokens": 7643,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 61.71900112496223,
+                  "content_bytes": 243,
+                  "content_chars": 243,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker",
+                    "inspection number",
+                    "parameter",
+                    "tolerance",
+                    "leader",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "geometry_tracer"
+                }
+              },
+              "coordinator_attempts": [
+                {
+                  "attempt": 0,
+                  "prompt_tokens": 7670,
+                  "completion_tokens": 101,
+                  "total_tokens": 7771,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 24.290151291992515,
+                  "content_bytes": 188,
+                  "content_chars": 188,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": null
+                }
+              ]
+            },
+            "decision_source": "coordinator"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 5,
+      "marker_bbox": [
+        3627,
+        5179,
+        3743,
+        5295
+      ],
+      "roi_bbox": [
+        2485,
+        4037,
+        4885,
+        6437
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "220",
+        "spc_letter": "OG",
+        "annotation_ids": [],
+        "text_ids": [
+          "T33",
+          "T34"
+        ],
+        "parameter_text_ids": [
+          "T33",
+          "T34"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [
+          "LP1"
+        ],
+        "leader_ids": [
+          "L30"
+        ],
+        "arrowhead_ids": [
+          "G14"
+        ],
+        "target_ids": [],
+        "complete": false,
+        "missing": [
+          "target"
+        ],
+        "confidence": 0.55,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T33",
+        "T34",
+        "LP1",
+        "G14"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T33",
+        "T34",
+        "L30",
+        "G14"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        2862,
+        4711,
+        4327,
+        5763
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_005",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_005/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_005/minimum.png",
+      "status": "rejected_not_fai",
+      "final_crop_bbox": [
+        2862,
+        4711,
+        4327,
+        5763
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/Candidate005_rejected_not_fai.png",
+      "expansion_dir": null,
+      "expansion_count": 0,
+      "recovery": {
+        "status": "rejected_not_fai",
+        "final_crop": [
+          2862,
+          4711,
+          4327,
+          5763
+        ],
+        "best_crop": [
+          2862,
+          4711,
+          4327,
+          5763
+        ],
+        "rejected": true,
+        "valid": false,
+        "best_score": 99.5375,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_005/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              2862,
+              4711,
+              4327,
+              5763
+            ],
+            "crop_after": [
+              2862,
+              4711,
+              4327,
+              5763
+            ],
+            "action": {
+              "action": "reject_candidate",
+              "valid": false,
+              "candidate_valid": false,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.99
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 6295,
+                "completion_tokens": 104,
+                "total_tokens": 6399,
+                "finish_reason": "stop",
+                "elapsed_seconds": 23.720014416030608,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 6326,
+                "completion_tokens": 98,
+                "total_tokens": 6424,
+                "finish_reason": "stop",
+                "elapsed_seconds": 11.303167790989392,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              },
+              {
+                "attempt": 2,
+                "prompt_tokens": 6326,
+                "completion_tokens": 98,
+                "total_tokens": 6424,
+                "finish_reason": "stop",
+                "elapsed_seconds": 6.4767817499814555,
+                "content_bytes": 187,
+                "content_chars": 187,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "reject_cross_field_violation"
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.5375,
+            "score_after": 99.5375,
+            "used_subagents": true,
+            "subagents": {
+              "adversarial_verifier": {
+                "call": {
+                  "prompt_tokens": 6234,
+                  "completion_tokens": 97,
+                  "total_tokens": 6331,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 51.40113879204728,
+                  "content_bytes": 256,
+                  "content_chars": 256,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker text",
+                    "inspection number",
+                    "parameter/tolerance",
+                    "feature-control frame",
+                    "measurement description"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "adversarial_verifier"
+                }
+              },
+              "completeness_auditor": {
+                "call": {
+                  "prompt_tokens": 6240,
+                  "completion_tokens": 106,
+                  "total_tokens": 6346,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 51.95917254197411,
+                  "content_bytes": 251,
+                  "content_chars": 251,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker",
+                    "SPC marker",
+                    "parameter text",
+                    "tolerance text",
+                    "leader line",
+                    "arrowhead",
+                    "target feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "completeness_auditor"
+                }
+              },
+              "geometry_tracer": {
+                "call": {
+                  "prompt_tokens": 6226,
+                  "completion_tokens": 100,
+                  "total_tokens": 6326,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 51.56446949997917,
+                  "content_bytes": 256,
+                  "content_chars": 256,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": false,
+                  "crop_complete": false,
+                  "missing": [
+                    "FAI marker text",
+                    "inspection number",
+                    "parameter/tolerance",
+                    "feature-control frame",
+                    "measurement description"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0
+                  },
+                  "confidence": 0.95,
+                  "role": "geometry_tracer"
+                }
+              },
+              "coordinator_attempts": [
+                {
+                  "attempt": 0,
+                  "prompt_tokens": 6360,
+                  "completion_tokens": 101,
+                  "total_tokens": 6461,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 21.092899375013076,
+                  "content_bytes": 188,
+                  "content_chars": 188,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": null
+                }
+              ]
+            },
+            "decision_source": "coordinator"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 6,
+      "marker_bbox": [
+        4359,
+        6087,
+        4421,
+        6149
+      ],
+      "roi_bbox": [
+        3190,
+        4918,
+        5590,
+        6800
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "221",
+        "spc_letter": "ABQ",
+        "annotation_ids": [],
+        "text_ids": [
+          "T14",
+          "T15"
+        ],
+        "parameter_text_ids": [
+          "T14",
+          "T15"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [],
+        "leader_ids": [],
+        "arrowhead_ids": [],
+        "target_ids": [],
+        "complete": false,
+        "missing": [
+          "annotation",
+          "leader",
+          "arrowhead",
+          "target"
+        ],
+        "confidence": 0.9,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T14",
+        "T15"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T14",
+        "T15"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        4025,
+        5815,
+        4755,
+        6421
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_006",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_006/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_006/minimum.png",
+      "status": "validated_from_incomplete_mapping",
+      "final_crop_bbox": [
+        4025,
+        5815,
+        4755,
+        6512
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/FAI221_006_validated.png",
+      "expansion_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/expand/candidate_006",
+      "expansion_count": 1,
+      "recovery": {
+        "status": "validated_from_incomplete_mapping",
+        "final_crop": [
+          4025,
+          5815,
+          4755,
+          6512
+        ],
+        "best_crop": [
+          4025,
+          5815,
+          4755,
+          6512
+        ],
+        "rejected": false,
+        "valid": true,
+        "best_score": 99.867,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_006/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              4025,
+              5815,
+              4755,
+              6421
+            ],
+            "crop_after": [
+              4025,
+              5815,
+              4755,
+              6512
+            ],
+            "action": {
+              "action": "expand_crop",
+              "valid": false,
+              "candidate_valid": true,
+              "missing": [
+                "measurement_description",
+                "target_feature"
+              ],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 150
+              },
+              "confidence": 0.95
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 2920,
+                "completion_tokens": 107,
+                "total_tokens": 3027,
+                "finish_reason": "stop",
+                "elapsed_seconds": 13.563570291968063,
+                "content_bytes": 226,
+                "content_chars": 226,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "expand_crop_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 2952,
+                "completion_tokens": 116,
+                "total_tokens": 3068,
+                "finish_reason": "stop",
+                "elapsed_seconds": 8.716170332976617,
+                "content_bytes": 226,
+                "content_chars": 226,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "expand_crop_cross_field_violation"
+              },
+              {
+                "attempt": 2,
+                "prompt_tokens": 2952,
+                "completion_tokens": 66,
+                "total_tokens": 3018,
+                "finish_reason": "stop",
+                "elapsed_seconds": 6.1377912919269875,
+                "content_bytes": 226,
+                "content_chars": 226,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "expand_crop_cross_field_violation"
+              }
+            ],
+            "expansion": {
+              "before": [
+                4025,
+                5815,
+                4755,
+                6421
+              ],
+              "after": [
+                4025,
+                5815,
+                4755,
+                6512
+              ],
+              "requested_norm": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 150
+              },
+              "applied_pixels": {
+                "left": 0.0,
+                "top": 0.0,
+                "right": 0.0,
+                "bottom": 90.869
+              },
+              "boundary_locked": {
+                "left": false,
+                "top": false,
+                "right": false,
+                "bottom": false
+              },
+              "changed": true,
+              "area_cap": 5305299.597,
+              "limited_by": []
+            },
+            "score_before": 99.867,
+            "score_after": 99.8471,
+            "used_subagents": true,
+            "subagents": {
+              "adversarial_verifier": {
+                "call": {
+                  "prompt_tokens": 2859,
+                  "completion_tokens": 83,
+                  "total_tokens": 2942,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 26.346794957993552,
+                  "content_bytes": 187,
+                  "content_chars": 187,
+                  "reasoning_chars": 0,
+                  "error": null
+                },
+                "protocol_error": null,
+                "result": {
+                  "candidate_valid": true,
+                  "crop_complete": false,
+                  "missing": [
+                    "measurement_description",
+                    "target_feature"
+                  ],
+                  "expand": {
+                    "left": 0,
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 150
+                  },
+                  "confidence": 0.95,
+                  "role": "adversarial_verifier"
+                }
+              },
+              "completeness_auditor": {
+                "call": {
+                  "prompt_tokens": 2865,
+                  "completion_tokens": 82,
+                  "total_tokens": 2947,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 26.18364808394108,
                   "content_bytes": 181,
                   "content_chars": 181,
                   "reasoning_chars": 0,
@@ -213,11 +1810,11 @@
               },
               "geometry_tracer": {
                 "call": {
-                  "prompt_tokens": 4862,
-                  "completion_tokens": 99,
-                  "total_tokens": 4961,
+                  "prompt_tokens": 2851,
+                  "completion_tokens": 82,
+                  "total_tokens": 2933,
                   "finish_reason": "stop",
-                  "elapsed_seconds": 41.79791316599585,
+                  "elapsed_seconds": 25.913819624925964,
                   "content_bytes": 181,
                   "content_chars": 181,
                   "reasoning_chars": 0,
@@ -225,9 +1822,293 @@
                 },
                 "protocol_error": "incomplete_recommendation_without_expansion",
                 "result": null
+              },
+              "coordinator_attempts": [
+                {
+                  "attempt": 0,
+                  "prompt_tokens": 2833,
+                  "completion_tokens": 60,
+                  "total_tokens": 2893,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 10.117830417002551,
+                  "content_bytes": 224,
+                  "content_chars": 224,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": "expand_crop_cross_field_violation"
+                },
+                {
+                  "attempt": 1,
+                  "prompt_tokens": 2846,
+                  "completion_tokens": 99,
+                  "total_tokens": 2945,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 7.519838875043206,
+                  "content_bytes": 224,
+                  "content_chars": 224,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": "expand_crop_cross_field_violation"
+                },
+                {
+                  "attempt": 2,
+                  "prompt_tokens": 2846,
+                  "completion_tokens": 96,
+                  "total_tokens": 2942,
+                  "finish_reason": "stop",
+                  "elapsed_seconds": 7.403652457986027,
+                  "content_bytes": 224,
+                  "content_chars": 224,
+                  "reasoning_chars": 0,
+                  "error": null,
+                  "protocol_error": "expand_crop_cross_field_violation"
+                }
+              ],
+              "emergency_action": {
+                "action": "expand_crop",
+                "valid": false,
+                "candidate_valid": true,
+                "missing": [
+                  "measurement_description",
+                  "target_feature"
+                ],
+                "arguments": {
+                  "left_norm": 0,
+                  "top_norm": 0,
+                  "right_norm": 0,
+                  "bottom_norm": 150
+                },
+                "confidence": 0.95
               }
             },
-            "decision_source": "subagents_failed"
+            "decision_source": "deterministic_arbitration"
+          },
+          {
+            "turn": 2,
+            "crop_before": [
+              4025,
+              5815,
+              4755,
+              6512
+            ],
+            "crop_after": [
+              4025,
+              5815,
+              4755,
+              6512
+            ],
+            "action": {
+              "action": "finish",
+              "valid": true,
+              "candidate_valid": true,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.95
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 3217,
+                "completion_tokens": 89,
+                "total_tokens": 3306,
+                "finish_reason": "stop",
+                "elapsed_seconds": 13.527397790923715,
+                "content_bytes": 176,
+                "content_chars": 176,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": null
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.8471,
+            "score_after": 99.8471,
+            "used_subagents": false,
+            "subagents": {},
+            "decision_source": "main"
+          }
+        ]
+      }
+    },
+    {
+      "candidate_index": 7,
+      "marker_bbox": [
+        4095,
+        6217,
+        4155,
+        6277
+      ],
+      "roi_bbox": [
+        2925,
+        5047,
+        5325,
+        6800
+      ],
+      "mapping": {
+        "marker_id": "F0",
+        "candidate_valid": true,
+        "fai_number": "220",
+        "spc_letter": "OG",
+        "annotation_ids": [],
+        "text_ids": [
+          "T24",
+          "T26",
+          "T27",
+          "T28"
+        ],
+        "parameter_text_ids": [
+          "T24",
+          "T26",
+          "T27",
+          "T28"
+        ],
+        "description_text_ids": [],
+        "leader_path_ids": [
+          "LP0"
+        ],
+        "leader_ids": [
+          "L5",
+          "L4",
+          "L36"
+        ],
+        "arrowhead_ids": [
+          "H8",
+          "H9"
+        ],
+        "target_ids": [],
+        "complete": true,
+        "missing": [
+          "target"
+        ],
+        "confidence": 0.95,
+        "compact_semantic": true
+      },
+      "qwen_selected_compact_ids": [
+        "T24",
+        "T26",
+        "T27",
+        "T28",
+        "LP0",
+        "H8",
+        "H9"
+      ],
+      "semantic_selected_ids": [
+        "F0",
+        "T24",
+        "T26",
+        "T27",
+        "T28",
+        "L5",
+        "L4",
+        "L36",
+        "H8",
+        "H9"
+      ],
+      "minimum_source": "semantic_exact_union",
+      "minimum_crop_bbox": [
+        2925,
+        5953,
+        4772,
+        6549
+      ],
+      "related_dir": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_007",
+      "selection_image_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_007/qwen_selected.png",
+      "minimum_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_007/minimum.png",
+      "status": "validated",
+      "final_crop_bbox": [
+        2925,
+        5953,
+        4772,
+        6549
+      ],
+      "final_crop_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop/FAI220_007_validated.png",
+      "expansion_dir": null,
+      "expansion_count": 0,
+      "recovery": {
+        "status": "validated",
+        "final_crop": [
+          2925,
+          5953,
+          4772,
+          6549
+        ],
+        "best_crop": [
+          2925,
+          5953,
+          4772,
+          6549
+        ],
+        "rejected": false,
+        "valid": true,
+        "best_score": 99.6697,
+        "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_007/recovery/history.json",
+        "turns": [
+          {
+            "turn": 1,
+            "crop_before": [
+              2925,
+              5953,
+              4772,
+              6549
+            ],
+            "crop_after": [
+              2925,
+              5953,
+              4772,
+              6549
+            ],
+            "action": {
+              "action": "finish",
+              "valid": true,
+              "candidate_valid": true,
+              "missing": [],
+              "arguments": {
+                "left_norm": 0,
+                "top_norm": 0,
+                "right_norm": 0,
+                "bottom_norm": 0
+              },
+              "confidence": 0.95
+            },
+            "format_attempts": [
+              {
+                "attempt": 0,
+                "prompt_tokens": 3554,
+                "completion_tokens": 116,
+                "total_tokens": 3670,
+                "finish_reason": "stop",
+                "elapsed_seconds": 15.981994000030681,
+                "content_bytes": 196,
+                "content_chars": 196,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": "expand_crop_cross_field_violation"
+              },
+              {
+                "attempt": 1,
+                "prompt_tokens": 3586,
+                "completion_tokens": 95,
+                "total_tokens": 3681,
+                "finish_reason": "stop",
+                "elapsed_seconds": 9.104130459018052,
+                "content_bytes": 176,
+                "content_chars": 176,
+                "reasoning_chars": 0,
+                "error": null,
+                "protocol_error": null
+              }
+            ],
+            "expansion": null,
+            "score_before": 99.6697,
+            "score_after": 99.6697,
+            "used_subagents": false,
+            "subagents": {},
+            "decision_source": "main"
           }
         ]
       }

@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import ast
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
+
+from PIL import Image
 
 
 SUPER_DIR = Path(__file__).resolve().parents[1]
@@ -14,6 +18,7 @@ from vision.detection import (  # noqa: E402
     axis_starts,
     circle_pair_marker_boxes,
     deduplicate_boxes,
+    detect_fai_candidates,
 )
 from vision.inference import parse_locate_response  # noqa: E402
 from vision.models import BBox, Primitive  # noqa: E402
@@ -61,6 +66,31 @@ class StandaloneVisionTests(unittest.TestCase):
         self.assertEqual(
             [box.to_int_tuple() for box in boxes],
             [(10, 10, 30, 30), (80, 80, 100, 100)],
+        )
+
+    def test_each_tile_combines_locateanything_and_opencv_candidates(self) -> None:
+        image = Image.new("RGB", (100, 100), "white")
+        pair = {
+            "left_bbox": BBox(60, 60, 80, 80),
+            "right_bbox": BBox(82, 60, 98, 80),
+        }
+        with (
+            tempfile.TemporaryDirectory() as temporary_dir,
+            patch("vision.detection.locate_boxes", return_value=[BBox(10, 10, 30, 30)]),
+            patch("vision.detection.detect_circle_pair_candidates", return_value=[pair]),
+        ):
+            boxes = detect_fai_candidates(
+                object(),
+                "LocateAnything-3B-8bit",
+                image,
+                100,
+                0.2,
+                Path(temporary_dir),
+                None,
+            )
+        self.assertEqual(
+            [box.to_int_tuple() for box in boxes],
+            [(10, 10, 30, 30), (60, 60, 80, 80)],
         )
 
     def test_primitive_contract_and_mapping_helpers(self) -> None:

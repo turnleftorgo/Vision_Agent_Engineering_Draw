@@ -32,9 +32,6 @@ from vision.detection import (
     DEFAULT_LOCATE_MODEL,
     DEFAULT_QWEN_MODEL,
     candidate_roi,
-    circle_pair_marker_boxes,
-    deduplicate_boxes,
-    detect_circle_pair_candidates,
     detect_fai_candidates,
     qwen_fai_fallback,
 )
@@ -255,10 +252,6 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
         raw_dir,
         debug_dir / "tiles" if args.debug else None,
     )
-    log("[1/8] OpenCV circle-pair proposals")
-    circle_pairs = detect_circle_pair_candidates(image)
-    circle_boxes = circle_pair_marker_boxes(circle_pairs)
-    marker_boxes = deduplicate_boxes(marker_boxes + circle_boxes)
     if not marker_boxes:
         log("[1/8] Hybrid proposals empty; trying full-page Qwen fallback")
         marker_boxes = qwen_fai_fallback(

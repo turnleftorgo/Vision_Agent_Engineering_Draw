@@ -89,19 +89,22 @@ def detect_fai_candidates(
         iter_tiles(image, tile_size, overlap)
     ):
         log(
-            f"[1/7] LocateAnything FAI scan tile {tile_index}: "
+            f"[1/8] LocateAnything + OpenCV FAI scan tile {tile_index}: "
             f"origin=({offset_x},{offset_y}), size={tile.width}x{tile.height}"
         )
         if tile_debug_dir:
             tile_debug_dir.mkdir(parents=True, exist_ok=True)
             tile.save(tile_debug_dir / f"tile_{tile_index:03d}.png")
-        local_boxes = locate_boxes(
+        locate_local_boxes = locate_boxes(
             client,
             model,
             tile,
             FAI_PROMPT,
             raw_dir / f"fai_tile_{tile_index:03d}.txt",
         )
+        circle_pairs = detect_circle_pair_candidates(tile)
+        opencv_local_boxes = circle_pair_marker_boxes(circle_pairs)
+        local_boxes = locate_local_boxes + opencv_local_boxes
         all_boxes.extend(box.translate(offset_x, offset_y) for box in local_boxes)
     return deduplicate_boxes(all_boxes)
 

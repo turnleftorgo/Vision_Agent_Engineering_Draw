@@ -33,6 +33,27 @@ Choose exactly one action:
   related leader reaches a crop border.
 - Use `reject_candidate` only when the selected red marker is not a real FAI.
 
+Interpret the two validity fields differently:
+
+- `candidate_valid` answers only whether the selected red rectangle contains a
+  real FAI marker. It does not mean that the current crop is complete.
+- `valid` answers whether the current crop is complete and contains all related
+  FAI content needed for the final output. It may be `true` only when the crop
+  can be accepted without any further expansion.
+
+The action fields must use exactly these combinations:
+
+- `expand_crop`: set `candidate_valid=true`, `valid=false`, and make at least
+  one of `left_norm`, `top_norm`, `right_norm`, or `bottom_norm` greater than
+  zero. List the clipped or outside evidence in `missing`.
+- `finish`: set `candidate_valid=true`, `valid=true`, `missing=[]`, and set all
+  four expansion directions to zero.
+- `reject_candidate`: set `candidate_valid=false`, `valid=false`, and set all
+  four expansion directions to zero.
+
+Never return `expand_crop` with every expansion direction set to zero. Never
+set `valid=true` when `missing` is non-empty or when requesting expansion.
+
 Never reject a real FAI merely because semantic association selected no
 components. Never claim completion to hide uncertainty. Never request expansion
 for unrelated FAI/SPC groups, title blocks, drawing views, or nearby dimensions.

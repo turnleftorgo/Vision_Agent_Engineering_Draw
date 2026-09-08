@@ -1,0 +1,226 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "fc823c9cb7cd03ebb1d87b44ad6f612ba8256b43f7ab76907ec05936a132ac5e"
+  },
+  "status": "rejected_not_fai",
+  "initial_crop": [
+    4013,
+    4713,
+    5277,
+    6253
+  ],
+  "current_crop": [
+    4013,
+    4713,
+    5277,
+    6253
+  ],
+  "best_crop": [
+    4013,
+    4713,
+    5277,
+    6253
+  ],
+  "best_score": 99.416,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        4013,
+        4713,
+        5277,
+        6253
+      ],
+      "crop_after": [
+        4013,
+        4713,
+        5277,
+        6253
+      ],
+      "action": {
+        "action": "reject_candidate",
+        "valid": false,
+        "candidate_valid": false,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.99
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 7605,
+          "completion_tokens": 102,
+          "total_tokens": 7707,
+          "finish_reason": "stop",
+          "elapsed_seconds": 28.203973708907142,
+          "content_bytes": 187,
+          "content_chars": 187,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "reject_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 7636,
+          "completion_tokens": 99,
+          "total_tokens": 7735,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.785064334049821,
+          "content_bytes": 187,
+          "content_chars": 187,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "reject_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 7636,
+          "completion_tokens": 100,
+          "total_tokens": 7736,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.888538375031203,
+          "content_bytes": 187,
+          "content_chars": 187,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "reject_cross_field_violation"
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.416,
+      "score_after": 99.416,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 7544,
+            "completion_tokens": 117,
+            "total_tokens": 7661,
+            "finish_reason": "stop",
+            "elapsed_seconds": 62.546927292016335,
+            "content_bytes": 311,
+            "content_chars": 311,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": false,
+            "crop_complete": false,
+            "missing": [
+              "FAI marker text",
+              "inspection number",
+              "parameter value",
+              "tolerance",
+              "feature-control frame",
+              "measurement description",
+              "leader line",
+              "arrowhead",
+              "target feature"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "adversarial_verifier"
+          }
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 7550,
+            "completion_tokens": 99,
+            "total_tokens": 7649,
+            "finish_reason": "stop",
+            "elapsed_seconds": 61.274959124973975,
+            "content_bytes": 228,
+            "content_chars": 228,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": false,
+            "crop_complete": false,
+            "missing": [
+              "FAI marker",
+              "SPC marker",
+              "parameter text",
+              "leader",
+              "arrowhead",
+              "target feature"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "completeness_auditor"
+          }
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 7536,
+            "completion_tokens": 107,
+            "total_tokens": 7643,
+            "finish_reason": "stop",
+            "elapsed_seconds": 61.71900112496223,
+            "content_bytes": 243,
+            "content_chars": 243,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": false,
+            "crop_complete": false,
+            "missing": [
+              "FAI marker",
+              "inspection number",
+              "parameter",
+              "tolerance",
+              "leader",
+              "arrowhead",
+              "target feature"
+            ],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "geometry_tracer"
+          }
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 7670,
+            "completion_tokens": 101,
+            "total_tokens": 7771,
+            "finish_reason": "stop",
+            "elapsed_seconds": 24.290151291992515,
+            "content_bytes": 188,
+            "content_chars": 188,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": null
+          }
+        ]
+      },
+      "decision_source": "coordinator"
+    }
+  ]
+}

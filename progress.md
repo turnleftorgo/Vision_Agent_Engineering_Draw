@@ -1,6 +1,59 @@
 # FAI Detection Pipeline Progress
 
-Last updated: 2026-09-03
+Last updated: 2026-09-08
+
+## 2026-09-08 updates
+
+### Per-tile LocateAnything and OpenCV candidate detection
+
+FAI proposal generation now runs both LocateAnything and OpenCV circle-pair
+detection on every overlapping image tile. Tile-local proposals from both
+detectors are translated back to full-image coordinates, merged, and then
+geometrically deduplicated before candidate ROIs are created.
+
+This replaces the earlier full-image OpenCV pass. On large drawings, the old
+image-relative Hough-circle radius limits could become invalid or too large for
+small FAI circles. Running OpenCV on the same 1200-pixel tiles as LocateAnything
+keeps the circle scale within the detector's useful range. OpenCV proposals are
+high-recall inputs; the later per-candidate semantic and recovery stages retain
+responsibility for deciding whether a proposal is a real FAI.
+
+Current proposal flow:
+
+```text
+Each overlapping tile
+    -> LocateAnything FAI proposals
+    -> OpenCV circle-pair proposals
+    -> translate both sets to full-image coordinates
+All tile proposals
+    -> merge and geometric deduplication
+    -> candidate ROI per retained proposal
+    -> per-candidate semantic association and validation
+```
+
+### Recovery action protocol prompt clarification
+
+The recovery prompt now explicitly distinguishes the two validity fields:
+
+- `candidate_valid` means only that the selected red rectangle contains a real
+  FAI marker.
+- `valid` means that the current crop is complete and can be accepted without
+  further expansion.
+
+The prompt and structured-output field descriptions now state the required
+cross-field combinations:
+
+```text
+expand_crop:     candidate_valid=true,  valid=false, expansion total > 0
+finish:          candidate_valid=true,  valid=true,  missing=[], expansion=0
+reject_candidate:candidate_valid=false, valid=false, expansion=0
+```
+
+This addresses a confirmed recovery failure where the model returned
+`action=expand_crop`, `valid=true`, a non-empty `missing` list, and zero for all
+expansion directions. That response was valid JSON but correctly rejected by
+Python as `expand_crop_cross_field_violation`. The Python protocol checks remain
+unchanged as the final safety boundary.
 
 ## Version 4 implementation
 

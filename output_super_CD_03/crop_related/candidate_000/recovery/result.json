@@ -1,45 +1,45 @@
 {
   "status": "protocol_failed",
   "final_crop": [
-    6744,
-    2030,
-    7551,
-    3561
+    6129,
+    1930,
+    6911,
+    3468
   ],
   "best_crop": [
-    6744,
-    2030,
-    7551,
-    3561
+    6129,
+    1930,
+    6911,
+    3468
   ],
   "rejected": false,
   "valid": false,
-  "best_score": 97.129,
+  "best_score": 97.1393,
   "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_03/crop_related/candidate_000/recovery/history.json",
   "turns": [
     {
       "turn": 1,
       "crop_before": [
-        6744,
-        2030,
-        7551,
-        3561
+        6129,
+        1930,
+        6911,
+        3468
       ],
       "crop_after": [
-        6744,
-        2030,
-        7551,
-        3561
+        6129,
+        1930,
+        6911,
+        3468
       ],
       "action": null,
       "format_attempts": [
         {
           "attempt": 0,
-          "prompt_tokens": 4931,
+          "prompt_tokens": 4732,
           "completion_tokens": 98,
-          "total_tokens": 5029,
+          "total_tokens": 4830,
           "finish_reason": "stop",
-          "elapsed_seconds": 19.06982054200489,
+          "elapsed_seconds": 18.54380737489555,
           "content_bytes": 202,
           "content_chars": 202,
           "reasoning_chars": 0,
@@ -48,45 +48,45 @@
         },
         {
           "attempt": 1,
-          "prompt_tokens": 4963,
-          "completion_tokens": 62,
-          "total_tokens": 5025,
+          "prompt_tokens": 4764,
+          "completion_tokens": 64,
+          "total_tokens": 4828,
           "finish_reason": "stop",
-          "elapsed_seconds": 5.981695041060448,
-          "content_bytes": 202,
-          "content_chars": 202,
+          "elapsed_seconds": 5.578920666011982,
+          "content_bytes": 201,
+          "content_chars": 201,
           "reasoning_chars": 0,
           "error": null,
           "protocol_error": "expand_crop_cross_field_violation"
         },
         {
           "attempt": 2,
-          "prompt_tokens": 4963,
-          "completion_tokens": 62,
-          "total_tokens": 5025,
+          "prompt_tokens": 4764,
+          "completion_tokens": 64,
+          "total_tokens": 4828,
           "finish_reason": "stop",
-          "elapsed_seconds": 6.023512665997259,
-          "content_bytes": 202,
-          "content_chars": 202,
+          "elapsed_seconds": 5.600700832903385,
+          "content_bytes": 201,
+          "content_chars": 201,
           "reasoning_chars": 0,
           "error": null,
           "protocol_error": "expand_crop_cross_field_violation"
         }
       ],
       "expansion": null,
-      "score_before": 97.129,
-      "score_after": 97.129,
+      "score_before": 97.1393,
+      "score_after": 97.1393,
       "used_subagents": true,
       "subagents": {
         "adversarial_verifier": {
           "call": {
-            "prompt_tokens": 4870,
-            "completion_tokens": 88,
-            "total_tokens": 4958,
+            "prompt_tokens": 4671,
+            "completion_tokens": 77,
+            "total_tokens": 4748,
             "finish_reason": "stop",
-            "elapsed_seconds": 41.01722854108084,
-            "content_bytes": 178,
-            "content_chars": 178,
+            "elapsed_seconds": 39.057298584026285,
+            "content_bytes": 163,
+            "content_chars": 163,
             "reasoning_chars": 0,
             "error": null
           },
@@ -95,13 +95,13 @@
         },
         "completeness_auditor": {
           "call": {
-            "prompt_tokens": 4876,
-            "completion_tokens": 82,
-            "total_tokens": 4958,
+            "prompt_tokens": 4677,
+            "completion_tokens": 79,
+            "total_tokens": 4756,
             "finish_reason": "stop",
-            "elapsed_seconds": 40.51715266704559,
-            "content_bytes": 181,
-            "content_chars": 181,
+            "elapsed_seconds": 38.82972408400383,
+            "content_bytes": 160,
+            "content_chars": 160,
             "reasoning_chars": 0,
             "error": null
           },
@@ -110,13 +110,13 @@
         },
         "geometry_tracer": {
           "call": {
-            "prompt_tokens": 4862,
-            "completion_tokens": 99,
-            "total_tokens": 4961,
+            "prompt_tokens": 4663,
+            "completion_tokens": 87,
+            "total_tokens": 4750,
             "finish_reason": "stop",
-            "elapsed_seconds": 41.79791316599585,
-            "content_bytes": 181,
-            "content_chars": 181,
+            "elapsed_seconds": 39.71363220794592,
+            "content_bytes": 178,
+            "content_chars": 178,
             "reasoning_chars": 0,
             "error": null
           },
