@@ -1,0 +1,267 @@
+{
+  "mapping": {
+    "marker_id": "F0",
+    "candidate_valid": true,
+    "fai_number": "1042",
+    "spc_letter": "VL",
+    "annotation_ids": [],
+    "text_ids": [
+      "T4",
+      "T6"
+    ],
+    "parameter_text_ids": [
+      "T4",
+      "T6"
+    ],
+    "description_text_ids": [],
+    "leader_path_ids": [
+      "LP0",
+      "LP1",
+      "LP2"
+    ],
+    "leader_ids": [
+      "L36",
+      "L32",
+      "L68",
+      "L52"
+    ],
+    "arrowhead_ids": [
+      "G4",
+      "G5",
+      "G10"
+    ],
+    "target_ids": [],
+    "complete": false,
+    "missing": [
+      "target"
+    ],
+    "confidence": 0.95,
+    "compact_semantic": true
+  },
+  "qwen_selected_compact_ids": [
+    "T4",
+    "T6",
+    "LP0",
+    "LP1",
+    "LP2",
+    "G4",
+    "G5",
+    "G10"
+  ],
+  "selected_ids": [
+    "F0",
+    "T4",
+    "T6",
+    "L36",
+    "L32",
+    "L68",
+    "L52",
+    "G4",
+    "G5",
+    "G10"
+  ],
+  "selected_leader_path_ids": [
+    "LP0",
+    "LP1",
+    "LP2"
+  ],
+  "leader_path_segments": {
+    "LP0": [
+      "L36"
+    ],
+    "LP1": [
+      "L32",
+      "L68"
+    ],
+    "LP2": [
+      "L52"
+    ],
+    "LP3": [
+      "L29",
+      "L39"
+    ],
+    "LP4": [
+      "L48"
+    ],
+    "LP5": [
+      "L34"
+    ]
+  },
+  "compact_evidence_records": [
+    {
+      "id": "F0",
+      "type": "fai_marker"
+    },
+    {
+      "id": "T4",
+      "type": "ocr_text",
+      "text": "O.20|SCORP"
+    },
+    {
+      "id": "T5",
+      "type": "ocr_text",
+      "text": "CN"
+    },
+    {
+      "id": "T6",
+      "type": "ocr_text",
+      "text": "Q.10"
+    },
+    {
+      "id": "T3",
+      "type": "ocr_text",
+      "text": "QO.10"
+    },
+    {
+      "id": "T2",
+      "type": "ocr_text",
+      "text": "OQ.20 | SCORP"
+    },
+    {
+      "id": "T0",
+      "type": "ocr_text",
+      "text": "1.850"
+    },
+    {
+      "id": "T1",
+      "type": "ocr_text",
+      "text": "—4--"
+    },
+    {
+      "id": "T11",
+      "type": "ocr_text",
+      "text": "CY|0.20}AR|SCORB-BIC"
+    },
+    {
+      "id": "T8",
+      "type": "ocr_text",
+      "text": "+"
+    },
+    {
+      "id": "T7",
+      "type": "ocr_text",
+      "text": "oe oe"
+    },
+    {
+      "id": "T9",
+      "type": "ocr_text",
+      "text": "o> O"
+    },
+    {
+      "id": "T12",
+      "type": "ocr_text",
+      "text": "A+B"
+    },
+    {
+      "id": "T10",
+      "type": "ocr_text",
+      "text": "K—s 2.5"
+    },
+    {
+      "id": "LP0",
+      "type": "leader_path",
+      "segment_count": 1
+    },
+    {
+      "id": "LP1",
+      "type": "leader_path",
+      "segment_count": 2
+    },
+    {
+      "id": "LP2",
+      "type": "leader_path",
+      "segment_count": 1
+    },
+    {
+      "id": "LP3",
+      "type": "leader_path",
+      "segment_count": 2
+    },
+    {
+      "id": "LP4",
+      "type": "leader_path",
+      "segment_count": 1
+    },
+    {
+      "id": "LP5",
+      "type": "leader_path",
+      "segment_count": 1
+    },
+    {
+      "id": "G3",
+      "type": "triangle"
+    },
+    {
+      "id": "G4",
+      "type": "triangle"
+    },
+    {
+      "id": "G5",
+      "type": "triangle"
+    },
+    {
+      "id": "G10",
+      "type": "triangle"
+    },
+    {
+      "id": "G6",
+      "type": "triangle"
+    },
+    {
+      "id": "G7",
+      "type": "triangle"
+    },
+    {
+      "id": "G0",
+      "type": "triangle"
+    },
+    {
+      "id": "G8",
+      "type": "triangle"
+    },
+    {
+      "id": "G2",
+      "type": "triangle"
+    },
+    {
+      "id": "G1",
+      "type": "triangle"
+    }
+  ],
+  "minimum_source": "semantic_exact_union+leader_target_trace",
+  "minimum_crop_bbox": [
+    6187,
+    793,
+    7918,
+    1631
+  ],
+  "leader_target_extensions": [
+    {
+      "source_id": "L68",
+      "side": "right",
+      "start": [
+        7143,
+        1266
+      ],
+      "terminal": [
+        7716,
+        1429
+      ],
+      "trace_bbox": [
+        7132,
+        1255,
+        7729,
+        1442
+      ],
+      "target_bbox": [
+        7514,
+        1227,
+        7918,
+        1631
+      ],
+      "traced_pixels": 596,
+      "hit_ratio": 0.9161,
+      "marker_circle_support": 1.0
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "status": "validated_from_incomplete_mapping",
+  "final_crop": [
+    4730,
+    1965,
+    6488,
+    2658
+  ],
+  "best_crop": [
+    4730,
+    1965,
+    6488,
+    2658
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 99.6342,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_13/crop_related/candidate_003/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        4890,
+        1965,
+        6488,
+        2658
+      ],
+      "crop_after": [
+        4730,
+        1965,
+        6488,
+        2658
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The leader line from the FAI 945 annotation points to the left, and the target feature (the h剖面/"
+        ],
+        "arguments": {
+          "left_norm": 100,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4474,
+          "completion_tokens": 119,
+          "total_tokens": 4593,
+          "finish_reason": "stop",
+          "elapsed_seconds": 18.651859540957958,
+          "content_bytes": 288,
+          "content_chars": 288,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "missing_item_invalid"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 4502,
+          "completion_tokens": 89,
+          "total_tokens": 4591,
+          "finish_reason": "stop",
+          "elapsed_seconds": 6.313657250022516,
+          "content_bytes": 190,
+          "content_chars": 190,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 4561,
+          "completion_tokens": 124,
+          "total_tokens": 4685,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.515553333098069,
+          "content_bytes": 292,
+          "content_chars": 292,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          4890,
+          1965,
+          6488,
+          2658
+        ],
+        "after": [
+          4730,
+          1965,
+          6488,
+          2658
+        ],
+        "requested_norm": {
+          "left_norm": 100,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 159.709,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 13265872.828,
+        "limited_by": []
+      },
+      "score_before": 97.1675,
+      "score_after": 99.6342,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        4730,
+        1965,
+        6488,
+        2658
+      ],
+      "crop_after": [
+        4730,
+        1965,
+        6488,
+        2658
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4499,
+          "completion_tokens": 81,
+          "total_tokens": 4580,
+          "finish_reason": "stop",
+          "elapsed_seconds": 16.58271583390888,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.6342,
+      "score_after": 99.6342,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

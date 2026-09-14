@@ -1,0 +1,276 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    4280,
+    4791,
+    5249,
+    5624
+  ],
+  "current_crop": [
+    3968,
+    4791,
+    5249,
+    5624
+  ],
+  "best_crop": [
+    3968,
+    4791,
+    5249,
+    5624
+  ],
+  "best_score": 99.7577,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        4280,
+        4791,
+        5249,
+        5624
+      ],
+      "crop_after": [
+        4135,
+        4791,
+        5249,
+        5624
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target_feature_left",
+          "leader_arrow_left"
+        ],
+        "arguments": {
+          "left_norm": 150,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4926,
+          "completion_tokens": 96,
+          "total_tokens": 5022,
+          "finish_reason": "stop",
+          "elapsed_seconds": 18.83380533300806,
+          "content_bytes": 213,
+          "content_chars": 213,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5013,
+          "completion_tokens": 94,
+          "total_tokens": 5107,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.71167987503577,
+          "content_bytes": 226,
+          "content_chars": 226,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          4280,
+          4791,
+          5249,
+          5624
+        ],
+        "after": [
+          4135,
+          4791,
+          5249,
+          5624
+        ],
+        "requested_norm": {
+          "left_norm": 150,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 145.201,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 9666706.348,
+        "limited_by": []
+      },
+      "score_before": 99.7577,
+      "score_after": 99.7213,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        4135,
+        4791,
+        5249,
+        5624
+      ],
+      "crop_after": [
+        3968,
+        4791,
+        5249,
+        5624
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target_feature_left",
+          "leader_arrow_left"
+        ],
+        "arguments": {
+          "left_norm": 150,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5570,
+          "completion_tokens": 98,
+          "total_tokens": 5668,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.92928404104896,
+          "content_bytes": 224,
+          "content_chars": 224,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5657,
+          "completion_tokens": 94,
+          "total_tokens": 5751,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.339497999986634,
+          "content_bytes": 226,
+          "content_chars": 226,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          4135,
+          4791,
+          5249,
+          5624
+        ],
+        "after": [
+          3968,
+          4791,
+          5249,
+          5624
+        ],
+        "requested_norm": {
+          "left_norm": 150,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 166.981,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 9666706.348,
+        "limited_by": []
+      },
+      "score_before": 99.7213,
+      "score_after": 99.6795,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        3968,
+        4791,
+        5249,
+        5624
+      ],
+      "crop_after": [
+        3968,
+        4791,
+        5249,
+        5624
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5781,
+          "completion_tokens": 77,
+          "total_tokens": 5858,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.45985395903699,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.6795,
+      "score_after": 99.6795,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

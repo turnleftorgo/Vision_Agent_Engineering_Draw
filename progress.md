@@ -31,6 +31,19 @@ All tile proposals
     -> per-candidate semantic association and validation
 ```
 
+OpenCV proposals now receive an additional per-tile circle-perimeter support
+check before they are merged with LocateAnything. This is a deterministic image
+geometry filter, not another Qwen validation stage. It removes paired holes,
+GD&T frames, and ordinary part geometry that happen to satisfy the Hough-circle
+pair spacing and horizontal-divider tests. LocateAnything proposals bypass this
+filter and remain unchanged.
+
+An offline replay using the saved CD_04 LocateAnything responses reduced the
+merged candidate count from 20 to 9. OpenCV alone dropped from 20 deduplicated
+proposals to 9, while all 5 LocateAnything proposals were preserved. The nine
+remaining boxes correspond to the nine visible FAI annotation regions in the
+drawing, eliminating the rejected Candidate 4-9 cluster on the top part edge.
+
 ### Recovery action protocol prompt clarification
 
 The recovery prompt now explicitly distinguishes the two validity fields:
@@ -54,6 +67,35 @@ This addresses a confirmed recovery failure where the model returned
 expansion directions. That response was valid JSON but correctly rejected by
 Python as `expand_crop_cross_field_violation`. The Python protocol checks remain
 unchanged as the final safety boundary.
+
+### Leader-to-target crop construction
+
+Crop construction now extends a tight semantic union along selected leader
+geometry when the target part is missing from the bounded candidate ROI. The
+extension follows dark full-resolution source pixels in the leader's outward
+direction, stops when the leader terminates at local drawing geometry, and adds
+only a bounded patch around that terminal point. The resulting crop contains
+the FAI annotation, the complete leader, and a useful local portion of the
+touched part instead of stopping at the annotation cluster.
+
+Long tracing is gated by geometric circle-perimeter support around `F0`. This
+prevents high-recall OpenCV false proposals on GD&T frames, holes, or ordinary
+part geometry from launching large crop extensions. Each accepted trace is
+saved in `selection.json` and `results.json` under
+`leader_target_extensions`, including its source line ID, direction, terminal
+point, trace box, target box, distance, and pixel hit ratio.
+
+Synthetic selected leader and target evidence is added to recovery scoring, so
+an extended crop is not discarded merely because it is larger than the old
+ROI-only crop. Semantic mappings are also normalized so `complete=true` cannot
+coexist with a non-empty `missing` list. Recovery retries now receive an
+explicit correction when an `expand_crop` response requests zero expansion in
+all directions.
+
+Offline verification on CD_04 Candidate 11 changed the crop from
+`[936,3141,2151,3819]` to `[936,3141,3245,3819]`. It followed selected leader
+`L58` 959 pixels to `(3046,3605)`, capturing the annotation, full leader, and
+the local vertical part edge without including the whole drawing.
 
 ## Version 4 implementation
 

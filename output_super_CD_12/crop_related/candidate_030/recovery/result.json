@@ -1,0 +1,172 @@
+{
+  "status": "validated_from_incomplete_mapping",
+  "final_crop": [
+    3792,
+    3555,
+    5563,
+    4490
+  ],
+  "best_crop": [
+    3792,
+    3555,
+    5563,
+    4490
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 99.5697,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_12/crop_related/candidate_030/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        3792,
+        3600,
+        5402,
+        4490
+      ],
+      "crop_after": [
+        3792,
+        3555,
+        5563,
+        4490
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The FAI 1269 marker is associated with the dimension 3.761 +/- 0.05 and the flatness feature 0.1",
+          "The leader line for the 3.761 dimension extends to the right, but the target feature/arrowhead",
+          "The leader line for the 0.10 D feature control frame extends to the right, but the target",
+          "The right border of the crop cuts off the dimension text (4.169 +/- 0.03) and the",
+          "The top border of the crop cuts off the FAI 1096 marker and the 0.10 PB feature"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 50,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5450,
+          "completion_tokens": 94,
+          "total_tokens": 5544,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.295868374989368,
+          "content_bytes": 200,
+          "content_chars": 200,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5537,
+          "completion_tokens": 240,
+          "total_tokens": 5777,
+          "finish_reason": "stop",
+          "elapsed_seconds": 16.991469166940078,
+          "content_bytes": 642,
+          "content_chars": 642,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          3792,
+          3600,
+          5402,
+          4490
+        ],
+        "after": [
+          3792,
+          3555,
+          5563,
+          4490
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 50,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 44.449,
+          "right": 160.909,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17165584.359,
+        "limited_by": []
+      },
+      "score_before": 99.5697,
+      "score_after": 99.503,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        3792,
+        3555,
+        5563,
+        4490
+      ],
+      "crop_after": [
+        3792,
+        3555,
+        5563,
+        4490
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5746,
+          "completion_tokens": 89,
+          "total_tokens": 5835,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.84263695892878,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.503,
+      "score_after": 99.503,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

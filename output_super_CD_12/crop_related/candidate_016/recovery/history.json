@@ -1,0 +1,177 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    4584,
+    904,
+    6201,
+    1822
+  ],
+  "current_crop": [
+    4584,
+    904,
+    6443,
+    1913
+  ],
+  "best_crop": [
+    4584,
+    904,
+    6443,
+    1913
+  ],
+  "best_score": 99.5547,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        4584,
+        904,
+        6201,
+        1822
+      ],
+      "crop_after": [
+        4584,
+        904,
+        6443,
+        1913
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target_hole_right",
+          "target_hole_bottom"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 100
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5676,
+          "completion_tokens": 98,
+          "total_tokens": 5774,
+          "finish_reason": "stop",
+          "elapsed_seconds": 21.1993036250351,
+          "content_bytes": 215,
+          "content_chars": 215,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5763,
+          "completion_tokens": 104,
+          "total_tokens": 5867,
+          "finish_reason": "stop",
+          "elapsed_seconds": 10.212451666011475,
+          "content_bytes": 227,
+          "content_chars": 227,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          4584,
+          904,
+          6201,
+          1822
+        ],
+        "after": [
+          4584,
+          904,
+          6443,
+          1913
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 150,
+          "bottom_norm": 100
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 242.363,
+          "bottom": 91.619
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17763998.213,
+        "limited_by": []
+      },
+      "score_before": 99.5547,
+      "score_after": 99.4367,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        4584,
+        904,
+        6443,
+        1913
+      ],
+      "crop_after": [
+        4584,
+        904,
+        6443,
+        1913
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5950,
+          "completion_tokens": 75,
+          "total_tokens": 6025,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.694255790906027,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.4367,
+      "score_after": 99.4367,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

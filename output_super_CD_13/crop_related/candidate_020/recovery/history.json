@@ -1,0 +1,315 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "boundary_exhausted",
+  "initial_crop": [
+    2576,
+    5527,
+    3388,
+    6566
+  ],
+  "current_crop": [
+    2576,
+    5527,
+    3388,
+    6800
+  ],
+  "best_crop": [
+    2576,
+    5527,
+    3388,
+    6566
+  ],
+  "best_score": 99.7464,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2576,
+        5527,
+        3388,
+        6566
+      ],
+      "crop_after": [
+        2576,
+        5527,
+        3388,
+        6691
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "bottom leader/arrowhead for FAI 1310 group",
+          "bottom feature-control frame 0.10 Z-SCORP clipped at bottom border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "confidence": 0.7
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4634,
+          "completion_tokens": 433,
+          "total_tokens": 5067,
+          "finish_reason": "stop",
+          "elapsed_seconds": 35.79624858300667,
+          "content_bytes": 1380,
+          "content_chars": 1380,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 4721,
+          "completion_tokens": 81,
+          "total_tokens": 4802,
+          "finish_reason": "stop",
+          "elapsed_seconds": 6.360556875006296,
+          "content_bytes": 297,
+          "content_chars": 297,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2576,
+          5527,
+          3388,
+          6566
+        ],
+        "after": [
+          2576,
+          5527,
+          3388,
+          6691
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 124.606
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 10115296.809,
+        "limited_by": []
+      },
+      "score_before": 99.7464,
+      "score_after": 99.716,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        2576,
+        5527,
+        3388,
+        6691
+      ],
+      "crop_after": [
+        2576,
+        5527,
+        3388,
+        6800
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "bottom feature-control frame 0.10 Z-SCORP for FAI 344 clipped at bottom border",
+          "bottom leader/arrowhead for FAI 344 group clipped at bottom border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4908,
+          "completion_tokens": 148,
+          "total_tokens": 5056,
+          "finish_reason": "stop",
+          "elapsed_seconds": 21.436860208050348,
+          "content_bytes": 334,
+          "content_chars": 334,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2576,
+          5527,
+          3388,
+          6691
+        ],
+        "after": [
+          2576,
+          5527,
+          3388,
+          6800
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 109.503
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": true
+        },
+        "changed": true,
+        "area_cap": 10115296.809,
+        "limited_by": []
+      },
+      "score_before": 99.716,
+      "score_after": 99.6893,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        2576,
+        5527,
+        3388,
+        6800
+      ],
+      "crop_after": [
+        2576,
+        5527,
+        3388,
+        6800
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "bottom feature-control frame 0.10 Z-SCORP for FAI 344 clipped at bottom border",
+          "bottom leader/arrowhead for FAI 344 group clipped at bottom border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 110
+        },
+        "confidence": 0.85
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5192,
+          "completion_tokens": 89,
+          "total_tokens": 5281,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.155396208981983,
+          "content_bytes": 331,
+          "content_chars": 331,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5279,
+          "completion_tokens": 92,
+          "total_tokens": 5371,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.248000457999296,
+          "content_bytes": 334,
+          "content_chars": 334,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2576,
+          5527,
+          3388,
+          6800
+        ],
+        "after": [
+          2576,
+          5527,
+          3388,
+          6800
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 110
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": true
+        },
+        "changed": false,
+        "area_cap": 10115296.809,
+        "limited_by": [
+          "bottom_boundary"
+        ]
+      },
+      "score_before": 99.6893,
+      "score_after": 99.6893,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

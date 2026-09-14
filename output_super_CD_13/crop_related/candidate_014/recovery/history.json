@@ -1,0 +1,177 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated",
+  "initial_crop": [
+    5999,
+    3529,
+    7712,
+    5180
+  ],
+  "current_crop": [
+    5999,
+    3529,
+    7884,
+    5345
+  ],
+  "best_crop": [
+    5999,
+    3529,
+    7884,
+    5345
+  ],
+  "best_score": 98.9723,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        5999,
+        3529,
+        7712,
+        5180
+      ],
+      "crop_after": [
+        5999,
+        3529,
+        7884,
+        5345
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "DETAIL BZ label clipped at bottom border",
+          "SCORP-B label and (3.075) dimension text clipped at right border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 100
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 9182,
+          "completion_tokens": 111,
+          "total_tokens": 9293,
+          "finish_reason": "stop",
+          "elapsed_seconds": 33.55292766704224,
+          "content_bytes": 280,
+          "content_chars": 280,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 9269,
+          "completion_tokens": 117,
+          "total_tokens": 9386,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.793334624962881,
+          "content_bytes": 296,
+          "content_chars": 296,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          5999,
+          3529,
+          7712,
+          5180
+        ],
+        "after": [
+          5999,
+          3529,
+          7884,
+          5345
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 100
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 171.209,
+          "bottom": 164.919
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 91.6507,
+      "score_after": 98.9723,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        5999,
+        3529,
+        7884,
+        5345
+      ],
+      "crop_after": [
+        5999,
+        3529,
+        7884,
+        5345
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 9879,
+          "completion_tokens": 89,
+          "total_tokens": 9968,
+          "finish_reason": "stop",
+          "elapsed_seconds": 34.72501429100521,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 98.9723,
+      "score_after": 98.9723,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 from typing import Any, Iterable
 
+import numpy as np
 from PIL import Image, ImageDraw
 
 
@@ -35,7 +36,10 @@ from vision.detection import (
     detect_fai_candidates,
     qwen_fai_fallback,
 )
-from vision.evidence import create_candidate_evidence
+from vision.evidence import (
+    create_candidate_evidence,
+    extend_crop_along_selected_leaders,
+)
 from vision.inference import create_vision_client
 from vision.models import BBox, Primitive
 from vision.utils import log, mapping_selected_ids, safe_fai_name
@@ -238,6 +242,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
         directory.mkdir(parents=True, exist_ok=True)
 
     image = Image.open(input_path).convert("RGB")
+    gray_image = np.asarray(image.convert("L"))
     client = create_vision_client(args.endpoint, args.api_key, args.timeout)
     skill = None
     if not args.no_verify:
@@ -318,6 +323,35 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
         minimum_crop, minimum_source, chosen_ids = exact_or_bootstrap_crop(
             mapping, primitives, roi_bbox, image.size
         )
+        leader_extensions: list[dict[str, object]] = []
+        mapping_missing = mapping.get("missing", [])
+        target_is_missing = (
+            not mapping.get("target_ids")
+            or (
+                isinstance(mapping_missing, list)
+                and "target" in mapping_missing
+            )
+        )
+        if (
+            mapping.get("candidate_valid", True)
+            and minimum_source == "semantic_exact_union"
+            and target_is_missing
+        ):
+            traced_crop, leader_extensions = extend_crop_along_selected_leaders(
+                gray_image,
+                roi_bbox,
+                minimum_crop,
+                primitives,
+                chosen_ids,
+                image.size,
+            )
+            if leader_extensions:
+                minimum_crop = traced_crop
+                minimum_source += "+leader_target_trace"
+                log(
+                    f"[5/8] Candidate {index}: traced {len(leader_extensions)} "
+                    "leader path(s) to local target geometry"
+                )
         fai_name = safe_fai_name(mapping.get("fai_number"))
         base = f"FAI{fai_name}_{index:03d}"
         selected_overlay = build_compact_selection_image(
@@ -340,6 +374,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
                 "compact_evidence_records": compact_evidence.records,
                 "minimum_source": minimum_source,
                 "minimum_crop_bbox": minimum_crop.to_list(),
+                "leader_target_extensions": leader_extensions,
             },
         )
         log(
@@ -356,6 +391,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
             "semantic_selected_ids": chosen_ids,
             "minimum_source": minimum_source,
             "minimum_crop_bbox": minimum_crop.to_list(),
+            "leader_target_extensions": leader_extensions,
             "related_dir": str(related_candidate_dir),
             "selection_image_path": str(selected_path),
             "minimum_crop_path": str(minimum_path),
@@ -379,6 +415,33 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
             assert skill is not None
             log(f"[6/8] Candidate {index}: starting agentic crop recovery")
             evidence = global_evidence(primitives, roi_bbox, chosen_ids)
+            for extension_index, extension in enumerate(leader_extensions):
+                evidence.extend(
+                    [
+                        EvidenceBox(
+                            f"XL{extension_index}",
+                            "leader_segment",
+                            CropBox.from_values(extension["trace_bbox"]),
+                            True,
+                        ),
+                        EvidenceBox(
+                            f"XR{extension_index}",
+                            "target_part",
+                            CropBox.from_values(extension["target_bbox"]),
+                            True,
+                        ),
+                    ]
+                )
+            recovery_mapping = dict(mapping)
+            if leader_extensions:
+                remaining_missing = [
+                    item
+                    for item in mapping.get("missing", [])
+                    if item != "target"
+                ]
+                recovery_mapping["missing"] = remaining_missing
+                recovery_mapping["complete"] = not remaining_missing
+                recovery_mapping["geometric_target_recovered"] = True
             config = RecoveryConfig(
                 max_turns=args.max_turns,
                 max_format_retries=args.max_format_retries,
@@ -399,7 +462,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
                 image,
                 CropBox.from_values(marker_box),
                 CropBox.from_values(minimum_crop),
-                mapping,
+                recovery_mapping,
                 evidence,
                 skill,
                 config,

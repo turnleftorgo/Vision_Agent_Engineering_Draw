@@ -1,0 +1,276 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "rejected_not_fai",
+  "initial_crop": [
+    2451,
+    937,
+    4074,
+    1909
+  ],
+  "current_crop": [
+    1544,
+    937,
+    4074,
+    1909
+  ],
+  "best_crop": [
+    2451,
+    937,
+    4074,
+    1909
+  ],
+  "best_score": 99.5269,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2451,
+        937,
+        4074,
+        1909
+      ],
+      "crop_after": [
+        2127,
+        937,
+        4074,
+        1909
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "FAI 34 marker and tolerance block are outside the current crop on the left; leader arrowhead and",
+          "target feature for FAI 34 are not visible in the current crop"
+        ],
+        "arguments": {
+          "left_norm": 200,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.85
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5876,
+          "completion_tokens": 81,
+          "total_tokens": 5957,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.237099834019318,
+          "content_bytes": 336,
+          "content_chars": 336,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5963,
+          "completion_tokens": 87,
+          "total_tokens": 6050,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.714196334010921,
+          "content_bytes": 347,
+          "content_chars": 347,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2451,
+          937,
+          4074,
+          1909
+        ],
+        "after": [
+          2127,
+          937,
+          4074,
+          1909
+        ],
+        "requested_norm": {
+          "left_norm": 200,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 324.238,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 18874287.331,
+        "limited_by": []
+      },
+      "score_before": 99.5269,
+      "score_after": 99.4323,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        2127,
+        937,
+        4074,
+        1909
+      ],
+      "crop_after": [
+        1544,
+        937,
+        4074,
+        1909
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "FAI 34 marker and tolerance block are outside the current crop on the left; leader arrowhead and",
+          "target feature for FAI 34 are not visible in the current crop"
+        ],
+        "arguments": {
+          "left_norm": 300,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.85
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5652,
+          "completion_tokens": 84,
+          "total_tokens": 5736,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.177681125001982,
+          "content_bytes": 344,
+          "content_chars": 344,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5739,
+          "completion_tokens": 87,
+          "total_tokens": 5826,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.138080334058031,
+          "content_bytes": 347,
+          "content_chars": 347,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2127,
+          937,
+          4074,
+          1909
+        ],
+        "after": [
+          1544,
+          937,
+          4074,
+          1909
+        ],
+        "requested_norm": {
+          "left_norm": 300,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 583.628,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 18874287.331,
+        "limited_by": []
+      },
+      "score_before": 99.4323,
+      "score_after": 99.2619,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        1544,
+        937,
+        4074,
+        1909
+      ],
+      "crop_after": [
+        1544,
+        937,
+        4074,
+        1909
+      ],
+      "action": {
+        "action": "reject_candidate",
+        "valid": false,
+        "candidate_valid": false,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5472,
+          "completion_tokens": 90,
+          "total_tokens": 5562,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.76962812501006,
+          "content_bytes": 188,
+          "content_chars": 188,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.2619,
+      "score_after": 99.2619,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

@@ -152,10 +152,18 @@ def _observation_prompt(
     }
     repair = ""
     if repair_error:
+        repair_instruction = ""
+        if repair_error == "expand_crop_cross_field_violation":
+            repair_instruction = (
+                " For expand_crop, valid must be false, candidate_valid must be "
+                "true, and at least one requested direction must be an integer "
+                "from 1 through 500. For example, a clipped right side requires "
+                "right_norm greater than zero and the other directions may be zero."
+            )
         repair = (
             "\nYour previous response failed protocol validation: "
             f"{repair_error}. Reinspect the same unchanged observation and return "
-            "only one schema-conforming JSON object.\n"
+            f"only one schema-conforming JSON object.{repair_instruction}\n"
         )
     final_rule = (
         "This is the final observation. expand_crop is forbidden; return finish "

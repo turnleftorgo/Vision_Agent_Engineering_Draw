@@ -14,7 +14,7 @@ import numpy as np
 from openai import OpenAI
 from PIL import Image, ImageDraw
 
-from .detection import deduplicate_boxes
+from .detection import circle_perimeter_support, deduplicate_boxes
 from .inference import locate_boxes
 from .models import BBox, Primitive
 from .utils import log
@@ -385,3 +385,183 @@ def create_candidate_evidence(
         for index, box in enumerate(detect_triangle_candidates(roi, lines, arrow_boxes))
     )
     return roi, primitives, build_evidence_overlay(roi, primitives)
+
+
+def extend_crop_along_selected_leaders(
+    gray_full_image: np.ndarray,
+    roi_bbox: BBox,
+    current_crop: BBox,
+    primitives: list[Primitive],
+    selected_ids: list[str],
+    image_size: tuple[int, int],
+    *,
+    max_traces: int = 4,
+) -> tuple[BBox, list[dict[str, object]]]:
+    """Follow selected leader rays beyond a tight crop to their local targets.
+
+    Semantic evidence is intentionally collected inside a bounded candidate ROI.
+    Long leaders can therefore be selected correctly while their touched part is
+    still outside both the semantic union and the ROI.  This function uses the
+    selected line geometry only to choose an outward ray, follows dark source
+    pixels in the original full-resolution drawing, and adds a bounded patch of
+    geometry around the terminal point.  It never includes the whole part.
+    """
+    if gray_full_image.ndim != 2:
+        raise ValueError("gray_full_image must be a two-dimensional array")
+    width, height = image_size
+    if gray_full_image.shape[1] != width or gray_full_image.shape[0] != height:
+        raise ValueError("gray_full_image dimensions do not match image_size")
+
+    marker = next((item for item in primitives if item.id == "F0"), None)
+    if marker is None:
+        return current_crop, []
+    marker_global = marker.bbox.translate(roi_bbox.x1, roi_bbox.y1).ordered()
+    circle_support = circle_perimeter_support(gray_full_image, marker_global)
+    # High-recall OpenCV proposals can land on GD&T frames or part geometry.
+    # Do not let those false candidates launch a long ray across the drawing.
+    if circle_support < 0.75:
+        return current_crop, []
+    selected = set(selected_ids)
+    local_crop = current_crop.translate(-roi_bbox.x1, -roi_bbox.y1).ordered()
+    marker_center = marker.bbox.center
+    marker_scale = max(marker.bbox.width, marker.bbox.height, 1.0)
+    edge_margin = max(48.0, min(local_crop.width, local_crop.height) * 0.12)
+    maximum_segment_length = max(roi_bbox.width, roi_bbox.height) * 0.82
+
+    candidates: list[
+        tuple[
+            float,
+            Primitive,
+            tuple[float, float],
+            tuple[float, float],
+            str,
+        ]
+    ] = []
+    for item in primitives:
+        if (
+            item.id not in selected
+            or item.kind != "leader_segment"
+            or len(item.points) < 2
+        ):
+            continue
+        endpoints = (item.points[0], item.points[-1])
+        near, far = sorted(
+            endpoints, key=lambda point: math.dist(point, marker_center)
+        )
+        dx = float(far[0] - near[0])
+        dy = float(far[1] - near[1])
+        length = math.hypot(dx, dy)
+        if length < max(24.0, marker_scale * 0.75) or length > maximum_segment_length:
+            continue
+        ux, uy = dx / length, dy / length
+        side = ""
+        if ux > 0.35 and local_crop.x2 - far[0] <= edge_margin:
+            side = "right"
+        elif ux < -0.35 and far[0] - local_crop.x1 <= edge_margin:
+            side = "left"
+        elif uy > 0.35 and local_crop.y2 - far[1] <= edge_margin:
+            side = "bottom"
+        elif uy < -0.35 and far[1] - local_crop.y1 <= edge_margin:
+            side = "top"
+        if not side:
+            continue
+        candidates.append(
+            (
+                math.dist(far, marker_center),
+                item,
+                (float(far[0] + roi_bbox.x1), float(far[1] + roi_bbox.y1)),
+                (ux, uy),
+                side,
+            )
+        )
+
+    candidates.sort(key=lambda value: value[0], reverse=True)
+    accepted: list[dict[str, object]] = []
+    accepted_starts: list[tuple[float, float]] = []
+    for _, item, start, direction, side in candidates:
+        if len(accepted) >= max_traces:
+            break
+        if any(
+            math.dist(start, existing) <= marker_scale * 2.0
+            for existing in accepted_starts
+        ):
+            continue
+        ux, uy = direction
+        perpendicular = (-uy, ux)
+        corridor_radius = max(7, min(18, round(marker_scale * 0.16)))
+        maximum_distance = round(max(roi_bbox.width, roi_bbox.height) * 1.5)
+        maximum_gap = max(28, min(60, round(marker_scale * 0.60)))
+        last_hit = 0
+        hit_count = 0
+        gap = 0
+        terminated = False
+        for distance in range(1, maximum_distance + 1):
+            expected_x = start[0] + ux * distance
+            expected_y = start[1] + uy * distance
+            if not (0 <= expected_x < width and 0 <= expected_y < height):
+                terminated = True
+                break
+            found = False
+            for offset in range(-corridor_radius, corridor_radius + 1):
+                x = round(expected_x + perpendicular[0] * offset)
+                y = round(expected_y + perpendicular[1] * offset)
+                if 0 <= x < width and 0 <= y < height and gray_full_image[y, x] < 200:
+                    found = True
+                    break
+            if found:
+                last_hit = distance
+                hit_count += 1
+                gap = 0
+            else:
+                gap += 1
+                if gap > maximum_gap and distance > maximum_gap:
+                    terminated = True
+                    break
+
+        minimum_extension = max(48.0, marker_scale * 1.25)
+        if (
+            not terminated
+            or last_hit < minimum_extension
+            or hit_count / max(last_hit, 1) < 0.45
+        ):
+            continue
+        terminal = (start[0] + ux * last_hit, start[1] + uy * last_hit)
+        target_padding = max(96.0, min(280.0, marker_scale * 3.0))
+        trace_box = BBox(
+            min(start[0], terminal[0]),
+            min(start[1], terminal[1]),
+            max(start[0], terminal[0]) + 1,
+            max(start[1], terminal[1]) + 1,
+        ).expand(
+            corridor_radius,
+            corridor_radius,
+            corridor_radius,
+            corridor_radius,
+        )
+        target_box = BBox(
+            terminal[0] - target_padding,
+            terminal[1] - target_padding,
+            terminal[0] + target_padding,
+            terminal[1] + target_padding,
+        ).clamp(width, height)
+        accepted.append(
+            {
+                "source_id": item.id,
+                "side": side,
+                "start": [round(start[0]), round(start[1])],
+                "terminal": [round(terminal[0]), round(terminal[1])],
+                "trace_bbox": trace_box.clamp(width, height).to_list(),
+                "target_bbox": target_box.to_list(),
+                "traced_pixels": last_hit,
+                "hit_ratio": round(hit_count / max(last_hit, 1), 4),
+                "marker_circle_support": round(circle_support, 4),
+            }
+        )
+        accepted_starts.append(start)
+
+    extension_boxes = [current_crop]
+    for trace in accepted:
+        extension_boxes.append(BBox(*trace["trace_bbox"]))
+        extension_boxes.append(BBox(*trace["target_bbox"]))
+    extended = (BBox.union(extension_boxes) or current_crop).clamp(width, height)
+    return extended, accepted

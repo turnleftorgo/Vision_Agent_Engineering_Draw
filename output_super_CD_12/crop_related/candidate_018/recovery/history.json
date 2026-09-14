@@ -1,0 +1,177 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    6679,
+    1593,
+    8061,
+    2914
+  ],
+  "current_crop": [
+    6679,
+    1593,
+    8061,
+    3073
+  ],
+  "best_crop": [
+    6679,
+    1593,
+    8061,
+    3073
+  ],
+  "best_score": 99.4515,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6679,
+        1593,
+        8061,
+        2914
+      ],
+      "crop_after": [
+        6679,
+        1593,
+        8061,
+        3073
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target feature for FAI 195 leader arrowheads",
+          "bottom FAI 192/SPC FO marker clipped at bottom border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "confidence": 0.7
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 8136,
+          "completion_tokens": 97,
+          "total_tokens": 8233,
+          "finish_reason": "stop",
+          "elapsed_seconds": 29.538541584042832,
+          "content_bytes": 218,
+          "content_chars": 218,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 8223,
+          "completion_tokens": 77,
+          "total_tokens": 8300,
+          "finish_reason": "stop",
+          "elapsed_seconds": 10.032540999935009,
+          "content_bytes": 286,
+          "content_chars": 286,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6679,
+          1593,
+          8061,
+          2914
+        ],
+        "after": [
+          6679,
+          1593,
+          8061,
+          3073
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 158.394
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 21883032.896,
+        "limited_by": []
+      },
+      "score_before": 99.4515,
+      "score_after": 99.3856,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        6679,
+        1593,
+        8061,
+        3073
+      ],
+      "crop_after": [
+        6679,
+        1593,
+        8061,
+        3073
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 8269,
+          "completion_tokens": 77,
+          "total_tokens": 8346,
+          "finish_reason": "stop",
+          "elapsed_seconds": 29.154937290935777,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.3856,
+      "score_after": 99.3856,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

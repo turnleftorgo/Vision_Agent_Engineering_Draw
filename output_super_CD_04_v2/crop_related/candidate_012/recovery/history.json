@@ -1,0 +1,470 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    881,
+    3179,
+    1952,
+    3975
+  ],
+  "current_crop": [
+    881,
+    3179,
+    3099,
+    3975
+  ],
+  "best_crop": [
+    881,
+    3179,
+    3099,
+    3975
+  ],
+  "best_score": 99.7446,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        881,
+        3179,
+        1952,
+        3975
+      ],
+      "crop_after": [
+        881,
+        3179,
+        2165,
+        3975
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target feature / leader arrowhead extending right beyond crop border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "confidence": 0.9
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5146,
+          "completion_tokens": 55,
+          "total_tokens": 5201,
+          "finish_reason": "stop",
+          "elapsed_seconds": 6.027038166997954,
+          "content_bytes": 240,
+          "content_chars": 240,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5233,
+          "completion_tokens": 95,
+          "total_tokens": 5328,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.351170957903378,
+          "content_bytes": 253,
+          "content_chars": 253,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          881,
+          3179,
+          1952,
+          3975
+        ],
+        "after": [
+          881,
+          3179,
+          2165,
+          3975
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 213.831,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 10189298.205,
+        "limited_by": []
+      },
+      "score_before": 99.7446,
+      "score_after": 99.6935,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        881,
+        3179,
+        2165,
+        3975
+      ],
+      "crop_after": [
+        881,
+        3179,
+        2422,
+        3975
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "leader arrowhead / target feature extending right beyond crop border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "confidence": 0.9
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5470,
+          "completion_tokens": 94,
+          "total_tokens": 5564,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.348077124916017,
+          "content_bytes": 252,
+          "content_chars": 252,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5557,
+          "completion_tokens": 95,
+          "total_tokens": 5652,
+          "finish_reason": "stop",
+          "elapsed_seconds": 9.221120209083892,
+          "content_bytes": 253,
+          "content_chars": 253,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          881,
+          3179,
+          2165,
+          3975
+        ],
+        "after": [
+          881,
+          3179,
+          2422,
+          3975
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 256.597,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 10189298.205,
+        "limited_by": []
+      },
+      "score_before": 99.6935,
+      "score_after": 99.6322,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        881,
+        3179,
+        2422,
+        3975
+      ],
+      "crop_after": [
+        881,
+        3179,
+        2730,
+        3975
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "leader arrowhead / target feature extending right beyond crop border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5194,
+          "completion_tokens": 94,
+          "total_tokens": 5288,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.50161687505897,
+          "content_bytes": 252,
+          "content_chars": 252,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5281,
+          "completion_tokens": 96,
+          "total_tokens": 5377,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.435882417019457,
+          "content_bytes": 254,
+          "content_chars": 254,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          881,
+          3179,
+          2422,
+          3975
+        ],
+        "after": [
+          881,
+          3179,
+          2730,
+          3975
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 307.916,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 10189298.205,
+        "limited_by": []
+      },
+      "score_before": 99.6322,
+      "score_after": 99.5586,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 4,
+      "crop_before": [
+        881,
+        3179,
+        2730,
+        3975
+      ],
+      "crop_after": [
+        881,
+        3179,
+        3099,
+        3975
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "leader arrowhead / target feature extending right beyond crop border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5041,
+          "completion_tokens": 107,
+          "total_tokens": 5148,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.645938041969202,
+          "content_bytes": 252,
+          "content_chars": 252,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5128,
+          "completion_tokens": 96,
+          "total_tokens": 5224,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.128612542059273,
+          "content_bytes": 254,
+          "content_chars": 254,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          881,
+          3179,
+          2730,
+          3975
+        ],
+        "after": [
+          881,
+          3179,
+          3099,
+          3975
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 369.499,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 10189298.205,
+        "limited_by": []
+      },
+      "score_before": 99.5586,
+      "score_after": 99.4704,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 5,
+      "crop_before": [
+        881,
+        3179,
+        3099,
+        3975
+      ],
+      "crop_after": [
+        881,
+        3179,
+        3099,
+        3975
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4990,
+          "completion_tokens": 89,
+          "total_tokens": 5079,
+          "finish_reason": "stop",
+          "elapsed_seconds": 18.315083333989605,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.4704,
+      "score_after": 99.4704,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

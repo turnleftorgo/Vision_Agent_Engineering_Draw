@@ -1,0 +1,367 @@
+{
+  "status": "validated_from_incomplete_mapping",
+  "final_crop": [
+    1337,
+    5207,
+    3290,
+    6003
+  ],
+  "best_crop": [
+    1337,
+    5207,
+    3290,
+    6003
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 99.7702,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_04_v2/crop_related/candidate_016/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        1337,
+        5207,
+        2301,
+        6003
+      ],
+      "crop_after": [
+        1337,
+        5207,
+        2493,
+        6003
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target",
+          "leader"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4724,
+          "completion_tokens": 55,
+          "total_tokens": 4779,
+          "finish_reason": "stop",
+          "elapsed_seconds": 5.035755957942456,
+          "content_bytes": 237,
+          "content_chars": 237,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 4811,
+          "completion_tokens": 90,
+          "total_tokens": 4901,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.081404792028479,
+          "content_bytes": 202,
+          "content_chars": 202,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          1337,
+          5207,
+          2301,
+          6003
+        ],
+        "after": [
+          1337,
+          5207,
+          2493,
+          6003
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 200,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 192.412,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 9167218.042,
+        "limited_by": []
+      },
+      "score_before": 99.7702,
+      "score_after": 99.7242,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        1337,
+        5207,
+        2493,
+        6003
+      ],
+      "crop_after": [
+        1337,
+        5207,
+        2839,
+        6003
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target",
+          "leader"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 300,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5516,
+          "completion_tokens": 97,
+          "total_tokens": 5613,
+          "finish_reason": "stop",
+          "elapsed_seconds": 20.759018665994518,
+          "content_bytes": 218,
+          "content_chars": 218,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5603,
+          "completion_tokens": 90,
+          "total_tokens": 5693,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.954267124994658,
+          "content_bytes": 202,
+          "content_chars": 202,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          1337,
+          5207,
+          2493,
+          6003
+        ],
+        "after": [
+          1337,
+          5207,
+          2839,
+          6003
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 300,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 346.342,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 9167218.042,
+        "limited_by": []
+      },
+      "score_before": 99.7242,
+      "score_after": 99.6415,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        1337,
+        5207,
+        2839,
+        6003
+      ],
+      "crop_after": [
+        1337,
+        5207,
+        3290,
+        6003
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target",
+          "leader"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 300,
+          "bottom_norm": 0
+        },
+        "confidence": 0.85
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5233,
+          "completion_tokens": 93,
+          "total_tokens": 5326,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.564562333049253,
+          "content_bytes": 200,
+          "content_chars": 200,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5320,
+          "completion_tokens": 52,
+          "total_tokens": 5372,
+          "finish_reason": "stop",
+          "elapsed_seconds": 6.397112500038929,
+          "content_bytes": 202,
+          "content_chars": 202,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          1337,
+          5207,
+          2839,
+          6003
+        ],
+        "after": [
+          1337,
+          5207,
+          3290,
+          6003
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 300,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 450.244,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 9167218.042,
+        "limited_by": []
+      },
+      "score_before": 99.6415,
+      "score_after": 99.534,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 4,
+      "crop_before": [
+        1337,
+        5207,
+        3290,
+        6003
+      ],
+      "crop_after": [
+        1337,
+        5207,
+        3290,
+        6003
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4950,
+          "completion_tokens": 77,
+          "total_tokens": 5027,
+          "finish_reason": "stop",
+          "elapsed_seconds": 17.663078250014223,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.534,
+      "score_after": 99.534,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

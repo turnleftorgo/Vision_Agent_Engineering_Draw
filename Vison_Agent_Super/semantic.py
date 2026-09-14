@@ -697,9 +697,11 @@ def run_compact_semantic_mapping(
         for item in parsed.get("missing", [])
         if isinstance(item, str) and item in MISSING_VALUES
     ]
+    candidate_valid = bool(parsed.get("candidate_valid", True))
+    complete = bool(parsed.get("complete", False)) and candidate_valid and not missing
     return {
         "marker_id": "F0",
-        "candidate_valid": bool(parsed.get("candidate_valid", True)),
+        "candidate_valid": candidate_valid,
         "fai_number": parsed.get("fai_number"),
         "spc_letter": parsed.get("spc_letter"),
         "annotation_ids": annotation_ids,
@@ -710,7 +712,7 @@ def run_compact_semantic_mapping(
         "leader_ids": expanded_line_ids,
         "arrowhead_ids": arrow_ids,
         "target_ids": target_ids,
-        "complete": bool(parsed.get("complete", False)),
+        "complete": complete,
         "missing": missing,
         "confidence": float(parsed.get("confidence", 0.0)),
         "compact_semantic": True,

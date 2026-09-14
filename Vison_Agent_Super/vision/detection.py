@@ -103,7 +103,7 @@ def detect_fai_candidates(
             raw_dir / f"fai_tile_{tile_index:03d}.txt",
         )
         circle_pairs = detect_circle_pair_candidates(tile)
-        opencv_local_boxes = circle_pair_marker_boxes(circle_pairs)
+        opencv_local_boxes = circle_pair_marker_boxes(circle_pairs, tile)
         local_boxes = locate_local_boxes + opencv_local_boxes
         all_boxes.extend(box.translate(offset_x, offset_y) for box in local_boxes)
     return deduplicate_boxes(all_boxes)
@@ -150,6 +150,32 @@ def horizontal_divider_score(
     if band.size == 0:
         return 0.0
     return float(max((row.mean() for row in band), default=0.0))
+
+
+def circle_perimeter_support(gray: np.ndarray, bbox: BBox) -> float:
+    """Measure whether a proposed marker box contains a real circular outline."""
+    box = bbox.ordered()
+    center_x, center_y = box.center
+    radius = min(box.width, box.height) / 2.0
+    if radius < 5:
+        return 0.0
+    height, width = gray.shape
+    best = 0.0
+    samples = 72
+    for radius_factor in np.linspace(0.70, 1.05, 8):
+        hits = 0
+        for angle in np.linspace(0.0, math.tau, samples, endpoint=False):
+            found = False
+            for radial_offset in range(-3, 4):
+                sample_radius = radius * radius_factor + radial_offset
+                x = round(center_x + math.cos(angle) * sample_radius)
+                y = round(center_y + math.sin(angle) * sample_radius)
+                if 0 <= x < width and 0 <= y < height and gray[y, x] < 180:
+                    found = True
+                    break
+            hits += int(found)
+        best = max(best, hits / samples)
+    return best
 
 
 def detect_circle_pair_candidates(image: Image.Image) -> list[dict[str, Any]]:
@@ -232,15 +258,30 @@ def detect_circle_pair_candidates(image: Image.Image) -> list[dict[str, Any]]:
     return deduplicated[:32]
 
 
-def circle_pair_marker_boxes(pairs: list[dict[str, Any]]) -> list[BBox]:
+def circle_pair_marker_boxes(
+    pairs: list[dict[str, Any]],
+    image: Image.Image | None = None,
+    *,
+    minimum_circle_support: float = 0.75,
+) -> list[BBox]:
     """Promote the conventional left-hand FAI circle from each detected pair.
 
     These remain high-recall proposals.  The per-candidate semantic stage owns
     the later decision about whether each proposed marker is a valid FAI.
     """
-    return deduplicate_boxes(
-        [pair["left_bbox"] for pair in pairs if isinstance(pair.get("left_bbox"), BBox)]
-    )
+    boxes = [
+        pair["left_bbox"]
+        for pair in pairs
+        if isinstance(pair.get("left_bbox"), BBox)
+    ]
+    if image is not None:
+        gray = cv2.cvtColor(np.array(image.convert("RGB")), cv2.COLOR_RGB2GRAY)
+        boxes = [
+            box
+            for box in boxes
+            if circle_perimeter_support(gray, box) >= minimum_circle_support
+        ]
+    return deduplicate_boxes(boxes)
 
 
 def candidate_roi(marker_bbox: BBox, width: int, height: int) -> BBox:

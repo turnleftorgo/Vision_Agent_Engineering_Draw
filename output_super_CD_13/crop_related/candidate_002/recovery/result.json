@@ -1,0 +1,104 @@
+{
+  "status": "protocol_failed",
+  "final_crop": [
+    6187,
+    793,
+    7918,
+    1631
+  ],
+  "best_crop": [
+    6187,
+    793,
+    7918,
+    1631
+  ],
+  "rejected": false,
+  "valid": false,
+  "best_score": 92.0637,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_13/crop_related/candidate_002/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6187,
+        793,
+        7918,
+        1631
+      ],
+      "crop_after": [
+        6187,
+        793,
+        7918,
+        1631
+      ],
+      "action": null,
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5076,
+          "completion_tokens": 77,
+          "total_tokens": 5153,
+          "finish_reason": "stop",
+          "elapsed_seconds": 18.25207391695585,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 92.0637,
+      "score_after": 92.0637,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 5015,
+            "completion_tokens": 81,
+            "total_tokens": 5096,
+            "finish_reason": "stop",
+            "elapsed_seconds": 41.49436824989971,
+            "content_bytes": 192,
+            "content_chars": 192,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 5021,
+            "completion_tokens": 46,
+            "total_tokens": 5067,
+            "finish_reason": "stop",
+            "elapsed_seconds": 39.45340912498068,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 5007,
+            "completion_tokens": 125,
+            "total_tokens": 5132,
+            "finish_reason": "stop",
+            "elapsed_seconds": 44.355649999924935,
+            "content_bytes": 316,
+            "content_chars": 316,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        }
+      },
+      "decision_source": "subagents_failed"
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    6000,
+    3143,
+    7591,
+    4388
+  ],
+  "current_crop": [
+    6000,
+    3143,
+    7782,
+    4388
+  ],
+  "best_crop": [
+    6000,
+    3143,
+    7782,
+    4388
+  ],
+  "best_score": 99.4051,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6000,
+        3143,
+        7591,
+        4388
+      ],
+      "crop_after": [
+        6000,
+        3143,
+        7782,
+        4388
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target feature / arrowhead of FAI 211 leader clipped on right side"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 120,
+          "bottom_norm": 0
+        },
+        "confidence": 0.85
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 7349,
+          "completion_tokens": 102,
+          "total_tokens": 7451,
+          "finish_reason": "stop",
+          "elapsed_seconds": 27.066760333953425,
+          "content_bytes": 230,
+          "content_chars": 230,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 7436,
+          "completion_tokens": 66,
+          "total_tokens": 7502,
+          "finish_reason": "stop",
+          "elapsed_seconds": 7.485133917070925,
+          "content_bytes": 252,
+          "content_chars": 252,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6000,
+          3143,
+          7591,
+          4388
+        ],
+        "after": [
+          6000,
+          3143,
+          7782,
+          4388
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 120,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 190.76,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 23734174.381,
+        "limited_by": []
+      },
+      "score_before": 99.4051,
+      "score_after": 99.3337,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        6000,
+        3143,
+        7782,
+        4388
+      ],
+      "crop_after": [
+        6000,
+        3143,
+        7782,
+        4388
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 7114,
+          "completion_tokens": 89,
+          "total_tokens": 7203,
+          "finish_reason": "stop",
+          "elapsed_seconds": 25.378813166054897,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.3337,
+      "score_after": 99.3337,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

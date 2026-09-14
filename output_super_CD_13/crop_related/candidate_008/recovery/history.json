@@ -1,0 +1,273 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated",
+  "initial_crop": [
+    6090,
+    4023,
+    7730,
+    5180
+  ],
+  "current_crop": [
+    6090,
+    4023,
+    7730,
+    5237
+  ],
+  "best_crop": [
+    6090,
+    4023,
+    7730,
+    5237
+  ],
+  "best_score": 91.9304,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6090,
+        4023,
+        7730,
+        5180
+      ],
+      "crop_after": [
+        6090,
+        4023,
+        7730,
+        5237
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "DETAIL B7 label is clipped at the bottom border"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 50
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 6785,
+          "completion_tokens": 115,
+          "total_tokens": 6900,
+          "finish_reason": "stop",
+          "elapsed_seconds": 25.622545375023037,
+          "content_bytes": 279,
+          "content_chars": 279,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 6872,
+          "completion_tokens": 104,
+          "total_tokens": 6976,
+          "finish_reason": "stop",
+          "elapsed_seconds": 8.104824083042331,
+          "content_bytes": 232,
+          "content_chars": 232,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6090,
+          4023,
+          7730,
+          5180
+        ],
+        "after": [
+          6090,
+          4023,
+          7730,
+          5237
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 50
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 57.759
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 22721542.014,
+        "limited_by": []
+      },
+      "score_before": 91.9304,
+      "score_after": 91.902,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        6090,
+        4023,
+        7730,
+        5237
+      ],
+      "crop_after": [
+        6090,
+        4023,
+        7730,
+        5237
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 7161,
+          "completion_tokens": 75,
+          "total_tokens": 7236,
+          "finish_reason": "stop",
+          "elapsed_seconds": 24.660681958077475,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 91.902,
+      "score_after": 91.902,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 7051,
+            "completion_tokens": 68,
+            "total_tokens": 7119,
+            "finish_reason": "stop",
+            "elapsed_seconds": 55.78062091697939,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "adversarial_verifier"
+          }
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 7057,
+            "completion_tokens": 68,
+            "total_tokens": 7125,
+            "finish_reason": "stop",
+            "elapsed_seconds": 55.897960292059,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "completeness_auditor"
+          }
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 7043,
+            "completion_tokens": 40,
+            "total_tokens": 7083,
+            "finish_reason": "stop",
+            "elapsed_seconds": 53.86693345801905,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "geometry_tracer"
+          }
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 7117,
+            "completion_tokens": 88,
+            "total_tokens": 7205,
+            "finish_reason": "stop",
+            "elapsed_seconds": 22.20882908301428,
+            "content_bytes": 176,
+            "content_chars": 176,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": null
+          }
+        ]
+      },
+      "decision_source": "coordinator"
+    }
+  ]
+}

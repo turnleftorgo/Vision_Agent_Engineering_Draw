@@ -1,0 +1,163 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated",
+  "initial_crop": [
+    2683,
+    5940,
+    5670,
+    6756
+  ],
+  "current_crop": [
+    2683,
+    5940,
+    5670,
+    6756
+  ],
+  "best_crop": [
+    2683,
+    5940,
+    5670,
+    6756
+  ],
+  "best_score": 89.2681,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2683,
+        5940,
+        5670,
+        6756
+      ],
+      "crop_after": [
+        2683,
+        5940,
+        5670,
+        6756
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3673,
+          "completion_tokens": 77,
+          "total_tokens": 3750,
+          "finish_reason": "stop",
+          "elapsed_seconds": 14.033598833950236,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 89.2681,
+      "score_after": 89.2681,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 3612,
+            "completion_tokens": 40,
+            "total_tokens": 3652,
+            "finish_reason": "stop",
+            "elapsed_seconds": 28.944943791022524,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "adversarial_verifier"
+          }
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 3618,
+            "completion_tokens": 64,
+            "total_tokens": 3682,
+            "finish_reason": "stop",
+            "elapsed_seconds": 30.53378120798152,
+            "content_bytes": 248,
+            "content_chars": 248,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 3604,
+            "completion_tokens": 40,
+            "total_tokens": 3644,
+            "finish_reason": "stop",
+            "elapsed_seconds": 28.666785041918047,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "geometry_tracer"
+          }
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 3632,
+            "completion_tokens": 88,
+            "total_tokens": 3720,
+            "finish_reason": "stop",
+            "elapsed_seconds": 13.445902916020714,
+            "content_bytes": 176,
+            "content_chars": 176,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": null
+          }
+        ]
+      },
+      "decision_source": "coordinator"
+    }
+  ]
+}
