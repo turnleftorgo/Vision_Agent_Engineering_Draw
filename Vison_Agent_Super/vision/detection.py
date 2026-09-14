@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -11,7 +12,12 @@ import numpy as np
 from openai import OpenAI
 from PIL import Image
 
-from .inference import call_vision_model, extract_json, locate_boxes, normalized_box_to_pixels
+from .inference import (
+    call_vision_model,
+    extract_json,
+    locate_boxes,
+    normalized_box_to_pixels,
+)
 from .models import BBox
 from .utils import log
 
@@ -22,10 +28,10 @@ DEFAULT_LOCATE_MODEL = "LocateAnything-3B-8bit"
 DEFAULT_QWEN_MODEL = "Qwen3.8-27B-MLX-8bit"
 
 FAI_PROMPT = (
-    'Locate all the instances that match the following description: '
-    'an FAI inspection marker or balloon, consisting of a circle containing '
+    "Locate all the instances that match the following description: "
+    "an FAI inspection marker or balloon, consisting of a circle containing "
     'the literal text "FAI" and an identification number. Exclude SPC circles, '
-    'datum circles, holes, ordinary circled numbers, and section labels.'
+    "datum circles, holes, ordinary circled numbers, and section labels."
 )
 
 
@@ -48,8 +54,17 @@ def iter_tiles(
 ) -> Iterable[tuple[int, int, Image.Image]]:
     for y in axis_starts(image.height, tile_size, overlap):
         for x in axis_starts(image.width, tile_size, overlap):
-            yield x, y, image.crop(
-                (x, y, min(image.width, x + tile_size), min(image.height, y + tile_size))
+            yield (
+                x,
+                y,
+                image.crop(
+                    (
+                        x,
+                        y,
+                        min(image.width, x + tile_size),
+                        min(image.height, y + tile_size),
+                    )
+                ),
             )
 
 
@@ -83,11 +98,28 @@ def detect_fai_candidates(
     overlap: float,
     raw_dir: Path,
     tile_debug_dir: Optional[Path],
+    concurrent: int = 16,
 ) -> list[BBox]:
-    all_boxes: list[BBox] = []
-    for tile_index, (offset_x, offset_y, tile) in enumerate(
-        iter_tiles(image, tile_size, overlap)
-    ):
+    positions = [
+        (x, y)
+        for y in axis_starts(image.height, tile_size, overlap)
+        for x in axis_starts(image.width, tile_size, overlap)
+    ]
+    jobs = [
+        (tile_index, offset_x, offset_y)
+        for tile_index, (offset_x, offset_y) in enumerate(positions)
+    ]
+
+    def scan_tile(job: tuple[int, int, int]) -> tuple[int, list[BBox]]:
+        tile_index, offset_x, offset_y = job
+        tile = image.crop(
+            (
+                offset_x,
+                offset_y,
+                min(image.width, offset_x + tile_size),
+                min(image.height, offset_y + tile_size),
+            )
+        )
         log(
             f"[1/8] LocateAnything + OpenCV FAI scan tile {tile_index}: "
             f"origin=({offset_x},{offset_y}), size={tile.width}x{tile.height}"
@@ -105,7 +137,15 @@ def detect_fai_candidates(
         circle_pairs = detect_circle_pair_candidates(tile)
         opencv_local_boxes = circle_pair_marker_boxes(circle_pairs, tile)
         local_boxes = locate_local_boxes + opencv_local_boxes
-        all_boxes.extend(box.translate(offset_x, offset_y) for box in local_boxes)
+        return tile_index, [box.translate(offset_x, offset_y) for box in local_boxes]
+
+    by_tile: dict[int, list[BBox]] = {}
+    with ThreadPoolExecutor(max_workers=min(concurrent, len(jobs))) as executor:
+        futures = {executor.submit(scan_tile, job): job[0] for job in jobs}
+        for future in as_completed(futures):
+            tile_index, boxes = future.result()
+            by_tile[tile_index] = boxes
+    all_boxes = [box for tile_index in sorted(by_tile) for box in by_tile[tile_index]]
     return deduplicate_boxes(all_boxes)
 
 
@@ -138,9 +178,7 @@ Return JSON only. Coordinates are integers normalized to [0,1000]:
     return deduplicate_boxes(boxes)
 
 
-def horizontal_divider_score(
-    gray: np.ndarray, cx: int, cy: int, radius: int
-) -> float:
+def horizontal_divider_score(gray: np.ndarray, cx: int, cy: int, radius: int) -> float:
     height, width = gray.shape
     x1 = max(0, int(cx - radius * 0.85))
     x2 = min(width, int(cx + radius * 0.85))
@@ -212,7 +250,9 @@ def detect_circle_pair_candidates(image: Image.Image) -> list[dict[str, Any]]:
             second_score = horizontal_divider_score(gray, *second)
             if min(first_score, second_score) < 0.72:
                 continue
-            left_circle, right_circle = sorted((first, second), key=lambda item: item[0])
+            left_circle, right_circle = sorted(
+                (first, second), key=lambda item: item[0]
+            )
             left_bbox = BBox(
                 left_circle[0] - left_circle[2],
                 left_circle[1] - left_circle[2],
@@ -270,9 +310,7 @@ def circle_pair_marker_boxes(
     the later decision about whether each proposed marker is a valid FAI.
     """
     boxes = [
-        pair["left_bbox"]
-        for pair in pairs
-        if isinstance(pair.get("left_bbox"), BBox)
+        pair["left_bbox"] for pair in pairs if isinstance(pair.get("left_bbox"), BBox)
     ]
     if image is not None:
         gray = cv2.cvtColor(np.array(image.convert("RGB")), cv2.COLOR_RGB2GRAY)

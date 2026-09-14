@@ -1,0 +1,177 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    834,
+    5288,
+    2297,
+    6004
+  ],
+  "current_crop": [
+    688,
+    5288,
+    2297,
+    6004
+  ],
+  "best_crop": [
+    688,
+    5288,
+    2297,
+    6004
+  ],
+  "best_score": 99.6855,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        834,
+        5288,
+        2297,
+        6004
+      ],
+      "crop_after": [
+        688,
+        5288,
+        2297,
+        6004
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target feature for FAI 442 leader arrowhead",
+          "left side dimension text clipped"
+        ],
+        "arguments": {
+          "left_norm": 100,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.85
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4760,
+          "completion_tokens": 96,
+          "total_tokens": 4856,
+          "finish_reason": "stop",
+          "elapsed_seconds": 83.9252375420183,
+          "content_bytes": 210,
+          "content_chars": 210,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 4847,
+          "completion_tokens": 67,
+          "total_tokens": 4914,
+          "finish_reason": "stop",
+          "elapsed_seconds": 136.15535883279517,
+          "content_bytes": 265,
+          "content_chars": 265,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          834,
+          5288,
+          2297,
+          6004
+        ],
+        "after": [
+          688,
+          5288,
+          2297,
+          6004
+        ],
+        "requested_norm": {
+          "left_norm": 100,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 146.219,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 12546862.192,
+        "limited_by": []
+      },
+      "score_before": 99.6855,
+      "score_after": 99.654,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        688,
+        5288,
+        2297,
+        6004
+      ],
+      "crop_after": [
+        688,
+        5288,
+        2297,
+        6004
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4752,
+          "completion_tokens": 77,
+          "total_tokens": 4829,
+          "finish_reason": "stop",
+          "elapsed_seconds": 114.36419512494467,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.654,
+      "score_after": 99.654,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

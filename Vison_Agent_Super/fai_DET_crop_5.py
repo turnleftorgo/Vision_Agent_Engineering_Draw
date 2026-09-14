@@ -7,6 +7,7 @@ import argparse
 import json
 import math
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -103,9 +104,7 @@ def exact_or_bootstrap_crop(
         boxes = [marker.bbox]
         selected_ids = ["F0"]
 
-        def take(
-            kinds: set[str], limit: int, reference: BBox
-        ) -> list[Primitive]:
+        def take(kinds: set[str], limit: int, reference: BBox) -> list[Primitive]:
             candidates = [item for item in primitives if item.kind in kinds]
             candidates.sort(
                 key=lambda item: (bbox_gap(item.bbox, reference), -item.bbox.area)
@@ -208,6 +207,10 @@ def manifest_base(
             "semantic_and_recovery": args.qwen_model,
             "endpoint": args.endpoint,
         },
+        "concurrency": {
+            "locate": args.concurrent,
+            "qwen": args.qwen_concurrent,
+        },
         "recovery": {
             "enabled": not args.no_verify,
             "max_turns": args.max_turns,
@@ -223,6 +226,242 @@ def manifest_base(
         },
         "results": records,
     }
+
+
+def process_candidate_v5(
+    args: argparse.Namespace,
+    client: Any,
+    image: Image.Image,
+    gray_image: np.ndarray,
+    marker_box: BBox,
+    index: int,
+    raw_dir: Path,
+    crop_dir: Path,
+    related_dir: Path,
+    expand_dir: Path,
+    skill: Any,
+) -> dict[str, Any]:
+    """Process one deduplicated marker in an isolated candidate directory."""
+    marker = Primitive("F0", "fai_marker", marker_box, "LocateAnything")
+    roi_bbox = candidate_roi(marker_box, image.width, image.height)
+    raw_roi, primitives, evidence_overlay = create_candidate_evidence(
+        client,
+        args.locate_model,
+        image,
+        marker,
+        roi_bbox,
+        raw_dir,
+        index,
+        use_tesseract=not args.no_tesseract,
+    )
+    related_candidate_dir = related_dir / f"candidate_{index:03d}"
+    related_candidate_dir.mkdir(parents=True, exist_ok=True)
+    raw_roi.save(related_candidate_dir / "roi.png")
+    evidence_overlay.save(related_candidate_dir / "evidence.png")
+    save_json(
+        related_candidate_dir / "primitives.json",
+        [item.prompt_record() for item in primitives],
+    )
+
+    compact_evidence = build_compact_semantic_evidence(raw_roi, primitives)
+    compact_evidence.image.save(related_candidate_dir / "semantic.png")
+    save_json(
+        related_candidate_dir / "semantic.json",
+        {
+            "records": compact_evidence.records,
+            "leader_path_segments": compact_evidence.path_segments,
+            "input_image_count": 1,
+        },
+    )
+
+    log(
+        f"[4/8] Candidate {index}: one Qwen semantic association "
+        f"({len(primitives)} primitives -> {len(compact_evidence.records)} compact "
+        f"records, {len(compact_evidence.paths)} LP path(s), 1 image)"
+    )
+    mapping = run_compact_semantic_mapping(
+        client,
+        args.qwen_model,
+        compact_evidence,
+        related_candidate_dir / "semantic_mapping.txt",
+        related_candidate_dir / "semantic_mapping_meta.json",
+        max_tokens=args.semantic_max_tokens,
+    )
+    semantic_ids = selected_component_ids(mapping)
+    log(
+        f"[4/8] Candidate {index}: Qwen selected {len(semantic_ids)} compact "
+        f"component(s): {', '.join(semantic_ids) if semantic_ids else 'none'}"
+    )
+    minimum_crop, minimum_source, chosen_ids = exact_or_bootstrap_crop(
+        mapping, primitives, roi_bbox, image.size
+    )
+    leader_extensions: list[dict[str, object]] = []
+    mapping_missing = mapping.get("missing", [])
+    target_is_missing = not mapping.get("target_ids") or (
+        isinstance(mapping_missing, list) and "target" in mapping_missing
+    )
+    if (
+        mapping.get("candidate_valid", True)
+        and minimum_source == "semantic_exact_union"
+        and target_is_missing
+    ):
+        traced_crop, leader_extensions = extend_crop_along_selected_leaders(
+            gray_image,
+            roi_bbox,
+            minimum_crop,
+            primitives,
+            chosen_ids,
+            image.size,
+        )
+        if leader_extensions:
+            minimum_crop = traced_crop
+            minimum_source += "+leader_target_trace"
+            log(
+                f"[5/8] Candidate {index}: traced {len(leader_extensions)} "
+                "leader path(s) to local target geometry"
+            )
+    fai_name = safe_fai_name(mapping.get("fai_number"))
+    base = f"FAI{fai_name}_{index:03d}"
+    selected_overlay = build_compact_selection_image(
+        compact_evidence,
+        chosen_ids,
+        mapping.get("leader_path_ids", []),
+    )
+    selected_path = related_candidate_dir / "qwen_selected.png"
+    minimum_path = related_candidate_dir / "minimum.png"
+    selected_overlay.save(selected_path)
+    image.crop(minimum_crop.to_int_tuple()).save(minimum_path)
+    save_json(
+        related_candidate_dir / "selection.json",
+        {
+            "mapping": mapping,
+            "qwen_selected_compact_ids": semantic_ids,
+            "selected_ids": chosen_ids,
+            "selected_leader_path_ids": mapping.get("leader_path_ids", []),
+            "leader_path_segments": compact_evidence.path_segments,
+            "compact_evidence_records": compact_evidence.records,
+            "minimum_source": minimum_source,
+            "minimum_crop_bbox": minimum_crop.to_list(),
+            "leader_target_extensions": leader_extensions,
+        },
+    )
+    log(
+        f"[5/8] Candidate {index}: {minimum_source} saved "
+        f"with {len(chosen_ids) - 1} component(s)"
+    )
+
+    record: dict[str, Any] = {
+        "candidate_index": index,
+        "marker_bbox": marker_box.to_list(),
+        "roi_bbox": roi_bbox.to_list(),
+        "mapping": mapping,
+        "qwen_selected_compact_ids": semantic_ids,
+        "semantic_selected_ids": chosen_ids,
+        "minimum_source": minimum_source,
+        "minimum_crop_bbox": minimum_crop.to_list(),
+        "leader_target_extensions": leader_extensions,
+        "related_dir": str(related_candidate_dir),
+        "selection_image_path": str(selected_path),
+        "minimum_crop_path": str(minimum_path),
+    }
+
+    if args.no_verify:
+        final_box = minimum_crop
+        final_path = crop_dir / f"{base}_verification_skipped.png"
+        image.crop(final_box.to_int_tuple()).save(final_path)
+        record.update(
+            {
+                "status": "verification_skipped",
+                "final_crop_bbox": final_box.to_list(),
+                "final_crop_path": str(final_path),
+                "expansion_dir": None,
+                "expansion_count": 0,
+                "recovery": None,
+            }
+        )
+        return record
+
+    assert skill is not None
+    log(f"[6/8] Candidate {index}: starting agentic crop recovery")
+    evidence = global_evidence(primitives, roi_bbox, chosen_ids)
+    for extension_index, extension in enumerate(leader_extensions):
+        evidence.extend(
+            [
+                EvidenceBox(
+                    f"XL{extension_index}",
+                    "leader_segment",
+                    CropBox.from_values(extension["trace_bbox"]),
+                    True,
+                ),
+                EvidenceBox(
+                    f"XR{extension_index}",
+                    "target_part",
+                    CropBox.from_values(extension["target_bbox"]),
+                    True,
+                ),
+            ]
+        )
+    recovery_mapping = dict(mapping)
+    if leader_extensions:
+        remaining_missing = [
+            item for item in mapping.get("missing", []) if item != "target"
+        ]
+        recovery_mapping["missing"] = remaining_missing
+        recovery_mapping["complete"] = not remaining_missing
+        recovery_mapping["geometric_target_recovered"] = True
+    config = RecoveryConfig(
+        max_turns=args.max_turns,
+        max_format_retries=args.max_format_retries,
+        max_subagents=args.max_subagents,
+        max_content_bytes=args.max_content_bytes,
+        max_direction_norm=args.max_direction_norm,
+        max_crop_area_ratio=args.max_crop_area_ratio,
+        max_crop_growth=args.max_crop_growth,
+        recovery_max_tokens=args.recovery_max_tokens,
+        subagent_confidence_threshold=args.subagent_confidence_threshold,
+        context_fraction=args.context_fraction,
+        max_image_edge=args.max_image_edge,
+    )
+    expansion_candidate_dir = expand_dir / f"candidate_{index:03d}"
+    recovery = run_crop_recovery(
+        client,
+        args.qwen_model,
+        image,
+        CropBox.from_values(marker_box),
+        CropBox.from_values(minimum_crop),
+        recovery_mapping,
+        evidence,
+        skill,
+        config,
+        related_candidate_dir / "recovery",
+        debug=args.debug,
+        logger=lambda message, idx=index: log(f"[7/8] Candidate {idx}: {message}"),
+        expansion_output_dir=expansion_candidate_dir,
+    )
+    final_box = BBox(*recovery.final_crop.to_int_tuple())
+    if recovery.rejected:
+        final_path = crop_dir / f"Candidate{index:03d}_rejected_not_fai.png"
+    elif recovery.valid:
+        final_path = crop_dir / f"{base}_validated.png"
+    else:
+        final_path = crop_dir / f"{base}_best_unvalidated.png"
+    image.crop(final_box.to_int_tuple()).save(final_path)
+    expansion_count = sum(
+        1
+        for turn in recovery.turns
+        if turn.expansion is not None and turn.expansion.changed
+    )
+    record.update(
+        {
+            "status": recovery.status,
+            "final_crop_bbox": final_box.to_list(),
+            "final_crop_path": str(final_path),
+            "expansion_dir": str(expansion_candidate_dir) if expansion_count else None,
+            "expansion_count": expansion_count,
+            "recovery": recovery.to_dict(),
+        }
+    )
+    return record
 
 
 def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
@@ -243,7 +482,15 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
 
     image = Image.open(input_path).convert("RGB")
     gray_image = np.asarray(image.convert("L"))
-    client = create_vision_client(args.endpoint, args.api_key, args.timeout)
+    client = create_vision_client(
+        args.endpoint,
+        args.api_key,
+        args.timeout,
+        locate_model=args.locate_model,
+        qwen_model=args.qwen_model,
+        locate_concurrency=args.concurrent,
+        qwen_concurrency=args.qwen_concurrent,
+    )
     skill = None
     if not args.no_verify:
         skill = load_recovery_skill(Path(args.recovery_skill))
@@ -256,6 +503,7 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
         args.tile_overlap,
         raw_dir,
         debug_dir / "tiles" if args.debug else None,
+        args.concurrent,
     )
     if not marker_boxes:
         log("[1/8] Hybrid proposals empty; trying full-page Qwen fallback")
@@ -267,242 +515,42 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
     marker_boxes = marker_boxes[: args.max_candidates]
     log(f"[1/8] Found {len(marker_boxes)} deduplicated FAI candidate(s)")
 
-    records: list[dict[str, Any]] = []
     manifest_path = output_dir / "results.json"
-    for index, marker_box in enumerate(marker_boxes):
-        marker = Primitive("F0", "fai_marker", marker_box, "LocateAnything")
-        roi_bbox = candidate_roi(marker_box, image.width, image.height)
-        raw_roi, primitives, evidence_overlay = create_candidate_evidence(
-            client,
-            args.locate_model,
-            image,
-            marker,
-            roi_bbox,
-            raw_dir,
-            index,
-            use_tesseract=not args.no_tesseract,
-        )
-        related_candidate_dir = related_dir / f"candidate_{index:03d}"
-        related_candidate_dir.mkdir(parents=True, exist_ok=True)
-        raw_roi.save(related_candidate_dir / "roi.png")
-        evidence_overlay.save(related_candidate_dir / "evidence.png")
-        save_json(
-            related_candidate_dir / "primitives.json",
-            [item.prompt_record() for item in primitives],
-        )
-
-        compact_evidence = build_compact_semantic_evidence(raw_roi, primitives)
-        compact_evidence.image.save(related_candidate_dir / "semantic.png")
-        save_json(
-            related_candidate_dir / "semantic.json",
-            {
-                "records": compact_evidence.records,
-                "leader_path_segments": compact_evidence.path_segments,
-                "input_image_count": 1,
-            },
-        )
-
-        log(
-            f"[4/8] Candidate {index}: one Qwen semantic association "
-            f"({len(primitives)} primitives -> {len(compact_evidence.records)} compact "
-            f"records, {len(compact_evidence.paths)} LP path(s), 1 image)"
-        )
-        mapping = run_compact_semantic_mapping(
-            client,
-            args.qwen_model,
-            compact_evidence,
-            related_candidate_dir / "semantic_mapping.txt",
-            related_candidate_dir / "semantic_mapping_meta.json",
-            max_tokens=args.semantic_max_tokens,
-        )
-        semantic_ids = selected_component_ids(mapping)
-        log(
-            f"[4/8] Candidate {index}: Qwen selected {len(semantic_ids)} compact "
-            f"component(s): {', '.join(semantic_ids) if semantic_ids else 'none'}"
-        )
-        minimum_crop, minimum_source, chosen_ids = exact_or_bootstrap_crop(
-            mapping, primitives, roi_bbox, image.size
-        )
-        leader_extensions: list[dict[str, object]] = []
-        mapping_missing = mapping.get("missing", [])
-        target_is_missing = (
-            not mapping.get("target_ids")
-            or (
-                isinstance(mapping_missing, list)
-                and "target" in mapping_missing
-            )
-        )
-        if (
-            mapping.get("candidate_valid", True)
-            and minimum_source == "semantic_exact_union"
-            and target_is_missing
-        ):
-            traced_crop, leader_extensions = extend_crop_along_selected_leaders(
-                gray_image,
-                roi_bbox,
-                minimum_crop,
-                primitives,
-                chosen_ids,
-                image.size,
-            )
-            if leader_extensions:
-                minimum_crop = traced_crop
-                minimum_source += "+leader_target_trace"
-                log(
-                    f"[5/8] Candidate {index}: traced {len(leader_extensions)} "
-                    "leader path(s) to local target geometry"
-                )
-        fai_name = safe_fai_name(mapping.get("fai_number"))
-        base = f"FAI{fai_name}_{index:03d}"
-        selected_overlay = build_compact_selection_image(
-            compact_evidence,
-            chosen_ids,
-            mapping.get("leader_path_ids", []),
-        )
-        selected_path = related_candidate_dir / "qwen_selected.png"
-        minimum_path = related_candidate_dir / "minimum.png"
-        selected_overlay.save(selected_path)
-        image.crop(minimum_crop.to_int_tuple()).save(minimum_path)
-        save_json(
-            related_candidate_dir / "selection.json",
-            {
-                "mapping": mapping,
-                "qwen_selected_compact_ids": semantic_ids,
-                "selected_ids": chosen_ids,
-                "selected_leader_path_ids": mapping.get("leader_path_ids", []),
-                "leader_path_segments": compact_evidence.path_segments,
-                "compact_evidence_records": compact_evidence.records,
-                "minimum_source": minimum_source,
-                "minimum_crop_bbox": minimum_crop.to_list(),
-                "leader_target_extensions": leader_extensions,
-            },
-        )
-        log(
-            f"[5/8] Candidate {index}: {minimum_source} saved "
-            f"with {len(chosen_ids) - 1} component(s)"
-        )
-
-        record: dict[str, Any] = {
-            "candidate_index": index,
-            "marker_bbox": marker_box.to_list(),
-            "roi_bbox": roi_bbox.to_list(),
-            "mapping": mapping,
-            "qwen_selected_compact_ids": semantic_ids,
-            "semantic_selected_ids": chosen_ids,
-            "minimum_source": minimum_source,
-            "minimum_crop_bbox": minimum_crop.to_list(),
-            "leader_target_extensions": leader_extensions,
-            "related_dir": str(related_candidate_dir),
-            "selection_image_path": str(selected_path),
-            "minimum_crop_path": str(minimum_path),
-        }
-
-        if args.no_verify:
-            final_box = minimum_crop
-            final_path = crop_dir / f"{base}_verification_skipped.png"
-            image.crop(final_box.to_int_tuple()).save(final_path)
-            record.update(
-                {
-                    "status": "verification_skipped",
-                    "final_crop_bbox": final_box.to_list(),
-                    "final_crop_path": str(final_path),
-                    "expansion_dir": None,
-                    "expansion_count": 0,
-                    "recovery": None,
-                }
-            )
-        else:
-            assert skill is not None
-            log(f"[6/8] Candidate {index}: starting agentic crop recovery")
-            evidence = global_evidence(primitives, roi_bbox, chosen_ids)
-            for extension_index, extension in enumerate(leader_extensions):
-                evidence.extend(
-                    [
-                        EvidenceBox(
-                            f"XL{extension_index}",
-                            "leader_segment",
-                            CropBox.from_values(extension["trace_bbox"]),
-                            True,
-                        ),
-                        EvidenceBox(
-                            f"XR{extension_index}",
-                            "target_part",
-                            CropBox.from_values(extension["target_bbox"]),
-                            True,
-                        ),
-                    ]
-                )
-            recovery_mapping = dict(mapping)
-            if leader_extensions:
-                remaining_missing = [
-                    item
-                    for item in mapping.get("missing", [])
-                    if item != "target"
-                ]
-                recovery_mapping["missing"] = remaining_missing
-                recovery_mapping["complete"] = not remaining_missing
-                recovery_mapping["geometric_target_recovered"] = True
-            config = RecoveryConfig(
-                max_turns=args.max_turns,
-                max_format_retries=args.max_format_retries,
-                max_subagents=args.max_subagents,
-                max_content_bytes=args.max_content_bytes,
-                max_direction_norm=args.max_direction_norm,
-                max_crop_area_ratio=args.max_crop_area_ratio,
-                max_crop_growth=args.max_crop_growth,
-                recovery_max_tokens=args.recovery_max_tokens,
-                subagent_confidence_threshold=args.subagent_confidence_threshold,
-                context_fraction=args.context_fraction,
-                max_image_edge=args.max_image_edge,
-            )
-            expansion_candidate_dir = expand_dir / f"candidate_{index:03d}"
-            recovery = run_crop_recovery(
+    records_by_index: dict[int, dict[str, Any]] = {}
+    worker_count = min(args.qwen_concurrent, len(marker_boxes))
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        futures = {
+            executor.submit(
+                process_candidate_v5,
+                args,
                 client,
-                args.qwen_model,
                 image,
-                CropBox.from_values(marker_box),
-                CropBox.from_values(minimum_crop),
-                recovery_mapping,
-                evidence,
+                gray_image,
+                marker_box,
+                index,
+                raw_dir,
+                crop_dir,
+                related_dir,
+                expand_dir,
                 skill,
-                config,
-                related_candidate_dir / "recovery",
-                debug=args.debug,
-                logger=lambda message, idx=index: log(
-                    f"[7/8] Candidate {idx}: {message}"
-                ),
-                expansion_output_dir=expansion_candidate_dir,
+            ): index
+            for index, marker_box in enumerate(marker_boxes)
+        }
+        for future in as_completed(futures):
+            index = futures[future]
+            record = future.result()
+            records_by_index[index] = record
+            records = [records_by_index[key] for key in sorted(records_by_index)]
+            save_json(
+                manifest_path,
+                manifest_base(input_path, image, args, skill, records),
             )
-            final_box = BBox(*recovery.final_crop.to_int_tuple())
-            if recovery.rejected:
-                final_path = crop_dir / f"Candidate{index:03d}_rejected_not_fai.png"
-            elif recovery.valid:
-                final_path = crop_dir / f"{base}_validated.png"
-            else:
-                final_path = crop_dir / f"{base}_best_unvalidated.png"
-            image.crop(final_box.to_int_tuple()).save(final_path)
-            expansion_count = sum(
-                1
-                for turn in recovery.turns
-                if turn.expansion is not None and turn.expansion.changed
+            log(
+                f"[8/8] Candidate {index}: {record['status']} -> "
+                f"{record['final_crop_path']}"
             )
-            record.update(
-                {
-                    "status": recovery.status,
-                    "final_crop_bbox": final_box.to_list(),
-                    "final_crop_path": str(final_path),
-                    "expansion_dir": (
-                        str(expansion_candidate_dir) if expansion_count else None
-                    ),
-                    "expansion_count": expansion_count,
-                    "recovery": recovery.to_dict(),
-                }
-            )
-        records.append(record)
-        save_json(manifest_path, manifest_base(input_path, image, args, skill, records))
-        log(
-            f"[8/8] Candidate {index}: {record['status']} -> {record['final_crop_path']}"
-        )
+
+    records = [records_by_index[index] for index in sorted(records_by_index)]
 
     if args.debug:
         write_overview(image, records, debug_dir / "overview.png")
@@ -525,6 +573,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tile-size", type=int, default=1200)
     parser.add_argument("--tile-overlap", type=float, default=0.20)
     parser.add_argument("--max-candidates", type=int, default=50)
+    parser.add_argument(
+        "--concurrent",
+        type=int,
+        default=16,
+        help="Maximum concurrent LocateAnything requests (default: 16)",
+    )
+    parser.add_argument(
+        "--qwen-concurrent",
+        type=int,
+        default=8,
+        help="Maximum concurrent Qwen requests and candidate workers (default: 8)",
+    )
     parser.add_argument("--timeout", type=float, default=300.0)
     parser.add_argument("--max-turns", type=int, default=6)
     parser.add_argument("--max-format-retries", type=int, default=2)
@@ -555,6 +615,10 @@ def validate_args(parser: argparse.ArgumentParser, args: argparse.Namespace) -> 
         parser.error("--tile-overlap must be in [0.0, 0.9)")
     if args.max_candidates < 1:
         parser.error("--max-candidates must be at least 1")
+    if args.concurrent < 1:
+        parser.error("--concurrent must be at least 1")
+    if args.qwen_concurrent < 1:
+        parser.error("--qwen-concurrent must be at least 1")
     if args.max_turns < 1:
         parser.error("--max-turns must be at least 1")
     if args.max_format_retries < 0:

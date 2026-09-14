@@ -6,9 +6,11 @@ import base64
 import io
 import json
 import re
+import threading
 import time
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, Iterator, Optional
 
 from openai import DefaultHttpxClient, OpenAI
 from PIL import Image
@@ -16,12 +18,130 @@ from PIL import Image
 from .models import BBox
 
 
-def create_vision_client(endpoint: str, api_key: str, timeout: float) -> OpenAI:
+class RequestLimiter:
+    """Thread-safe cap for in-flight model requests."""
+
+    def __init__(self, max_concurrency: int) -> None:
+        if max_concurrency < 1:
+            raise ValueError("max_concurrency must be at least 1")
+        self.max_concurrency = max_concurrency
+        self._semaphore = threading.BoundedSemaphore(max_concurrency)
+        self._lock = threading.Lock()
+        self._active = 0
+        self._peak = 0
+
+    @contextmanager
+    def slot(self) -> Iterator[None]:
+        self._semaphore.acquire()
+        with self._lock:
+            self._active += 1
+            self._peak = max(self._peak, self._active)
+        try:
+            yield
+        finally:
+            with self._lock:
+                self._active -= 1
+            self._semaphore.release()
+
+    @property
+    def active(self) -> int:
+        with self._lock:
+            return self._active
+
+    @property
+    def peak(self) -> int:
+        with self._lock:
+            return self._peak
+
+
+class _LimitedCompletions:
+    def __init__(
+        self,
+        delegate: Any,
+        locate_model: str,
+        qwen_model: str,
+        locate_limiter: RequestLimiter,
+        qwen_limiter: RequestLimiter,
+    ) -> None:
+        self._delegate = delegate
+        self._locate_model = locate_model
+        self._qwen_model = qwen_model
+        self._locate_limiter = locate_limiter
+        self._qwen_limiter = qwen_limiter
+
+    def create(self, **kwargs: Any) -> Any:
+        model = str(kwargs.get("model", ""))
+        limiter = (
+            self._locate_limiter
+            if model == self._locate_model or "locateanything" in model.lower()
+            else self._qwen_limiter
+        )
+        with limiter.slot():
+            return self._delegate.create(**kwargs)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
+class _LimitedChat:
+    def __init__(self, delegate: Any, completions: _LimitedCompletions) -> None:
+        self._delegate = delegate
+        self.completions = completions
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
+class ConcurrencyLimitedClient:
+    """Transparent OpenAI client wrapper with separate Locate/Qwen gates."""
+
+    def __init__(
+        self,
+        client: OpenAI,
+        *,
+        locate_model: str,
+        qwen_model: str,
+        locate_concurrency: int,
+        qwen_concurrency: int,
+    ) -> None:
+        self._client = client
+        self.locate_limiter = RequestLimiter(locate_concurrency)
+        self.qwen_limiter = RequestLimiter(qwen_concurrency)
+        completions = _LimitedCompletions(
+            client.chat.completions,
+            locate_model,
+            qwen_model,
+            self.locate_limiter,
+            self.qwen_limiter,
+        )
+        self.chat = _LimitedChat(client.chat, completions)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._client, name)
+
+
+def create_vision_client(
+    endpoint: str,
+    api_key: str,
+    timeout: float,
+    *,
+    locate_model: str = "LocateAnything-3B-8bit",
+    qwen_model: str = "Qwen3.8-27B-MLX-8bit",
+    locate_concurrency: int = 16,
+    qwen_concurrency: int = 8,
+) -> ConcurrencyLimitedClient:
     """Create a local-model client that bypasses macOS/system HTTP proxies."""
-    return OpenAI(
+    client = OpenAI(
         base_url=endpoint,
         api_key=api_key,
         http_client=DefaultHttpxClient(timeout=timeout, trust_env=False),
+    )
+    return ConcurrencyLimitedClient(
+        client,
+        locate_model=locate_model,
+        qwen_model=qwen_model,
+        locate_concurrency=locate_concurrency,
+        qwen_concurrency=qwen_concurrency,
     )
 
 
@@ -95,9 +215,7 @@ def extract_json(text: str) -> Any:
     raise ValueError("No valid JSON value found in model response")
 
 
-def normalized_box_to_pixels(
-    values: Iterable[float], width: int, height: int
-) -> BBox:
+def normalized_box_to_pixels(values: Iterable[float], width: int, height: int) -> BBox:
     coords = list(values)
     if len(coords) != 4:
         raise ValueError(f"Expected four box coordinates, received {coords!r}")
@@ -127,7 +245,9 @@ def parse_locate_response(text: str, width: int, height: int) -> list[BBox]:
     if isinstance(data, list):
         records = data
     elif isinstance(data, dict):
-        records = data.get("boxes") or data.get("detections") or data.get("objects") or []
+        records = (
+            data.get("boxes") or data.get("detections") or data.get("objects") or []
+        )
     else:
         records = []
     for record in records:

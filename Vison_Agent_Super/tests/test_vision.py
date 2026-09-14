@@ -3,8 +3,12 @@ from __future__ import annotations
 import ast
 import sys
 import tempfile
+import threading
+import time
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import numpy as np
@@ -21,7 +25,10 @@ from vision.detection import (  # noqa: E402
     deduplicate_boxes,
     detect_fai_candidates,
 )
-from vision.inference import parse_locate_response  # noqa: E402
+from vision.inference import (  # noqa: E402
+    ConcurrencyLimitedClient,
+    parse_locate_response,
+)
 from vision.evidence import extend_crop_along_selected_leaders  # noqa: E402
 from vision.models import BBox, Primitive  # noqa: E402
 from vision.utils import mapping_selected_ids, safe_fai_name  # noqa: E402
@@ -62,7 +69,10 @@ class StandaloneVisionTests(unittest.TestCase):
         pairs = [
             {"left_bbox": BBox(10, 10, 30, 30), "right_bbox": BBox(35, 10, 55, 30)},
             {"left_bbox": BBox(11, 11, 29, 29), "right_bbox": BBox(36, 11, 54, 29)},
-            {"left_bbox": BBox(80, 80, 100, 100), "right_bbox": BBox(105, 80, 125, 100)},
+            {
+                "left_bbox": BBox(80, 80, 100, 100),
+                "right_bbox": BBox(105, 80, 125, 100),
+            },
         ]
         boxes = circle_pair_marker_boxes(pairs)
         self.assertEqual(
@@ -81,7 +91,9 @@ class StandaloneVisionTests(unittest.TestCase):
         with (
             tempfile.TemporaryDirectory() as temporary_dir,
             patch("vision.detection.locate_boxes", return_value=[BBox(10, 10, 30, 30)]),
-            patch("vision.detection.detect_circle_pair_candidates", return_value=[pair]),
+            patch(
+                "vision.detection.detect_circle_pair_candidates", return_value=[pair]
+            ),
         ):
             boxes = detect_fai_candidates(
                 object(),
@@ -177,6 +189,81 @@ class StandaloneVisionTests(unittest.TestCase):
         )
         self.assertEqual(traces, [])
         self.assertEqual(crop.to_int_tuple(), initial.to_int_tuple())
+
+
+class BlockingCompletions:
+    def __init__(self, expected_peak: int) -> None:
+        self.expected_peak = expected_peak
+        self.active = 0
+        self.peak = 0
+        self.lock = threading.Lock()
+        self.full = threading.Event()
+        self.release = threading.Event()
+
+    def create(self, **kwargs: object) -> SimpleNamespace:
+        with self.lock:
+            self.active += 1
+            self.peak = max(self.peak, self.active)
+            if self.active == self.expected_peak:
+                self.full.set()
+        self.release.wait(timeout=3)
+        with self.lock:
+            self.active -= 1
+        return SimpleNamespace(choices=[])
+
+
+class FailingCompletions:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    def create(self, **kwargs: object) -> SimpleNamespace:
+        self.calls += 1
+        if self.calls == 1:
+            raise RuntimeError("expected failure")
+        return SimpleNamespace(choices=[])
+
+
+def limited_client(completions: object) -> ConcurrencyLimitedClient:
+    raw = SimpleNamespace(chat=SimpleNamespace(completions=completions))
+    return ConcurrencyLimitedClient(
+        raw,
+        locate_model="locate-test",
+        qwen_model="qwen-test",
+        locate_concurrency=16,
+        qwen_concurrency=8,
+    )
+
+
+class ModelConcurrencyTests(unittest.TestCase):
+    def _assert_limit(self, model: str, request_count: int, expected: int) -> None:
+        completions = BlockingCompletions(expected)
+        client = limited_client(completions)
+        with ThreadPoolExecutor(max_workers=request_count) as executor:
+            futures = [
+                executor.submit(client.chat.completions.create, model=model)
+                for _ in range(request_count)
+            ]
+            self.assertTrue(completions.full.wait(timeout=2))
+            time.sleep(0.05)
+            self.assertEqual(completions.peak, expected)
+            completions.release.set()
+            for future in futures:
+                future.result(timeout=2)
+
+    def test_locate_requests_are_capped_at_sixteen(self) -> None:
+        self._assert_limit("locate-test", 17, 16)
+
+    def test_qwen_requests_are_capped_at_eight(self) -> None:
+        self._assert_limit("qwen-test", 9, 8)
+
+    def test_failed_request_releases_its_slot(self) -> None:
+        completions = FailingCompletions()
+        client = limited_client(completions)
+        with self.assertRaisesRegex(RuntimeError, "expected failure"):
+            client.chat.completions.create(model="qwen-test")
+        client.chat.completions.create(model="qwen-test")
+        self.assertEqual(client.qwen_limiter.active, 0)
+        self.assertEqual(completions.calls, 2)
 
 
 if __name__ == "__main__":

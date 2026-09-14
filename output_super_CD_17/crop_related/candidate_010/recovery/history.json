@@ -1,0 +1,189 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    682,
+    4935,
+    1953,
+    6056
+  ],
+  "current_crop": [
+    682,
+    4935,
+    1953,
+    6191
+  ],
+  "best_crop": [
+    682,
+    4935,
+    1953,
+    6191
+  ],
+  "best_score": 99.5721,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        682,
+        4935,
+        1953,
+        6056
+      ],
+      "crop_after": [
+        682,
+        4935,
+        1953,
+        6191
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target feature for FAI 452 profile tolerance leader arrowhead is clipped at the bottom/left of当前"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "confidence": 0.7
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 7321,
+          "completion_tokens": 94,
+          "total_tokens": 7415,
+          "finish_reason": "stop",
+          "elapsed_seconds": 161.5400798751507,
+          "content_bytes": 200,
+          "content_chars": 200,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 7408,
+          "completion_tokens": 47,
+          "total_tokens": 7455,
+          "finish_reason": "stop",
+          "elapsed_seconds": 77.47626008396037,
+          "content_bytes": 189,
+          "content_chars": 189,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 7408,
+          "completion_tokens": 72,
+          "total_tokens": 7480,
+          "finish_reason": "stop",
+          "elapsed_seconds": 57.93280424992554,
+          "content_bytes": 291,
+          "content_chars": 291,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          682,
+          4935,
+          1953,
+          6056
+        ],
+        "after": [
+          682,
+          4935,
+          1953,
+          6191
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 120
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 134.399
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17071145.298,
+        "limited_by": []
+      },
+      "score_before": 99.5721,
+      "score_after": 99.5207,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        682,
+        4935,
+        1953,
+        6191
+      ],
+      "crop_after": [
+        682,
+        4935,
+        1953,
+        6191
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 8141,
+          "completion_tokens": 89,
+          "total_tokens": 8230,
+          "finish_reason": "stop",
+          "elapsed_seconds": 133.04118645796552,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.5207,
+      "score_after": 99.5207,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

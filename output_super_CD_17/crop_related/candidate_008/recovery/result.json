@@ -1,0 +1,268 @@
+{
+  "status": "validated_from_incomplete_mapping",
+  "final_crop": [
+    6597,
+    4720,
+    8624,
+    5607
+  ],
+  "best_crop": [
+    6597,
+    4720,
+    8624,
+    5607
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 99.5088,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_17/crop_related/candidate_008/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        7021,
+        4720,
+        8624,
+        5607
+      ],
+      "crop_after": [
+        6781,
+        4720,
+        8624,
+        5607
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The leader line for FAI 445 extends to the left and is clipped by the left border of the current",
+          "The target feature (the angled surface) that the leader points to is partially outside the left"
+        ],
+        "arguments": {
+          "left_norm": 150,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 6274,
+          "completion_tokens": 189,
+          "total_tokens": 6463,
+          "finish_reason": "stop",
+          "elapsed_seconds": 302.1239687500056,
+          "content_bytes": 572,
+          "content_chars": 572,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 6361,
+          "completion_tokens": 136,
+          "total_tokens": 6497,
+          "finish_reason": "stop",
+          "elapsed_seconds": 235.38564270804636,
+          "content_bytes": 381,
+          "content_chars": 381,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          7021,
+          4720,
+          8624,
+          5607
+        ],
+        "after": [
+          6781,
+          4720,
+          8624,
+          5607
+        ],
+        "requested_norm": {
+          "left_norm": 150,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 240.265,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17040281.281,
+        "limited_by": []
+      },
+      "score_before": 94.5729,
+      "score_after": 99.5088,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        6781,
+        4720,
+        8624,
+        5607
+      ],
+      "crop_after": [
+        6597,
+        4720,
+        8624,
+        5607
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The leader line for FAI 445 extends to the left and is clipped by the left border of the current",
+          "The target feature (the angled surface) that the leader points to is partially outside the left"
+        ],
+        "arguments": {
+          "left_norm": 100,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 6055,
+          "completion_tokens": 134,
+          "total_tokens": 6189,
+          "finish_reason": "stop",
+          "elapsed_seconds": 271.9198624168057,
+          "content_bytes": 379,
+          "content_chars": 379,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 6142,
+          "completion_tokens": 141,
+          "total_tokens": 6283,
+          "finish_reason": "stop",
+          "elapsed_seconds": 167.65653891605325,
+          "content_bytes": 381,
+          "content_chars": 381,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6781,
+          4720,
+          8624,
+          5607
+        ],
+        "after": [
+          6597,
+          4720,
+          8624,
+          5607
+        ],
+        "requested_norm": {
+          "left_norm": 100,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 184.203,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17040281.281,
+        "limited_by": []
+      },
+      "score_before": 99.5088,
+      "score_after": 99.4597,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        6597,
+        4720,
+        8624,
+        5607
+      ],
+      "crop_after": [
+        6597,
+        4720,
+        8624,
+        5607
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5977,
+          "completion_tokens": 89,
+          "total_tokens": 6066,
+          "finish_reason": "stop",
+          "elapsed_seconds": 144.50632699998096,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.4597,
+      "score_after": 99.4597,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

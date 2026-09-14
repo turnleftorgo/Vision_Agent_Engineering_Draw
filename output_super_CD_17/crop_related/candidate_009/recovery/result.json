@@ -1,0 +1,183 @@
+{
+  "status": "validated_from_incomplete_mapping",
+  "final_crop": [
+    6767,
+    4777,
+    8274,
+    5613
+  ],
+  "best_crop": [
+    6767,
+    4777,
+    8274,
+    5613
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 99.6949,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_17/crop_related/candidate_009/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6913,
+        4777,
+        8128,
+        5613
+      ],
+      "crop_after": [
+        6767,
+        4777,
+        8274,
+        5613
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "target feature / leader arrowhead for FAI 444 (the crosshair target and the leader line pointing",
+          "left side: the (Ø 1.00) text and the position tolerance frame leader are clipped at the left",
+          "right side: the 2.080 ±0.05 dimension text and FAI 445 balloon are outside the crop"
+        ],
+        "arguments": {
+          "left_norm": 120,
+          "top_norm": 0,
+          "right_norm": 120,
+          "bottom_norm": 0
+        },
+        "confidence": 0.7
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5863,
+          "completion_tokens": 117,
+          "total_tokens": 5980,
+          "finish_reason": "stop",
+          "elapsed_seconds": 201.8214892090764,
+          "content_bytes": 288,
+          "content_chars": 288,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "missing_item_invalid"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5891,
+          "completion_tokens": 110,
+          "total_tokens": 6001,
+          "finish_reason": "stop",
+          "elapsed_seconds": 262.11830637487583,
+          "content_bytes": 278,
+          "content_chars": 278,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 2,
+          "prompt_tokens": 5950,
+          "completion_tokens": 128,
+          "total_tokens": 6078,
+          "finish_reason": "stop",
+          "elapsed_seconds": 221.16316149989143,
+          "content_bytes": 476,
+          "content_chars": 476,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6913,
+          4777,
+          8128,
+          5613
+        ],
+        "after": [
+          6767,
+          4777,
+          8274,
+          5613
+        ],
+        "requested_norm": {
+          "left_norm": 120,
+          "top_norm": 0,
+          "right_norm": 120,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 145.715,
+          "top": 0.0,
+          "right": 145.715,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 12169941.565,
+        "limited_by": []
+      },
+      "score_before": 99.6949,
+      "score_after": 99.6217,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        6767,
+        4777,
+        8274,
+        5613
+      ],
+      "crop_after": [
+        6767,
+        4777,
+        8274,
+        5613
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5689,
+          "completion_tokens": 77,
+          "total_tokens": 5766,
+          "finish_reason": "stop",
+          "elapsed_seconds": 53.458754332968965,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.6217,
+      "score_after": 99.6217,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "validated_from_incomplete_mapping",
+  "initial_crop": [
+    6307,
+    266,
+    7907,
+    1175
+  ],
+  "current_crop": [
+    6307,
+    266,
+    8067,
+    1447
+  ],
+  "best_crop": [
+    6307,
+    266,
+    8067,
+    1447
+  ],
+  "best_score": 99.4473,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        6307,
+        266,
+        7907,
+        1175
+      ],
+      "crop_after": [
+        6307,
+        266,
+        8067,
+        1311
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The leader line from the FAI 454 / SPC MI marker extends downward and to the right, exiting the",
+          "The target feature (the cross-section view or the specific surface being referenced) is not",
+          "The text 'SECTION DL-DL' and the '150.00' dimension are partially visible at the bottom, but"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 150
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5220,
+          "completion_tokens": 108,
+          "total_tokens": 5328,
+          "finish_reason": "stop",
+          "elapsed_seconds": 159.25845299987122,
+          "content_bytes": 280,
+          "content_chars": 280,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5307,
+          "completion_tokens": 170,
+          "total_tokens": 5477,
+          "finish_reason": "stop",
+          "elapsed_seconds": 248.52721495786682,
+          "content_bytes": 477,
+          "content_chars": 477,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6307,
+          266,
+          7907,
+          1175
+        ],
+        "after": [
+          6307,
+          266,
+          8067,
+          1311
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 150
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 159.886,
+          "bottom": 136.278
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17431087.417,
+        "limited_by": []
+      },
+      "score_before": 97.0596,
+      "score_after": 99.4473,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        6307,
+        266,
+        8067,
+        1311
+      ],
+      "crop_after": [
+        6307,
+        266,
+        8067,
+        1447
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The leader line from the FAI 454 / SPC MI marker extends downward and to the right, exiting the",
+          "The target feature (the cross-section view or the specific surface being referenced) is not",
+          "The text 'SECTION DL-DL' and the '150.00' dimension are partially visible at the bottom, but"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 130
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5969,
+          "completion_tokens": 120,
+          "total_tokens": 6089,
+          "finish_reason": "stop",
+          "elapsed_seconds": 140.39991633291356,
+          "content_bytes": 472,
+          "content_chars": 472,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          6307,
+          266,
+          8067,
+          1311
+        ],
+        "after": [
+          6307,
+          266,
+          8067,
+          1447
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 130
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 135.823
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 17431087.417,
+        "limited_by": []
+      },
+      "score_before": 99.4473,
+      "score_after": 99.3754,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        6307,
+        266,
+        8067,
+        1447
+      ],
+      "crop_after": [
+        6307,
+        266,
+        8067,
+        1447
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 6598,
+          "completion_tokens": 89,
+          "total_tokens": 6687,
+          "finish_reason": "stop",
+          "elapsed_seconds": 236.73469937499613,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 99.3754,
+      "score_after": 99.3754,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}
