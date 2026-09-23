@@ -1,0 +1,99 @@
+{
+  "round": 1,
+  "crop_before": [
+    6158,
+    289,
+    6750,
+    586
+  ],
+  "context_bbox": [
+    5862,
+    141,
+    7046,
+    734
+  ],
+  "votes": [
+    {
+      "role": "target_completeness_auditor",
+      "action": "right",
+      "reason": "target_clipped",
+      "confidence": 0.87,
+      "elapsed_seconds": 3.588795749936253,
+      "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+      "metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 1121,
+          "total_tokens": 1139,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 256
+          },
+          "input_tokens": 1121,
+          "output_tokens": 18,
+          "total_time": 3.55
+        }
+      },
+      "error": null
+    },
+    {
+      "role": "target_contour_tracer",
+      "action": "right",
+      "reason": "target_clipped",
+      "confidence": 0.87,
+      "elapsed_seconds": 3.5877261669375002,
+      "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+      "metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 1122,
+          "total_tokens": 1140,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 256
+          },
+          "input_tokens": 1122,
+          "output_tokens": 18,
+          "total_time": 3.55
+        }
+      },
+      "error": null
+    },
+    {
+      "role": "adversarial_target_verifier",
+      "action": "right",
+      "reason": "target_clipped",
+      "confidence": 0.87,
+      "elapsed_seconds": 3.6269884170033038,
+      "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+      "metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 1124,
+          "total_tokens": 1142,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 256
+          },
+          "input_tokens": 1124,
+          "output_tokens": 18,
+          "total_time": 3.6
+        }
+      },
+      "error": null
+    }
+  ],
+  "consensus": "right",
+  "crop_after": [
+    6158,
+    289,
+    6857,
+    586
+  ]
+}

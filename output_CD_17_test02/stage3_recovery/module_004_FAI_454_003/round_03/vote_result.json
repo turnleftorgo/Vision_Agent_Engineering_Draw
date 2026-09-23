@@ -1,0 +1,93 @@
+{
+  "round": 3,
+  "crop_before": [
+    6369,
+    706,
+    8074,
+    836
+  ],
+  "votes": [
+    {
+      "role": "target_completeness_auditor",
+      "action": "right",
+      "reason": "target_clipped",
+      "confidence": 0.85,
+      "elapsed_seconds": 1.939466750016436,
+      "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+      "metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 586,
+          "total_tokens": 604,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 256
+          },
+          "input_tokens": 586,
+          "output_tokens": 18,
+          "total_time": 1.92
+        }
+      },
+      "error": null
+    },
+    {
+      "role": "target_contour_tracer",
+      "action": "right",
+      "reason": "target_clipped",
+      "confidence": 0.85,
+      "elapsed_seconds": 2.153993583051488,
+      "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+      "metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 587,
+          "total_tokens": 605,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 256
+          },
+          "input_tokens": 587,
+          "output_tokens": 18,
+          "total_time": 2.13
+        }
+      },
+      "error": null
+    },
+    {
+      "role": "adversarial_target_verifier",
+      "action": "right",
+      "reason": "target_clipped",
+      "confidence": 0.87,
+      "elapsed_seconds": 2.1527835419401526,
+      "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+      "metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 589,
+          "total_tokens": 607,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 256
+          },
+          "input_tokens": 589,
+          "output_tokens": 18,
+          "total_time": 2.13
+        }
+      },
+      "error": null
+    }
+  ],
+  "consensus": "right",
+  "crop_after": [
+    6369,
+    706,
+    8381,
+    836
+  ]
+}

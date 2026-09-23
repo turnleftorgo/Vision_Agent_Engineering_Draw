@@ -128,7 +128,7 @@ def create_vision_client(
     locate_model: str = "LocateAnything-3B-8bit",
     qwen_model: str = "Qwen3.8-27B-MLX-8bit",
     locate_concurrency: int = 16,
-    qwen_concurrency: int = 8,
+    qwen_concurrency: int = 4,
 ) -> ConcurrencyLimitedClient:
     """Create a local-model client that bypasses macOS/system HTTP proxies."""
     client = OpenAI(

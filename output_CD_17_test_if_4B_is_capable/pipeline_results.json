@@ -1,0 +1,88 @@
+{
+  "status": "ok",
+  "elapsed_seconds": 52.201,
+  "module_count": 1,
+  "fai_cluster_count": 0,
+  "failed_module_count": 0,
+  "recovery_finished_count": 0,
+  "recovery_unresolved_count": 0,
+  "stage1": {
+    "status": "ok",
+    "elapsed_seconds": 34.687,
+    "response_metadata": {
+      "finish_reason": "stop",
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 16778,
+        "total_tokens": 16865,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 0
+        },
+        "input_tokens": 16778,
+        "output_tokens": 87,
+        "total_time": 32.14
+      }
+    },
+    "valid_module_count": 1,
+    "invalid_module_count": 0,
+    "valid_modules": [
+      {
+        "id": 1,
+        "description": "一张包含多个机械零件视图和标注的工程图纸，标题为“KNUCKLE INTERLOCK SCREWS”，包含尺寸、公差、剖面视图和版权信息。",
+        "bbox_normalized": [
+          0.0,
+          0.0,
+          1000.0,
+          1000.0
+        ],
+        "bbox_pixels": [
+          0,
+          0,
+          8800,
+          6800
+        ],
+        "crop_path": "crop1/module_001.png"
+      }
+    ],
+    "invalid_modules": [],
+    "visualization_path": "visualization.jpg"
+  },
+  "stage2": [
+    {
+      "status": "ok",
+      "module_index": 1,
+      "module_crop_path": "crop1/module_001.png",
+      "elapsed_seconds": 14.567,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 9,
+          "prompt_tokens": 17937,
+          "total_tokens": 17946,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 17937,
+          "output_tokens": 9,
+          "total_time": 12.15
+        }
+      },
+      "valid_cluster_count": 0,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_001_visualization.jpg"
+    }
+  ],
+  "stage3": {
+    "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+    "submitted_crop_count": 0,
+    "finished_count": 0,
+    "unresolved_count": 0,
+    "results": []
+  }
+}

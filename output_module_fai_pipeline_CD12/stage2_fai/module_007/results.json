@@ -1,0 +1,100 @@
+{
+  "status": "ok",
+  "module_index": 7,
+  "module_crop_path": "crop1/module_007.png",
+  "elapsed_seconds": 80.312,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1469,
+      "prompt_tokens": 3542,
+      "total_tokens": 5011,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 3542,
+      "output_tokens": 1469,
+      "total_time": 80.21
+    }
+  },
+  "valid_cluster_count": 3,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1096",
+      "spc_code": "WP",
+      "bbox_normalized": [
+        70.0,
+        170.0,
+        560.0,
+        380.0
+      ],
+      "bbox_pixels": [
+        111,
+        215,
+        887,
+        480
+      ],
+      "description": "形位公差 0.10 PB 和基准 A3",
+      "arrow_count": 2,
+      "target_summary": "截面图中左侧钩状零件特征和右侧凸起零件特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_007_FAI_1096_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "196",
+      "spc_code": "FS",
+      "bbox_normalized": [
+        40.0,
+        490.0,
+        560.0,
+        550.0
+      ],
+      "bbox_pixels": [
+        63,
+        619,
+        887,
+        695
+      ],
+      "description": "形位公差 0.10 D",
+      "arrow_count": 1,
+      "target_summary": "截面图中右侧长条形零件特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_007_FAI_196_002.png"
+    },
+    {
+      "id": 3,
+      "fai_number": "1269",
+      "spc_code": "ACS",
+      "bbox_normalized": [
+        40.0,
+        580.0,
+        560.0,
+        660.0
+      ],
+      "bbox_pixels": [
+        63,
+        733,
+        887,
+        834
+      ],
+      "description": "尺寸 3.761 ±0.05",
+      "arrow_count": 2,
+      "target_summary": "截面图中右侧长条形零件特征及左侧基准线",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_007_FAI_1269_003.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_007_visualization.jpg"
+}

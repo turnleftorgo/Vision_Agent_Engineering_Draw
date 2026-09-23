@@ -1,0 +1,310 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "protocol_failed",
+  "initial_crop": [
+    3721,
+    4121,
+    5803,
+    6061
+  ],
+  "current_crop": [
+    3721,
+    4121,
+    6240,
+    6061
+  ],
+  "best_crop": [
+    3721,
+    4121,
+    5803,
+    6061
+  ],
+  "best_score": 88.7861,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        3721,
+        4121,
+        5803,
+        6061
+      ],
+      "crop_after": [
+        3721,
+        4121,
+        6011,
+        6061
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "FAI 23 annotation text and feature control frame are clipped on the right border",
+          "Leader arrowhead for FAI 23 is partially visible but the full annotation block extends beyond"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 9897,
+          "completion_tokens": 110,
+          "total_tokens": 10007,
+          "finish_reason": "stop",
+          "elapsed_seconds": 77.84264091704972,
+          "content_bytes": 235,
+          "content_chars": 235,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 9984,
+          "completion_tokens": 130,
+          "total_tokens": 10114,
+          "finish_reason": "stop",
+          "elapsed_seconds": 71.6122653328348,
+          "content_bytes": 363,
+          "content_chars": 363,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          3721,
+          4121,
+          5803,
+          6061
+        ],
+        "after": [
+          3721,
+          4121,
+          6011,
+          6061
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 208.109,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 88.7861,
+      "score_after": 88.6647,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        3721,
+        4121,
+        6011,
+        6061
+      ],
+      "crop_after": [
+        3721,
+        4121,
+        6240,
+        6061
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "FAI 23 annotation text and feature control frame are clipped on the right border",
+          "Leader arrowhead for FAI 23 is partially visible but the full annotation block extends beyond"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 9950,
+          "completion_tokens": 136,
+          "total_tokens": 10086,
+          "finish_reason": "stop",
+          "elapsed_seconds": 46.60450650006533,
+          "content_bytes": 361,
+          "content_chars": 361,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 10037,
+          "completion_tokens": 139,
+          "total_tokens": 10176,
+          "finish_reason": "stop",
+          "elapsed_seconds": 43.074602250009775,
+          "content_bytes": 363,
+          "content_chars": 363,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          3721,
+          4121,
+          6011,
+          6061
+        ],
+        "after": [
+          3721,
+          4121,
+          6240,
+          6061
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 228.92,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 88.6647,
+      "score_after": 88.5312,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        3721,
+        4121,
+        6240,
+        6061
+      ],
+      "crop_after": [
+        3721,
+        4121,
+        6240,
+        6061
+      ],
+      "action": null,
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 9534,
+          "completion_tokens": 89,
+          "total_tokens": 9623,
+          "finish_reason": "stop",
+          "elapsed_seconds": 48.10952554200776,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 88.5312,
+      "score_after": 88.5312,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 9321,
+            "completion_tokens": 52,
+            "total_tokens": 9373,
+            "finish_reason": "stop",
+            "elapsed_seconds": 109.25322070880793,
+            "content_bytes": 195,
+            "content_chars": 195,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 9327,
+            "completion_tokens": 45,
+            "total_tokens": 9372,
+            "finish_reason": "stop",
+            "elapsed_seconds": 123.18959254189394,
+            "content_bytes": 173,
+            "content_chars": 173,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 9313,
+            "completion_tokens": 44,
+            "total_tokens": 9357,
+            "finish_reason": "stop",
+            "elapsed_seconds": 58.645517291966826,
+            "content_bytes": 172,
+            "content_chars": 172,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        }
+      },
+      "decision_source": "subagents_failed"
+    }
+  ]
+}

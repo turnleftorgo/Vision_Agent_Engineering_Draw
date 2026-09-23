@@ -1,0 +1,20 @@
+{
+  "input_image": "/Users/macsuper/Desktop/Vision_Agent/CD_17.png",
+  "image_width": 8800,
+  "image_height": 6800,
+  "endpoint": "http://127.0.0.1:8001/v1",
+  "front_model": "Qwen3.8-27B-MLX-8bit",
+  "recovery_endpoint": "http://127.0.0.1:8001/v1",
+  "recovery_model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "module_max_tokens": 8192,
+  "fai_max_tokens": 8192,
+  "temperature": 0.0,
+  "recovery_max_rounds": 6,
+  "recovery_max_tokens": 128,
+  "recovery_temperature": 0.1,
+  "recovery_context_fraction": 0.5,
+  "recovery_max_image_edge": 2400,
+  "recovery_step_norm": 180,
+  "recovery_workers": 1,
+  "execution": "streaming dual-model pipeline with single-agent multi-side recovery"
+}

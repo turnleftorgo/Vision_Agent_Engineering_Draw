@@ -1,0 +1,627 @@
+{
+  "status": "max_rounds_exhausted",
+  "valid": false,
+  "candidate_key": "module_004_FAI_448_004",
+  "module_index": 4,
+  "cluster_index": 4,
+  "fai_number": "448",
+  "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "source_crop_path": "crop2/module_004_FAI_448_004.png",
+  "refined_crop_path": "crop2_refined/module_004_FAI_448_004.png",
+  "initial_bbox_full_image": [
+    7700,
+    497,
+    8186,
+    598
+  ],
+  "marker_bbox_full_image": [
+    7964,
+    497,
+    8038,
+    563
+  ],
+  "final_bbox_full_image": [
+    7340,
+    497,
+    8652,
+    598
+  ],
+  "round_count": 6,
+  "elapsed_seconds": 16.668,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        7700,
+        497,
+        8186,
+        598
+      ],
+      "context_bbox": [
+        7457,
+        447,
+        8429,
+        648
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 4.272125250194222,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 644,
+              "total_tokens": 662,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 644,
+              "output_tokens": 18,
+              "total_time": 4.25
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.272394333034754,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 645,
+              "total_tokens": 663,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 645,
+              "output_tokens": 18,
+              "total_time": 4.25
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.349383958848193,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 647,
+              "total_tokens": 665,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 647,
+              "output_tokens": 18,
+              "total_time": 4.33
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "left",
+      "crop_after": [
+        7613,
+        497,
+        8186,
+        598
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        7613,
+        497,
+        8186,
+        598
+      ],
+      "context_bbox": [
+        7327,
+        447,
+        8472,
+        648
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.0581029998138547,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 680,
+              "total_tokens": 698,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 680,
+              "output_tokens": 18,
+              "total_time": 2.03
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.270666749915108,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 681,
+              "total_tokens": 699,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 681,
+              "output_tokens": 18,
+              "total_time": 2.25
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.2696663341484964,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 683,
+              "total_tokens": 701,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 683,
+              "output_tokens": 18,
+              "total_time": 2.25
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "left",
+      "crop_after": [
+        7510,
+        497,
+        8186,
+        598
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        7510,
+        497,
+        8186,
+        598
+      ],
+      "context_bbox": [
+        7172,
+        447,
+        8524,
+        648
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.2456209589727223,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 716,
+              "total_tokens": 734,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 716,
+              "output_tokens": 18,
+              "total_time": 2.23
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.1544798749964684,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 717,
+              "total_tokens": 735,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 717,
+              "output_tokens": 18,
+              "total_time": 2.13
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.153914958005771,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 719,
+              "total_tokens": 737,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 719,
+              "output_tokens": 18,
+              "total_time": 2.14
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "right",
+      "crop_after": [
+        7510,
+        497,
+        8308,
+        598
+      ]
+    },
+    {
+      "round": 4,
+      "crop_before": [
+        7510,
+        497,
+        8308,
+        598
+      ],
+      "context_bbox": [
+        7111,
+        447,
+        8707,
+        648
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.169640582986176,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 764,
+              "total_tokens": 782,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 764,
+              "output_tokens": 18,
+              "total_time": 2.14
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.3573006251826882,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 765,
+              "total_tokens": 783,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 765,
+              "output_tokens": 18,
+              "total_time": 2.33
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.355863083153963,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 767,
+              "total_tokens": 785,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 767,
+              "output_tokens": 18,
+              "total_time": 2.33
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "right",
+      "crop_after": [
+        7510,
+        497,
+        8452,
+        598
+      ]
+    },
+    {
+      "round": 5,
+      "crop_before": [
+        7510,
+        497,
+        8452,
+        598
+      ],
+      "context_bbox": [
+        7039,
+        447,
+        8800,
+        648
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.718203416094184,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 794,
+              "total_tokens": 812,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 794,
+              "output_tokens": 18,
+              "total_time": 2.69
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.4523136250209063,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 795,
+              "total_tokens": 813,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 795,
+              "output_tokens": 18,
+              "total_time": 2.43
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 2.71575262513943,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 797,
+              "total_tokens": 815,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 797,
+              "output_tokens": 18,
+              "total_time": 2.7
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "left",
+      "crop_after": [
+        7340,
+        497,
+        8452,
+        598
+      ]
+    },
+    {
+      "round": 6,
+      "crop_before": [
+        7340,
+        497,
+        8452,
+        598
+      ],
+      "context_bbox": [
+        6784,
+        447,
+        8800,
+        648
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.436001749942079,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 842,
+              "total_tokens": 860,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 842,
+              "output_tokens": 18,
+              "total_time": 2.4
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.2732998749706894,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 843,
+              "total_tokens": 861,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 843,
+              "output_tokens": 18,
+              "total_time": 2.23
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.4350445000454783,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 845,
+              "total_tokens": 863,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 845,
+              "output_tokens": 18,
+              "total_time": 2.4
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "right",
+      "crop_after": [
+        7340,
+        497,
+        8652,
+        598
+      ]
+    }
+  ]
+}

@@ -1,0 +1,588 @@
+{
+  "status": "max_rounds_exhausted",
+  "valid": false,
+  "candidate_key": "module_003_FAI_437_001",
+  "module_index": 3,
+  "cluster_index": 1,
+  "fai_number": "437",
+  "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "source_crop_path": "crop2/module_003_FAI_437_001.png",
+  "refined_crop_path": "crop2_refined/module_003_FAI_437_001.png",
+  "initial_bbox_full_image": [
+    383,
+    502,
+    1551,
+    1081
+  ],
+  "final_bbox_full_image": [
+    383,
+    502,
+    1551,
+    2064
+  ],
+  "round_count": 6,
+  "elapsed_seconds": 32.184,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        383,
+        502,
+        1551,
+        1081
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 11.950368207879364,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1022,
+              "total_tokens": 1040,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              },
+              "input_tokens": 1022,
+              "output_tokens": 18,
+              "model_load_duration": 4.25,
+              "total_time": 7.65
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 11.78224758291617,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1023,
+              "total_tokens": 1041,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              },
+              "input_tokens": 1023,
+              "output_tokens": 18,
+              "model_load_duration": 4.04,
+              "total_time": 7.51
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 11.947786540957168,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1025,
+              "total_tokens": 1043,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0
+              },
+              "input_tokens": 1025,
+              "output_tokens": 18,
+              "model_load_duration": 4.24,
+              "total_time": 7.67
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        383,
+        502,
+        1551,
+        1185
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        383,
+        502,
+        1551,
+        1185
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.242134749889374,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1130,
+              "total_tokens": 1148,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1130,
+              "output_tokens": 18,
+              "total_time": 3.21
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.336524625075981,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1131,
+              "total_tokens": 1149,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1131,
+              "output_tokens": 18,
+              "total_time": 3.3
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 3.2399675000924617,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1133,
+              "total_tokens": 1151,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1133,
+              "output_tokens": 18,
+              "total_time": 3.21
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        383,
+        502,
+        1551,
+        1308
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        383,
+        502,
+        1551,
+        1308
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.205896249972284,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1274,
+              "total_tokens": 1292,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1274,
+              "output_tokens": 18,
+              "total_time": 3.16
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.3494776249863207,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1275,
+              "total_tokens": 1293,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1275,
+              "output_tokens": 18,
+              "total_time": 3.3
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 3.3472052079159766,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1277,
+              "total_tokens": 1295,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1277,
+              "output_tokens": 18,
+              "total_time": 3.3
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        383,
+        502,
+        1551,
+        1453
+      ]
+    },
+    {
+      "round": 4,
+      "crop_before": [
+        383,
+        502,
+        1551,
+        1453
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 4.040045290952548,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1454,
+              "total_tokens": 1472,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1454,
+              "output_tokens": 18,
+              "total_time": 3.99
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.8962681661359966,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1455,
+              "total_tokens": 1473,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1455,
+              "output_tokens": 18,
+              "total_time": 3.85
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.8963226249907166,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1457,
+              "total_tokens": 1475,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1457,
+              "output_tokens": 18,
+              "total_time": 3.85
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        383,
+        502,
+        1551,
+        1624
+      ]
+    },
+    {
+      "round": 5,
+      "crop_before": [
+        383,
+        502,
+        1551,
+        1624
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.9349153339862823,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1634,
+              "total_tokens": 1652,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1634,
+              "output_tokens": 18,
+              "total_time": 3.88
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.931285624857992,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1635,
+              "total_tokens": 1653,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1635,
+              "output_tokens": 18,
+              "total_time": 3.88
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.050138583872467,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1637,
+              "total_tokens": 1655,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1637,
+              "output_tokens": 18,
+              "total_time": 4.0
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        383,
+        502,
+        1551,
+        1826
+      ]
+    },
+    {
+      "round": 6,
+      "crop_before": [
+        383,
+        502,
+        1551,
+        1826
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 4.7244392081629485,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1850,
+              "total_tokens": 1868,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1850,
+              "output_tokens": 18,
+              "total_time": 4.67
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.7231343339663,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1851,
+              "total_tokens": 1869,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1851,
+              "output_tokens": 18,
+              "total_time": 4.67
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.534753124928102,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1853,
+              "total_tokens": 1871,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1853,
+              "output_tokens": 18,
+              "total_time": 4.48
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        383,
+        502,
+        1551,
+        2064
+      ]
+    }
+  ]
+}

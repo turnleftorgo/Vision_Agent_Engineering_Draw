@@ -1,0 +1,49 @@
+{
+  "round": 3,
+  "crop_before": [
+    7613,
+    289,
+    8186,
+    720
+  ],
+  "context_bbox": [
+    7327,
+    73,
+    8472,
+    936
+  ],
+  "decision": {
+    "action": "expand",
+    "expand_sides": [
+      "down",
+      "left"
+    ],
+    "reason": "target_clipped",
+    "confidence": 0.95,
+    "elapsed_seconds": 7.012407790869474,
+    "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\", \"left\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+    "metadata": {
+      "finish_reason": "stop",
+      "usage": {
+        "completion_tokens": 26,
+        "prompt_tokens": 1922,
+        "total_tokens": 1948,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 0
+        },
+        "input_tokens": 1922,
+        "output_tokens": 26,
+        "total_time": 6.99
+      }
+    },
+    "error": null
+  },
+  "crop_after": [
+    7510,
+    289,
+    8186,
+    798
+  ]
+}

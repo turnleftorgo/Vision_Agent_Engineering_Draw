@@ -1,0 +1,52 @@
+{
+  "status": "ok",
+  "module_index": 8,
+  "module_crop_path": "crop1/module_008.png",
+  "elapsed_seconds": 30.38,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 533,
+      "prompt_tokens": 1926,
+      "total_tokens": 2459,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 1926,
+      "output_tokens": 533,
+      "total_time": 30.35
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1230",
+      "spc_code": "ABF",
+      "bbox_normalized": [
+        300.0,
+        220.0,
+        970.0,
+        690.0
+      ],
+      "bbox_pixels": [
+        230,
+        109,
+        743,
+        342
+      ],
+      "description": "尺寸 4.169 ±0.03",
+      "arrow_count": 1,
+      "target_summary": "带有剖面线的零件截面结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_008_FAI_1230_001.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_008_visualization.jpg"
+}

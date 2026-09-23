@@ -1,0 +1,203 @@
+{
+  "status": "protocol_failed",
+  "final_crop": [
+    2891,
+    5790,
+    5854,
+    6721
+  ],
+  "best_crop": [
+    2891,
+    5790,
+    5854,
+    6721
+  ],
+  "rejected": false,
+  "valid": false,
+  "best_score": 91.6715,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_05/crop_related/candidate_049/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2891,
+        5790,
+        5854,
+        6721
+      ],
+      "crop_after": [
+        2891,
+        5790,
+        6150,
+        6721
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The FAI 253 / SPC HA marker and its associated tolerance frame are clipped on the right edge of",
+          "the current crop, requiring expansion to capture the full annotation group."
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4198,
+          "completion_tokens": 170,
+          "total_tokens": 4368,
+          "finish_reason": "stop",
+          "elapsed_seconds": 62.386498040985316,
+          "content_bytes": 490,
+          "content_chars": 490,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 4285,
+          "completion_tokens": 130,
+          "total_tokens": 4415,
+          "finish_reason": "stop",
+          "elapsed_seconds": 42.44981237500906,
+          "content_bytes": 360,
+          "content_chars": 360,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2891,
+          5790,
+          5854,
+          6721
+        ],
+        "after": [
+          2891,
+          5790,
+          6150,
+          6721
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 296.238,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 91.6715,
+      "score_after": 91.5886,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        2891,
+        5790,
+        6150,
+        6721
+      ],
+      "crop_after": [
+        2891,
+        5790,
+        6150,
+        6721
+      ],
+      "action": null,
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3900,
+          "completion_tokens": 89,
+          "total_tokens": 3989,
+          "finish_reason": "stop",
+          "elapsed_seconds": 23.241813333006576,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 91.5886,
+      "score_after": 91.5886,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 3762,
+            "completion_tokens": 155,
+            "total_tokens": 3917,
+            "finish_reason": "stop",
+            "elapsed_seconds": 58.875531709054485,
+            "content_bytes": 374,
+            "content_chars": 374,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 3768,
+            "completion_tokens": 81,
+            "total_tokens": 3849,
+            "finish_reason": "stop",
+            "elapsed_seconds": 16.54728449997492,
+            "content_bytes": 332,
+            "content_chars": 332,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 3754,
+            "completion_tokens": 117,
+            "total_tokens": 3871,
+            "finish_reason": "stop",
+            "elapsed_seconds": 48.135690374998376,
+            "content_bytes": 448,
+            "content_chars": 448,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        }
+      },
+      "decision_source": "subagents_failed"
+    }
+  ]
+}

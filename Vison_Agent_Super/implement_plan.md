@@ -110,6 +110,144 @@ Super 版本应：
 Super 主脚本只负责原有图像检测 pipeline、依赖装配和 CLI。Recovery 内部逻辑不
 继续堆进单文件，避免模型调用、动作校验和坐标修改共享隐式状态。
 
+### 3.1 阶段式流式调度架构（新增设计约束）
+
+Candidate 不应再独占一个从 annotation 一直运行到 final crop 的线程。所有
+Candidate 进入按阶段划分的队列；某个 Candidate 完成当前阶段后，立即进入满足
+依赖的下一阶段，不能等待其他 Candidate 完成同一阶段。
+
+正确结构应该拆成三个执行池：
+
+```text
+                    ┌────────────────────┐
+  annotation/arrow ─► Locate 执行池       │
+  target           ─► LocateLimiter(16)   │
+                    └────────────────────┘
+                             │
+                             ▼
+                    ┌────────────────────┐
+  evidence/OCR     ─► CPU 执行池          │
+                    └────────────────────┘
+                             │
+                             ▼
+                    ┌────────────────────┐
+  semantic         ─► Qwen 执行池         │
+  recovery         ─► QwenLimiter(4)     │
+                    └────────────────────┘
+```
+
+这样即使 Locate 队列堵住，也不会占用 Qwen 的线程：
+
+```text
+Locate 堵塞 ───────┐
+                   ├─ 不影响 Qwen
+CPU 阶段等待 ──────┘
+```
+
+所以问题不是单纯的“模型没有工作”，而是共享线程池被前置 Locate 任务耗尽，
+后续阶段没有可运行的线程，导致模型和程序同时看起来都停住。
+
+阶段依赖明确如下：
+
+```text
+annotation ─────────────┐
+                        ├─► evidence/OCR ─► semantic ─► recovery ─► finalize
+arrowhead ─► target ────┘
+```
+
+`annotation` 与 `arrowhead` 使用同一初始 overlay，可以并行；`target` 必须等待
+`arrowhead`；`evidence` 必须等待三个 Locate 结果；`semantic` 和 `recovery`
+通过独立的 Qwen 执行池运行。调度器只在阶段完成事件中更新 Candidate 状态并派发
+下一任务，不得一次性向单一线程池提交所有 Candidate 的所有前置任务。
+
+与之前架构的对比：
+
+```text
+之前：Candidate 级共享线程池
+
+Candidate 0 ─ annotation ─ arrow ─ target ─ semantic ─ recovery ─ final
+Candidate 1 ─ annotation ─ arrow ─ target ─ semantic ─ recovery ─ final
+Candidate 2 ─ annotation ─ arrow ─ target ─ semantic ─ recovery ─ final
+                    ▲
+                    └─ 一个 Candidate 完成前一直占用 worker
+
+结果：前置 Locate 任务阻塞时，后续 Qwen 任务没有可运行线程。
+```
+
+```text
+现在目标：阶段级流式队列
+
+Locate 队列：  A0  A1  H0  H1  T0  A2  H2 ...   （最多 16 个模型请求）
+CPU 队列：                 E0  E1  E2 ...
+Qwen 队列：                    S0  R1  S1  R0 ...（最多 4 个模型请求）
+
+结果：任意 Candidate 一旦完成当前阶段即可向下流动，
+      不被其他 Candidate 的完整生命周期阻塞。
+```
+
+实现时应使用显式的 `CandidateState` 和阶段完成事件；执行池之间相互隔离，
+模型 limiter 只负责限制实际 in-flight 请求，不承担任务调度职责。
+
+### 3.1.1 需要修改的函数与原因
+
+#### 必须拆分或重写
+
+| 函数 | 文件 | 修改原因 |
+|---|---|---|
+| `process_image_v5()` | `fai_DET_crop_5.py` | 移除当前 Candidate 级 `ThreadPoolExecutor`，改为创建阶段队列、三个执行池、Candidate 状态表和完成事件循环。它负责启动初始 annotation/arrow 任务，并在每个 future 完成后派发下一阶段。 |
+| `process_candidate_v5()` | `fai_DET_crop_5.py` | 当前函数从头执行到尾，会长期占用一个 Candidate worker。应拆成各阶段函数，或降级为兼容入口，不能继续作为主调度路径。 |
+| `create_candidate_evidence()` | `vision/evidence.py` | 当前内部顺序执行 annotation、arrowhead、target 三次 Locate 请求，无法让阶段调度器感知中间完成状态。应拆出三个 proposal 阶段和一个 evidence 汇总阶段。 |
+| `run_annotation_proposal()` | `vision/evidence.py` | 新增/抽取 annotation Locate 请求，完成后立即释放 Locate 执行池并更新 `CandidateState`。 |
+| `run_arrowhead_proposal()` | `vision/evidence.py` | 新增/抽取 arrowhead Locate 请求；它与 annotation 使用同一 overlay，可以并行。 |
+| `run_target_proposal()` | `vision/evidence.py` | 新增/抽取 target-part Locate 请求；它必须等待 arrowhead 结果，再构造带箭头框的 target overlay。 |
+| `assemble_candidate_evidence()` | `vision/evidence.py` | 新增/抽取 OCR、OpenCV、Primitive 合并和 evidence overlay 生成；只在三个 Locate 结果齐备后进入 CPU 执行池。 |
+| `run_compact_semantic_mapping()` 的调用阶段 | `semantic.py` / `fai_DET_crop_5.py` | semantic 请求应成为独立 Qwen 队列任务，不能埋在 Candidate 长函数中；完成后立即将状态送入 recovery 或 finalize。函数本身的语义协议不必重写。 |
+| `run_crop_recovery()` 的调用阶段 | `recovery/engine.py` / `fai_DET_crop_5.py` | recovery 应作为独立 Qwen 队列任务；不能让 recovery 长时间占用 Locate 或通用 Candidate worker。状态机内部的 observe/decide/expand 逻辑可以保持不变。 |
+
+#### 需要调整并发边界的函数
+
+| 函数/类 | 文件 | 修改原因 |
+|---|---|---|
+| `RequestLimiter` | `vision/inference.py` | 保留 semaphore 机制，但明确只限制模型请求：`LocateLimiter(16)` 和 `QwenLimiter(4)`。它不再承担阶段任务排队。 |
+| `ConcurrencyLimitedClient.__init__()` | `vision/inference.py` | 创建并暴露两个全局 limiter；所有 Locate/Qwen 请求必须经过各自 limiter，不能由阶段线程池自行重复计数。 |
+| `create_vision_client()` | `vision/inference.py` | 默认并发参数固定为 Locate 16、Qwen 4，并传递给全局 client wrapper。 |
+| `request_subagent_opinions()` | `recovery/agents.py` | 当前内部还有一个独立线程池。需要确认它只提交 Qwen 请求并受同一个 `QwenLimiter(4)` 控制，避免 subagent 线程池绕过全局 Qwen 上限，或因嵌套线程池占满外层 worker。 |
+| `manifest_base()` 与结果落盘逻辑 | `fai_DET_crop_5.py` | 改为 Candidate 完成一个最终阶段就增量写入 manifest；不能等整个共享线程池结束后才统一写结果。 |
+
+#### 可以保持不变的函数
+
+| 函数 | 原因 |
+|---|---|
+| `detect_fai_candidates()` | 粗扫描本身已经是独立的 tile 级 Locate 流程，不属于 Candidate 细扫描阶段；只需继续使用 LocateLimiter(16)。 |
+| `call_vision_model()`、`locate_boxes()` | 负责单次请求、重试和响应解析，不应承担跨阶段调度。 |
+| `exact_or_bootstrap_crop()` | 纯 CPU 的确定性 crop 计算，可作为 evidence/semantic 之间的 CPU 子步骤。 |
+| `run_compact_semantic_mapping()` 内部 schema 逻辑 | semantic 协议与阶段调度正交，除调用位置外不需要改变。 |
+| `run_crop_recovery()` 内部状态机 | recovery 的业务状态机可保持不变，只需由独立 Qwen 队列调用。 |
+
+最终调用关系应从：
+
+```text
+process_image_v5
+  └─ Candidate ThreadPool
+       └─ process_candidate_v5（从头跑到尾）
+```
+
+改为：
+
+```text
+process_image_v5
+  └─ StageScheduler
+       ├─ LocatePool(16)
+       │    ├─ run_annotation_proposal
+       │    ├─ run_arrowhead_proposal
+       │    └─ run_target_proposal
+       ├─ CPUPool
+       │    └─ assemble_candidate_evidence
+       └─ QwenPool(4)
+            ├─ run_compact_semantic_mapping
+            └─ run_crop_recovery
+```
+
 ## 4. Recovery Skill
 
 ### 4.1 Skill 文件

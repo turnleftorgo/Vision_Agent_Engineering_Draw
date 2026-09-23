@@ -1,0 +1,155 @@
+{
+  "status": "validated",
+  "final_crop": [
+    2708,
+    535,
+    5998,
+    1468
+  ],
+  "best_crop": [
+    2708,
+    535,
+    5998,
+    1468
+  ],
+  "rejected": false,
+  "valid": true,
+  "best_score": 91.5775,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_05/crop_related/candidate_015/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2708,
+        535,
+        5998,
+        1468
+      ],
+      "crop_after": [
+        2708,
+        535,
+        5998,
+        1468
+      ],
+      "action": {
+        "action": "finish",
+        "valid": true,
+        "candidate_valid": true,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 4120,
+          "completion_tokens": 77,
+          "total_tokens": 4197,
+          "finish_reason": "stop",
+          "elapsed_seconds": 42.446001916890964,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 91.5775,
+      "score_after": 91.5775,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 4059,
+            "completion_tokens": 66,
+            "total_tokens": 4125,
+            "finish_reason": "stop",
+            "elapsed_seconds": 73.42308395798318,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "adversarial_verifier"
+          }
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 4065,
+            "completion_tokens": 73,
+            "total_tokens": 4138,
+            "finish_reason": "stop",
+            "elapsed_seconds": 86.03206304088235,
+            "content_bytes": 239,
+            "content_chars": 239,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 4051,
+            "completion_tokens": 40,
+            "total_tokens": 4091,
+            "finish_reason": "stop",
+            "elapsed_seconds": 59.705340708140284,
+            "content_bytes": 141,
+            "content_chars": 141,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": null,
+          "result": {
+            "candidate_valid": true,
+            "crop_complete": true,
+            "missing": [],
+            "expand": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0
+            },
+            "confidence": 0.95,
+            "role": "geometry_tracer"
+          }
+        },
+        "coordinator_attempts": [
+          {
+            "attempt": 0,
+            "prompt_tokens": 4081,
+            "completion_tokens": 85,
+            "total_tokens": 4166,
+            "finish_reason": "stop",
+            "elapsed_seconds": 18.588803583057597,
+            "content_bytes": 176,
+            "content_chars": 176,
+            "reasoning_chars": 0,
+            "error": null,
+            "protocol_error": null
+          }
+        ]
+      },
+      "decision_source": "coordinator"
+    }
+  ]
+}

@@ -1,0 +1,585 @@
+{
+  "status": "boundary_exhausted",
+  "valid": false,
+  "candidate_key": "module_005_FAI_441_001",
+  "module_index": 5,
+  "cluster_index": 1,
+  "fai_number": "441",
+  "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "source_crop_path": "crop2/module_005_FAI_441_001.png",
+  "refined_crop_path": "crop2_refined/module_005_FAI_441_001.png",
+  "initial_bbox_full_image": [
+    393,
+    5332,
+    1676,
+    6001
+  ],
+  "final_bbox_full_image": [
+    393,
+    5332,
+    1676,
+    6800
+  ],
+  "round_count": 6,
+  "elapsed_seconds": 29.711,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        393,
+        5332,
+        1676,
+        6001
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 6.012474667048082,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1214,
+              "total_tokens": 1232,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1214,
+              "output_tokens": 18,
+              "total_time": 5.96
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 6.010858708061278,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1215,
+              "total_tokens": 1233,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1215,
+              "output_tokens": 18,
+              "total_time": 5.96
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 6.095904125133529,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1217,
+              "total_tokens": 1235,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1217,
+              "output_tokens": 18,
+              "total_time": 6.05
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        393,
+        5332,
+        1676,
+        6121
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        393,
+        5332,
+        1676,
+        6121
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.4411438750103116,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1374,
+              "total_tokens": 1392,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1374,
+              "output_tokens": 18,
+              "total_time": 3.39
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.4398269588127732,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1375,
+              "total_tokens": 1393,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1375,
+              "output_tokens": 18,
+              "total_time": 3.39
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 3.500280415872112,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1377,
+              "total_tokens": 1395,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1377,
+              "output_tokens": 18,
+              "total_time": 3.46
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        393,
+        5332,
+        1676,
+        6263
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        393,
+        5332,
+        1676,
+        6263
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 4.038315374869853,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1534,
+              "total_tokens": 1552,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1534,
+              "output_tokens": 18,
+              "total_time": 3.98
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.03845424996689,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1535,
+              "total_tokens": 1553,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1535,
+              "output_tokens": 18,
+              "total_time": 3.98
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 4.124280625022948,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1537,
+              "total_tokens": 1555,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1537,
+              "output_tokens": 18,
+              "total_time": 4.07
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        393,
+        5332,
+        1676,
+        6431
+      ]
+    },
+    {
+      "round": 4,
+      "crop_before": [
+        393,
+        5332,
+        1676,
+        6431
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 4.057728166226298,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1734,
+              "total_tokens": 1752,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1734,
+              "output_tokens": 18,
+              "total_time": 4.0
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 3.959707957925275,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1735,
+              "total_tokens": 1753,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1735,
+              "output_tokens": 18,
+              "total_time": 3.9
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "right",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 3.9581184580456465,
+          "raw_response": "{\"action\":\"right\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 1737,
+              "total_tokens": 1755,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 1737,
+              "output_tokens": 18,
+              "total_time": 3.9
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        393,
+        5332,
+        1676,
+        6629
+      ]
+    },
+    {
+      "round": 5,
+      "crop_before": [
+        393,
+        5332,
+        1676,
+        6629
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 5.087000875035301,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 2014,
+              "total_tokens": 2032,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 2014,
+              "output_tokens": 18,
+              "total_time": 5.02
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 5.362214333144948,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 2015,
+              "total_tokens": 2033,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 2015,
+              "output_tokens": 18,
+              "total_time": 5.3
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 5.3609450838994235,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 2017,
+              "total_tokens": 2035,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 2017,
+              "output_tokens": 18,
+              "total_time": 5.3
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        393,
+        5332,
+        1676,
+        6800
+      ]
+    },
+    {
+      "round": 6,
+      "crop_before": [
+        393,
+        5332,
+        1676,
+        6800
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 5.460089874919504,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 2214,
+              "total_tokens": 2232,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 2214,
+              "output_tokens": 18,
+              "total_time": 5.39
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 5.459881333867088,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 2215,
+              "total_tokens": 2233,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 2215,
+              "output_tokens": 18,
+              "total_time": 5.39
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.95,
+          "elapsed_seconds": 5.527495415881276,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.95}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 2217,
+              "total_tokens": 2235,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 2217,
+              "output_tokens": 18,
+              "total_time": 5.46
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        393,
+        5332,
+        1676,
+        6800
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "status": "ok",
+  "module_index": 4,
+  "module_crop_path": "crop1/module_004.png",
+  "elapsed_seconds": 69.092,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1342,
+      "prompt_tokens": 2018,
+      "total_tokens": 3360,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2018,
+      "output_tokens": 1342,
+      "total_time": 69.06
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1172",
+      "spc_code": "YY",
+      "bbox_normalized": [
+        180.0,
+        100.0,
+        930.0,
+        710.0
+      ],
+      "bbox_pixels": [
+        158,
+        54,
+        818,
+        386
+      ],
+      "description": "尺寸 0.58 ±0.05",
+      "arrow_count": 2,
+      "target_summary": "截面零件顶部水平面及整体轮廓",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_004_FAI_1172_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "1173",
+      "spc_code": "YZ",
+      "bbox_normalized": [
+        180.0,
+        380.0,
+        980.0,
+        710.0
+      ],
+      "bbox_pixels": [
+        158,
+        207,
+        862,
+        386
+      ],
+      "description": "尺寸 0.75 ±0.10",
+      "arrow_count": 2,
+      "target_summary": "截面零件右侧水平面及整体轮廓",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_004_FAI_1173_002.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_004_visualization.jpg"
+}

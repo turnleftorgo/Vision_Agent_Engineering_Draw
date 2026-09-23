@@ -1,0 +1,156 @@
+{
+  "status": "ok",
+  "elapsed_seconds": 110.227,
+  "image": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/module_001.png",
+    "width": 2500,
+    "height": 1672
+  },
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1954,
+      "prompt_tokens": 5279,
+      "total_tokens": 7233,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 5279,
+      "output_tokens": 1954,
+      "total_time": 109.8
+    }
+  },
+  "coordinate_system": {
+    "normalized_width": 1000,
+    "normalized_height": 1000,
+    "origin": "top-left"
+  },
+  "valid_cluster_count": 5,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "180",
+      "spc_code": "FC",
+      "bbox_normalized": [
+        20.0,
+        60.0,
+        470.0,
+        260.0
+      ],
+      "bbox_pixels": [
+        50,
+        100,
+        1175,
+        435
+      ],
+      "description": "FAI 180, SPC FC, 0.20 A3 RCAM B 29",
+      "arrow_count": 1,
+      "target_summary": "中心大孔上边缘",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_180_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "179",
+      "spc_code": "FB",
+      "bbox_normalized": [
+        500.0,
+        140.0,
+        980.0,
+        380.0
+      ],
+      "bbox_pixels": [
+        1250,
+        234,
+        2450,
+        635
+      ],
+      "description": "FAI 179, SPC FB, 0.20/0.10 A3 RCAM B 29",
+      "arrow_count": 1,
+      "target_summary": "中心大孔中心",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_179_002.png"
+    },
+    {
+      "id": 3,
+      "fai_number": "182",
+      "spc_code": "FE",
+      "bbox_normalized": [
+        110.0,
+        560.0,
+        490.0,
+        700.0
+      ],
+      "bbox_pixels": [
+        275,
+        936,
+        1225,
+        1170
+      ],
+      "description": "FAI 182, SPC FE, 0.10 A3 RMIC 29",
+      "arrow_count": 1,
+      "target_summary": "下方长圆孔中心",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_182_003.png"
+    },
+    {
+      "id": 4,
+      "fai_number": "184",
+      "spc_code": "FG",
+      "bbox_normalized": [
+        570.0,
+        580.0,
+        980.0,
+        840.0
+      ],
+      "bbox_pixels": [
+        1425,
+        970,
+        2450,
+        1404
+      ],
+      "description": "FAI 184, SPC FG, 0.20/0.10 A3 RCAM B 29",
+      "arrow_count": 1,
+      "target_summary": "右侧小孔特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_184_004.png"
+    },
+    {
+      "id": 5,
+      "fai_number": "1123",
+      "spc_code": "XE",
+      "bbox_normalized": [
+        250.0,
+        850.0,
+        480.0,
+        930.0
+      ],
+      "bbox_pixels": [
+        625,
+        1421,
+        1200,
+        1555
+      ],
+      "description": "FAI 1123, SPC XE, 0.756 ±0.10",
+      "arrow_count": 2,
+      "target_summary": "下方垂直边缘宽度",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_1123_005.png"
+    }
+  ],
+  "invalid_clusters": []
+}

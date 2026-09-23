@@ -1,0 +1,2012 @@
+{
+  "status": "ok",
+  "elapsed_seconds": 1621.259,
+  "module_count": 16,
+  "fai_cluster_count": 52,
+  "failed_module_count": 0,
+  "stage1": {
+    "status": "ok",
+    "elapsed_seconds": 267.013,
+    "response_metadata": {
+      "finish_reason": "stop",
+      "usage": {
+        "completion_tokens": 5133,
+        "prompt_tokens": 16813,
+        "total_tokens": 21946,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 16384
+        },
+        "input_tokens": 16813,
+        "output_tokens": 5133,
+        "total_time": 264.13
+      }
+    },
+    "valid_module_count": 16,
+    "invalid_module_count": 0,
+    "valid_modules": [
+      {
+        "id": 1,
+        "description": "左上角 DETAIL AY (SCALE 5:1) 局部放大视图，含四周尺寸标注、GD&T 符号及模块标题",
+        "bbox_normalized": [
+          28.0,
+          22.0,
+          312.0,
+          268.0
+        ],
+        "bbox_pixels": [
+          246,
+          150,
+          2746,
+          1822
+        ],
+        "crop_path": "crop1/module_001.png"
+      },
+      {
+        "id": 2,
+        "description": "SECTION NZ-NZ 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          368.0,
+          42.0,
+          462.0,
+          132.0
+        ],
+        "bbox_pixels": [
+          3238,
+          286,
+          4066,
+          898
+        ],
+        "crop_path": "crop1/module_002.png"
+      },
+      {
+        "id": 3,
+        "description": "SECTION NW-NW 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          468.0,
+          38.0,
+          578.0,
+          132.0
+        ],
+        "bbox_pixels": [
+          4118,
+          258,
+          5086,
+          898
+        ],
+        "crop_path": "crop1/module_003.png"
+      },
+      {
+        "id": 4,
+        "description": "SECTION NL-NL 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          402.0,
+          148.0,
+          502.0,
+          228.0
+        ],
+        "bbox_pixels": [
+          3538,
+          1006,
+          4418,
+          1550
+        ],
+        "crop_path": "crop1/module_004.png"
+      },
+      {
+        "id": 5,
+        "description": "右上角 DETAIL AS (SCALE 5:1) 大局部放大视图，含密集尺寸链、GD&T 符号及模块标题",
+        "bbox_normalized": [
+          502.0,
+          18.0,
+          958.0,
+          452.0
+        ],
+        "bbox_pixels": [
+          4418,
+          122,
+          8430,
+          3074
+        ],
+        "crop_path": "crop1/module_005.png"
+      },
+      {
+        "id": 6,
+        "description": "左下/中部设备外壳整体轮廓视图，含苹果标志、点阵、剖面标记群及关联引出尺寸标注",
+        "bbox_normalized": [
+          80.0,
+          235.0,
+          532.0,
+          888.0
+        ],
+        "bbox_pixels": [
+          704,
+          1598,
+          4682,
+          6038
+        ],
+        "crop_path": "crop1/module_006.png"
+      },
+      {
+        "id": 7,
+        "description": "SECTION AZ-AZ 剖面图及其尺寸、公差与 GD&T 标注",
+        "bbox_normalized": [
+          452.0,
+          492.0,
+          632.0,
+          678.0
+        ],
+        "bbox_pixels": [
+          3978,
+          3346,
+          5562,
+          4610
+        ],
+        "crop_path": "crop1/module_007.png"
+      },
+      {
+        "id": 8,
+        "description": "SECTION NA-NA 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          618.0,
+          452.0,
+          705.0,
+          525.0
+        ],
+        "bbox_pixels": [
+          5438,
+          3074,
+          6204,
+          3570
+        ],
+        "crop_path": "crop1/module_008.png"
+      },
+      {
+        "id": 9,
+        "description": "SECTION NU-NU 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          692.0,
+          452.0,
+          788.0,
+          538.0
+        ],
+        "bbox_pixels": [
+          6090,
+          3074,
+          6934,
+          3658
+        ],
+        "crop_path": "crop1/module_009.png"
+      },
+      {
+        "id": 10,
+        "description": "SECTION BC-BC 剖面图及其大量尺寸、公差与 GD&T 标注",
+        "bbox_normalized": [
+          718.0,
+          458.0,
+          958.0,
+          795.0
+        ],
+        "bbox_pixels": [
+          6318,
+          3114,
+          8430,
+          5406
+        ],
+        "crop_path": "crop1/module_010.png"
+      },
+      {
+        "id": 11,
+        "description": "SECTION BA-BA 剖面图及其尺寸与表面粗糙度标注",
+        "bbox_normalized": [
+          442.0,
+          700.0,
+          662.0,
+          832.0
+        ],
+        "bbox_pixels": [
+          3890,
+          4760,
+          5826,
+          5658
+        ],
+        "crop_path": "crop1/module_011.png"
+      },
+      {
+        "id": 12,
+        "description": "SECTION BB-BB 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          448.0,
+          848.0,
+          700.0,
+          968.0
+        ],
+        "bbox_pixels": [
+          3942,
+          5766,
+          6160,
+          6582
+        ],
+        "crop_path": "crop1/module_012.png"
+      },
+      {
+        "id": 13,
+        "description": "SECTION BE-BE 剖面图及其尺寸公差与 GD&T 标注",
+        "bbox_normalized": [
+          770.0,
+          828.0,
+          892.0,
+          925.0
+        ],
+        "bbox_pixels": [
+          6776,
+          5630,
+          7850,
+          6290
+        ],
+        "crop_path": "crop1/module_013.png"
+      },
+      {
+        "id": 14,
+        "description": "SECTION BD-BD 剖面图及其尺寸与 GD&T 标注",
+        "bbox_normalized": [
+          338.0,
+          902.0,
+          458.0,
+          978.0
+        ],
+        "bbox_pixels": [
+          2974,
+          6134,
+          4030,
+          6650
+        ],
+        "crop_path": "crop1/module_014.png"
+      },
+      {
+        "id": 15,
+        "description": "图纸顶部标题 CORNER 3 DETAILS",
+        "bbox_normalized": [
+          395.0,
+          22.0,
+          600.0,
+          50.0
+        ],
+        "bbox_pixels": [
+          3476,
+          150,
+          5280,
+          340
+        ],
+        "crop_path": "crop1/module_015.png"
+      },
+      {
+        "id": 16,
+        "description": "右下角标题栏，含 MacIII、图号 099-19053、版本及页码信息",
+        "bbox_normalized": [
+          832.0,
+          942.0,
+          992.0,
+          985.0
+        ],
+        "bbox_pixels": [
+          7322,
+          6406,
+          8730,
+          6698
+        ],
+        "crop_path": "crop1/module_016.png"
+      }
+    ],
+    "invalid_modules": [],
+    "visualization_path": "visualization.jpg"
+  },
+  "stage2": [
+    {
+      "status": "ok",
+      "module_index": 1,
+      "module_crop_path": "crop1/module_001.png",
+      "elapsed_seconds": 97.762,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1926,
+          "prompt_tokens": 5598,
+          "total_tokens": 7524,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 4096
+          },
+          "input_tokens": 5598,
+          "output_tokens": 1926,
+          "total_time": 97.49
+        }
+      },
+      "valid_cluster_count": 5,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "180",
+          "spc_code": "FC",
+          "bbox_normalized": [
+            20.0,
+            60.0,
+            600.0,
+            500.0
+          ],
+          "bbox_pixels": [
+            50,
+            100,
+            1500,
+            836
+          ],
+          "description": "0.20 轮廓度公差，基准 A3, RCAM, B",
+          "arrow_count": 1,
+          "target_summary": "中心八边形结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_001_FAI_180_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "179",
+          "spc_code": "FB",
+          "bbox_normalized": [
+            580.0,
+            140.0,
+            980.0,
+            400.0
+          ],
+          "bbox_pixels": [
+            1450,
+            234,
+            2450,
+            669
+          ],
+          "description": "0.20/0.10 轮廓度公差，基准 A3, RCAM, B",
+          "arrow_count": 1,
+          "target_summary": "中心偏右结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_001_FAI_179_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "182",
+          "spc_code": "FE",
+          "bbox_normalized": [
+            110.0,
+            560.0,
+            550.0,
+            780.0
+          ],
+          "bbox_pixels": [
+            275,
+            936,
+            1375,
+            1304
+          ],
+          "description": "0.10 轮廓度公差，基准 A3, RMIC",
+          "arrow_count": 1,
+          "target_summary": "下方椭圆形结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_001_FAI_182_003.png"
+        },
+        {
+          "id": 4,
+          "fai_number": "184",
+          "spc_code": "FG",
+          "bbox_normalized": [
+            580.0,
+            580.0,
+            980.0,
+            850.0
+          ],
+          "bbox_pixels": [
+            1450,
+            970,
+            2450,
+            1421
+          ],
+          "description": "0.20/0.10 轮廓度公差，基准 A3, RCAM, B",
+          "arrow_count": 1,
+          "target_summary": "中心偏右下结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_001_FAI_184_004.png"
+        },
+        {
+          "id": 5,
+          "fai_number": "1123",
+          "spc_code": "XE",
+          "bbox_normalized": [
+            250.0,
+            850.0,
+            520.0,
+            920.0
+          ],
+          "bbox_pixels": [
+            625,
+            1421,
+            1300,
+            1538
+          ],
+          "description": "0.756 ±0.10 尺寸",
+          "arrow_count": 1,
+          "target_summary": "下方垂直线结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_001_FAI_1123_005.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_001_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 2,
+      "module_crop_path": "crop1/module_002.png",
+      "elapsed_seconds": 72.071,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1405,
+          "prompt_tokens": 2036,
+          "total_tokens": 3441,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 2036,
+          "output_tokens": 1405,
+          "total_time": 72.02
+        }
+      },
+      "valid_cluster_count": 2,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1307",
+          "spc_code": "ADX",
+          "bbox_normalized": [
+            130.0,
+            100.0,
+            920.0,
+            730.0
+          ],
+          "bbox_pixels": [
+            108,
+            61,
+            762,
+            447
+          ],
+          "description": "0.45 ± 0.05 尺寸标注",
+          "arrow_count": 2,
+          "target_summary": "截面零件顶部水平面",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_002_FAI_1307_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "1308",
+          "spc_code": "ADY",
+          "bbox_normalized": [
+            130.0,
+            490.0,
+            990.0,
+            730.0
+          ],
+          "bbox_pixels": [
+            108,
+            300,
+            820,
+            447
+          ],
+          "description": "0.63 ± 0.10 尺寸标注",
+          "arrow_count": 2,
+          "target_summary": "截面零件顶部和底部水平面",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_002_FAI_1308_002.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_002_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 3,
+      "module_crop_path": "crop1/module_003.png",
+      "elapsed_seconds": 94.33,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1857,
+          "prompt_tokens": 2142,
+          "total_tokens": 3999,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 2142,
+          "output_tokens": 1857,
+          "total_time": 94.28
+        }
+      },
+      "valid_cluster_count": 3,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1318",
+          "spc_code": "AEH",
+          "bbox_normalized": [
+            150.0,
+            50.0,
+            560.0,
+            750.0
+          ],
+          "bbox_pixels": [
+            145,
+            32,
+            542,
+            480
+          ],
+          "description": "0.62 ±0.05 尺寸标注",
+          "arrow_count": 2,
+          "target_summary": "L型截面零件的垂直部分",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_003_FAI_1318_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "1262",
+          "spc_code": "ACM",
+          "bbox_normalized": [
+            150.0,
+            220.0,
+            940.0,
+            750.0
+          ],
+          "bbox_pixels": [
+            145,
+            141,
+            910,
+            480
+          ],
+          "description": "0.45 ±0.05 尺寸标注",
+          "arrow_count": 2,
+          "target_summary": "L型截面零件的顶部水平部分",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_003_FAI_1262_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "1263",
+          "spc_code": "ACN",
+          "bbox_normalized": [
+            150.0,
+            520.0,
+            940.0,
+            750.0
+          ],
+          "bbox_pixels": [
+            145,
+            333,
+            910,
+            480
+          ],
+          "description": "0.88 ±0.10 尺寸标注",
+          "arrow_count": 2,
+          "target_summary": "L型截面零件的底部水平部分",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_003_FAI_1263_003.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_003_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 4,
+      "module_crop_path": "crop1/module_004.png",
+      "elapsed_seconds": 69.092,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1342,
+          "prompt_tokens": 2018,
+          "total_tokens": 3360,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 2018,
+          "output_tokens": 1342,
+          "total_time": 69.06
+        }
+      },
+      "valid_cluster_count": 2,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1172",
+          "spc_code": "YY",
+          "bbox_normalized": [
+            180.0,
+            100.0,
+            930.0,
+            710.0
+          ],
+          "bbox_pixels": [
+            158,
+            54,
+            818,
+            386
+          ],
+          "description": "尺寸 0.58 ±0.05",
+          "arrow_count": 2,
+          "target_summary": "截面零件顶部水平面及整体轮廓",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_004_FAI_1172_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "1173",
+          "spc_code": "YZ",
+          "bbox_normalized": [
+            180.0,
+            380.0,
+            980.0,
+            710.0
+          ],
+          "bbox_pixels": [
+            158,
+            207,
+            862,
+            386
+          ],
+          "description": "尺寸 0.75 ±0.10",
+          "arrow_count": 2,
+          "target_summary": "截面零件右侧水平面及整体轮廓",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_004_FAI_1173_002.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_004_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 5,
+      "module_crop_path": "crop1/module_005.png",
+      "elapsed_seconds": 144.924,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1938,
+          "prompt_tokens": 13042,
+          "total_tokens": 14980,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 13042,
+          "output_tokens": 1938,
+          "total_time": 144.27
+        }
+      },
+      "valid_cluster_count": 10,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1318",
+          "spc_code": "AEM",
+          "bbox_normalized": [
+            0.0,
+            50.0,
+            70.0,
+            160.0
+          ],
+          "bbox_pixels": [
+            0,
+            148,
+            281,
+            472
+          ],
+          "description": "0.62 ±0.05",
+          "arrow_count": 1,
+          "target_summary": "左侧边缘的局部结构",
+          "complete": false,
+          "missing": [
+            "部分引出线和目标结构被图像左边缘截断"
+          ],
+          "confidence": 0.9,
+          "crop_path": "crop2/module_005_FAI_1318_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "1262",
+          "spc_code": "ACM",
+          "bbox_normalized": [
+            30.0,
+            80.0,
+            160.0,
+            150.0
+          ],
+          "bbox_pixels": [
+            120,
+            236,
+            642,
+            443
+          ],
+          "description": "0.45 ±0.05",
+          "arrow_count": 1,
+          "target_summary": "左侧边缘的局部结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.9,
+          "crop_path": "crop2/module_005_FAI_1262_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "1263",
+          "spc_code": "ACN",
+          "bbox_normalized": [
+            40.0,
+            150.0,
+            140.0,
+            210.0
+          ],
+          "bbox_pixels": [
+            160,
+            443,
+            562,
+            620
+          ],
+          "description": "0.88 ±0.10",
+          "arrow_count": 1,
+          "target_summary": "左侧边缘的局部结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.9,
+          "crop_path": "crop2/module_005_FAI_1263_003.png"
+        },
+        {
+          "id": 4,
+          "fai_number": "643",
+          "spc_code": "QQ",
+          "bbox_normalized": [
+            140.0,
+            450.0,
+            440.0,
+            550.0
+          ],
+          "bbox_pixels": [
+            562,
+            1328,
+            1765,
+            1624
+          ],
+          "description": "4X Ø(1.20) 及形位公差",
+          "arrow_count": 1,
+          "target_summary": "左侧的两个孔",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_643_004.png"
+        },
+        {
+          "id": 5,
+          "fai_number": "1261",
+          "spc_code": "ACL",
+          "bbox_normalized": [
+            590.0,
+            50.0,
+            810.0,
+            110.0
+          ],
+          "bbox_pixels": [
+            2367,
+            148,
+            3250,
+            325
+          ],
+          "description": "Ø(1.00) 及形位公差",
+          "arrow_count": 1,
+          "target_summary": "右上方的孔",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_1261_005.png"
+        },
+        {
+          "id": 6,
+          "fai_number": "185",
+          "spc_code": "FH",
+          "bbox_normalized": [
+            640.0,
+            110.0,
+            780.0,
+            200.0
+          ],
+          "bbox_pixels": [
+            2568,
+            325,
+            3129,
+            590
+          ],
+          "description": "Ø(1.00) 及形位公差",
+          "arrow_count": 1,
+          "target_summary": "右上方的孔",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_185_006.png"
+        },
+        {
+          "id": 7,
+          "fai_number": "1228",
+          "spc_code": "AAQ",
+          "bbox_normalized": [
+            600.0,
+            230.0,
+            730.0,
+            300.0
+          ],
+          "bbox_pixels": [
+            2407,
+            679,
+            2929,
+            886
+          ],
+          "description": "0.65 ±0.05",
+          "arrow_count": 1,
+          "target_summary": "右侧的轮廓",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_1228_007.png"
+        },
+        {
+          "id": 8,
+          "fai_number": "190",
+          "spc_code": "FM",
+          "bbox_normalized": [
+            630.0,
+            350.0,
+            840.0,
+            480.0
+          ],
+          "bbox_pixels": [
+            2528,
+            1033,
+            3370,
+            1417
+          ],
+          "description": "形位公差 0.20/0.10",
+          "arrow_count": 1,
+          "target_summary": "右侧的轮廓",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_190_008.png"
+        },
+        {
+          "id": 9,
+          "fai_number": "195",
+          "spc_code": "FR",
+          "bbox_normalized": [
+            580.0,
+            780.0,
+            860.0,
+            850.0
+          ],
+          "bbox_pixels": [
+            2327,
+            2303,
+            3450,
+            2509
+          ],
+          "description": "形位公差 0.20/0.10",
+          "arrow_count": 1,
+          "target_summary": "下方的轮廓",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_195_009.png"
+        },
+        {
+          "id": 10,
+          "fai_number": "192",
+          "spc_code": "FO",
+          "bbox_normalized": [
+            730.0,
+            870.0,
+            890.0,
+            960.0
+          ],
+          "bbox_pixels": [
+            2929,
+            2568,
+            3571,
+            2834
+          ],
+          "description": "2X Ø(1.20) 及形位公差",
+          "arrow_count": 1,
+          "target_summary": "右下方的孔",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_005_FAI_192_010.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_005_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 6,
+      "module_crop_path": "crop1/module_006.png",
+      "elapsed_seconds": 331.135,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 5005,
+          "prompt_tokens": 17877,
+          "total_tokens": 22882,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 17877,
+          "output_tokens": 5005,
+          "total_time": 330.25
+        }
+      },
+      "valid_cluster_count": 7,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1123",
+          "spc_code": "XE",
+          "bbox_normalized": [
+            0.0,
+            0.0,
+            150.0,
+            50.0
+          ],
+          "bbox_pixels": [
+            0,
+            0,
+            597,
+            222
+          ],
+          "description": "0.756 ± 0.10 尺寸标注",
+          "arrow_count": 1,
+          "target_summary": "左上角边缘特征",
+          "complete": false,
+          "missing": [
+            "引出线终端",
+            "目标部件完整轮廓"
+          ],
+          "confidence": 0.9,
+          "crop_path": "crop2/module_006_FAI_1123_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "201",
+          "spc_code": "FX",
+          "bbox_normalized": [
+            650.0,
+            100.0,
+            950.0,
+            300.0
+          ],
+          "bbox_pixels": [
+            2586,
+            444,
+            3779,
+            1332
+          ],
+          "description": "0.10 Z-VB 平面度公差",
+          "arrow_count": 1,
+          "target_summary": "右上角平面区域",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_006_FAI_201_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "1096",
+          "spc_code": "WP",
+          "bbox_normalized": [
+            650.0,
+            400.0,
+            950.0,
+            500.0
+          ],
+          "bbox_pixels": [
+            2586,
+            1776,
+            3779,
+            2220
+          ],
+          "description": "0.10 PB 平面度公差及 2.000 尺寸",
+          "arrow_count": 1,
+          "target_summary": "右侧边缘平面",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_006_FAI_1096_003.png"
+        },
+        {
+          "id": 4,
+          "fai_number": "196",
+          "spc_code": "FS",
+          "bbox_normalized": [
+            650.0,
+            500.0,
+            950.0,
+            600.0
+          ],
+          "bbox_pixels": [
+            2586,
+            2220,
+            3779,
+            2664
+          ],
+          "description": "0.10 D 平面度公差",
+          "arrow_count": 1,
+          "target_summary": "右侧边缘平面",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_006_FAI_196_004.png"
+        },
+        {
+          "id": 5,
+          "fai_number": "1269",
+          "spc_code": "ACS",
+          "bbox_normalized": [
+            650.0,
+            600.0,
+            950.0,
+            700.0
+          ],
+          "bbox_pixels": [
+            2586,
+            2664,
+            3779,
+            3108
+          ],
+          "description": "3.761 ± 0.05 尺寸",
+          "arrow_count": 1,
+          "target_summary": "右侧边缘特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_006_FAI_1269_005.png"
+        },
+        {
+          "id": 6,
+          "fai_number": "200",
+          "spc_code": "FW",
+          "bbox_normalized": [
+            650.0,
+            700.0,
+            950.0,
+            850.0
+          ],
+          "bbox_pixels": [
+            2586,
+            3108,
+            3779,
+            3774
+          ],
+          "description": "0.20 PB 和 0.10 形位公差",
+          "arrow_count": 1,
+          "target_summary": "右下角特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_006_FAI_200_006.png"
+        },
+        {
+          "id": 7,
+          "fai_number": "1125",
+          "spc_code": "XG",
+          "bbox_normalized": [
+            650.0,
+            850.0,
+            950.0,
+            1000.0
+          ],
+          "bbox_pixels": [
+            2586,
+            3774,
+            3779,
+            4440
+          ],
+          "description": "3.00 ± 0.05 尺寸",
+          "arrow_count": 1,
+          "target_summary": "右下角边缘特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_006_FAI_1125_007.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_006_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 7,
+      "module_crop_path": "crop1/module_007.png",
+      "elapsed_seconds": 80.312,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1469,
+          "prompt_tokens": 3542,
+          "total_tokens": 5011,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 3542,
+          "output_tokens": 1469,
+          "total_time": 80.21
+        }
+      },
+      "valid_cluster_count": 3,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1096",
+          "spc_code": "WP",
+          "bbox_normalized": [
+            70.0,
+            170.0,
+            560.0,
+            380.0
+          ],
+          "bbox_pixels": [
+            111,
+            215,
+            887,
+            480
+          ],
+          "description": "形位公差 0.10 PB 和基准 A3",
+          "arrow_count": 2,
+          "target_summary": "截面图中左侧钩状零件特征和右侧凸起零件特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_007_FAI_1096_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "196",
+          "spc_code": "FS",
+          "bbox_normalized": [
+            40.0,
+            490.0,
+            560.0,
+            550.0
+          ],
+          "bbox_pixels": [
+            63,
+            619,
+            887,
+            695
+          ],
+          "description": "形位公差 0.10 D",
+          "arrow_count": 1,
+          "target_summary": "截面图中右侧长条形零件特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_007_FAI_196_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "1269",
+          "spc_code": "ACS",
+          "bbox_normalized": [
+            40.0,
+            580.0,
+            560.0,
+            660.0
+          ],
+          "bbox_pixels": [
+            63,
+            733,
+            887,
+            834
+          ],
+          "description": "尺寸 3.761 ±0.05",
+          "arrow_count": 2,
+          "target_summary": "截面图中右侧长条形零件特征及左侧基准线",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_007_FAI_1269_003.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_007_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 8,
+      "module_crop_path": "crop1/module_008.png",
+      "elapsed_seconds": 30.38,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 533,
+          "prompt_tokens": 1926,
+          "total_tokens": 2459,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 1926,
+          "output_tokens": 533,
+          "total_time": 30.35
+        }
+      },
+      "valid_cluster_count": 1,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1230",
+          "spc_code": "ABF",
+          "bbox_normalized": [
+            300.0,
+            220.0,
+            970.0,
+            690.0
+          ],
+          "bbox_pixels": [
+            230,
+            109,
+            743,
+            342
+          ],
+          "description": "尺寸 4.169 ±0.03",
+          "arrow_count": 1,
+          "target_summary": "带有剖面线的零件截面结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_008_FAI_1230_001.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_008_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 9,
+      "module_crop_path": "crop1/module_009.png",
+      "elapsed_seconds": 31.92,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 564,
+          "prompt_tokens": 2010,
+          "total_tokens": 2574,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 2010,
+          "output_tokens": 564,
+          "total_time": 31.88
+        }
+      },
+      "valid_cluster_count": 1,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1250",
+          "spc_code": "ABP",
+          "bbox_normalized": [
+            290.0,
+            220.0,
+            980.0,
+            690.0
+          ],
+          "bbox_pixels": [
+            245,
+            128,
+            827,
+            403
+          ],
+          "description": "尺寸 4.169 ±0.03 的垂直高度测量",
+          "arrow_count": 2,
+          "target_summary": "剖面图中的阶梯状结构单元",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_009_FAI_1250_001.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_009_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 10,
+      "module_crop_path": "crop1/module_010.png",
+      "elapsed_seconds": 118.112,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 2051,
+          "prompt_tokens": 6294,
+          "total_tokens": 8345,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 6294,
+          "output_tokens": 2051,
+          "total_time": 117.83
+        }
+      },
+      "valid_cluster_count": 9,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1250",
+          "spc_code": "ABP",
+          "bbox_normalized": [
+            10.0,
+            30.0,
+            290.0,
+            160.0
+          ],
+          "bbox_pixels": [
+            21,
+            69,
+            612,
+            367
+          ],
+          "description": "尺寸 4.169 ±0.03",
+          "arrow_count": 2,
+          "target_summary": "左上角局部截面图",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_1250_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "211",
+          "spc_code": "GH",
+          "bbox_normalized": [
+            10.0,
+            320.0,
+            490.0,
+            400.0
+          ],
+          "bbox_pixels": [
+            21,
+            733,
+            1035,
+            917
+          ],
+          "description": "形位公差 0.20 A3, Z-CAM",
+          "arrow_count": 1,
+          "target_summary": "中间截面图左侧凸台",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_211_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "210",
+          "spc_code": "GG",
+          "bbox_normalized": [
+            10.0,
+            410.0,
+            490.0,
+            450.0
+          ],
+          "bbox_pixels": [
+            21,
+            940,
+            1035,
+            1031
+          ],
+          "description": "形位公差 0.10 Z-CAM",
+          "arrow_count": 1,
+          "target_summary": "中间截面图左侧",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_210_003.png"
+        },
+        {
+          "id": 4,
+          "fai_number": "939",
+          "spc_code": "RI",
+          "bbox_normalized": [
+            30.0,
+            470.0,
+            450.0,
+            510.0
+          ],
+          "bbox_pixels": [
+            63,
+            1077,
+            950,
+            1169
+          ],
+          "description": "形位公差 0.10 D",
+          "arrow_count": 1,
+          "target_summary": "中间截面图左侧",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_939_004.png"
+        },
+        {
+          "id": 5,
+          "fai_number": "1127",
+          "spc_code": "XI",
+          "bbox_normalized": [
+            410.0,
+            570.0,
+            670.0,
+            630.0
+          ],
+          "bbox_pixels": [
+            866,
+            1306,
+            1415,
+            1444
+          ],
+          "description": "尺寸 0.450 ±0.05",
+          "arrow_count": 2,
+          "target_summary": "中间截面图底部",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_1127_005.png"
+        },
+        {
+          "id": 6,
+          "fai_number": "317",
+          "spc_code": null,
+          "bbox_normalized": [
+            470.0,
+            410.0,
+            650.0,
+            470.0
+          ],
+          "bbox_pixels": [
+            993,
+            940,
+            1373,
+            1077
+          ],
+          "description": "尺寸 0.500",
+          "arrow_count": 2,
+          "target_summary": "中间截面图右侧",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_317_006.png"
+        },
+        {
+          "id": 7,
+          "fai_number": "212",
+          "spc_code": "GI",
+          "bbox_normalized": [
+            430.0,
+            20.0,
+            840.0,
+            220.0
+          ],
+          "bbox_pixels": [
+            908,
+            46,
+            1774,
+            504
+          ],
+          "description": "形位公差 0.20 D RCAM / 0.10, A-B",
+          "arrow_count": 1,
+          "target_summary": "顶部截面图右侧",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_212_007.png"
+        },
+        {
+          "id": 8,
+          "fai_number": "213",
+          "spc_code": "GJ",
+          "bbox_normalized": [
+            490.0,
+            140.0,
+            940.0,
+            270.0
+          ],
+          "bbox_pixels": [
+            1035,
+            321,
+            1985,
+            619
+          ],
+          "description": "形位公差 0.10 D, Z-VOLCANO",
+          "arrow_count": 1,
+          "target_summary": "顶部截面图右侧",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_213_008.png"
+        },
+        {
+          "id": 9,
+          "fai_number": "214",
+          "spc_code": "GK",
+          "bbox_normalized": [
+            470.0,
+            340.0,
+            990.0,
+            440.0
+          ],
+          "bbox_pixels": [
+            993,
+            779,
+            2091,
+            1008
+          ],
+          "description": "形位公差 0.10 Z-VOLCANO",
+          "arrow_count": 1,
+          "target_summary": "中间截面图右侧",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_010_FAI_214_009.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_010_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 11,
+      "module_crop_path": "crop1/module_011.png",
+      "elapsed_seconds": 32.468,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 499,
+          "prompt_tokens": 3222,
+          "total_tokens": 3721,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 3222,
+          "output_tokens": 499,
+          "total_time": 32.37
+        }
+      },
+      "valid_cluster_count": 1,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "200",
+          "spc_code": "FW",
+          "bbox_normalized": [
+            20.0,
+            80.0,
+            680.0,
+            650.0
+          ],
+          "bbox_pixels": [
+            39,
+            72,
+            1316,
+            584
+          ],
+          "description": "平行度公差 0.20/0.10 基准 PB",
+          "arrow_count": 2,
+          "target_summary": "中间椭圆形部件",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_011_FAI_200_001.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_011_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 12,
+      "module_crop_path": "crop1/module_012.png",
+      "elapsed_seconds": 57.014,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1000,
+          "prompt_tokens": 3336,
+          "total_tokens": 4336,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 3336,
+          "output_tokens": 1000,
+          "total_time": 56.92
+        }
+      },
+      "valid_cluster_count": 4,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1125",
+          "spc_code": "XG",
+          "bbox_normalized": [
+            10.0,
+            100.0,
+            180.0,
+            480.0
+          ],
+          "bbox_pixels": [
+            22,
+            82,
+            399,
+            392
+          ],
+          "description": "3.00 ±0.05",
+          "arrow_count": 1,
+          "target_summary": "左侧剖面结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_012_FAI_1125_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "204",
+          "spc_code": "GA",
+          "bbox_normalized": [
+            230.0,
+            480.0,
+            340.0,
+            800.0
+          ],
+          "bbox_pixels": [
+            510,
+            392,
+            754,
+            653
+          ],
+          "description": "0.75",
+          "arrow_count": 1,
+          "target_summary": "左侧剖面结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_012_FAI_204_002.png"
+        },
+        {
+          "id": 3,
+          "fai_number": "205",
+          "spc_code": null,
+          "bbox_normalized": [
+            570.0,
+            480.0,
+            680.0,
+            800.0
+          ],
+          "bbox_pixels": [
+            1264,
+            392,
+            1508,
+            653
+          ],
+          "description": "0.68",
+          "arrow_count": 1,
+          "target_summary": "右侧剖面结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_012_FAI_205_003.png"
+        },
+        {
+          "id": 4,
+          "fai_number": "1126",
+          "spc_code": "XH",
+          "bbox_normalized": [
+            820.0,
+            280.0,
+            990.0,
+            650.0
+          ],
+          "bbox_pixels": [
+            1819,
+            228,
+            2196,
+            530
+          ],
+          "description": "3.150 ±0.05",
+          "arrow_count": 1,
+          "target_summary": "右侧剖面结构",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_012_FAI_1126_004.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_012_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 13,
+      "module_crop_path": "crop1/module_013.png",
+      "elapsed_seconds": 46.326,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 853,
+          "prompt_tokens": 2256,
+          "total_tokens": 3109,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 2256,
+          "output_tokens": 853,
+          "total_time": 46.29
+        }
+      },
+      "valid_cluster_count": 1,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "207",
+          "spc_code": "GD",
+          "bbox_normalized": [
+            30.0,
+            140.0,
+            960.0,
+            750.0
+          ],
+          "bbox_pixels": [
+            32,
+            92,
+            1031,
+            495
+          ],
+          "description": "FAI 207, SPC GD, 尺寸 1.33 ±0.10 和 1.196",
+          "arrow_count": 3,
+          "target_summary": "上方独立小零件和下方主零件截面",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_013_FAI_207_001.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_013_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 14,
+      "module_crop_path": "crop1/module_014.png",
+      "elapsed_seconds": 61.343,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1177,
+          "prompt_tokens": 2070,
+          "total_tokens": 3247,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 2070,
+          "output_tokens": 1177,
+          "total_time": 61.31
+        }
+      },
+      "valid_cluster_count": 2,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "641",
+          "spc_code": "OO",
+          "bbox_normalized": [
+            390.0,
+            170.0,
+            960.0,
+            460.0
+          ],
+          "bbox_pixels": [
+            412,
+            88,
+            1014,
+            237
+          ],
+          "description": "0.10 Z-VB 形位公差",
+          "arrow_count": 1,
+          "target_summary": "上方零件特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_014_FAI_641_001.png"
+        },
+        {
+          "id": 2,
+          "fai_number": "642",
+          "spc_code": "OP",
+          "bbox_normalized": [
+            390.0,
+            540.0,
+            960.0,
+            780.0
+          ],
+          "bbox_pixels": [
+            412,
+            279,
+            1014,
+            402
+          ],
+          "description": "0.10 Z-VB 形位公差",
+          "arrow_count": 1,
+          "target_summary": "下方零件特征",
+          "complete": true,
+          "missing": [],
+          "confidence": 0.95,
+          "crop_path": "crop2/module_014_FAI_642_002.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_014_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 15,
+      "module_crop_path": "crop1/module_015.png",
+      "elapsed_seconds": 68.423,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 1337,
+          "prompt_tokens": 1878,
+          "total_tokens": 3215,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 1878,
+          "output_tokens": 1337,
+          "total_time": 68.39
+        }
+      },
+      "valid_cluster_count": 1,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [
+        {
+          "id": 1,
+          "fai_number": "1318",
+          "spc_code": "AFH",
+          "bbox_normalized": [
+            533.0,
+            848.0,
+            610.0,
+            1000.0
+          ],
+          "bbox_pixels": [
+            962,
+            161,
+            1100,
+            190
+          ],
+          "description": "FAI 1318 圆形标记与同组 SPC AFH 圆形标记，位于标题文字下方，无可见尺寸、公差或描述文字",
+          "arrow_count": 0,
+          "target_summary": "无引出线或箭头，未指向任何部件或结构单元",
+          "complete": false,
+          "missing": [
+            "相关引出线/leader 未显示",
+            "终端箭头未显示",
+            "箭头目标部件未显示",
+            "FAI/SPC 圆形标记底部疑似被图像下边缘截断"
+          ],
+          "confidence": 0.7,
+          "crop_path": "crop2/module_015_FAI_1318_001.png"
+        }
+      ],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_015_visualization.jpg"
+    },
+    {
+      "status": "ok",
+      "module_index": 16,
+      "module_crop_path": "crop1/module_016.png",
+      "elapsed_seconds": 14.777,
+      "response_metadata": {
+        "finish_reason": "stop",
+        "usage": {
+          "completion_tokens": 207,
+          "prompt_tokens": 1938,
+          "total_tokens": 2145,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cached_tokens": 0
+          },
+          "input_tokens": 1938,
+          "output_tokens": 207,
+          "total_time": 14.73
+        }
+      },
+      "valid_cluster_count": 0,
+      "invalid_cluster_count": 0,
+      "valid_clusters": [],
+      "invalid_clusters": [],
+      "visualization_path": "fai_visualizations/module_016_visualization.jpg"
+    }
+  ]
+}

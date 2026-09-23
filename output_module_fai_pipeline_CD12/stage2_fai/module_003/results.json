@@ -1,0 +1,100 @@
+{
+  "status": "ok",
+  "module_index": 3,
+  "module_crop_path": "crop1/module_003.png",
+  "elapsed_seconds": 94.33,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1857,
+      "prompt_tokens": 2142,
+      "total_tokens": 3999,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2142,
+      "output_tokens": 1857,
+      "total_time": 94.28
+    }
+  },
+  "valid_cluster_count": 3,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1318",
+      "spc_code": "AEH",
+      "bbox_normalized": [
+        150.0,
+        50.0,
+        560.0,
+        750.0
+      ],
+      "bbox_pixels": [
+        145,
+        32,
+        542,
+        480
+      ],
+      "description": "0.62 ±0.05 尺寸标注",
+      "arrow_count": 2,
+      "target_summary": "L型截面零件的垂直部分",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_003_FAI_1318_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "1262",
+      "spc_code": "ACM",
+      "bbox_normalized": [
+        150.0,
+        220.0,
+        940.0,
+        750.0
+      ],
+      "bbox_pixels": [
+        145,
+        141,
+        910,
+        480
+      ],
+      "description": "0.45 ±0.05 尺寸标注",
+      "arrow_count": 2,
+      "target_summary": "L型截面零件的顶部水平部分",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_003_FAI_1262_002.png"
+    },
+    {
+      "id": 3,
+      "fai_number": "1263",
+      "spc_code": "ACN",
+      "bbox_normalized": [
+        150.0,
+        520.0,
+        940.0,
+        750.0
+      ],
+      "bbox_pixels": [
+        145,
+        333,
+        910,
+        480
+      ],
+      "description": "0.88 ±0.10 尺寸标注",
+      "arrow_count": 2,
+      "target_summary": "L型截面零件的底部水平部分",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_003_FAI_1263_003.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_003_visualization.jpg"
+}

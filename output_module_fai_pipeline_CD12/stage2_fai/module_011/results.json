@@ -1,0 +1,52 @@
+{
+  "status": "ok",
+  "module_index": 11,
+  "module_crop_path": "crop1/module_011.png",
+  "elapsed_seconds": 32.468,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 499,
+      "prompt_tokens": 3222,
+      "total_tokens": 3721,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 3222,
+      "output_tokens": 499,
+      "total_time": 32.37
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "200",
+      "spc_code": "FW",
+      "bbox_normalized": [
+        20.0,
+        80.0,
+        680.0,
+        650.0
+      ],
+      "bbox_pixels": [
+        39,
+        72,
+        1316,
+        584
+      ],
+      "description": "平行度公差 0.20/0.10 基准 PB",
+      "arrow_count": 2,
+      "target_summary": "中间椭圆形部件",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_011_FAI_200_001.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_011_visualization.jpg"
+}

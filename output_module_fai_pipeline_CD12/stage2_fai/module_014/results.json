@@ -1,0 +1,76 @@
+{
+  "status": "ok",
+  "module_index": 14,
+  "module_crop_path": "crop1/module_014.png",
+  "elapsed_seconds": 61.343,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1177,
+      "prompt_tokens": 2070,
+      "total_tokens": 3247,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2070,
+      "output_tokens": 1177,
+      "total_time": 61.31
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "641",
+      "spc_code": "OO",
+      "bbox_normalized": [
+        390.0,
+        170.0,
+        960.0,
+        460.0
+      ],
+      "bbox_pixels": [
+        412,
+        88,
+        1014,
+        237
+      ],
+      "description": "0.10 Z-VB 形位公差",
+      "arrow_count": 1,
+      "target_summary": "上方零件特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_014_FAI_641_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "642",
+      "spc_code": "OP",
+      "bbox_normalized": [
+        390.0,
+        540.0,
+        960.0,
+        780.0
+      ],
+      "bbox_pixels": [
+        412,
+        279,
+        1014,
+        402
+      ],
+      "description": "0.10 Z-VB 形位公差",
+      "arrow_count": 1,
+      "target_summary": "下方零件特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_014_FAI_642_002.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_014_visualization.jpg"
+}

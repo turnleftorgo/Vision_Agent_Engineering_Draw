@@ -1,0 +1,211 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "protocol_failed",
+  "initial_crop": [
+    2635,
+    5789,
+    5895,
+    6543
+  ],
+  "current_crop": [
+    2635,
+    5789,
+    5895,
+    6619
+  ],
+  "best_crop": [
+    2635,
+    5789,
+    5895,
+    6543
+  ],
+  "best_score": 91.7609,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2635,
+        5789,
+        5895,
+        6543
+      ],
+      "crop_after": [
+        2635,
+        5789,
+        5895,
+        6619
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "bottom leader arrowhead for FAI 19",
+          "bottom feature-control frame for FAI 19"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 100
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3449,
+          "completion_tokens": 155,
+          "total_tokens": 3604,
+          "finish_reason": "stop",
+          "elapsed_seconds": 24.706778041785583,
+          "content_bytes": 390,
+          "content_chars": 390,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 3536,
+          "completion_tokens": 114,
+          "total_tokens": 3650,
+          "finish_reason": "stop",
+          "elapsed_seconds": 39.15698687499389,
+          "content_bytes": 263,
+          "content_chars": 263,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2635,
+          5789,
+          5895,
+          6543
+        ],
+        "after": [
+          2635,
+          5789,
+          5895,
+          6619
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 100
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 75.38
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 91.7609,
+      "score_after": 91.687,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        2635,
+        5789,
+        5895,
+        6619
+      ],
+      "crop_after": [
+        2635,
+        5789,
+        5895,
+        6619
+      ],
+      "action": null,
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3659,
+          "completion_tokens": 82,
+          "total_tokens": 3741,
+          "finish_reason": "stop",
+          "elapsed_seconds": 64.13989437487908,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 91.687,
+      "score_after": 91.687,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 3538,
+            "completion_tokens": 125,
+            "total_tokens": 3663,
+            "finish_reason": "stop",
+            "elapsed_seconds": 51.32656158390455,
+            "content_bytes": 317,
+            "content_chars": 317,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 3544,
+            "completion_tokens": 91,
+            "total_tokens": 3635,
+            "finish_reason": "stop",
+            "elapsed_seconds": 44.0200664580334,
+            "content_bytes": 317,
+            "content_chars": 317,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 3530,
+            "completion_tokens": 114,
+            "total_tokens": 3644,
+            "finish_reason": "stop",
+            "elapsed_seconds": 18.603913417086005,
+            "content_bytes": 336,
+            "content_chars": 336,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        }
+      },
+      "decision_source": "subagents_failed"
+    }
+  ]
+}

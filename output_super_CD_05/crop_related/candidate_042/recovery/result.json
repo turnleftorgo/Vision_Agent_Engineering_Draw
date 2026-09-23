@@ -1,0 +1,304 @@
+{
+  "status": "protocol_failed",
+  "final_crop": [
+    2891,
+    5241,
+    5854,
+    6569
+  ],
+  "best_crop": [
+    2891,
+    5241,
+    5854,
+    6569
+  ],
+  "rejected": false,
+  "valid": false,
+  "best_score": 91.3174,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_05/crop_related/candidate_042/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2891,
+        5241,
+        5854,
+        6569
+      ],
+      "crop_after": [
+        2891,
+        5241,
+        6150,
+        6636
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The FAI 253 / SPC HA marker and its associated tolerance frame (position 0.20 Z2 B) are clipped,",
+          "The leader line from the FAI 253 marker to the hole pattern is partially outside the crop,",
+          "The text '11X Ø 1.755 ±0.05' and the position tolerance frame for the right hole group are cut"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 50
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5623,
+          "completion_tokens": 164,
+          "total_tokens": 5787,
+          "finish_reason": "stop",
+          "elapsed_seconds": 38.19448541710153,
+          "content_bytes": 463,
+          "content_chars": 463,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5710,
+          "completion_tokens": 182,
+          "total_tokens": 5892,
+          "finish_reason": "stop",
+          "elapsed_seconds": 59.15780004207045,
+          "content_bytes": 485,
+          "content_chars": 485,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2891,
+          5241,
+          5854,
+          6569
+        ],
+        "after": [
+          2891,
+          5241,
+          6150,
+          6636
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 50
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 296.241,
+          "bottom": 66.354
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 91.3174,
+      "score_after": 91.1341,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        2891,
+        5241,
+        6150,
+        6636
+      ],
+      "crop_after": [
+        2891,
+        5241,
+        6476,
+        6636
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The FAI 253 / SPC HA marker and its associated tolerance frame (position 0.20 Z2 B) are clipped",
+          "The leader line from the FAI 253 marker to the hole pattern is partially outside the crop",
+          "The text '11X Ø 1.755 ±0.05' and the position tolerance frame for the right hole group are cut"
+        ],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5448,
+          "completion_tokens": 187,
+          "total_tokens": 5635,
+          "finish_reason": "stop",
+          "elapsed_seconds": 30.925313167041168,
+          "content_bytes": 480,
+          "content_chars": 480,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 5535,
+          "completion_tokens": 189,
+          "total_tokens": 5724,
+          "finish_reason": "stop",
+          "elapsed_seconds": 19.980623207986355,
+          "content_bytes": 482,
+          "content_chars": 482,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2891,
+          5241,
+          6150,
+          6636
+        ],
+        "after": [
+          2891,
+          5241,
+          6476,
+          6636
+        ],
+        "requested_norm": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 100,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 0.0,
+          "top": 0.0,
+          "right": 325.865,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 91.1341,
+      "score_after": 90.9975,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 3,
+      "crop_before": [
+        2891,
+        5241,
+        6476,
+        6636
+      ],
+      "crop_after": [
+        2891,
+        5241,
+        6476,
+        6636
+      ],
+      "action": null,
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 5196,
+          "completion_tokens": 89,
+          "total_tokens": 5285,
+          "finish_reason": "stop",
+          "elapsed_seconds": 22.126439332962036,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 90.9975,
+      "score_after": 90.9975,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 4887,
+            "completion_tokens": 130,
+            "total_tokens": 5017,
+            "finish_reason": "stop",
+            "elapsed_seconds": 42.769152709050104,
+            "content_bytes": 339,
+            "content_chars": 339,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 4893,
+            "completion_tokens": 83,
+            "total_tokens": 4976,
+            "finish_reason": "stop",
+            "elapsed_seconds": 19.272689583012834,
+            "content_bytes": 239,
+            "content_chars": 239,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 4879,
+            "completion_tokens": 62,
+            "total_tokens": 4941,
+            "finish_reason": "stop",
+            "elapsed_seconds": 60.42363854101859,
+            "content_bytes": 229,
+            "content_chars": 229,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        }
+      },
+      "decision_source": "subagents_failed"
+    }
+  ]
+}

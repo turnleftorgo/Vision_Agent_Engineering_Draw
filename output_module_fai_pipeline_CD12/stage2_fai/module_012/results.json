@@ -1,0 +1,124 @@
+{
+  "status": "ok",
+  "module_index": 12,
+  "module_crop_path": "crop1/module_012.png",
+  "elapsed_seconds": 57.014,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1000,
+      "prompt_tokens": 3336,
+      "total_tokens": 4336,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 3336,
+      "output_tokens": 1000,
+      "total_time": 56.92
+    }
+  },
+  "valid_cluster_count": 4,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1125",
+      "spc_code": "XG",
+      "bbox_normalized": [
+        10.0,
+        100.0,
+        180.0,
+        480.0
+      ],
+      "bbox_pixels": [
+        22,
+        82,
+        399,
+        392
+      ],
+      "description": "3.00 ±0.05",
+      "arrow_count": 1,
+      "target_summary": "左侧剖面结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_012_FAI_1125_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "204",
+      "spc_code": "GA",
+      "bbox_normalized": [
+        230.0,
+        480.0,
+        340.0,
+        800.0
+      ],
+      "bbox_pixels": [
+        510,
+        392,
+        754,
+        653
+      ],
+      "description": "0.75",
+      "arrow_count": 1,
+      "target_summary": "左侧剖面结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_012_FAI_204_002.png"
+    },
+    {
+      "id": 3,
+      "fai_number": "205",
+      "spc_code": null,
+      "bbox_normalized": [
+        570.0,
+        480.0,
+        680.0,
+        800.0
+      ],
+      "bbox_pixels": [
+        1264,
+        392,
+        1508,
+        653
+      ],
+      "description": "0.68",
+      "arrow_count": 1,
+      "target_summary": "右侧剖面结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_012_FAI_205_003.png"
+    },
+    {
+      "id": 4,
+      "fai_number": "1126",
+      "spc_code": "XH",
+      "bbox_normalized": [
+        820.0,
+        280.0,
+        990.0,
+        650.0
+      ],
+      "bbox_pixels": [
+        1819,
+        228,
+        2196,
+        530
+      ],
+      "description": "3.150 ±0.05",
+      "arrow_count": 1,
+      "target_summary": "右侧剖面结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_012_FAI_1126_004.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_012_visualization.jpg"
+}

@@ -7,7 +7,9 @@ import argparse
 import json
 import math
 import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import deque
+from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -38,8 +40,13 @@ from vision.detection import (
     qwen_fai_fallback,
 )
 from vision.evidence import (
+    assemble_candidate_evidence,
     create_candidate_evidence,
     extend_crop_along_selected_leaders,
+    prepare_candidate_roi,
+    run_annotation_proposal,
+    run_arrowhead_proposal,
+    run_target_proposal,
 )
 from vision.inference import create_vision_client
 from vision.models import BBox, Primitive
@@ -241,7 +248,7 @@ def process_candidate_v5(
     expand_dir: Path,
     skill: Any,
 ) -> dict[str, Any]:
-    """Process one deduplicated marker in an isolated candidate directory."""
+    """Compatibility entry point that runs the same stages synchronously."""
     marker = Primitive("F0", "fai_marker", marker_box, "LocateAnything")
     roi_bbox = candidate_roi(marker_box, image.width, image.height)
     raw_roi, primitives, evidence_overlay = create_candidate_evidence(
@@ -254,6 +261,58 @@ def process_candidate_v5(
         index,
         use_tesseract=not args.no_tesseract,
     )
+    prepared = run_candidate_semantic_stage(
+        args,
+        client,
+        image,
+        gray_image,
+        marker_box,
+        index,
+        roi_bbox,
+        raw_roi,
+        primitives,
+        evidence_overlay,
+        related_dir,
+    )
+    return run_candidate_recovery_stage(
+        args,
+        client,
+        image,
+        prepared,
+        crop_dir,
+        expand_dir,
+        skill,
+    )
+
+@dataclass
+class CandidateSemanticState:
+    index: int
+    marker_box: BBox
+    roi_bbox: BBox
+    primitives: list[Primitive]
+    mapping: dict[str, Any]
+    chosen_ids: list[str]
+    minimum_crop: BBox
+    leader_extensions: list[dict[str, object]]
+    related_candidate_dir: Path
+    base: str
+    record: dict[str, Any]
+
+
+def run_candidate_semantic_stage(
+    args: argparse.Namespace,
+    client: Any,
+    image: Image.Image,
+    gray_image: np.ndarray,
+    marker_box: BBox,
+    index: int,
+    roi_bbox: BBox,
+    raw_roi: Image.Image,
+    primitives: list[Primitive],
+    evidence_overlay: Image.Image,
+    related_dir: Path,
+) -> CandidateSemanticState:
+    """Persist evidence and run exactly one candidate semantic association."""
     related_candidate_dir = related_dir / f"candidate_{index:03d}"
     related_candidate_dir.mkdir(parents=True, exist_ok=True)
     raw_roi.save(related_candidate_dir / "roi.png")
@@ -262,7 +321,6 @@ def process_candidate_v5(
         related_candidate_dir / "primitives.json",
         [item.prompt_record() for item in primitives],
     )
-
     compact_evidence = build_compact_semantic_evidence(raw_roi, primitives)
     compact_evidence.image.save(related_candidate_dir / "semantic.png")
     save_json(
@@ -273,7 +331,6 @@ def process_candidate_v5(
             "input_image_count": 1,
         },
     )
-
     log(
         f"[4/8] Candidate {index}: one Qwen semantic association "
         f"({len(primitives)} primitives -> {len(compact_evidence.records)} compact "
@@ -349,7 +406,6 @@ def process_candidate_v5(
         f"[5/8] Candidate {index}: {minimum_source} saved "
         f"with {len(chosen_ids) - 1} component(s)"
     )
-
     record: dict[str, Any] = {
         "candidate_index": index,
         "marker_bbox": marker_box.to_list(),
@@ -364,10 +420,35 @@ def process_candidate_v5(
         "selection_image_path": str(selected_path),
         "minimum_crop_path": str(minimum_path),
     }
+    return CandidateSemanticState(
+        index=index,
+        marker_box=marker_box,
+        roi_bbox=roi_bbox,
+        primitives=primitives,
+        mapping=mapping,
+        chosen_ids=chosen_ids,
+        minimum_crop=minimum_crop,
+        leader_extensions=leader_extensions,
+        related_candidate_dir=related_candidate_dir,
+        base=base,
+        record=record,
+    )
 
+
+def run_candidate_recovery_stage(
+    args: argparse.Namespace,
+    client: Any,
+    image: Image.Image,
+    prepared: CandidateSemanticState,
+    crop_dir: Path,
+    expand_dir: Path,
+    skill: Any,
+) -> dict[str, Any]:
+    """Run verification/recovery after semantic selection is complete."""
+    record = dict(prepared.record)
     if args.no_verify:
-        final_box = minimum_crop
-        final_path = crop_dir / f"{base}_verification_skipped.png"
+        final_box = prepared.minimum_crop
+        final_path = crop_dir / f"{prepared.base}_verification_skipped.png"
         image.crop(final_box.to_int_tuple()).save(final_path)
         record.update(
             {
@@ -382,9 +463,12 @@ def process_candidate_v5(
         return record
 
     assert skill is not None
+    index = prepared.index
     log(f"[6/8] Candidate {index}: starting agentic crop recovery")
-    evidence = global_evidence(primitives, roi_bbox, chosen_ids)
-    for extension_index, extension in enumerate(leader_extensions):
+    evidence = global_evidence(
+        prepared.primitives, prepared.roi_bbox, prepared.chosen_ids
+    )
+    for extension_index, extension in enumerate(prepared.leader_extensions):
         evidence.extend(
             [
                 EvidenceBox(
@@ -401,10 +485,10 @@ def process_candidate_v5(
                 ),
             ]
         )
-    recovery_mapping = dict(mapping)
-    if leader_extensions:
+    recovery_mapping = dict(prepared.mapping)
+    if prepared.leader_extensions:
         remaining_missing = [
-            item for item in mapping.get("missing", []) if item != "target"
+            item for item in prepared.mapping.get("missing", []) if item != "target"
         ]
         recovery_mapping["missing"] = remaining_missing
         recovery_mapping["complete"] = not remaining_missing
@@ -427,13 +511,13 @@ def process_candidate_v5(
         client,
         args.qwen_model,
         image,
-        CropBox.from_values(marker_box),
-        CropBox.from_values(minimum_crop),
+        CropBox.from_values(prepared.marker_box),
+        CropBox.from_values(prepared.minimum_crop),
         recovery_mapping,
         evidence,
         skill,
         config,
-        related_candidate_dir / "recovery",
+        prepared.related_candidate_dir / "recovery",
         debug=args.debug,
         logger=lambda message, idx=index: log(f"[7/8] Candidate {idx}: {message}"),
         expansion_output_dir=expansion_candidate_dir,
@@ -442,9 +526,9 @@ def process_candidate_v5(
     if recovery.rejected:
         final_path = crop_dir / f"Candidate{index:03d}_rejected_not_fai.png"
     elif recovery.valid:
-        final_path = crop_dir / f"{base}_validated.png"
+        final_path = crop_dir / f"{prepared.base}_validated.png"
     else:
-        final_path = crop_dir / f"{base}_best_unvalidated.png"
+        final_path = crop_dir / f"{prepared.base}_best_unvalidated.png"
     image.crop(final_box.to_int_tuple()).save(final_path)
     expansion_count = sum(
         1
@@ -462,6 +546,237 @@ def process_candidate_v5(
         }
     )
     return record
+
+
+@dataclass
+class PipelineCandidateState:
+    index: int
+    marker_box: BBox
+    roi_bbox: BBox
+    raw_roi: Image.Image
+    marker_local: BBox
+    selected_overlay: Image.Image
+    annotation_boxes: list[BBox] | None = None
+    arrow_boxes: list[BBox] | None = None
+    target_boxes: list[BBox] | None = None
+    primitives: list[Primitive] | None = None
+    evidence_overlay: Image.Image | None = None
+    semantic: CandidateSemanticState | None = None
+    evidence_queued: bool = False
+
+
+def run_streaming_candidates(
+    args: argparse.Namespace,
+    client: Any,
+    image: Image.Image,
+    gray_image: np.ndarray,
+    marker_boxes: list[BBox],
+    raw_dir: Path,
+    crop_dir: Path,
+    related_dir: Path,
+    expand_dir: Path,
+    skill: Any,
+    *,
+    on_record: Any = None,
+) -> list[dict[str, Any]]:
+    """Run a bounded event-driven pipeline over isolated execution pools."""
+    states: dict[int, PipelineCandidateState] = {}
+    for index, marker_box in enumerate(marker_boxes):
+        marker = Primitive("F0", "fai_marker", marker_box, "LocateAnything")
+        roi_bbox = candidate_roi(marker_box, image.width, image.height)
+        raw_roi, marker_local, selected_overlay = prepare_candidate_roi(
+            image, marker, roi_bbox
+        )
+        states[index] = PipelineCandidateState(
+            index=index,
+            marker_box=marker_box,
+            roi_bbox=roi_bbox,
+            raw_roi=raw_roi,
+            marker_local=marker_local,
+            selected_overlay=selected_overlay,
+        )
+
+    locate_queue: deque[tuple[str, int]] = deque()
+    cpu_queue: deque[tuple[str, int]] = deque()
+    semantic_queue: deque[tuple[str, int]] = deque()
+    recovery_queue: deque[tuple[str, int]] = deque()
+    for index in states:
+        locate_queue.append(("annotation", index))
+        locate_queue.append(("arrowhead", index))
+
+    running: dict[Future[Any], tuple[str, int, str]] = {}
+    running_by_pool = {"locate": 0, "cpu": 0, "qwen": 0}
+    records: dict[int, dict[str, Any]] = {}
+    locate_workers = args.concurrent
+    qwen_workers = args.qwen_concurrent
+    cpu_workers = max(2, min(os.cpu_count() or 4, 8))
+
+    def submit(
+        executor: ThreadPoolExecutor,
+        pool: str,
+        stage: str,
+        index: int,
+    ) -> None:
+        state = states[index]
+        if stage == "annotation":
+            future = executor.submit(
+                run_annotation_proposal,
+                client,
+                args.locate_model,
+                state.selected_overlay,
+                raw_dir,
+                index,
+            )
+        elif stage == "arrowhead":
+            future = executor.submit(
+                run_arrowhead_proposal,
+                client,
+                args.locate_model,
+                state.selected_overlay,
+                raw_dir,
+                index,
+            )
+        elif stage == "target":
+            assert state.arrow_boxes is not None
+            future = executor.submit(
+                run_target_proposal,
+                client,
+                args.locate_model,
+                state.raw_roi,
+                state.marker_local,
+                state.arrow_boxes,
+                raw_dir,
+                index,
+            )
+        elif stage == "evidence":
+            assert state.annotation_boxes is not None
+            assert state.arrow_boxes is not None
+            assert state.target_boxes is not None
+            future = executor.submit(
+                assemble_candidate_evidence,
+                state.raw_roi,
+                state.marker_local,
+                state.annotation_boxes,
+                state.arrow_boxes,
+                state.target_boxes,
+                index,
+                not args.no_tesseract,
+            )
+        elif stage == "semantic":
+            assert state.primitives is not None
+            assert state.evidence_overlay is not None
+            future = executor.submit(
+                run_candidate_semantic_stage,
+                args,
+                client,
+                image,
+                gray_image,
+                state.marker_box,
+                index,
+                state.roi_bbox,
+                state.raw_roi,
+                state.primitives,
+                state.evidence_overlay,
+                related_dir,
+            )
+        elif stage == "recovery":
+            assert state.semantic is not None
+            future = executor.submit(
+                run_candidate_recovery_stage,
+                args,
+                client,
+                image,
+                state.semantic,
+                crop_dir,
+                expand_dir,
+                skill,
+            )
+        else:
+            raise ValueError(f"Unknown pipeline stage: {stage}")
+        running[future] = (pool, index, stage)
+        running_by_pool[pool] += 1
+
+    def submit_ready(
+        locate_executor: ThreadPoolExecutor,
+        cpu_executor: ThreadPoolExecutor,
+        qwen_executor: ThreadPoolExecutor,
+    ) -> None:
+        while locate_queue and running_by_pool["locate"] < locate_workers:
+            stage, index = locate_queue.popleft()
+            submit(locate_executor, "locate", stage, index)
+        while cpu_queue and running_by_pool["cpu"] < cpu_workers:
+            stage, index = cpu_queue.popleft()
+            submit(cpu_executor, "cpu", stage, index)
+        while running_by_pool["qwen"] < qwen_workers:
+            queue = semantic_queue if semantic_queue else recovery_queue
+            if not queue:
+                break
+            stage, index = queue.popleft()
+            submit(qwen_executor, "qwen", stage, index)
+
+    with (
+        ThreadPoolExecutor(
+            max_workers=locate_workers, thread_name_prefix="fai-locate"
+        ) as locate_executor,
+        ThreadPoolExecutor(
+            max_workers=cpu_workers, thread_name_prefix="fai-evidence"
+        ) as cpu_executor,
+        ThreadPoolExecutor(
+            max_workers=qwen_workers, thread_name_prefix="fai-qwen"
+        ) as qwen_executor,
+    ):
+        submit_ready(locate_executor, cpu_executor, qwen_executor)
+        while running:
+            completed, _ = wait(tuple(running), return_when=FIRST_COMPLETED)
+            for future in completed:
+                pool, index, stage = running.pop(future)
+                running_by_pool[pool] -= 1
+                state = states[index]
+                try:
+                    result = future.result()
+                except Exception as exc:
+                    raise RuntimeError(
+                        f"Candidate {index} failed in {stage} stage"
+                    ) from exc
+
+                if stage == "annotation":
+                    state.annotation_boxes = result
+                elif stage == "arrowhead":
+                    state.arrow_boxes = result
+                    # Completed downstream work has priority over untouched
+                    # candidates, which keeps the pipeline flowing.
+                    locate_queue.appendleft(("target", index))
+                elif stage == "target":
+                    state.target_boxes = result
+                elif stage == "evidence":
+                    state.raw_roi, state.primitives, state.evidence_overlay = result
+                    semantic_queue.append(("semantic", index))
+                elif stage == "semantic":
+                    state.semantic = result
+                    recovery_queue.append(("recovery", index))
+                elif stage == "recovery":
+                    records[index] = result
+                    if on_record is not None:
+                        on_record(result)
+                    log(
+                        f"[8/8] Candidate {index}: {result['status']} -> "
+                        f"{result['final_crop_path']}"
+                    )
+
+                if (
+                    state.annotation_boxes is not None
+                    and state.arrow_boxes is not None
+                    and state.target_boxes is not None
+                    and not state.evidence_queued
+                ):
+                    state.evidence_queued = True
+                    cpu_queue.append(("evidence", index))
+            submit_ready(locate_executor, cpu_executor, qwen_executor)
+
+    if len(records) != len(states):
+        missing = sorted(set(states) - set(records))
+        raise RuntimeError(f"Pipeline stopped before candidates completed: {missing}")
+    return [records[index] for index in sorted(records)]
 
 
 def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
@@ -517,40 +832,28 @@ def process_image_v5(args: argparse.Namespace) -> list[dict[str, Any]]:
 
     manifest_path = output_dir / "results.json"
     records_by_index: dict[int, dict[str, Any]] = {}
-    worker_count = min(args.qwen_concurrent, len(marker_boxes))
-    with ThreadPoolExecutor(max_workers=worker_count) as executor:
-        futures = {
-            executor.submit(
-                process_candidate_v5,
-                args,
-                client,
-                image,
-                gray_image,
-                marker_box,
-                index,
-                raw_dir,
-                crop_dir,
-                related_dir,
-                expand_dir,
-                skill,
-            ): index
-            for index, marker_box in enumerate(marker_boxes)
-        }
-        for future in as_completed(futures):
-            index = futures[future]
-            record = future.result()
-            records_by_index[index] = record
-            records = [records_by_index[key] for key in sorted(records_by_index)]
-            save_json(
-                manifest_path,
-                manifest_base(input_path, image, args, skill, records),
-            )
-            log(
-                f"[8/8] Candidate {index}: {record['status']} -> "
-                f"{record['final_crop_path']}"
-            )
 
-    records = [records_by_index[index] for index in sorted(records_by_index)]
+    def persist_record(record: dict[str, Any]) -> None:
+        records_by_index[record["candidate_index"]] = record
+        completed = [records_by_index[key] for key in sorted(records_by_index)]
+        save_json(
+            manifest_path,
+            manifest_base(input_path, image, args, skill, completed),
+        )
+
+    records = run_streaming_candidates(
+        args,
+        client,
+        image,
+        gray_image,
+        marker_boxes,
+        raw_dir,
+        crop_dir,
+        related_dir,
+        expand_dir,
+        skill,
+        on_record=persist_record,
+    )
 
     if args.debug:
         write_overview(image, records, debug_dir / "overview.png")
@@ -582,8 +885,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--qwen-concurrent",
         type=int,
-        default=8,
-        help="Maximum concurrent Qwen requests and candidate workers (default: 8)",
+        default=4,
+        help="Maximum concurrent Qwen requests and Qwen-stage workers (default: 4)",
     )
     parser.add_argument("--timeout", type=float, default=300.0)
     parser.add_argument("--max-turns", type=int, default=6)

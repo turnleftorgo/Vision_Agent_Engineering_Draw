@@ -1,0 +1,202 @@
+{
+  "status": "protocol_failed",
+  "final_crop": [
+    2635,
+    5732,
+    5895,
+    6543
+  ],
+  "best_crop": [
+    2635,
+    5732,
+    5895,
+    6543
+  ],
+  "rejected": false,
+  "valid": false,
+  "best_score": 91.7051,
+  "history_path": "/Users/macsuper/Desktop/Vision_Agent/output_super_CD_05/crop_related/candidate_046/recovery/history.json",
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2635,
+        5732,
+        5895,
+        6543
+      ],
+      "crop_after": [
+        2472,
+        5732,
+        5895,
+        6543
+      ],
+      "action": {
+        "action": "expand_crop",
+        "valid": false,
+        "candidate_valid": true,
+        "missing": [
+          "The FAI 19 / SPC S marker and its associated text '11X Ø 1.755 ±0.05' and '⊕ | Ø 0.10 | Z1 | SH-"
+        ],
+        "arguments": {
+          "left_norm": 50,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3672,
+          "completion_tokens": 179,
+          "total_tokens": 3851,
+          "finish_reason": "stop",
+          "elapsed_seconds": 35.95667762495577,
+          "content_bytes": 422,
+          "content_chars": 422,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": "expand_crop_cross_field_violation"
+        },
+        {
+          "attempt": 1,
+          "prompt_tokens": 3759,
+          "completion_tokens": 148,
+          "total_tokens": 3907,
+          "finish_reason": "stop",
+          "elapsed_seconds": 36.109629000071436,
+          "content_bytes": 301,
+          "content_chars": 301,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": {
+        "before": [
+          2635,
+          5732,
+          5895,
+          6543
+        ],
+        "after": [
+          2472,
+          5732,
+          5895,
+          6543
+        ],
+        "requested_norm": {
+          "left_norm": 50,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "applied_pixels": {
+          "left": 162.97,
+          "top": 0.0,
+          "right": 0.0,
+          "bottom": 0.0
+        },
+        "boundary_locked": {
+          "left": false,
+          "top": false,
+          "right": false,
+          "bottom": false
+        },
+        "changed": true,
+        "area_cap": 26928000.0,
+        "limited_by": []
+      },
+      "score_before": 91.7051,
+      "score_after": 91.6654,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    },
+    {
+      "turn": 2,
+      "crop_before": [
+        2472,
+        5732,
+        5895,
+        6543
+      ],
+      "crop_after": [
+        2472,
+        5732,
+        5895,
+        6543
+      ],
+      "action": null,
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 3610,
+          "completion_tokens": 89,
+          "total_tokens": 3699,
+          "finish_reason": "stop",
+          "elapsed_seconds": 36.66798191703856,
+          "content_bytes": 176,
+          "content_chars": 176,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 91.6654,
+      "score_after": 91.6654,
+      "used_subagents": true,
+      "subagents": {
+        "adversarial_verifier": {
+          "call": {
+            "prompt_tokens": 3460,
+            "completion_tokens": 135,
+            "total_tokens": 3595,
+            "finish_reason": "stop",
+            "elapsed_seconds": 45.705603749956936,
+            "content_bytes": 343,
+            "content_chars": 343,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "completeness_auditor": {
+          "call": {
+            "prompt_tokens": 3466,
+            "completion_tokens": 183,
+            "total_tokens": 3649,
+            "finish_reason": "stop",
+            "elapsed_seconds": 41.69507270795293,
+            "content_bytes": 578,
+            "content_chars": 578,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        },
+        "geometry_tracer": {
+          "call": {
+            "prompt_tokens": 3452,
+            "completion_tokens": 90,
+            "total_tokens": 3542,
+            "finish_reason": "stop",
+            "elapsed_seconds": 25.281524082878605,
+            "content_bytes": 302,
+            "content_chars": 302,
+            "reasoning_chars": 0,
+            "error": null
+          },
+          "protocol_error": "incomplete_recommendation_without_expansion",
+          "result": null
+        }
+      },
+      "decision_source": "subagents_failed"
+    }
+  ]
+}

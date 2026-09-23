@@ -1,0 +1,78 @@
+{
+  "skill": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/Vison_Agent_Super/skills/fai-crop-recovery/SKILL.md",
+    "name": "fai-crop-recovery",
+    "sha256": "e1a0fae6d37fba19ce190a2bd667d46f116375854ad1831f5c5faa59e48e0fc8"
+  },
+  "status": "rejected_not_fai",
+  "initial_crop": [
+    2945,
+    4360,
+    4975,
+    5649
+  ],
+  "current_crop": [
+    2945,
+    4360,
+    4975,
+    5649
+  ],
+  "best_crop": [
+    2945,
+    4360,
+    4975,
+    5649
+  ],
+  "best_score": 85.4644,
+  "turns": [
+    {
+      "turn": 1,
+      "crop_before": [
+        2945,
+        4360,
+        4975,
+        5649
+      ],
+      "crop_after": [
+        2945,
+        4360,
+        4975,
+        5649
+      ],
+      "action": {
+        "action": "reject_candidate",
+        "valid": false,
+        "candidate_valid": false,
+        "missing": [],
+        "arguments": {
+          "left_norm": 0,
+          "top_norm": 0,
+          "right_norm": 0,
+          "bottom_norm": 0
+        },
+        "confidence": 0.95
+      },
+      "format_attempts": [
+        {
+          "attempt": 0,
+          "prompt_tokens": 7102,
+          "completion_tokens": 82,
+          "total_tokens": 7184,
+          "finish_reason": "stop",
+          "elapsed_seconds": 53.589678457938135,
+          "content_bytes": 188,
+          "content_chars": 188,
+          "reasoning_chars": 0,
+          "error": null,
+          "protocol_error": null
+        }
+      ],
+      "expansion": null,
+      "score_before": 85.4644,
+      "score_after": 85.4644,
+      "used_subagents": false,
+      "subagents": {},
+      "decision_source": "main"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "status": "ok",
+  "elapsed_seconds": 97.95,
+  "image": {
+    "path": "/Users/macsuper/Desktop/Vision_Agent/module_002.png",
+    "width": 828,
+    "height": 612
+  },
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1593,
+      "prompt_tokens": 2036,
+      "total_tokens": 3629,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2036,
+      "output_tokens": 1593,
+      "total_time": 97.69
+    }
+  },
+  "coordinate_system": {
+    "normalized_width": 1000,
+    "normalized_height": 1000,
+    "origin": "top-left"
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1307",
+      "spc_code": "ADX",
+      "bbox_normalized": [
+        130.0,
+        100.0,
+        920.0,
+        730.0
+      ],
+      "bbox_pixels": [
+        108,
+        61,
+        762,
+        447
+      ],
+      "description": "0.45 ± 0.05 尺寸公差",
+      "arrow_count": 2,
+      "target_summary": "截面零件上方水平面的上下边缘",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_1307_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "1308",
+      "spc_code": "ADY",
+      "bbox_normalized": [
+        130.0,
+        490.0,
+        990.0,
+        730.0
+      ],
+      "bbox_pixels": [
+        108,
+        300,
+        820,
+        447
+      ],
+      "description": "0.63 ± 0.10 尺寸公差",
+      "arrow_count": 2,
+      "target_summary": "截面零件上方水平面下边缘与下方水平面上边缘",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop/FAI_1308_002.png"
+    }
+  ],
+  "invalid_clusters": []
+}

@@ -1,0 +1,52 @@
+{
+  "status": "ok",
+  "module_index": 9,
+  "module_crop_path": "crop1/module_009.png",
+  "elapsed_seconds": 31.92,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 564,
+      "prompt_tokens": 2010,
+      "total_tokens": 2574,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2010,
+      "output_tokens": 564,
+      "total_time": 31.88
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1250",
+      "spc_code": "ABP",
+      "bbox_normalized": [
+        290.0,
+        220.0,
+        980.0,
+        690.0
+      ],
+      "bbox_pixels": [
+        245,
+        128,
+        827,
+        403
+      ],
+      "description": "尺寸 4.169 ±0.03 的垂直高度测量",
+      "arrow_count": 2,
+      "target_summary": "剖面图中的阶梯状结构单元",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_009_FAI_1250_001.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_009_visualization.jpg"
+}

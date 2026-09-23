@@ -1,0 +1,79 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_004_FAI_447_005",
+  "module_index": 4,
+  "cluster_index": 5,
+  "fai_number": "447",
+  "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "source_crop_path": "crop2/module_004_FAI_447_005.png",
+  "refined_crop_path": "crop2_refined/module_004_FAI_447_005.png",
+  "initial_bbox_full_image": [
+    8027,
+    878,
+    8101,
+    944
+  ],
+  "marker_bbox_full_image": [
+    8027,
+    878,
+    8101,
+    944
+  ],
+  "final_bbox_full_image": [
+    8027,
+    878,
+    8101,
+    944
+  ],
+  "round_count": 1,
+  "elapsed_seconds": 1.009,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        8027,
+        878,
+        8101,
+        944
+      ],
+      "context_bbox": [
+        7990,
+        845,
+        8138,
+        977
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.93,
+        "elapsed_seconds": 1.0000752080231905,
+        "raw_response": "{\"action\":\"finish\",\"expand_sides\":[],\"reason\":\"complete\",\"confidence\":0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 21,
+            "prompt_tokens": 586,
+            "total_tokens": 607,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 256
+            },
+            "input_tokens": 586,
+            "output_tokens": 21,
+            "total_time": 0.99
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        8027,
+        878,
+        8101,
+        944
+      ]
+    }
+  ]
+}

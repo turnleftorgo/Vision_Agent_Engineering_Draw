@@ -302,34 +302,108 @@ def create_candidate_evidence(
     candidate_index: int,
     use_tesseract: bool,
 ) -> tuple[Image.Image, list[Primitive], Image.Image]:
+    roi, marker_local, selected_overlay = prepare_candidate_roi(
+        full_image, marker, roi_bbox
+    )
+    annotation_boxes = run_annotation_proposal(
+        locate_client, locate_model, selected_overlay, raw_dir, candidate_index
+    )
+    arrow_boxes = run_arrowhead_proposal(
+        locate_client, locate_model, selected_overlay, raw_dir, candidate_index
+    )
+    target_boxes = run_target_proposal(
+        locate_client,
+        locate_model,
+        roi,
+        marker_local,
+        arrow_boxes,
+        raw_dir,
+        candidate_index,
+    )
+    return assemble_candidate_evidence(
+        roi,
+        marker_local,
+        annotation_boxes,
+        arrow_boxes,
+        target_boxes,
+        candidate_index,
+        use_tesseract,
+    )
+
+
+def prepare_candidate_roi(
+    full_image: Image.Image,
+    marker: Primitive,
+    roi_bbox: BBox,
+) -> tuple[Image.Image, BBox, Image.Image]:
     roi = full_image.crop(roi_bbox.to_int_tuple()).convert("RGB")
     marker_local = marker_local_bbox(marker.bbox, roi_bbox)
-    selected_overlay = make_selection_overlay(roi, marker_local)
+    return roi, marker_local, make_selection_overlay(roi, marker_local)
+
+
+def run_annotation_proposal(
+    locate_client: OpenAI,
+    locate_model: str,
+    selected_overlay: Image.Image,
+    raw_dir: Path,
+    candidate_index: int,
+) -> list[BBox]:
     log(f"[2/7] Candidate {candidate_index}: LocateAnything annotation proposal")
-    annotation_boxes = locate_boxes(
+    return locate_boxes(
         locate_client,
         locate_model,
         selected_overlay,
         ANNOTATION_PROMPT,
         raw_dir / f"candidate_{candidate_index:03d}_annotation.txt",
     )
+
+
+def run_arrowhead_proposal(
+    locate_client: OpenAI,
+    locate_model: str,
+    selected_overlay: Image.Image,
+    raw_dir: Path,
+    candidate_index: int,
+) -> list[BBox]:
     log(f"[2/7] Candidate {candidate_index}: LocateAnything arrowhead proposal")
-    arrow_boxes = locate_boxes(
+    return locate_boxes(
         locate_client,
         locate_model,
         selected_overlay,
         ARROW_PROMPT,
         raw_dir / f"candidate_{candidate_index:03d}_arrows.txt",
     )
-    target_overlay = make_selection_overlay(roi, marker_local, arrow_boxes)
+
+
+def run_target_proposal(
+    locate_client: OpenAI,
+    locate_model: str,
+    roi: Image.Image,
+    marker_local: BBox,
+    arrow_boxes: list[BBox],
+    raw_dir: Path,
+    candidate_index: int,
+) -> list[BBox]:
     log(f"[2/7] Candidate {candidate_index}: LocateAnything target-part proposal")
-    target_boxes = locate_boxes(
+    target_overlay = make_selection_overlay(roi, marker_local, arrow_boxes)
+    return locate_boxes(
         locate_client,
         locate_model,
         target_overlay,
         TARGET_PROMPT,
         raw_dir / f"candidate_{candidate_index:03d}_target.txt",
     )
+
+
+def assemble_candidate_evidence(
+    roi: Image.Image,
+    marker_local: BBox,
+    annotation_boxes: list[BBox],
+    arrow_boxes: list[BBox],
+    target_boxes: list[BBox],
+    candidate_index: int,
+    use_tesseract: bool,
+) -> tuple[Image.Image, list[Primitive], Image.Image]:
     primitives: list[Primitive] = [
         Primitive("F0", "fai_marker", marker_local, "LocateAnything")
     ]

@@ -1,0 +1,148 @@
+{
+  "status": "ok",
+  "module_index": 1,
+  "module_crop_path": "crop1/module_001.png",
+  "elapsed_seconds": 97.762,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1926,
+      "prompt_tokens": 5598,
+      "total_tokens": 7524,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 4096
+      },
+      "input_tokens": 5598,
+      "output_tokens": 1926,
+      "total_time": 97.49
+    }
+  },
+  "valid_cluster_count": 5,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "180",
+      "spc_code": "FC",
+      "bbox_normalized": [
+        20.0,
+        60.0,
+        600.0,
+        500.0
+      ],
+      "bbox_pixels": [
+        50,
+        100,
+        1500,
+        836
+      ],
+      "description": "0.20 轮廓度公差，基准 A3, RCAM, B",
+      "arrow_count": 1,
+      "target_summary": "中心八边形结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_180_001.png"
+    },
+    {
+      "id": 2,
+      "fai_number": "179",
+      "spc_code": "FB",
+      "bbox_normalized": [
+        580.0,
+        140.0,
+        980.0,
+        400.0
+      ],
+      "bbox_pixels": [
+        1450,
+        234,
+        2450,
+        669
+      ],
+      "description": "0.20/0.10 轮廓度公差，基准 A3, RCAM, B",
+      "arrow_count": 1,
+      "target_summary": "中心偏右结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_179_002.png"
+    },
+    {
+      "id": 3,
+      "fai_number": "182",
+      "spc_code": "FE",
+      "bbox_normalized": [
+        110.0,
+        560.0,
+        550.0,
+        780.0
+      ],
+      "bbox_pixels": [
+        275,
+        936,
+        1375,
+        1304
+      ],
+      "description": "0.10 轮廓度公差，基准 A3, RMIC",
+      "arrow_count": 1,
+      "target_summary": "下方椭圆形结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_182_003.png"
+    },
+    {
+      "id": 4,
+      "fai_number": "184",
+      "spc_code": "FG",
+      "bbox_normalized": [
+        580.0,
+        580.0,
+        980.0,
+        850.0
+      ],
+      "bbox_pixels": [
+        1450,
+        970,
+        2450,
+        1421
+      ],
+      "description": "0.20/0.10 轮廓度公差，基准 A3, RCAM, B",
+      "arrow_count": 1,
+      "target_summary": "中心偏右下结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_184_004.png"
+    },
+    {
+      "id": 5,
+      "fai_number": "1123",
+      "spc_code": "XE",
+      "bbox_normalized": [
+        250.0,
+        850.0,
+        520.0,
+        920.0
+      ],
+      "bbox_pixels": [
+        625,
+        1421,
+        1300,
+        1538
+      ],
+      "description": "0.756 ±0.10 尺寸",
+      "arrow_count": 1,
+      "target_summary": "下方垂直线结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_1123_005.png"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_001_visualization.jpg"
+}

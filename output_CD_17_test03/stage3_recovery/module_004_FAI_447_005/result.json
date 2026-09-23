@@ -1,0 +1,621 @@
+{
+  "status": "max_rounds_exhausted",
+  "valid": false,
+  "candidate_key": "module_004_FAI_447_005",
+  "module_index": 4,
+  "cluster_index": 5,
+  "fai_number": "447",
+  "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "source_crop_path": "crop2/module_004_FAI_447_005.png",
+  "refined_crop_path": "crop2_refined/module_004_FAI_447_005.png",
+  "initial_bbox_full_image": [
+    8017,
+    884,
+    8101,
+    932
+  ],
+  "final_bbox_full_image": [
+    8002,
+    884,
+    8101,
+    951
+  ],
+  "round_count": 6,
+  "elapsed_seconds": 12.019,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        8017,
+        884,
+        8101,
+        932
+      ],
+      "context_bbox": [
+        7975,
+        860,
+        8143,
+        956
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": null,
+          "reason": null,
+          "confidence": null,
+          "elapsed_seconds": 1.5874403750058264,
+          "raw_response": "{\"action\":\"finish\",\"reason\":\"complete\"}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 9,
+              "prompt_tokens": 495,
+              "total_tokens": 504,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 495,
+              "output_tokens": 9,
+              "total_time": 1.57
+            }
+          },
+          "error": "ValueError: response must contain exactly action, reason, confidence"
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.95,
+          "elapsed_seconds": 2.1563681249972433,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.95}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 496,
+              "total_tokens": 514,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 496,
+              "output_tokens": 18,
+              "total_time": 2.14
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 2.1561022081878036,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 498,
+              "total_tokens": 516,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 498,
+              "output_tokens": 18,
+              "total_time": 2.14
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": null,
+      "crop_after": [
+        8017,
+        884,
+        8101,
+        932
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        8017,
+        884,
+        8101,
+        932
+      ],
+      "context_bbox": [
+        7975,
+        860,
+        8143,
+        956
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 1.8698141670320183,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 543,
+              "total_tokens": 561,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 543,
+              "output_tokens": 18,
+              "total_time": 1.85
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 2.00110145797953,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 544,
+              "total_tokens": 562,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 544,
+              "output_tokens": 18,
+              "total_time": 1.98
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 1.9994789168704301,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 546,
+              "total_tokens": 564,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 546,
+              "output_tokens": 18,
+              "total_time": 1.98
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        8017,
+        884,
+        8101,
+        941
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        8017,
+        884,
+        8101,
+        941
+      ],
+      "context_bbox": [
+        7975,
+        856,
+        8143,
+        969
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": null,
+          "reason": null,
+          "confidence": null,
+          "elapsed_seconds": 1.4406388748902828,
+          "raw_response": "{\"action\":\"finish\",\"reason\":\"complete\"}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 9,
+              "prompt_tokens": 488,
+              "total_tokens": 497,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 488,
+              "output_tokens": 9,
+              "total_time": 1.42
+            }
+          },
+          "error": "ValueError: response must contain exactly action, reason, confidence"
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": null,
+          "reason": null,
+          "confidence": null,
+          "elapsed_seconds": 1.6261100000701845,
+          "raw_response": "{\"action\":\"finish\",\"reason\":\"complete\"}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 9,
+              "prompt_tokens": 489,
+              "total_tokens": 498,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 489,
+              "output_tokens": 9,
+              "total_time": 1.61
+            }
+          },
+          "error": "ValueError: response must contain exactly action, reason, confidence"
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 1.9217745838686824,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 491,
+              "total_tokens": 509,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 491,
+              "output_tokens": 18,
+              "total_time": 1.9
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": null,
+      "crop_after": [
+        8017,
+        884,
+        8101,
+        941
+      ]
+    },
+    {
+      "round": 4,
+      "crop_before": [
+        8017,
+        884,
+        8101,
+        941
+      ],
+      "context_bbox": [
+        7975,
+        856,
+        8143,
+        969
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 1.5825744580943137,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 536,
+              "total_tokens": 554,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 536,
+              "output_tokens": 18,
+              "total_time": 1.56
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 1.843729792162776,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 537,
+              "total_tokens": 555,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 537,
+              "output_tokens": 18,
+              "total_time": 1.82
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 1.9344821250997484,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 539,
+              "total_tokens": 557,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 539,
+              "output_tokens": 18,
+              "total_time": 1.92
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "left",
+      "crop_after": [
+        8002,
+        884,
+        8101,
+        941
+      ]
+    },
+    {
+      "round": 5,
+      "crop_before": [
+        8002,
+        884,
+        8101,
+        941
+      ],
+      "context_bbox": [
+        7952,
+        856,
+        8151,
+        969
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 1.8594680419191718,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 495,
+              "total_tokens": 513,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 495,
+              "output_tokens": 18,
+              "total_time": 1.84
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": "down",
+          "reason": "target_clipped",
+          "confidence": 0.95,
+          "elapsed_seconds": 1.996796458028257,
+          "raw_response": "{\"action\":\"down\",\"reason\":\"target_clipped\",\"confidence\":0.95}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 496,
+              "total_tokens": 514,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 496,
+              "output_tokens": 18,
+              "total_time": 1.98
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.87,
+          "elapsed_seconds": 1.9951828331686556,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.87}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 498,
+              "total_tokens": 516,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 498,
+              "output_tokens": 18,
+              "total_time": 1.98
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": "down",
+      "crop_after": [
+        8002,
+        884,
+        8101,
+        951
+      ]
+    },
+    {
+      "round": 6,
+      "crop_before": [
+        8002,
+        884,
+        8101,
+        951
+      ],
+      "context_bbox": [
+        7952,
+        850,
+        8151,
+        985
+      ],
+      "votes": [
+        {
+          "role": "target_completeness_auditor",
+          "action": "finish",
+          "reason": "complete",
+          "confidence": 1.0,
+          "elapsed_seconds": 1.7465539581608027,
+          "raw_response": "{\"action\":\"finish\",\"reason\":\"complete\",\"confidence\":1.0}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 15,
+              "prompt_tokens": 488,
+              "total_tokens": 503,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 488,
+              "output_tokens": 15,
+              "total_time": 1.73
+            }
+          },
+          "error": null
+        },
+        {
+          "role": "target_contour_tracer",
+          "action": null,
+          "reason": null,
+          "confidence": null,
+          "elapsed_seconds": 1.5478994590230286,
+          "raw_response": "{\"action\":\"finish\",\"reason\":\"complete\"}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 9,
+              "prompt_tokens": 489,
+              "total_tokens": 498,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 489,
+              "output_tokens": 9,
+              "total_time": 1.53
+            }
+          },
+          "error": "ValueError: response must contain exactly action, reason, confidence"
+        },
+        {
+          "role": "adversarial_target_verifier",
+          "action": "left",
+          "reason": "target_clipped",
+          "confidence": 0.85,
+          "elapsed_seconds": 1.9018251670058817,
+          "raw_response": "{\"action\":\"left\",\"reason\":\"target_clipped\",\"confidence\":0.85}",
+          "metadata": {
+            "finish_reason": "stop",
+            "usage": {
+              "completion_tokens": 18,
+              "prompt_tokens": 491,
+              "total_tokens": 509,
+              "completion_tokens_details": null,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 256
+              },
+              "input_tokens": 491,
+              "output_tokens": 18,
+              "total_time": 1.89
+            }
+          },
+          "error": null
+        }
+      ],
+      "consensus": null,
+      "crop_after": [
+        8002,
+        884,
+        8101,
+        951
+      ]
+    }
+  ]
+}

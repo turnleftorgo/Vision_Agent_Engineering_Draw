@@ -1,0 +1,177 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_005_FAI_452_004",
+  "module_index": 5,
+  "cluster_index": 4,
+  "fai_number": "452",
+  "model": "Qwen3-VL-4B-Instruct-MLX-8bit",
+  "source_crop_path": "crop2/module_005_FAI_452_004.png",
+  "refined_crop_path": "crop2_refined/module_005_FAI_452_004.png",
+  "initial_bbox_full_image": [
+    1159,
+    5220,
+    1758,
+    5750
+  ],
+  "marker_bbox_full_image": [
+    1500,
+    5227,
+    1582,
+    5290
+  ],
+  "final_bbox_full_image": [
+    924,
+    5220,
+    1758,
+    5957
+  ],
+  "round_count": 3,
+  "elapsed_seconds": 8.388,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        1159,
+        5220,
+        1758,
+        5750
+      ],
+      "context_bbox": [
+        859,
+        4955,
+        2058,
+        6015
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.85,
+        "elapsed_seconds": 2.0839157088194042,
+        "raw_response": "{\"action\":\"expand\",\"expand_sides\":[\"left\",\"down\"],\"reason\":\"target_clipped\",\"confidence\":0.85}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 1735,
+            "total_tokens": 1761,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 256
+            },
+            "input_tokens": 1735,
+            "output_tokens": 26,
+            "total_time": 2.07
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        1051,
+        5220,
+        1758,
+        5845
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        1051,
+        5220,
+        1758,
+        5845
+      ],
+      "context_bbox": [
+        697,
+        4908,
+        2112,
+        6157
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.85,
+        "elapsed_seconds": 2.4573715841397643,
+        "raw_response": "{\"action\":\"expand\",\"expand_sides\":[\"left\",\"down\"],\"reason\":\"target_clipped\",\"confidence\":0.85}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 2230,
+            "total_tokens": 2256,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 256
+            },
+            "input_tokens": 2230,
+            "output_tokens": 26,
+            "total_time": 2.43
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        924,
+        5220,
+        1758,
+        5957
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        924,
+        5220,
+        1758,
+        5957
+      ],
+      "context_bbox": [
+        507,
+        4852,
+        2175,
+        6325
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.93,
+        "elapsed_seconds": 3.2709483329672366,
+        "raw_response": "{\"action\":\"finish\",\"expand_sides\":[],\"reason\":\"complete\",\"confidence\":0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 21,
+            "prompt_tokens": 2906,
+            "total_tokens": 2927,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 256
+            },
+            "input_tokens": 2906,
+            "output_tokens": 21,
+            "total_time": 3.24
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        924,
+        5220,
+        1758,
+        5957
+      ]
+    }
+  ]
+}
