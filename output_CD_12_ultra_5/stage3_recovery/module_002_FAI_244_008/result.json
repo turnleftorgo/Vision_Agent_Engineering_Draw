@@ -1,0 +1,175 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_002_FAI_244_008",
+  "module_index": 2,
+  "cluster_index": 8,
+  "fai_number": "244",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_002_FAI_244_008.png",
+  "refined_crop_path": "crop2_refined/module_002_FAI_244_008.png",
+  "initial_bbox_full_image": [
+    4611,
+    728,
+    5808,
+    1125
+  ],
+  "marker_bbox_full_image": [
+    4611,
+    1064,
+    4664,
+    1125
+  ],
+  "final_bbox_full_image": [
+    3938,
+    728,
+    5808,
+    1125
+  ],
+  "round_count": 3,
+  "elapsed_seconds": 28.171,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        4611,
+        728,
+        5808,
+        1125
+      ],
+      "context_bbox": [
+        4013,
+        530,
+        6406,
+        1323
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.9,
+        "elapsed_seconds": 10.20056579192169,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\"], \"reason\": \"target_clipped\", \"confidence\": 0.9}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 23,
+            "prompt_tokens": 3108,
+            "total_tokens": 3131,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 3108,
+            "output_tokens": 23,
+            "total_time": 10.17
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        4312,
+        728,
+        5808,
+        1125
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        4312,
+        728,
+        5808,
+        1125
+      ],
+      "context_bbox": [
+        3564,
+        530,
+        6556,
+        1323
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.9,
+        "elapsed_seconds": 9.18865366699174,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\"], \"reason\": \"target_clipped\", \"confidence\": 0.9}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 23,
+            "prompt_tokens": 2733,
+            "total_tokens": 2756,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2733,
+            "output_tokens": 23,
+            "total_time": 9.16
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3938,
+        728,
+        5808,
+        1125
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        3938,
+        728,
+        5808,
+        1125
+      ],
+      "context_bbox": [
+        3003,
+        530,
+        6743,
+        1323
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.93,
+        "elapsed_seconds": 8.164200166938826,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 21,
+            "prompt_tokens": 2433,
+            "total_tokens": 2454,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2433,
+            "output_tokens": 21,
+            "total_time": 8.13
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3938,
+        728,
+        5808,
+        1125
+      ]
+    }
+  ]
+}

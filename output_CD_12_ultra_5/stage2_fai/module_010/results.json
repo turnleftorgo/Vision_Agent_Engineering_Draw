@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 10,
+  "module_crop_path": "crop1/module_010.png",
+  "elapsed_seconds": 244.529,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 707,
+      "prompt_tokens": 3225,
+      "total_tokens": 3932,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 3225,
+      "output_tokens": 707,
+      "total_time": 244.45
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "8",
+      "spc_code": "H",
+      "bbox_normalized": [
+        130.0,
+        20.0,
+        940.0,
+        970.0
+      ],
+      "bbox_pixels": [
+        172,
+        24,
+        1241,
+        1187
+      ],
+      "marker_bbox_normalized": [
+        670.0,
+        610.0,
+        730.0,
+        670.0
+      ],
+      "marker_bbox_pixels": [
+        884,
+        747,
+        964,
+        820
+      ],
+      "description": "形位公差 0.20/0.15/0.10 Z-I/O 及 I/O 标注",
+      "arrow_count": 1,
+      "target_summary": "长圆形孔及其相关尺寸标注",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_010_FAI_8_001.png",
+      "bbox_full_image": [
+        700,
+        5328,
+        1769,
+        6491
+      ],
+      "recovery_key": "module_010_FAI_8_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_010_visualization.jpg"
+}

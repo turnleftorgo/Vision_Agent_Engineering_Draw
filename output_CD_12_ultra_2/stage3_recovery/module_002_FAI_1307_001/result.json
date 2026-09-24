@@ -1,0 +1,175 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_002_FAI_1307_001",
+  "module_index": 2,
+  "cluster_index": 1,
+  "fai_number": "1307",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_002_FAI_1307_001.png",
+  "refined_crop_path": "crop2_refined/module_002_FAI_1307_001.png",
+  "initial_bbox_full_image": [
+    3346,
+    347,
+    4000,
+    733
+  ],
+  "marker_bbox_full_image": [
+    3784,
+    347,
+    3851,
+    402
+  ],
+  "final_bbox_full_image": [
+    3346,
+    347,
+    4164,
+    829
+  ],
+  "round_count": 3,
+  "elapsed_seconds": 30.787,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        3346,
+        347,
+        4000,
+        733
+      ],
+      "context_bbox": [
+        3019,
+        154,
+        4327,
+        926
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.93,
+        "elapsed_seconds": 13.010205833939835,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 2218,
+            "total_tokens": 2242,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2218,
+            "output_tokens": 24,
+            "total_time": 12.97
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3346,
+        347,
+        4000,
+        829
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        3346,
+        347,
+        4000,
+        829
+      ],
+      "context_bbox": [
+        3019,
+        106,
+        4327,
+        1070
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "right"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.93,
+        "elapsed_seconds": 8.260289791971445,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"right\"], \"reason\": \"target_clipped\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 2464,
+            "total_tokens": 2488,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2464,
+            "output_tokens": 24,
+            "total_time": 8.23
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3346,
+        347,
+        4164,
+        829
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        3346,
+        347,
+        4164,
+        829
+      ],
+      "context_bbox": [
+        2937,
+        106,
+        4573,
+        1070
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.93,
+        "elapsed_seconds": 9.089729374973103,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 21,
+            "prompt_tokens": 2764,
+            "total_tokens": 2785,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2764,
+            "output_tokens": 21,
+            "total_time": 9.06
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3346,
+        347,
+        4164,
+        829
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 1,
+  "module_crop_path": "crop1/module_001.png",
+  "elapsed_seconds": 131.768,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 2510,
+      "prompt_tokens": 4017,
+      "total_tokens": 6527,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 4017,
+      "output_tokens": 2510,
+      "total_time": 131.62
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "224",
+      "spc_code": "GL",
+      "bbox_normalized": [
+        220.0,
+        50.0,
+        775.0,
+        975.0
+      ],
+      "bbox_pixels": [
+        348,
+        75,
+        1228,
+        1459
+      ],
+      "marker_bbox_normalized": [
+        540.0,
+        785.0,
+        575.0,
+        820.0
+      ],
+      "marker_bbox_pixels": [
+        855,
+        1174,
+        911,
+        1227
+      ],
+      "description": "12X 0.070 +0.08/0.00, MEASURE AT 1ST, 6TH AND 10TH HOLE IN EACH SET.",
+      "arrow_count": 1,
+      "target_summary": "Section BK-BK part, specifically the left hole edge",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_224_001.png",
+      "bbox_full_image": [
+        700,
+        279,
+        1580,
+        1663
+      ],
+      "recovery_key": "module_001_FAI_224_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_001_visualization.jpg"
+}

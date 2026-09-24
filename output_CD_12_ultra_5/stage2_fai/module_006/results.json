@@ -1,0 +1,120 @@
+{
+  "status": "ok",
+  "module_index": 6,
+  "module_crop_path": "crop1/module_006.png",
+  "elapsed_seconds": 435.647,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 4460,
+      "prompt_tokens": 17713,
+      "total_tokens": 22173,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 17713,
+      "output_tokens": 4460,
+      "total_time": 434.85
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "23",
+      "spc_code": "W",
+      "bbox_normalized": [
+        150.0,
+        50.0,
+        950.0,
+        980.0
+      ],
+      "bbox_pixels": [
+        541,
+        228,
+        3428,
+        4465
+      ],
+      "marker_bbox_normalized": [
+        855.0,
+        945.0,
+        875.0,
+        965.0
+      ],
+      "marker_bbox_pixels": [
+        3085,
+        4305,
+        3157,
+        4397
+      ],
+      "description": "Ø 2.20 ±0.10, ⊕ | Ø 0.20 | A | B | C",
+      "arrow_count": 1,
+      "target_summary": "整个背壳结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_006_FAI_23_001.png",
+      "bbox_full_image": [
+        2917,
+        1520,
+        5804,
+        5757
+      ],
+      "recovery_key": "module_006_FAI_23_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "24",
+      "spc_code": null,
+      "bbox_normalized": [
+        965.0,
+        955.0,
+        1000.0,
+        975.0
+      ],
+      "bbox_pixels": [
+        3482,
+        4351,
+        3608,
+        4442
+      ],
+      "marker_bbox_normalized": [
+        965.0,
+        955.0,
+        1000.0,
+        975.0
+      ],
+      "marker_bbox_pixels": [
+        3482,
+        4351,
+        3608,
+        4442
+      ],
+      "description": "被截断，无法读取完整描述",
+      "arrow_count": 0,
+      "target_summary": "未知（被截断）",
+      "complete": false,
+      "missing": [
+        "SPC标记",
+        "描述文字",
+        "引出线",
+        "箭头",
+        "目标部件"
+      ],
+      "confidence": 0.5,
+      "crop_path": "crop2/module_006_FAI_24_002.png",
+      "bbox_full_image": [
+        5858,
+        5643,
+        5984,
+        5734
+      ],
+      "recovery_key": "module_006_FAI_24_002"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_006_visualization.jpg"
+}

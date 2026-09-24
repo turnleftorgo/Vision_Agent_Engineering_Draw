@@ -1,0 +1,203 @@
+{
+  "status": "ok",
+  "module_index": 8,
+  "module_crop_path": "crop1/module_008.png",
+  "elapsed_seconds": 602.723,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 4765,
+      "prompt_tokens": 4631,
+      "total_tokens": 9396,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 4631,
+      "output_tokens": 4765,
+      "total_time": 602.49
+    }
+  },
+  "valid_cluster_count": 4,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "935",
+      "spc_code": "RF",
+      "bbox_normalized": [
+        460.0,
+        0.0,
+        980.0,
+        410.0
+      ],
+      "bbox_pixels": [
+        769,
+        0,
+        1639,
+        753
+      ],
+      "marker_bbox_normalized": [
+        730.0,
+        0.0,
+        770.0,
+        25.0
+      ],
+      "marker_bbox_pixels": [
+        1221,
+        0,
+        1287,
+        46
+      ],
+      "description": "0.15 Z-VB VB, 0.05 形位公差",
+      "arrow_count": 1,
+      "target_summary": "上方长圆孔",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_008_FAI_935_001.png",
+      "bbox_full_image": [
+        7721,
+        1020,
+        8591,
+        1773
+      ],
+      "recovery_key": "module_008_FAI_935_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "16",
+      "spc_code": "P",
+      "bbox_normalized": [
+        0.0,
+        650.0,
+        570.0,
+        780.0
+      ],
+      "bbox_pixels": [
+        0,
+        1193,
+        953,
+        1432
+      ],
+      "marker_bbox_normalized": [
+        0.0,
+        650.0,
+        70.0,
+        690.0
+      ],
+      "marker_bbox_pixels": [
+        0,
+        1193,
+        117,
+        1267
+      ],
+      "description": "0.20 Z-VB C, 0.15 Z-VB, 0.05 形位公差",
+      "arrow_count": 1,
+      "target_summary": "下方长圆孔",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_008_FAI_16_002.png",
+      "bbox_full_image": [
+        6952,
+        2213,
+        7905,
+        2452
+      ],
+      "recovery_key": "module_008_FAI_16_002"
+    },
+    {
+      "id": 3,
+      "fai_number": "17",
+      "spc_code": "Q",
+      "bbox_normalized": [
+        710.0,
+        870.0,
+        990.0,
+        1000.0
+      ],
+      "bbox_pixels": [
+        1187,
+        1597,
+        1655,
+        1836
+      ],
+      "marker_bbox_normalized": [
+        790.0,
+        870.0,
+        870.0,
+        910.0
+      ],
+      "marker_bbox_pixels": [
+        1321,
+        1597,
+        1455,
+        1671
+      ],
+      "description": "0.20 Z-SCORP C, 0.15 Z-SCORP, 0.06 形位公差",
+      "arrow_count": 1,
+      "target_summary": "未知（引出线被截断）",
+      "complete": false,
+      "missing": [
+        "引出线终端箭头",
+        "目标部件"
+      ],
+      "confidence": 0.9,
+      "crop_path": "crop2/module_008_FAI_17_003.png",
+      "bbox_full_image": [
+        8139,
+        2617,
+        8607,
+        2856
+      ],
+      "recovery_key": "module_008_FAI_17_003"
+    },
+    {
+      "id": 4,
+      "fai_number": "984",
+      "spc_code": "SN",
+      "bbox_normalized": [
+        270.0,
+        930.0,
+        670.0,
+        990.0
+      ],
+      "bbox_pixels": [
+        451,
+        1707,
+        1120,
+        1818
+      ],
+      "marker_bbox_normalized": [
+        280.0,
+        930.0,
+        360.0,
+        970.0
+      ],
+      "marker_bbox_pixels": [
+        468,
+        1707,
+        602,
+        1781
+      ],
+      "description": "4.00 ±0.05 尺寸",
+      "arrow_count": 2,
+      "target_summary": "两条垂直参考线",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_008_FAI_984_004.png",
+      "bbox_full_image": [
+        7403,
+        2727,
+        8072,
+        2838
+      ],
+      "recovery_key": "module_008_FAI_984_004"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_008_visualization.jpg"
+}

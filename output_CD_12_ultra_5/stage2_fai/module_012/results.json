@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 12,
+  "module_crop_path": "crop1/module_012.png",
+  "elapsed_seconds": 187.565,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 718,
+      "prompt_tokens": 3641,
+      "total_tokens": 4359,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 3641,
+      "output_tokens": 718,
+      "total_time": 187.46
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "18",
+      "spc_code": "R",
+      "bbox_normalized": [
+        480.0,
+        650.0,
+        965.0,
+        975.0
+      ],
+      "bbox_pixels": [
+        718,
+        884,
+        1444,
+        1326
+      ],
+      "marker_bbox_normalized": [
+        715.0,
+        650.0,
+        760.0,
+        695.0
+      ],
+      "marker_bbox_pixels": [
+        1070,
+        884,
+        1137,
+        945
+      ],
+      "description": "圆度公差 0.20/0.15/0.10，基准 F，关联 SIM 框",
+      "arrow_count": 1,
+      "target_summary": "长条形槽零件的底部圆孔区域",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_012_FAI_18_001.png",
+      "bbox_full_image": [
+        7934,
+        5576,
+        8660,
+        6018
+      ],
+      "recovery_key": "module_012_FAI_18_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_012_visualization.jpg"
+}

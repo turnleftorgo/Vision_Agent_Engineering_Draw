@@ -1,0 +1,114 @@
+{
+  "status": "ok",
+  "module_index": 4,
+  "module_crop_path": "crop1/module_004.png",
+  "elapsed_seconds": 129.667,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1532,
+      "prompt_tokens": 2143,
+      "total_tokens": 3675,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2143,
+      "output_tokens": 1532,
+      "total_time": 129.63
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1172",
+      "spc_code": "YY",
+      "bbox_normalized": [
+        180.0,
+        100.0,
+        930.0,
+        400.0
+      ],
+      "bbox_pixels": [
+        158,
+        54,
+        818,
+        218
+      ],
+      "marker_bbox_normalized": [
+        780.0,
+        100.0,
+        840.0,
+        200.0
+      ],
+      "marker_bbox_pixels": [
+        686,
+        54,
+        739,
+        109
+      ],
+      "description": "尺寸 0.58 ±0.05",
+      "arrow_count": 2,
+      "target_summary": "零件上部水平面及相连结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_004_FAI_1172_001.png",
+      "bbox_full_image": [
+        3696,
+        1060,
+        4356,
+        1224
+      ],
+      "recovery_key": "module_004_FAI_1172_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "1173",
+      "spc_code": "YZ",
+      "bbox_normalized": [
+        180.0,
+        380.0,
+        980.0,
+        550.0
+      ],
+      "bbox_pixels": [
+        158,
+        207,
+        862,
+        299
+      ],
+      "marker_bbox_normalized": [
+        740.0,
+        380.0,
+        800.0,
+        480.0
+      ],
+      "marker_bbox_pixels": [
+        651,
+        207,
+        704,
+        261
+      ],
+      "description": "尺寸 0.75 ±0.10",
+      "arrow_count": 2,
+      "target_summary": "零件中部水平面及相连结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_004_FAI_1173_002.png",
+      "bbox_full_image": [
+        3696,
+        1213,
+        4400,
+        1305
+      ],
+      "recovery_key": "module_004_FAI_1173_002"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_004_visualization.jpg"
+}

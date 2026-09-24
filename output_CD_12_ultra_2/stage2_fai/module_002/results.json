@@ -1,0 +1,114 @@
+{
+  "status": "ok",
+  "module_index": 2,
+  "module_crop_path": "crop1/module_002.png",
+  "elapsed_seconds": 249.893,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1346,
+      "prompt_tokens": 2161,
+      "total_tokens": 3507,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 2048
+      },
+      "input_tokens": 2161,
+      "output_tokens": 1346,
+      "total_time": 249.84
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1307",
+      "spc_code": "ADX",
+      "bbox_normalized": [
+        130.0,
+        100.0,
+        920.0,
+        730.0
+      ],
+      "bbox_pixels": [
+        108,
+        61,
+        762,
+        447
+      ],
+      "marker_bbox_normalized": [
+        660.0,
+        100.0,
+        740.0,
+        190.0
+      ],
+      "marker_bbox_pixels": [
+        546,
+        61,
+        613,
+        116
+      ],
+      "description": "尺寸 0.45 ± 0.05",
+      "arrow_count": 2,
+      "target_summary": "L形截面零件的上部和中间水平面",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_002_FAI_1307_001.png",
+      "bbox_full_image": [
+        3346,
+        347,
+        4000,
+        733
+      ],
+      "recovery_key": "module_002_FAI_1307_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "1308",
+      "spc_code": "ADY",
+      "bbox_normalized": [
+        240.0,
+        480.0,
+        990.0,
+        730.0
+      ],
+      "bbox_pixels": [
+        199,
+        294,
+        820,
+        447
+      ],
+      "marker_bbox_normalized": [
+        740.0,
+        480.0,
+        820.0,
+        570.0
+      ],
+      "marker_bbox_pixels": [
+        613,
+        294,
+        679,
+        349
+      ],
+      "description": "尺寸 0.63 ± 0.10",
+      "arrow_count": 1,
+      "target_summary": "L形截面零件的下部水平面",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_002_FAI_1308_002.png",
+      "bbox_full_image": [
+        3437,
+        580,
+        4058,
+        733
+      ],
+      "recovery_key": "module_002_FAI_1308_002"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_002_visualization.jpg"
+}

@@ -1,0 +1,159 @@
+{
+  "status": "ok",
+  "module_index": 7,
+  "module_crop_path": "crop1/module_007.png",
+  "elapsed_seconds": 157.619,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1202,
+      "prompt_tokens": 5792,
+      "total_tokens": 6994,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 5792,
+      "output_tokens": 1202,
+      "total_time": 157.39
+    }
+  },
+  "valid_cluster_count": 3,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "16",
+      "spc_code": "SP",
+      "bbox_normalized": [
+        890.0,
+        210.0,
+        1000.0,
+        280.0
+      ],
+      "bbox_pixels": [
+        940,
+        843,
+        1056,
+        1123
+      ],
+      "marker_bbox_normalized": [
+        900.0,
+        215.0,
+        960.0,
+        235.0
+      ],
+      "marker_bbox_pixels": [
+        950,
+        863,
+        1014,
+        943
+      ],
+      "description": "FAI 16 及其关联的 SPC 标记和形位公差框",
+      "arrow_count": 0,
+      "target_summary": "右侧边缘的 SPC 标记和公差框",
+      "complete": false,
+      "missing": [
+        "SPC 标记和公差框的右侧部分被图像边缘截断"
+      ],
+      "confidence": 0.9,
+      "crop_path": "crop2/module_007_FAI_16_001.png",
+      "bbox_full_image": [
+        6924,
+        2203,
+        7040,
+        2483
+      ],
+      "recovery_key": "module_007_FAI_16_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "246",
+      "spc_code": null,
+      "bbox_normalized": [
+        190.0,
+        310.0,
+        510.0,
+        350.0
+      ],
+      "bbox_pixels": [
+        201,
+        1244,
+        539,
+        1404
+      ],
+      "marker_bbox_normalized": [
+        300.0,
+        315.0,
+        360.0,
+        335.0
+      ],
+      "marker_bbox_pixels": [
+        317,
+        1264,
+        380,
+        1344
+      ],
+      "description": "尺寸 87.243 ±0.10，基准 DC",
+      "arrow_count": 2,
+      "target_summary": "垂直尺寸线及其两端的箭头",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_007_FAI_246_002.png",
+      "bbox_full_image": [
+        6185,
+        2604,
+        6523,
+        2764
+      ],
+      "recovery_key": "module_007_FAI_246_002"
+    },
+    {
+      "id": 3,
+      "fai_number": "248",
+      "spc_code": null,
+      "bbox_normalized": [
+        190.0,
+        665.0,
+        510.0,
+        705.0
+      ],
+      "bbox_pixels": [
+        201,
+        2668,
+        539,
+        2828
+      ],
+      "marker_bbox_normalized": [
+        290.0,
+        670.0,
+        350.0,
+        690.0
+      ],
+      "marker_bbox_pixels": [
+        306,
+        2688,
+        370,
+        2768
+      ],
+      "description": "尺寸 94.925 ±0.10，基准 DC",
+      "arrow_count": 2,
+      "target_summary": "垂直尺寸线及其两端的箭头",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_007_FAI_248_003.png",
+      "bbox_full_image": [
+        6185,
+        4028,
+        6523,
+        4188
+      ],
+      "recovery_key": "module_007_FAI_248_003"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_007_visualization.jpg"
+}

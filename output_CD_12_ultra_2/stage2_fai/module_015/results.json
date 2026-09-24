@@ -1,0 +1,76 @@
+{
+  "status": "ok",
+  "module_index": 15,
+  "module_crop_path": "crop1/module_015.png",
+  "elapsed_seconds": 114.814,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1318,
+      "prompt_tokens": 2003,
+      "total_tokens": 3321,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2003,
+      "output_tokens": 1318,
+      "total_time": 114.78
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1318",
+      "spc_code": "AFH",
+      "bbox_normalized": [
+        533.0,
+        850.0,
+        612.0,
+        995.0
+      ],
+      "bbox_pixels": [
+        962,
+        162,
+        1104,
+        189
+      ],
+      "marker_bbox_normalized": [
+        535.0,
+        855.0,
+        565.0,
+        990.0
+      ],
+      "marker_bbox_pixels": [
+        965,
+        162,
+        1019,
+        188
+      ],
+      "description": "仅见FAI 1318与SPC AFH圆形标记，无可见尺寸、公差或描述文字",
+      "arrow_count": 0,
+      "target_summary": "无可见箭头或目标部件，图像在标记下方被截断",
+      "complete": false,
+      "missing": [
+        "引出线",
+        "终端箭头",
+        "目标部件完整轮廓",
+        "尺寸或公差描述文字"
+      ],
+      "confidence": 0.55,
+      "crop_path": "crop2/module_015_FAI_1318_001.png",
+      "bbox_full_image": [
+        4438,
+        312,
+        4580,
+        339
+      ],
+      "recovery_key": "module_015_FAI_1318_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_015_visualization.jpg"
+}

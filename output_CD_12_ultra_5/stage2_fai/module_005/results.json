@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 5,
+  "module_crop_path": "crop1/module_005.png",
+  "elapsed_seconds": 73.783,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 717,
+      "prompt_tokens": 2747,
+      "total_tokens": 3464,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2747,
+      "output_tokens": 717,
+      "total_time": 73.72
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "225",
+      "spc_code": "GM",
+      "bbox_normalized": [
+        160.0,
+        30.0,
+        870.0,
+        800.0
+      ],
+      "bbox_pixels": [
+        155,
+        35,
+        842,
+        925
+      ],
+      "marker_bbox_normalized": [
+        570.0,
+        620.0,
+        640.0,
+        680.0
+      ],
+      "marker_bbox_pixels": [
+        552,
+        717,
+        620,
+        786
+      ],
+      "description": "尺寸 0.070 +0.10 0.00 和角度 45.00°",
+      "arrow_count": 2,
+      "target_summary": "左侧剖面图部件的底部边缘和斜角",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_005_FAI_225_001.png",
+      "bbox_full_image": [
+        507,
+        3775,
+        1194,
+        4665
+      ],
+      "recovery_key": "module_005_FAI_225_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_005_visualization.jpg"
+}

@@ -45,6 +45,8 @@ class RecoveryUnitTests(unittest.TestCase):
         self.assertIn("Linear, angular, or distance dimension", prompt)
         self.assertIn("Diameter or radius dimension", prompt)
         self.assertIn("no physical target geometry", prompt)
+        self.assertIn("LEFT, RIGHT, TOP, and BOTTOM", prompt)
+        self.assertIn("percentage stated in the user", prompt)
         self.assertNotIn("437", prompt)
 
     def test_decision_parser_accepts_multiple_expansion_sides(self) -> None:
@@ -107,6 +109,16 @@ class RecoveryUnitTests(unittest.TestCase):
         self.assertEqual(observation.size, (400, 280))
         self.assertEqual(observation.getpixel((100, 70)), (220, 0, 220))
         self.assertEqual(observation.getpixel((120, 105)), (220, 0, 0))
+
+    def test_refined_crop_draws_red_rectangle_around_target_fai(self) -> None:
+        refined = pipeline.build_refined_crop(
+            Image.new("RGB", (200, 200), "white"),
+            pipeline.CropBox(50, 50, 150, 150),
+            pipeline.CropBox(80, 80, 100, 100),
+        )
+        self.assertEqual(refined.size, (100, 100))
+        self.assertEqual(refined.getpixel((27, 27)), (220, 0, 0))
+        self.assertEqual(refined.getpixel((40, 40)), (255, 255, 255))
 
     def test_crop2_is_published_immediately_after_save(self) -> None:
         published: list[pipeline.RecoveryCandidate] = []
@@ -245,6 +257,7 @@ class RecoveryUnitTests(unittest.TestCase):
             round_number=1,
             max_tokens=128,
             temperature=0.1,
+            step_norm=250,
         )
         self.assertEqual(result.action, "finish")
         self.assertEqual(client.chat.completions.calls, 1)
@@ -252,10 +265,13 @@ class RecoveryUnitTests(unittest.TestCase):
             client.chat.completions.last_kwargs["response_format"],
             pipeline.RECOVERY_RESPONSE_FORMAT,
         )
+        user_content = client.chat.completions.last_kwargs["messages"][1]["content"]
+        self.assertIn("25 percent", user_content[0]["text"])
 
     def test_recovery_default_max_tokens_is_2048(self) -> None:
         args = pipeline.build_parser().parse_args(["drawing.png"])
         self.assertEqual(args.recovery_max_tokens, 2048)
+        self.assertEqual(args.recovery_step_norm, 250)
 
 
 if __name__ == "__main__":

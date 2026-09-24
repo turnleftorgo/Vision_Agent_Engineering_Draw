@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 11,
+  "module_crop_path": "crop1/module_011.png",
+  "elapsed_seconds": 224.936,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 752,
+      "prompt_tokens": 3347,
+      "total_tokens": 4099,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 3347,
+      "output_tokens": 752,
+      "total_time": 224.84
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "200",
+      "spc_code": "FW",
+      "bbox_normalized": [
+        20.0,
+        80.0,
+        940.0,
+        960.0
+      ],
+      "bbox_pixels": [
+        39,
+        72,
+        1820,
+        862
+      ],
+      "marker_bbox_normalized": [
+        68.0,
+        80.0,
+        100.0,
+        140.0
+      ],
+      "marker_bbox_pixels": [
+        132,
+        72,
+        194,
+        126
+      ],
+      "description": "FAI 200, SPC FW, 平行度公差 0.20/0.10 基准 PB, 以及 2X SURFACES 平行度 0.030",
+      "arrow_count": 4,
+      "target_summary": "截面图中央椭圆形孔的左右两个内表面",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_011_FAI_200_001.png",
+      "bbox_full_image": [
+        3929,
+        4832,
+        5710,
+        5622
+      ],
+      "recovery_key": "module_011_FAI_200_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_011_visualization.jpg"
+}

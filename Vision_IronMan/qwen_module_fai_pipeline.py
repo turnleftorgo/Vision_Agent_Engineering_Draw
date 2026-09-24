@@ -99,13 +99,25 @@ First identify which general annotation topology is present:
    diameter is insufficient when the relevant circular or cylindrical feature
    continues beyond the crop.
 
-Only after the physical target has been found may you assess completeness.
-Seeing only annotation elements, a tiny physical patch, short edge, corner, one
-side of a feature, or partial contour is incomplete.
+Only after the physical target has been found may you assess completeness. A
+recognizable target is not necessarily a complete target. The arrow contact
+point, measured surface, hole edge, short arc, corner, or small hatched patch is
+only a target seed. Starting from that seed, trace the connected physical contour
+or structural unit to a closed contour, visible component boundary, structural
+separation, or another natural endpoint.
+
+In a sectional view, hatching represents physical material. When the target seed
+belongs to a hatched region, follow the region and its enclosing outline to the
+natural boundary of the same structural unit. A small visible hatch fragment is
+never sufficient when the same structure continues beyond the current crop.
 
 Rules:
-- finish only when every associated physical target is sufficiently visible
-  inside the MAGENTA rectangle and no relevant physical contour crosses it.
+- Before returning finish, inspect the LEFT, RIGHT, TOP, and BOTTOM edges of the
+  MAGENTA rectangle. Finish is allowed only when every associated physical target
+  reaches its visible natural boundaries inside the rectangle.
+- If any target-related physical contour, surface, wall, hatch region, or
+  connected structure touches or crosses a MAGENTA edge and continues in the
+  wider context, finish is forbidden. Return every such edge in expand_sides.
 - Follow only leaders and arrows belonging to the RED FAI marker. Ignore every
   other FAI/SPC circle, dimension, arrow, and target visible in the context.
 - Never return finish when no physical target geometry associated with the RED
@@ -115,12 +127,17 @@ Rules:
 - When the annotation path exits the MAGENTA rectangle before reaching its
   physical target, expand the side crossed by that path. When it exits the wider
   observation as well, use its exit side as the required expansion direction.
+- Use geometry outside the MAGENTA rectangle as direct evidence. If it shows
+  continuation of the target inside the rectangle, expand the crossed side even
+  when the arrow contact point and a recognizable target fragment are inside.
 - expand_sides names every side of the MAGENTA rectangle where relevant target
   geometry is missing. It is not the visual pointing direction of an arrowhead.
 - annotation elements need not remain inside the final crop after their
   association has been traced; final completeness is judged on physical targets.
 - if target geometry is clipped on multiple sides, return all of those sides in
   the same response, for example ["left", "down"]. Do not choose only one side.
+- Python expands each requested side by the percentage stated in the user
+  message. Request all necessary sides in the same decision.
 - uncertainty is not evidence of completeness. Do not hide uncertainty with finish.
 
 Allowed action values: finish, expand.
@@ -262,6 +279,31 @@ def build_recovery_observation(
     return fit_observation_image(observation, max_image_edge), context_box
 
 
+def build_refined_crop(
+    full_image: Image.Image,
+    crop_box: CropBox,
+    marker_box: CropBox | None,
+) -> Image.Image:
+    """Crop from the full image and draw a red rectangle around the target FAI."""
+    crop_box = crop_box.clamp(full_image.width, full_image.height)
+    refined = full_image.crop(tuple(crop_box.to_list())).convert("RGB")
+    if marker_box is None:
+        return refined
+
+    marker = marker_box.clamp(full_image.width, full_image.height)
+    pad = max(3, round(max(marker.width, marker.height) * 0.08))
+    left = max(0, marker.x1 - crop_box.x1 - pad)
+    top = max(0, marker.y1 - crop_box.y1 - pad)
+    right = min(refined.width - 1, marker.x2 - crop_box.x1 + pad)
+    bottom = min(refined.height - 1, marker.y2 - crop_box.y1 + pad)
+    if left < right and top < bottom:
+        stroke = max(2, round(min(refined.size) * 0.004))
+        ImageDraw.Draw(refined).rectangle(
+            (left, top, right, bottom), outline=(220, 0, 0), width=stroke
+        )
+    return refined
+
+
 def _strip_response_wrappers(text: str) -> str:
     cleaned = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
     cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
@@ -386,16 +428,20 @@ def request_recovery_decision(
     fai_number: str | None = None,
     max_tokens: int,
     temperature: float,
+    step_norm: int,
 ) -> RecoveryDecision:
     """Ask one recovery agent which crop sides must expand together."""
     image_urls = [fai.image_to_data_url(image)]
+    step_percent = step_norm / 10.0
     prompt = (
         f"This is recovery round {round_number}. Inspect the one wider-context "
         f"image. The selected FAI number is {fai_number or 'shown in the red ellipse'}. "
-        "Judge only whether each arrowhead-touched target part is "
-        "sufficiently complete inside the MAGENTA current-crop rectangle. "
+        "Trace its annotation to the physical target, then apply the four-edge "
+        "physical-contour audit to the MAGENTA current-crop rectangle. A "
+        "recognizable fragment or arrow contact point is not a complete target. "
         "If incomplete on multiple borders, include every required border in "
-        "expand_sides. Return exactly one decision JSON."
+        f"expand_sides. Python will expand each requested side by {step_percent:g} "
+        "percent of the current crop width or height. Return exactly one decision JSON."
     )
     return call_recovery_agent(
         client, model, prompt, image_urls, max_tokens, temperature
@@ -468,6 +514,7 @@ def recover_crop_candidate(
             fai_number=candidate.fai_number,
             max_tokens=max_tokens,
             temperature=temperature,
+            step_norm=step_norm,
         )
         (round_dir / "decision_raw.txt").write_text(
             decision.raw_response, encoding="utf-8"
@@ -505,7 +552,7 @@ def recover_crop_candidate(
             break
 
     refined_path = refined_dir / candidate.source_crop_path.name
-    full_image.crop(tuple(current.to_list())).save(refined_path)
+    build_refined_crop(full_image, current, candidate.marker_box).save(refined_path)
     result = {
         "status": status,
         "valid": status == "finished",
@@ -1040,7 +1087,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--recovery-temperature", type=float, default=0.1)
     parser.add_argument("--recovery-context-fraction", type=float, default=0.5)
     parser.add_argument("--recovery-max-image-edge", type=int, default=2400)
-    parser.add_argument("--recovery-step-norm", type=int, default=180)
+    parser.add_argument("--recovery-step-norm", type=int, default=250)
     parser.add_argument(
         "--recovery-workers",
         type=int,

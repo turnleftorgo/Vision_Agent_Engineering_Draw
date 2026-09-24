@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 13,
+  "module_crop_path": "crop1/module_013.png",
+  "elapsed_seconds": 152.312,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 713,
+      "prompt_tokens": 2381,
+      "total_tokens": 3094,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2381,
+      "output_tokens": 713,
+      "total_time": 152.27
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "207",
+      "spc_code": "GD",
+      "bbox_normalized": [
+        30.0,
+        400.0,
+        960.0,
+        750.0
+      ],
+      "bbox_pixels": [
+        32,
+        264,
+        1031,
+        495
+      ],
+      "marker_bbox_normalized": [
+        760.0,
+        400.0,
+        820.0,
+        480.0
+      ],
+      "marker_bbox_pixels": [
+        816,
+        264,
+        881,
+        317
+      ],
+      "description": "尺寸 1.33 ±0.10",
+      "arrow_count": 2,
+      "target_summary": "上方独立凸起零件的宽度及下方主零件截面上的特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_013_FAI_207_001.png",
+      "bbox_full_image": [
+        6808,
+        5894,
+        7807,
+        6125
+      ],
+      "recovery_key": "module_013_FAI_207_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_013_visualization.jpg"
+}

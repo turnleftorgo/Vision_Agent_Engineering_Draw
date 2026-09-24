@@ -1,0 +1,74 @@
+{
+  "status": "ok",
+  "module_index": 4,
+  "module_crop_path": "crop1/module_004.png",
+  "elapsed_seconds": 122.323,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 813,
+      "prompt_tokens": 2465,
+      "total_tokens": 3278,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2465,
+      "output_tokens": 813,
+      "total_time": 122.27
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "908",
+      "spc_code": "S",
+      "bbox_normalized": [
+        670.0,
+        460.0,
+        1000.0,
+        1000.0
+      ],
+      "bbox_pixels": [
+        825,
+        313,
+        1232,
+        680
+      ],
+      "marker_bbox_normalized": [
+        925.0,
+        780.0,
+        970.0,
+        850.0
+      ],
+      "marker_bbox_pixels": [
+        1140,
+        530,
+        1195,
+        578
+      ],
+      "description": "CENTERLINE OF SPEAKER AND POWER BUTTON SLOT",
+      "arrow_count": 2,
+      "target_summary": "Speaker/Power button assembly and Volume button slot",
+      "complete": false,
+      "missing": [
+        "SPC marker is truncated on the right edge",
+        "Description text is truncated on the right edge"
+      ],
+      "confidence": 0.9,
+      "crop_path": "crop2/module_004_FAI_908_001.png",
+      "bbox_full_image": [
+        7865,
+        449,
+        8272,
+        816
+      ],
+      "recovery_key": "module_004_FAI_908_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_004_visualization.jpg"
+}

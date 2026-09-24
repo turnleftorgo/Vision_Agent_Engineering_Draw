@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 8,
+  "module_crop_path": "crop1/module_008.png",
+  "elapsed_seconds": 176.281,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 639,
+      "prompt_tokens": 2051,
+      "total_tokens": 2690,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2051,
+      "output_tokens": 639,
+      "total_time": 176.25
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1230",
+      "spc_code": "ABF",
+      "bbox_normalized": [
+        300.0,
+        210.0,
+        970.0,
+        690.0
+      ],
+      "bbox_pixels": [
+        230,
+        104,
+        743,
+        342
+      ],
+      "marker_bbox_normalized": [
+        635.0,
+        305.0,
+        725.0,
+        425.0
+      ],
+      "marker_bbox_pixels": [
+        486,
+        151,
+        555,
+        211
+      ],
+      "description": "尺寸 4.169 ±0.03",
+      "arrow_count": 2,
+      "target_summary": "剖面图中的零件结构及顶部水平面",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_008_FAI_1230_001.png",
+      "bbox_full_image": [
+        5668,
+        3178,
+        6181,
+        3416
+      ],
+      "recovery_key": "module_008_FAI_1230_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_008_visualization.jpg"
+}

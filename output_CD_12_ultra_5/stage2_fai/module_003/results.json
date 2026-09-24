@@ -1,0 +1,114 @@
+{
+  "status": "ok",
+  "module_index": 3,
+  "module_crop_path": "crop1/module_003.png",
+  "elapsed_seconds": 266.604,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1242,
+      "prompt_tokens": 2891,
+      "total_tokens": 4133,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2891,
+      "output_tokens": 1242,
+      "total_time": 266.53
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "13",
+      "spc_code": "M",
+      "bbox_normalized": [
+        0.0,
+        290.0,
+        900.0,
+        690.0
+      ],
+      "bbox_pixels": [
+        0,
+        316,
+        1030,
+        751
+      ],
+      "marker_bbox_normalized": [
+        10.0,
+        630.0,
+        65.0,
+        690.0
+      ],
+      "marker_bbox_pixels": [
+        11,
+        685,
+        74,
+        751
+      ],
+      "description": "FAI 13 对应尺寸 4.000，指示部件的垂直高度",
+      "arrow_count": 2,
+      "target_summary": "中间的胶囊状部件及其内部结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_003_FAI_13_001.png",
+      "bbox_full_image": [
+        5984,
+        656,
+        7014,
+        1091
+      ],
+      "recovery_key": "module_003_FAI_13_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "14",
+      "spc_code": "N",
+      "bbox_normalized": [
+        10.0,
+        20.0,
+        900.0,
+        770.0
+      ],
+      "bbox_pixels": [
+        11,
+        22,
+        1030,
+        838
+      ],
+      "marker_bbox_normalized": [
+        10.0,
+        710.0,
+        65.0,
+        770.0
+      ],
+      "marker_bbox_pixels": [
+        11,
+        772,
+        74,
+        838
+      ],
+      "description": "FAI 14 对应尺寸 17.116，指示部件的水平长度",
+      "arrow_count": 2,
+      "target_summary": "中间的胶囊状部件及其内部结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_003_FAI_14_002.png",
+      "bbox_full_image": [
+        5995,
+        362,
+        7014,
+        1178
+      ],
+      "recovery_key": "module_003_FAI_14_002"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_003_visualization.jpg"
+}
