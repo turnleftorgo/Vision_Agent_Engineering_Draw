@@ -1,0 +1,114 @@
+{
+  "status": "ok",
+  "module_index": 1,
+  "module_crop_path": "crop1/module_001.png",
+  "elapsed_seconds": 68.564,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 1302,
+      "prompt_tokens": 2479,
+      "total_tokens": 3781,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2479,
+      "output_tokens": 1302,
+      "total_time": 68.49
+    }
+  },
+  "valid_cluster_count": 2,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1314",
+      "spc_code": "AED",
+      "bbox_normalized": [
+        70.0,
+        230.0,
+        630.0,
+        520.0
+      ],
+      "bbox_pixels": [
+        64,
+        210,
+        577,
+        474
+      ],
+      "marker_bbox_normalized": [
+        120.0,
+        290.0,
+        190.0,
+        360.0
+      ],
+      "marker_bbox_pixels": [
+        110,
+        264,
+        174,
+        328
+      ],
+      "description": "尺寸 2.22 ±0.05，测量椭圆孔的垂直高度",
+      "arrow_count": 2,
+      "target_summary": "中间的椭圆形孔/槽结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_1314_001.png",
+      "bbox_full_image": [
+        222,
+        1080,
+        735,
+        1344
+      ],
+      "recovery_key": "module_001_FAI_1314_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "1315",
+      "spc_code": "AEE",
+      "bbox_normalized": [
+        170.0,
+        570.0,
+        630.0,
+        680.0
+      ],
+      "bbox_pixels": [
+        156,
+        520,
+        577,
+        620
+      ],
+      "marker_bbox_normalized": [
+        230.0,
+        570.0,
+        300.0,
+        640.0
+      ],
+      "marker_bbox_pixels": [
+        211,
+        520,
+        275,
+        584
+      ],
+      "description": "尺寸 0.88 ±0.05，测量椭圆孔的水平宽度",
+      "arrow_count": 2,
+      "target_summary": "中间的椭圆形孔/槽结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_001_FAI_1315_002.png",
+      "bbox_full_image": [
+        314,
+        1390,
+        735,
+        1490
+      ],
+      "recovery_key": "module_001_FAI_1315_002"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_001_visualization.jpg"
+}

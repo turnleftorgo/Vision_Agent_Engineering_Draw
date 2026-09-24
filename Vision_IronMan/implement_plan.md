@@ -1,5 +1,31 @@
 # Qwen 图像模块盲测工具实施说明
 
+## 0. IronMan Stage 2 CPU Structural X-Ray（新增）
+
+`qwen_module_fai_pipeline.py` 在生成 `crop2` 的第一次 27B FAI 集群识别前，
+先调用 `fai_xray.py` 对每张 `crop1/module` 执行一次纯 CPU 证据编码：
+
+```text
+module image
+  -> Tesseract proposes FAI/text evidence
+  -> OpenCV proposes FAI bubbles, annotation frames, lines and arrowheads
+  -> CPU associates A/T/L/H/G/R by spatial continuity
+  -> render xray.png and save xray.json
+  -> one existing 27B Stage 2 request
+  -> crop2
+```
+
+颜色表示 `Cxx` 集群归属，字母表示证据类型。未能可靠归属的全量 OCR、Hough
+线段和轮廓不会绘制到模型输入。每个 Stage 2 module 固定保存：
+
+- `module_original.png`：未标记的原始 module；
+- `xray.png`：给 Qwen 且供人检查的 CPU 结构 X 光图；
+- `xray.json`：每个 cluster 的 A/T/L/H/G/R、缺失类别和诊断计数；
+- `system_prompt_xray.txt`：实际使用的 X 光图说明。
+
+该阶段不调用 LocateAnything，不增加 GPU 模型调用。X-ray 仅使用 Tesseract、OpenCV
+和 NumPy 在 CPU 上生成；Stage 2 仍然只调用一次 Qwen 27B，Stage 3 recovery 保持原流程。
+
 ## 1. 实施范围
 
 当前实现位于 `qwen_module_blind_test.py`，是一个单文件命令行程序。本文件描述其 Approach、Algorithm 和函数级 Architecture，不规划目录重构，也不引入未实现的多轮推理、传统视觉检测或评估指标。

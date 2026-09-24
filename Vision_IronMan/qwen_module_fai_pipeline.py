@@ -20,6 +20,7 @@ from openai import OpenAI
 from PIL import Image, ImageDraw
 
 import qwen_fai_cluster_detector as fai
+from fai_xray import XRAY_PROMPT_APPENDIX, build_fai_xray, save_xray_result
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -787,12 +788,27 @@ def stage2_detect_fai_for_module(
     started = time.perf_counter()
 
     try:
+        xray_started = time.perf_counter()
+        module_image.save(detail_dir / "module_original.png")
+        xray = build_fai_xray(module_image)
+        xray_path = detail_dir / "xray.png"
+        xray_json_path = detail_dir / "xray.json"
+        save_xray_result(xray, xray_path, xray_json_path)
+        xray_elapsed = time.perf_counter() - xray_started
+        xray_system_prompt = fai.SYSTEM_PROMPT + XRAY_PROMPT_APPENDIX
+        (detail_dir / "system_prompt_xray.txt").write_text(
+            xray_system_prompt, encoding="utf-8"
+        )
+        log(
+            f"[Stage 2/3][{module_index}/{module_total}] CPU X-ray saved "
+            f"({len(xray.clusters)} FAI candidate(s), {xray_elapsed:.2f}s)"
+        )
         raw, metadata = call_vision_once(
             client,
             model,
-            fai.SYSTEM_PROMPT,
+            xray_system_prompt,
             fai.USER_PROMPT,
-            module_image,
+            xray.image,
             max_tokens,
             temperature,
         )
@@ -836,6 +852,12 @@ def stage2_detect_fai_for_module(
             "module_crop_path": str(module_path.relative_to(output_dir)),
             "elapsed_seconds": round(elapsed, 3),
             "response_metadata": metadata,
+            "xray_elapsed_seconds": round(xray_elapsed, 3),
+            "xray_path": str(xray_path.relative_to(output_dir)),
+            "xray_json_path": str(xray_json_path.relative_to(output_dir)),
+            "xray_debug_path": str(xray_debug_path.relative_to(output_dir)),
+            "xray_used_for_qwen": xray.use_for_qwen,
+            "xray_diagnostics": xray.diagnostics,
             "valid_cluster_count": len(clusters),
             "invalid_cluster_count": len(invalid),
             "valid_clusters": serialized,
@@ -886,6 +908,7 @@ def run(args: argparse.Namespace) -> int:
             "image_height": large_image.height,
             "endpoint": args.endpoint,
             "front_model": args.model,
+            "xray_mode": "cpu_ocr_opencv",
             "recovery_endpoint": args.recovery_endpoint or args.endpoint,
             "recovery_model": args.recovery_model,
             "module_max_tokens": args.module_max_tokens,

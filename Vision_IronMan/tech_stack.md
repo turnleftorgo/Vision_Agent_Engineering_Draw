@@ -11,6 +11,17 @@
 
 ## 2. 第三方 Python 包
 
+### `opencv-python` 与 `numpy`（Stage 2 CPU X-Ray）
+
+用途：灰度增强、Canny、Hough 线段/圆检测、轮廓和三角箭头候选提取。所有操作
+运行在 CPU，不加载 CUDA、MLX 或其他 GPU 推理框架。
+
+### Tesseract OCR（外部可执行文件）
+
+`fai_xray.py` 通过 `subprocess` 调用系统 `tesseract` 并读取 TSV，不依赖
+`pytesseract` Python 包。Tesseract 不可用时 OCR 证据为空，但 OpenCV 路径仍可
+运行。
+
 ### `openai`
 
 用途：

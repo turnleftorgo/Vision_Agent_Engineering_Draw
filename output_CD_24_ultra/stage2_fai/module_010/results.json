@@ -1,0 +1,216 @@
+{
+  "status": "ok",
+  "module_index": 10,
+  "module_crop_path": "crop1/module_010.png",
+  "elapsed_seconds": 491.785,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 4884,
+      "prompt_tokens": 4473,
+      "total_tokens": 9357,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 4473,
+      "output_tokens": 4884,
+      "total_time": 490.47
+    }
+  },
+  "xray_elapsed_seconds": 1.185,
+  "xray_path": "stage2_fai/module_010/xray.png",
+  "xray_json_path": "stage2_fai/module_010/xray.json",
+  "xray_diagnostics": {
+    "cpu_only": true,
+    "input_size": [
+      1320,
+      2068
+    ],
+    "ocr_line_count": 24,
+    "fai_marker_count": 4,
+    "opencv_line_count": 500,
+    "opencv_triangle_count": 57,
+    "opencv_annotation_frame_count": 17,
+    "cluster_count": 4
+  },
+  "valid_cluster_count": 4,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1203",
+      "spc_code": "AAC",
+      "bbox_normalized": [
+        55.0,
+        28.0,
+        805.0,
+        905.0
+      ],
+      "bbox_pixels": [
+        73,
+        58,
+        1063,
+        1872
+      ],
+      "marker_bbox_normalized": [
+        638.0,
+        28.0,
+        688.0,
+        58.0
+      ],
+      "marker_bbox_pixels": [
+        842,
+        58,
+        908,
+        120
+      ],
+      "description": "FAI 1203 / SPC AAC，尺寸 0.530，垂直引出线箭头指向左侧截面零件顶部台阶面",
+      "arrow_count": 1,
+      "target_summary": "左侧 SECTION MH-MH 截面零件的完整可见 hatched 轮廓（含顶部圆角与右上台阶）",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.78,
+      "crop_path": "crop2/module_010_FAI_1203_001.png",
+      "bbox_full_image": [
+        1323,
+        4600,
+        2313,
+        6414
+      ],
+      "recovery_key": "module_010_FAI_1203_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "1204",
+      "spc_code": "AAD",
+      "bbox_normalized": [
+        55.0,
+        132.0,
+        948.0,
+        905.0
+      ],
+      "bbox_pixels": [
+        73,
+        273,
+        1251,
+        1872
+      ],
+      "marker_bbox_normalized": [
+        672.0,
+        132.0,
+        722.0,
+        158.0
+      ],
+      "marker_bbox_pixels": [
+        887,
+        273,
+        953,
+        327
+      ],
+      "description": "FAI 1204 / SPC AAD，形位公差框 0.10 A4（半圆符号），引出线箭头指向左侧截面零件右边缘台阶面",
+      "arrow_count": 1,
+      "target_summary": "左侧 SECTION MH-MH 截面零件的完整可见 hatched 轮廓（含右上台阶与右边缘）",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.78,
+      "crop_path": "crop2/module_010_FAI_1204_002.png",
+      "bbox_full_image": [
+        1323,
+        4815,
+        2501,
+        6414
+      ],
+      "recovery_key": "module_010_FAI_1204_002"
+    },
+    {
+      "id": 3,
+      "fai_number": "1202",
+      "spc_code": "AAB",
+      "bbox_normalized": [
+        55.0,
+        190.0,
+        768.0,
+        905.0
+      ],
+      "bbox_pixels": [
+        73,
+        393,
+        1014,
+        1872
+      ],
+      "marker_bbox_normalized": [
+        603.0,
+        190.0,
+        653.0,
+        216.0
+      ],
+      "marker_bbox_pixels": [
+        796,
+        393,
+        862,
+        447
+      ],
+      "description": "FAI 1202 / SPC AAB，尺寸 0.450，水平引出线箭头指向左侧截面零件中部凹槽右壁",
+      "arrow_count": 1,
+      "target_summary": "左侧 SECTION MH-MH 截面零件的完整可见 hatched 轮廓（含中部凹槽）",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.78,
+      "crop_path": "crop2/module_010_FAI_1202_003.png",
+      "bbox_full_image": [
+        1323,
+        4935,
+        2264,
+        6414
+      ],
+      "recovery_key": "module_010_FAI_1202_003"
+    },
+    {
+      "id": 4,
+      "fai_number": "1323",
+      "spc_code": "AEM",
+      "bbox_normalized": [
+        55.0,
+        72.0,
+        545.0,
+        905.0
+      ],
+      "bbox_pixels": [
+        73,
+        149,
+        719,
+        1872
+      ],
+      "marker_bbox_normalized": [
+        313.0,
+        685.0,
+        362.0,
+        716.0
+      ],
+      "marker_bbox_pixels": [
+        413,
+        1417,
+        478,
+        1481
+      ],
+      "description": "FAI 1323 / SPC AEM，尺寸 3.76 ±0.10，水平尺寸线双箭头分别指向左侧截面零件下凸台右壁与右侧垂直界线",
+      "arrow_count": 2,
+      "target_summary": "左侧 SECTION MH-MH 截面零件的完整可见 hatched 轮廓（含下部凸台与左边缘）",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.8,
+      "crop_path": "crop2/module_010_FAI_1323_004.png",
+      "bbox_full_image": [
+        1323,
+        4691,
+        1969,
+        6414
+      ],
+      "recovery_key": "module_010_FAI_1323_004"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_010_visualization.jpg"
+}

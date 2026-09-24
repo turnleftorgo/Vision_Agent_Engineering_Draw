@@ -1,0 +1,259 @@
+{
+  "status": "ok",
+  "module_index": 9,
+  "module_crop_path": "crop1/module_009.png",
+  "elapsed_seconds": 454.257,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 4914,
+      "prompt_tokens": 4555,
+      "total_tokens": 9469,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 4555,
+      "output_tokens": 4914,
+      "total_time": 453.11
+    }
+  },
+  "xray_elapsed_seconds": 1.013,
+  "xray_path": "stage2_fai/module_009/xray.png",
+  "xray_json_path": "stage2_fai/module_009/xray.json",
+  "xray_diagnostics": {
+    "cpu_only": true,
+    "input_size": [
+      1320,
+      2136
+    ],
+    "ocr_line_count": 24,
+    "fai_marker_count": 5,
+    "opencv_line_count": 500,
+    "opencv_triangle_count": 57,
+    "opencv_annotation_frame_count": 7,
+    "cluster_count": 5
+  },
+  "valid_cluster_count": 5,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1205",
+      "spc_code": "AAE",
+      "bbox_normalized": [
+        60.0,
+        33.0,
+        825.0,
+        200.0
+      ],
+      "bbox_pixels": [
+        79,
+        70,
+        1089,
+        427
+      ],
+      "marker_bbox_normalized": [
+        662.0,
+        33.0,
+        708.0,
+        62.0
+      ],
+      "marker_bbox_pixels": [
+        874,
+        70,
+        935,
+        132
+      ],
+      "description": "尺寸 0.530，垂直双箭头测量顶部台阶高度",
+      "arrow_count": 2,
+      "target_summary": "左侧截面零件顶部台阶的两个水平面",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.8,
+      "crop_path": "crop2/module_009_FAI_1205_001.png",
+      "bbox_full_image": [
+        273,
+        4068,
+        1283,
+        4425
+      ],
+      "recovery_key": "module_009_FAI_1205_001"
+    },
+    {
+      "id": 2,
+      "fai_number": "1206",
+      "spc_code": "AAF",
+      "bbox_normalized": [
+        505.0,
+        115.0,
+        950.0,
+        200.0
+      ],
+      "bbox_pixels": [
+        667,
+        246,
+        1254,
+        427
+      ],
+      "marker_bbox_normalized": [
+        818.0,
+        118.0,
+        865.0,
+        150.0
+      ],
+      "marker_bbox_pixels": [
+        1080,
+        252,
+        1142,
+        320
+      ],
+      "description": "形位公差框 0.10 A4（半圆/轮廓度符号），引线指向台阶垂直面",
+      "arrow_count": 1,
+      "target_summary": "左侧截面零件台阶处的垂直面",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.8,
+      "crop_path": "crop2/module_009_FAI_1206_002.png",
+      "bbox_full_image": [
+        861,
+        4244,
+        1448,
+        4425
+      ],
+      "recovery_key": "module_009_FAI_1206_002"
+    },
+    {
+      "id": 3,
+      "fai_number": "1207",
+      "spc_code": "AAG",
+      "bbox_normalized": [
+        505.0,
+        175.0,
+        745.0,
+        235.0
+      ],
+      "bbox_pixels": [
+        667,
+        374,
+        983,
+        502
+      ],
+      "marker_bbox_normalized": [
+        582.0,
+        180.0,
+        628.0,
+        212.0
+      ],
+      "marker_bbox_pixels": [
+        768,
+        384,
+        829,
+        453
+      ],
+      "description": "尺寸 0.450，水平双箭头测量台阶宽度",
+      "arrow_count": 2,
+      "target_summary": "左侧截面零件台阶的垂直面与中心线之间",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.8,
+      "crop_path": "crop2/module_009_FAI_1207_003.png",
+      "bbox_full_image": [
+        861,
+        4372,
+        1177,
+        4500
+      ],
+      "recovery_key": "module_009_FAI_1207_003"
+    },
+    {
+      "id": 4,
+      "fai_number": "1208",
+      "spc_code": null,
+      "bbox_normalized": [
+        448.0,
+        250.0,
+        780.0,
+        330.0
+      ],
+      "bbox_pixels": [
+        591,
+        534,
+        1030,
+        705
+      ],
+      "marker_bbox_normalized": [
+        620.0,
+        280.0,
+        665.0,
+        310.0
+      ],
+      "marker_bbox_pixels": [
+        818,
+        598,
+        878,
+        662
+      ],
+      "description": "尺寸 0.628，水平双箭头测量小孔/槽宽度",
+      "arrow_count": 2,
+      "target_summary": "左侧截面零件中部的小孔/槽特征",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.75,
+      "crop_path": "crop2/module_009_FAI_1208_004.png",
+      "bbox_full_image": [
+        785,
+        4532,
+        1224,
+        4703
+      ],
+      "recovery_key": "module_009_FAI_1208_004"
+    },
+    {
+      "id": 5,
+      "fai_number": "1322",
+      "spc_code": "AEL",
+      "bbox_normalized": [
+        278.0,
+        420.0,
+        795.0,
+        655.0
+      ],
+      "bbox_pixels": [
+        367,
+        897,
+        1049,
+        1399
+      ],
+      "marker_bbox_normalized": [
+        632.0,
+        423.0,
+        678.0,
+        455.0
+      ],
+      "marker_bbox_pixels": [
+        834,
+        904,
+        895,
+        972
+      ],
+      "description": "尺寸 2.99 +0.10，水平双箭头测量腔体宽度",
+      "arrow_count": 2,
+      "target_summary": "左侧截面零件内部白色腔体的左右壁",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.8,
+      "crop_path": "crop2/module_009_FAI_1322_005.png",
+      "bbox_full_image": [
+        561,
+        4895,
+        1243,
+        5397
+      ],
+      "recovery_key": "module_009_FAI_1322_005"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_009_visualization.jpg"
+}

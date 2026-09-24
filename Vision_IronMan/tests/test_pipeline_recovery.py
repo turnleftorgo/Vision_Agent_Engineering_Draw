@@ -39,6 +39,14 @@ def decision(
 
 
 class RecoveryUnitTests(unittest.TestCase):
+    def test_stage2_prompt_requires_complete_engineering_chain(self) -> None:
+        prompt = pipeline.fai.SYSTEM_PROMPT
+        self.assertIn("完整工程语义链", prompt)
+        self.assertIn("ALL POINTS", prompt)
+        self.assertIn("四边审计", prompt)
+        self.assertIn("实际被测的两个表面", prompt)
+        self.assertIn("没有任何彩色辅助标记", prompt)
+
     def test_prompt_uses_general_annotation_topologies(self) -> None:
         prompt = pipeline.RECOVERY_SYSTEM_PROMPT
         self.assertIn("Direct leader or callout", prompt)

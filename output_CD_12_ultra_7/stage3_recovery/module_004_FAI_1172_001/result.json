@@ -1,0 +1,320 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_004_FAI_1172_001",
+  "module_index": 4,
+  "cluster_index": 1,
+  "fai_number": "1172",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_004_FAI_1172_001.png",
+  "refined_crop_path": "crop2_refined/module_004_FAI_1172_001.png",
+  "initial_bbox_full_image": [
+    3696,
+    1058,
+    4356,
+    1202
+  ],
+  "marker_bbox_full_image": [
+    4220,
+    1060,
+    4282,
+    1115
+  ],
+  "final_bbox_full_image": [
+    3531,
+    1058,
+    4356,
+    1497
+  ],
+  "round_count": 6,
+  "elapsed_seconds": 86.638,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        3696,
+        1058,
+        4356,
+        1202
+      ],
+      "context_bbox": [
+        3366,
+        986,
+        4686,
+        1274
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 41.170352374901995,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 1603,
+            "total_tokens": 1627,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1603,
+            "output_tokens": 24,
+            "total_time": 41.15
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3696,
+        1058,
+        4356,
+        1238
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        3696,
+        1058,
+        4356,
+        1238
+      ],
+      "context_bbox": [
+        3366,
+        968,
+        4686,
+        1328
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 7.999948582844809,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\", \"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 45,
+            "prompt_tokens": 1685,
+            "total_tokens": 1730,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1685,
+            "output_tokens": 45,
+            "total_time": 7.98
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3531,
+        1058,
+        4356,
+        1283
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        3531,
+        1058,
+        4356,
+        1283
+      ],
+      "context_bbox": [
+        3119,
+        946,
+        4768,
+        1395
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 8.484174625016749,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 41,
+            "prompt_tokens": 1962,
+            "total_tokens": 2003,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1962,
+            "output_tokens": 41,
+            "total_time": 8.47
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3531,
+        1058,
+        4356,
+        1339
+      ]
+    },
+    {
+      "round": 4,
+      "crop_before": [
+        3531,
+        1058,
+        4356,
+        1339
+      ],
+      "context_bbox": [
+        3119,
+        918,
+        4768,
+        1479
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 9.00580016686581,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 41,
+            "prompt_tokens": 2170,
+            "total_tokens": 2211,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2170,
+            "output_tokens": 41,
+            "total_time": 8.98
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3531,
+        1058,
+        4356,
+        1409
+      ]
+    },
+    {
+      "round": 5,
+      "crop_before": [
+        3531,
+        1058,
+        4356,
+        1409
+      ],
+      "context_bbox": [
+        3119,
+        882,
+        4768,
+        1585
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 9.67122787493281,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 41,
+            "prompt_tokens": 2378,
+            "total_tokens": 2419,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2378,
+            "output_tokens": 41,
+            "total_time": 9.64
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3531,
+        1058,
+        4356,
+        1497
+      ]
+    },
+    {
+      "round": 6,
+      "crop_before": [
+        3531,
+        1058,
+        4356,
+        1497
+      ],
+      "context_bbox": [
+        3119,
+        838,
+        4768,
+        1717
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.95,
+        "elapsed_seconds": 9.727848875103518,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 33,
+            "prompt_tokens": 2638,
+            "total_tokens": 2671,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2638,
+            "output_tokens": 33,
+            "total_time": 9.7
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        3531,
+        1058,
+        4356,
+        1497
+      ]
+    }
+  ]
+}

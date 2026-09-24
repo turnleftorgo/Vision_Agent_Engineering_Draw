@@ -1,0 +1,176 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_002_FAI_951_004",
+  "module_index": 2,
+  "cluster_index": 4,
+  "fai_number": "951",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_002_FAI_951_004.png",
+  "refined_crop_path": "crop2_refined/module_002_FAI_951_004.png",
+  "initial_bbox_full_image": [
+    2098,
+    765,
+    2596,
+    1173
+  ],
+  "marker_bbox_full_image": [
+    2347,
+    765,
+    2422,
+    833
+  ],
+  "final_bbox_full_image": [
+    2098,
+    765,
+    2876,
+    1275
+  ],
+  "round_count": 3,
+  "elapsed_seconds": 25.332,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        2098,
+        765,
+        2596,
+        1173
+      ],
+      "context_bbox": [
+        1849,
+        561,
+        2845,
+        1377
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "right"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 7.170188582967967,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"right\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 2039,
+            "total_tokens": 2063,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2039,
+            "output_tokens": 24,
+            "total_time": 7.14
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        2098,
+        765,
+        2720,
+        1173
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        2098,
+        765,
+        2720,
+        1173
+      ],
+      "context_bbox": [
+        1787,
+        561,
+        3031,
+        1377
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "right",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 7.897636082954705,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"right\", \"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 2247,
+            "total_tokens": 2273,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2247,
+            "output_tokens": 26,
+            "total_time": 7.88
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        2098,
+        765,
+        2876,
+        1275
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        2098,
+        765,
+        2876,
+        1275
+      ],
+      "context_bbox": [
+        1709,
+        510,
+        3265,
+        1530
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.95,
+        "elapsed_seconds": 9.90714033297263,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 33,
+            "prompt_tokens": 2801,
+            "total_tokens": 2834,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2801,
+            "output_tokens": 33,
+            "total_time": 9.88
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        2098,
+        765,
+        2876,
+        1275
+      ]
+    }
+  ]
+}

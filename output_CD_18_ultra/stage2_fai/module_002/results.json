@@ -1,0 +1,71 @@
+{
+  "status": "ok",
+  "module_index": 2,
+  "module_crop_path": "crop1/module_002.png",
+  "elapsed_seconds": 80.363,
+  "response_metadata": {
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 665,
+      "prompt_tokens": 2265,
+      "total_tokens": 2930,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cached_tokens": 0
+      },
+      "input_tokens": 2265,
+      "output_tokens": 665,
+      "total_time": 80.32
+    }
+  },
+  "valid_cluster_count": 1,
+  "invalid_cluster_count": 0,
+  "valid_clusters": [
+    {
+      "id": 1,
+      "fai_number": "1316",
+      "spc_code": "AEE",
+      "bbox_normalized": [
+        100.0,
+        90.0,
+        890.0,
+        810.0
+      ],
+      "bbox_pixels": [
+        74,
+        76,
+        659,
+        684
+      ],
+      "marker_bbox_normalized": [
+        165.0,
+        355.0,
+        245.0,
+        425.0
+      ],
+      "marker_bbox_pixels": [
+        122,
+        300,
+        181,
+        359
+      ],
+      "description": "尺寸 1.05 ±0.05",
+      "arrow_count": 2,
+      "target_summary": "右侧带有剖面线的实体结构",
+      "complete": true,
+      "missing": [],
+      "confidence": 0.95,
+      "crop_path": "crop2/module_002_FAI_1316_001.png",
+      "bbox_full_image": [
+        1200,
+        946,
+        1785,
+        1554
+      ],
+      "recovery_key": "module_002_FAI_1316_001"
+    }
+  ],
+  "invalid_clusters": [],
+  "visualization_path": "fai_visualizations/module_002_visualization.jpg"
+}

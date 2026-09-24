@@ -1,0 +1,176 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_013_FAI_207_001",
+  "module_index": 13,
+  "cluster_index": 1,
+  "fai_number": "207",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_013_FAI_207_001.png",
+  "refined_crop_path": "crop2_refined/module_013_FAI_207_001.png",
+  "initial_bbox_full_image": [
+    7361,
+    5886,
+    7809,
+    6126
+  ],
+  "marker_bbox_full_image": [
+    7594,
+    5895,
+    7659,
+    5948
+  ],
+  "final_bbox_full_image": [
+    7109,
+    5886,
+    7809,
+    6186
+  ],
+  "round_count": 3,
+  "elapsed_seconds": 29.29,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        7361,
+        5886,
+        7809,
+        6126
+      ],
+      "context_bbox": [
+        7137,
+        5766,
+        8033,
+        6246
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.93,
+        "elapsed_seconds": 14.445559874875471,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\", \"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 1653,
+            "total_tokens": 1679,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1653,
+            "output_tokens": 26,
+            "total_time": 14.42
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        7249,
+        5886,
+        7809,
+        6186
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        7249,
+        5886,
+        7809,
+        6186
+      ],
+      "context_bbox": [
+        6969,
+        5736,
+        8089,
+        6336
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.93,
+        "elapsed_seconds": 6.732291040942073,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\"], \"reason\": \"target_clipped\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 1898,
+            "total_tokens": 1922,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1898,
+            "output_tokens": 24,
+            "total_time": 6.71
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        7109,
+        5886,
+        7809,
+        6186
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        7109,
+        5886,
+        7809,
+        6186
+      ],
+      "context_bbox": [
+        6759,
+        5736,
+        8159,
+        6336
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.95,
+        "elapsed_seconds": 7.878538165939972,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 33,
+            "prompt_tokens": 2069,
+            "total_tokens": 2102,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2069,
+            "output_tokens": 33,
+            "total_time": 7.85
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        7109,
+        5886,
+        7809,
+        6186
+      ]
+    }
+  ]
+}

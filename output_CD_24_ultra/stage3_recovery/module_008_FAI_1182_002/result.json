@@ -1,0 +1,273 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_008_FAI_1182_002",
+  "module_index": 8,
+  "cluster_index": 2,
+  "fai_number": "1182",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_008_FAI_1182_002.png",
+  "refined_crop_path": "crop2_refined/module_008_FAI_1182_002.png",
+  "initial_bbox_full_image": [
+    5672,
+    3684,
+    6229,
+    3981
+  ],
+  "marker_bbox_full_image": [
+    5969,
+    3888,
+    6117,
+    3966
+  ],
+  "final_bbox_full_image": [
+    4869,
+    3684,
+    6229,
+    4148
+  ],
+  "round_count": 5,
+  "elapsed_seconds": 42.761,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        5672,
+        3684,
+        6229,
+        3981
+      ],
+      "context_bbox": [
+        5394,
+        3536,
+        6507,
+        4129
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 6.671734458068386,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 1899,
+            "total_tokens": 1923,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1899,
+            "output_tokens": 24,
+            "total_time": 6.65
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        5533,
+        3684,
+        6229,
+        3981
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        5533,
+        3684,
+        6229,
+        3981
+      ],
+      "context_bbox": [
+        5185,
+        3536,
+        6577,
+        4129
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 7.312037375057116,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\", \"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 26,
+            "prompt_tokens": 2070,
+            "total_tokens": 2096,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2070,
+            "output_tokens": 26,
+            "total_time": 7.28
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        5359,
+        3684,
+        6229,
+        4055
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        5359,
+        3684,
+        6229,
+        4055
+      ],
+      "context_bbox": [
+        4924,
+        3498,
+        6664,
+        4241
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 8.296539124799892,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 2476,
+            "total_tokens": 2500,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2476,
+            "output_tokens": 24,
+            "total_time": 8.26
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        5141,
+        3684,
+        6229,
+        4055
+      ]
+    },
+    {
+      "round": 4,
+      "crop_before": [
+        5141,
+        3684,
+        6229,
+        4055
+      ],
+      "context_bbox": [
+        4597,
+        3498,
+        6773,
+        4241
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "left",
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.9,
+        "elapsed_seconds": 9.38360850000754,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"left\", \"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.9}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 25,
+            "prompt_tokens": 2798,
+            "total_tokens": 2823,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 2798,
+            "output_tokens": 25,
+            "total_time": 9.35
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        4869,
+        3684,
+        6229,
+        4148
+      ]
+    },
+    {
+      "round": 5,
+      "crop_before": [
+        4869,
+        3684,
+        6229,
+        4148
+      ],
+      "context_bbox": [
+        4189,
+        3452,
+        6909,
+        4380
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.93,
+        "elapsed_seconds": 10.285463250009343,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.93}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 21,
+            "prompt_tokens": 3184,
+            "total_tokens": 3205,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 3184,
+            "output_tokens": 21,
+            "total_time": 10.24
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        4869,
+        3684,
+        6229,
+        4148
+      ]
+    }
+  ]
+}
