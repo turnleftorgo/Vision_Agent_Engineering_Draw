@@ -1,5 +1,26 @@
 # Qwen 图像模块盲测工具技术栈
 
+## Claw View PDF 扫描工作台
+
+- 前端：Next.js 16、React 19、TypeScript、原生 Pointer Events 与 CSS；
+- 本地 API：FastAPI、Uvicorn、`python-multipart`；
+- PDF 页面渲染：Poppler `pdftoppm`，CPU 执行；
+- 本地状态与结果：Python 标准库 `sqlite3`，WAL 模式；
+- 人工重截：Pillow 从 PDF 渲染页按像素 bbox 生成 PNG；
+- pipeline 联动：子进程 + 追加式 JSONL `refined_crop_ready` 事件；
+- 本地页面地址：`http://127.0.0.1:4173/scan`；
+- 本地 API 地址：`http://127.0.0.1:8002`。
+
+开发启动可在项目根目录执行：
+
+```bash
+python3 run_claw_view.py
+```
+
+该命令同时启动 FastAPI 和 Next.js 本地开发服务。Qwen endpoint/model 可通过
+`CLAW_VIEW_ENDPOINT`、`CLAW_VIEW_MODEL`、`CLAW_VIEW_RECOVERY_ENDPOINT`、
+`CLAW_VIEW_RECOVERY_MODEL` 环境变量覆盖。
+
 ## 1. 运行环境
 
 ### Python

@@ -1,5 +1,61 @@
 # Qwen 图像模块盲测工具实施说明
 
+## Claw View PDF 扫描工作台（已实现）
+
+### Approach
+
+网页把 PDF 处理视为一个长期运行的 scan run，而不是一次同步 HTTP 请求。上传后，
+本地后端先用 Poppler 把 PDF 逐页渲染成 PNG，再按页调用现有
+`qwen_module_fai_pipeline.py`。只有 Stage 3 已经生成且验证为有效的
+`crop2_refined` 才写入检验表；candidate 创建、恢复中的中间状态和失败结果不会显示。
+
+目前没有可靠来源的 `Project / Revision / Author / Date / Module / Nominal / USL /
+LSL / 100% / DC / Points` 全部作为 nullable 字段保留，UI 显示完整列但不填值。未来的
+“第一页检验信息抽取层”只负责更新这些字段，不改变 pipeline 的识别协议和网页表格结构。
+
+### Algorithm
+
+```text
+PDF upload
+  -> Poppler CPU render (page PNGs)
+  -> page 1..N sequential orchestration
+  -> existing module / FAI / recovery pipeline
+  -> valid crop2_refined JSONL event
+  -> SQLite record (model bbox + model crop)
+  -> table polling update, sorted by numeric FAI
+  -> row click selects the PDF page and shows an editable dashed crop box
+  -> progress view opens the Stage 1 overview, then a clickable module FAI overview
+  -> user edits the dashed bbox directly on the current large drawing
+  -> crop original rendered page
+  -> append crop revision + set user override
+  -> effective result = user result, otherwise model result
+```
+
+### Architecture
+
+```text
+web_frontend/app/scan/page.tsx
+  | POST/GET/PUT
+  v
+web_backend/app.py (FastAPI)
+  |-- ScanStore ----------------------> web_data/claw_view.sqlite3
+  |-- process_pdf_run()
+        |-- pdftoppm -----------------> web_data/runs/<id>/pages
+        |-- qwen_module_fai_pipeline.py per page
+              |-- append refined_crop_ready JSONL event
+              v
+        consume_new_events() ----------> records table
+
+manual crop PUT
+  -> crop source page with Pillow
+  -> web_data/runs/<id>/user_crops
+  -> crop_revisions + records.user_bbox/user_crop_path
+```
+
+`records` 同时保存模型版本与用户版本。接口只计算 `effective_bbox` 和
+`effective_crop_path`，优先级固定为 user > model，因此人工修改不会破坏原始模型证据，
+也不会被后续刷新覆盖。
+
 ## 0. IronMan Stage 2 CPU Structural X-Ray（新增）
 
 `qwen_module_fai_pipeline.py` 在生成 `crop2` 的第一次 27B FAI 集群识别前，

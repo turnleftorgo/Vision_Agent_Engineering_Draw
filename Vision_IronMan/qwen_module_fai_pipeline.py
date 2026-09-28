@@ -188,6 +188,9 @@ class RecoveryCandidate:
     source_crop_path: Path
     initial_box: CropBox
     marker_box: CropBox | None = None
+    spc_code: str | None = None
+    description: str = ""
+    target_summary: str = ""
 
 
 @dataclass(frozen=True)
@@ -211,6 +214,16 @@ def log(message: str) -> None:
 
 def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def append_jsonl(path: Path | None, value: dict[str, Any]) -> None:
+    """Append one UI-facing event after its referenced artifacts exist."""
+    if path is None:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(value, ensure_ascii=False) + "\n")
+        handle.flush()
 
 
 def local_box_to_global(
@@ -561,6 +574,9 @@ def recover_crop_candidate(
         "module_index": candidate.module_index,
         "cluster_index": candidate.cluster_index,
         "fai_number": candidate.fai_number,
+        "spc_code": candidate.spc_code,
+        "description": candidate.description,
+        "target_summary": candidate.target_summary,
         "model": model,
         "source_crop_path": str(candidate.source_crop_path.relative_to(output_dir)),
         "refined_crop_path": str(refined_path.relative_to(output_dir)),
@@ -743,6 +759,9 @@ def save_stage2_crops(
                     module_index=module_index,
                     cluster_index=cluster_index,
                     fai_number=cluster.fai_number,
+                    spc_code=getattr(cluster, "spc_code", None),
+                    description=getattr(cluster, "description", ""),
+                    target_summary=getattr(cluster, "target_summary", ""),
                     source_crop_path=path,
                     initial_box=local_box_to_global(
                         module_bbox, cluster.bbox_pixels
@@ -855,7 +874,6 @@ def stage2_detect_fai_for_module(
             "xray_elapsed_seconds": round(xray_elapsed, 3),
             "xray_path": str(xray_path.relative_to(output_dir)),
             "xray_json_path": str(xray_json_path.relative_to(output_dir)),
-            "xray_debug_path": str(xray_debug_path.relative_to(output_dir)),
             "xray_used_for_qwen": xray.use_for_qwen,
             "xray_diagnostics": xray.diagnostics,
             "valid_cluster_count": len(clusters),
@@ -895,6 +913,9 @@ def run(args: argparse.Namespace) -> int:
         raise FileNotFoundError(f"Input image does not exist: {image_path}")
     output_dir = Path(args.output).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
+    events_file = (
+        Path(args.events_file).expanduser().resolve() if args.events_file else None
+    )
 
     module_detector = load_module_detector()
     with Image.open(image_path) as loaded:
@@ -923,6 +944,8 @@ def run(args: argparse.Namespace) -> int:
             "recovery_step_norm": args.recovery_step_norm,
             "recovery_workers": args.recovery_workers,
             "execution": "streaming dual-model pipeline with single-agent multi-side recovery",
+            "page_index": args.page_index,
+            "page_total": args.page_total,
         },
     )
 
@@ -946,6 +969,21 @@ def run(args: argparse.Namespace) -> int:
         output_dir=output_dir,
         max_tokens=args.module_max_tokens,
         temperature=args.temperature,
+    )
+    append_jsonl(
+        events_file,
+        {
+            "type": "stage1_complete",
+            "page_index": args.page_index,
+            "page_total": args.page_total,
+            "output_dir": str(output_dir),
+            "page_image": str(image_path),
+            "page_width": large_image.width,
+            "page_height": large_image.height,
+            "module_count": len(modules),
+            "modules": stage1_result.get("valid_modules", []),
+            "visualization_path": str((output_dir / "visualization.jpg").resolve()),
+        },
     )
 
     total = len(module_paths)
@@ -985,20 +1023,43 @@ def run(args: argparse.Namespace) -> int:
         ):
             with Image.open(module_path) as loaded:
                 module_image = loaded.convert("RGB")
-            stage2_results.append(
-                stage2_detect_fai_for_module(
-                    client=front_client,
-                    model=args.model,
-                    module_image=module_image,
-                    module_path=module_path,
-                    module_bbox=module.bbox_pixels,
-                    module_index=index,
-                    module_total=total,
-                    output_dir=output_dir,
-                    max_tokens=args.fai_max_tokens,
-                    temperature=args.temperature,
-                    on_crop=submit_recovery,
-                )
+            module_result = stage2_detect_fai_for_module(
+                client=front_client,
+                model=args.model,
+                module_image=module_image,
+                module_path=module_path,
+                module_bbox=module.bbox_pixels,
+                module_index=index,
+                module_total=total,
+                output_dir=output_dir,
+                max_tokens=args.fai_max_tokens,
+                temperature=args.temperature,
+                on_crop=submit_recovery,
+            )
+            stage2_results.append(module_result)
+            module_visualization = module_result.get("visualization_path")
+            append_jsonl(
+                events_file,
+                {
+                    "type": "stage2_module_complete",
+                    "page_index": args.page_index,
+                    "page_total": args.page_total,
+                    "output_dir": str(output_dir),
+                    "page_image": str(image_path),
+                    "page_width": large_image.width,
+                    "page_height": large_image.height,
+                    "module_index": index,
+                    "module_bbox_full_image": list(module.bbox_pixels),
+                    "module_width": module_image.width,
+                    "module_height": module_image.height,
+                    "valid_cluster_count": module_result.get("valid_cluster_count", 0),
+                    "valid_clusters": module_result.get("valid_clusters", []),
+                    "visualization_path": (
+                        str((output_dir / module_visualization).resolve())
+                        if module_visualization
+                        else None
+                    ),
+                },
             )
 
         log(
@@ -1008,7 +1069,26 @@ def run(args: argparse.Namespace) -> int:
         for future in as_completed(recovery_futures):
             candidate = recovery_futures[future]
             try:
-                recovery_results.append(future.result())
+                result = future.result()
+                recovery_results.append(result)
+                refined_relative = result.get("refined_crop_path")
+                refined_exists = bool(
+                    refined_relative and (output_dir / refined_relative).is_file()
+                )
+                if result.get("valid") is True and refined_exists:
+                    append_jsonl(
+                        events_file,
+                        {
+                            "type": "refined_crop_ready",
+                            "page_index": args.page_index,
+                            "page_total": args.page_total,
+                            "output_dir": str(output_dir),
+                            "page_image": str(image_path),
+                            "page_width": large_image.width,
+                            "page_height": large_image.height,
+                            **result,
+                        },
+                    )
             except Exception as exc:
                 error_result = {
                     "status": "error",
@@ -1121,6 +1201,13 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("--timeout", type=float, default=600.0)
+    parser.add_argument(
+        "--events-file",
+        default=None,
+        help="Optional JSONL file receiving refined_crop_ready events",
+    )
+    parser.add_argument("--page-index", type=int, default=1)
+    parser.add_argument("--page-total", type=int, default=1)
     return parser
 
 

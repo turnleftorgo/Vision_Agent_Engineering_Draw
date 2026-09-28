@@ -1,0 +1,199 @@
+from __future__ import annotations
+
+import json
+import shutil
+import threading
+import uuid
+from pathlib import Path
+from typing import Any
+
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+from PIL import Image
+
+from .orchestrator import process_pdf_run
+from .store import ScanStore
+
+
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = PROJECT_DIR / "web_data"
+RUNS_DIR = DATA_DIR / "runs"
+STORE = ScanStore(DATA_DIR / "claw_view.sqlite3")
+
+app = FastAPI(title="Claw View local scan API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:4173", "http://localhost:4173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+class CropUpdate(BaseModel):
+    bbox: list[int]
+
+
+def public_record(record: dict[str, Any]) -> dict[str, Any]:
+    value = dict(record)
+    run_id = value["run_id"]
+    value["crop_url"] = f"/api/runs/{run_id}/records/{value['id']}/crop"
+    value["page_url"] = f"/api/runs/{run_id}/pages/{value['page_index']}"
+    for key in ("model_crop_path", "user_crop_path", "effective_crop_path", "source_page_path"):
+        value.pop(key, None)
+    return value
+
+
+@app.get("/api/health")
+def health() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+@app.post("/api/runs")
+def create_run(pdf: UploadFile = File(...)) -> dict[str, Any]:
+    if not pdf.filename or not pdf.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="请选择 PDF 文件")
+    run_id = uuid.uuid4().hex
+    run_dir = RUNS_DIR / run_id
+    run_dir.mkdir(parents=True, exist_ok=False)
+    pdf_path = run_dir / "source.pdf"
+    with pdf_path.open("wb") as destination:
+        shutil.copyfileobj(pdf.file, destination)
+    try:
+        if pdf_path.read_bytes()[:5] != b"%PDF-":
+            raise ValueError
+    except ValueError:
+        shutil.rmtree(run_dir)
+        raise HTTPException(status_code=400, detail="上传文件不是有效 PDF")
+    STORE.create_run(run_id, pdf.filename, pdf_path, run_dir)
+    threading.Thread(
+        target=process_pdf_run,
+        args=(STORE, run_id),
+        name=f"scan-{run_id[:8]}",
+        daemon=True,
+    ).start()
+    return {"run_id": run_id, "status": "queued"}
+
+
+@app.get("/api/runs/{run_id}")
+def get_run(run_id: str) -> dict[str, Any]:
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    run.pop("pdf_path", None)
+    run.pop("run_dir", None)
+    run["records"] = [public_record(item) for item in STORE.list_records(run_id)]
+    progress = STORE.get_progress(run_id)
+    for page in progress["pages"]:
+        page_index = page["page_index"]
+        page["overview_url"] = f"/api/runs/{run_id}/progress/{page_index}/overview"
+        for module in page["stage2_modules"].values():
+            module["visualization_url"] = (
+                f"/api/runs/{run_id}/progress/{page_index}/modules/"
+                f"{module['module_index']}"
+            )
+            module.pop("visualization_path", None)
+    run["progress"] = progress
+    return run
+
+
+@app.get("/api/runs/{run_id}/pages/{page_index}")
+def get_page(run_id: str, page_index: int) -> FileResponse:
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    pages = sorted(
+        (Path(run["run_dir"]) / "pages").glob("page-*.png"),
+        key=lambda path: int(path.stem.rsplit("-", 1)[-1]),
+    )
+    if page_index < 1 or page_index > len(pages):
+        raise HTTPException(status_code=404, detail="PDF 页面不存在")
+    return FileResponse(pages[page_index - 1], media_type="image/png")
+
+
+@app.get("/api/runs/{run_id}/records/{record_id}/crop")
+def get_crop(run_id: str, record_id: str) -> FileResponse:
+    record = STORE.get_record(run_id, record_id)
+    if not record:
+        raise HTTPException(status_code=404, detail="检验记录不存在")
+    path = Path(record["effective_crop_path"])
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="截图文件不存在")
+    return FileResponse(path, media_type="image/png")
+
+
+@app.get("/api/runs/{run_id}/progress/{page_index}/overview")
+def get_overview(run_id: str, page_index: int) -> FileResponse:
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    with STORE.connect() as db:
+        row = db.execute(
+            """SELECT overview_path FROM page_progress
+            WHERE run_id = ? AND page_index = ?""",
+            (run_id, page_index),
+        ).fetchone()
+    if not row or not row[0] or not Path(row[0]).is_file():
+        raise HTTPException(status_code=404, detail="Stage 1 总览尚未生成")
+    path = Path(row[0]).resolve()
+    if Path(run["run_dir"]).resolve() not in path.parents:
+        raise HTTPException(status_code=403, detail="无权访问该文件")
+    return FileResponse(path, media_type="image/jpeg")
+
+
+@app.get("/api/runs/{run_id}/progress/{page_index}/modules/{module_index}")
+def get_module_visualization(run_id: str, page_index: int, module_index: int) -> FileResponse:
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    with STORE.connect() as db:
+        row = db.execute(
+            """SELECT stage2_modules FROM page_progress
+            WHERE run_id = ? AND page_index = ?""",
+            (run_id, page_index),
+        ).fetchone()
+    modules = json.loads(row[0]) if row else {}
+    module = modules.get(str(module_index))
+    path = Path(module["visualization_path"]).resolve() if module and module.get("visualization_path") else None
+    if not path or not path.is_file():
+        raise HTTPException(status_code=404, detail="模块 FAI 总览尚未生成")
+    if Path(run["run_dir"]).resolve() not in path.parents:
+        raise HTTPException(status_code=403, detail="无权访问该文件")
+    return FileResponse(path, media_type="image/jpeg")
+
+
+@app.put("/api/runs/{run_id}/records/{record_id}/crop")
+def update_crop(run_id: str, record_id: str, request: CropUpdate) -> dict[str, Any]:
+    record = STORE.get_record(run_id, record_id)
+    if not record:
+        raise HTTPException(status_code=404, detail="检验记录不存在")
+    if len(request.bbox) != 4:
+        raise HTTPException(status_code=422, detail="bbox 必须有四个整数")
+    x1, y1, x2, y2 = request.bbox
+    width, height = int(record["page_width"]), int(record["page_height"])
+    x1, x2 = sorted((max(0, min(width, x1)), max(0, min(width, x2))))
+    y1, y2 = sorted((max(0, min(height, y1)), max(0, min(height, y2))))
+    if x2 - x1 < 8 or y2 - y1 < 8:
+        raise HTTPException(status_code=422, detail="截图区域过小")
+
+    source_path = Path(record["source_page_path"])
+    run = STORE.get_run(run_id)
+    if not run or not source_path.is_file():
+        raise HTTPException(status_code=404, detail="原始 PDF 页面不存在")
+    revision_dir = Path(run["run_dir"]) / "user_crops"
+    revision_dir.mkdir(parents=True, exist_ok=True)
+    existing = len(list(revision_dir.glob(f"{record_id}-*.png")))
+    crop_path = revision_dir / f"{record_id}-{existing + 1:03d}.png"
+    with Image.open(source_path) as image:
+        image.convert("RGB").crop((x1, y1, x2, y2)).save(crop_path)
+    STORE.save_user_crop(record_id, [x1, y1, x2, y2], crop_path)
+    updated = STORE.get_record(run_id, record_id)
+    return public_record(updated) if updated else {}
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("web_backend.app:app", host="127.0.0.1", port=8002, reload=True)
