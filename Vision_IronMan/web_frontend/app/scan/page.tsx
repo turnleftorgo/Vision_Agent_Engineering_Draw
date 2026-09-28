@@ -48,6 +48,7 @@ type InspectionRecord = {
 type Stage1Module = {
   bbox_pixels: Box;
   description?: string;
+  crop_url?: string;
 };
 
 type Stage2Cluster = {
@@ -90,6 +91,7 @@ type ScanRun = {
   status: 'queued' | 'rendering' | 'processing' | 'completed' | 'failed';
   total_pages: number;
   current_page: number;
+  current_module: number;
   error: string | null;
   records: InspectionRecord[];
   progress: ScanProgress;
@@ -246,6 +248,8 @@ export default function ScanPage() {
   const [uploading, setUploading] = useState(false);
   const [draggingFile, setDraggingFile] = useState(false);
   const [error, setError] = useState('');
+  const [leftWidth, setLeftWidth] = useState(60);
+  const resizeRef = useRef<{ startX: number; startWidth: number } | null>(null);
 
   const refreshRun = useCallback(async (runId: string) => {
     const response = await fetch(apiUrl(`/api/runs/${runId}`), { cache: 'no-store' });
@@ -291,8 +295,16 @@ export default function ScanPage() {
     return [...run.records].sort((a, b) => b.sequence - a.sequence)[0];
   }, [run, selectedId]);
 
+  const documentRecord = useMemo(
+    () => run?.records.find((record) => record.project || record.revision || record.author || record.drawing_date) ?? null,
+    [run],
+  );
+
   const progressPage = run?.progress.pages.find((page) => page.page_index === viewPage) ?? null;
   const activeModule = viewModule && progressPage ? progressPage.stage2_modules[String(viewModule)] : null;
+  const activeStage1Module = viewModule && progressPage
+    ? progressPage.stage1_modules[viewModule - 1] ?? null
+    : null;
 
   const saveRecord = useCallback(async (record: InspectionRecord, bbox: Box) => {
     if (!run) return;
@@ -314,6 +326,15 @@ export default function ScanPage() {
     setViewPage(record.page_index);
     setViewModule(record.module_index || null);
     setViewMode(mode);
+  };
+
+  const changePage = (requested: number) => {
+    if (!run || !Number.isFinite(requested)) return;
+    const next = Math.max(1, Math.min(run.total_pages || 1, Math.round(requested)));
+    setSelectedId(null);
+    setViewModule(null);
+    setViewPage(next);
+    setViewMode('page');
   };
 
   const moduleOverlays: Overlay[] = progressPage?.stage1_modules.map((module, index) => ({
@@ -345,13 +366,31 @@ export default function ScanPage() {
       ], activeModule.module_width, activeModule.module_height)
     : null;
 
-  const currentPage = activeRecord && viewMode === 'page' ? activeRecord.page_index : viewPage || run?.current_page || 1;
-  const progress = run?.progress;
+  const currentPage = viewPage || run?.current_page || 1;
+  const currentPageModuleCount = progressPage?.stage1_modules.length ?? 0;
+  const currentPageCandidateCount = progressPage
+    ? Object.values(progressPage.stage2_modules).reduce(
+        (sum, module) => sum + module.valid_cluster_count,
+        0,
+      )
+    : 0;
+  const currentPageCompletedModuleCount = progressPage
+    ? Object.keys(progressPage.stage2_modules).length
+    : 0;
+  const currentPageRefinedCount = run?.records.filter(
+    (record) => record.page_index === currentPage,
+  ).length ?? 0;
+  const currentPagePercent = currentPageModuleCount
+    ? Math.min(100, Math.round((currentPageCompletedModuleCount / currentPageModuleCount) * 100))
+    : 0;
 
   return (
     <main className="scan-page">
       <header className="scan-header">
-        <Link className="brand" href="/"><span className="brand-mark" aria-hidden="true">CV</span><span>Claw View</span></Link>
+        <div className="scan-brand-group">
+          <Link className="brand" href="/"><span className="brand-mark" aria-hidden="true">CV</span><span>Claw View</span></Link>
+          <Link className="back-home-link" href="/">← 主界面</Link>
+        </div>
         <div className="scan-progress" aria-live="polite">
           <span className={`status-dot status-${run?.status ?? 'idle'}`} />
           {run ? <><strong>{run.status === 'completed' ? '处理完成' : run.status === 'failed' ? '处理失败' : '正在处理'}</strong><span>第 {run.current_page || 0}/{run.total_pages || '—'} 页</span><span className="progress-file">{run.pdf_name}</span></> : <span>等待 PDF</span>}
@@ -360,36 +399,87 @@ export default function ScanPage() {
         <input ref={inputRef} className="visually-hidden" type="file" accept="application/pdf,.pdf" onChange={(event: ChangeEvent<HTMLInputElement>) => void uploadPdf(event.target.files?.[0])} />
       </header>
 
-      <section className="scan-workspace">
+      <section
+        className="scan-workspace"
+        style={{ gridTemplateColumns: `${leftWidth}% 8px minmax(0, 1fr)` }}
+      >
         <aside className="inspection-panel">
+          <div className="inspection-metadata" aria-label="图纸资料">
+            <div><span>PROJECT</span><strong>{documentRecord?.project || '—'}</strong></div>
+            <div><span>REVISION</span><strong>{documentRecord?.revision || '—'}</strong></div>
+            <div><span>AUTHOR</span><strong>{documentRecord?.author || '—'}</strong></div>
+            <div><span>DATE</span><strong>{documentRecord?.drawing_date || '—'}</strong></div>
+          </div>
           <div className="panel-heading"><div><span className="panel-kicker">INSPECTION INDEX</span><h1>检验信息</h1></div><span className="record-count">{run?.records.length ?? 0} 条</span></div>
           <div className="inspection-table-wrap"><table className="inspection-table">
-            <thead><tr><th>No.</th><th>Project</th><th>Revision</th><th>Author</th><th>Date</th><th>Module</th><th>Page</th><th>FAI</th><th>SPC</th><th>Description</th><th>Nominal</th><th>USL</th><th>LSL</th><th>100%</th><th>DC</th><th>Points</th><th>SPC截图</th></tr></thead>
+            <thead><tr><th>No.</th><th>Module</th><th>Page</th><th>FAI</th><th>SPC</th><th>Description</th><th>Nominal</th><th>USL</th><th>LSL</th><th>SPC截图</th><th>100%</th><th>DC</th><th>Points</th></tr></thead>
             <tbody>
               {run?.records.map((record, index) => (
                 <tr key={record.id} className={activeRecord?.id === record.id ? 'is-selected' : ''} onClick={() => selectRecord(record)}>
-                  <td>{index + 1}</td><td>{emptyCell(record.project)}</td><td>{emptyCell(record.revision)}</td><td>{emptyCell(record.author)}</td><td>{emptyCell(record.drawing_date)}</td><td>{emptyCell(record.module)}</td><td>page {record.page_index}</td><td className="fai-value">{emptyCell(record.fai)}</td><td>{emptyCell(record.spc)}</td><td className="description-cell">{emptyCell(record.description)}</td><td>{emptyCell(record.nominal)}</td><td>{emptyCell(record.usl)}</td><td>{emptyCell(record.lsl)}</td><td>{emptyCell(record.hundred_percent)}</td><td>{emptyCell(record.dc)}</td><td>{emptyCell(record.points)}</td>
+                  <td>{index + 1}</td><td>{emptyCell(record.module)}</td><td>page {record.page_index}</td><td className="fai-value">{emptyCell(record.fai)}</td><td>{emptyCell(record.spc)}</td><td className="description-cell">{emptyCell(record.description)}</td><td>{emptyCell(record.nominal)}</td><td>{emptyCell(record.usl)}</td><td>{emptyCell(record.lsl)}</td>
                   <td className="thumbnail-cell">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={`${apiUrl(record.crop_url)}?v=${encodeURIComponent(record.updated_at)}`} alt={`FAI ${record.fai ?? ''} 截图`} />
                     {record.user_override && <span>已修改</span>}
-                  </td>
+                  </td><td>{emptyCell(record.hundred_percent)}</td><td>{emptyCell(record.dc)}</td><td>{emptyCell(record.points)}</td>
                 </tr>
               ))}
-              {!run?.records.length && <tr className="empty-table-row"><td colSpan={17}>crop2_refined 完成后，结果会按 FAI 从小到大出现在这里</td></tr>}
+              {!run?.records.length && <tr className="empty-table-row"><td colSpan={13}>crop2_refined 完成后，结果会按 FAI 从小到大出现在这里</td></tr>}
             </tbody>
           </table></div>
         </aside>
 
+        <div
+          className="resize-divider"
+          role="separator"
+          aria-label="调整表格与图纸宽度"
+          aria-orientation="vertical"
+          aria-valuemin={30}
+          aria-valuemax={75}
+          aria-valuenow={Math.round(leftWidth)}
+          onPointerDown={(event: ReactPointerEvent<HTMLDivElement>) => {
+            event.currentTarget.setPointerCapture(event.pointerId);
+            resizeRef.current = { startX: event.clientX, startWidth: leftWidth };
+          }}
+          onPointerMove={(event: ReactPointerEvent<HTMLDivElement>) => {
+            const start = resizeRef.current;
+            const container = event.currentTarget.parentElement;
+            if (!start || !container) return;
+            const width = container.getBoundingClientRect().width;
+            const next = start.startWidth + ((event.clientX - start.startX) / width) * 100;
+            setLeftWidth(Math.max(30, Math.min(75, next)));
+          }}
+          onPointerUp={(event: ReactPointerEvent<HTMLDivElement>) => {
+            resizeRef.current = null;
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }}
+          onPointerCancel={() => { resizeRef.current = null; }}
+        />
+
         <section className={`drawing-panel ${draggingFile ? 'is-file-dragging' : ''}`} onDragOver={(event: DragEvent<HTMLElement>) => { event.preventDefault(); setDraggingFile(true); }} onDragLeave={() => setDraggingFile(false)} onDrop={(event: DragEvent<HTMLElement>) => { event.preventDefault(); setDraggingFile(false); void uploadPdf(event.dataTransfer.files?.[0]); }}>
           <div className="drawing-toolbar">
-            <div><span>{viewMode === 'overview' ? 'STAGE 1 OVERVIEW' : viewMode === 'module' ? `MODULE ${viewModule}` : 'PDF PAGE'}</span><strong>{run ? `${currentPage} / ${run.total_pages || '—'}` : '— / —'}</strong></div>
+            <div className="page-navigation">
+              <span>{viewMode === 'overview' ? 'STAGE 1 OVERVIEW' : viewMode === 'module' ? `MODULE ${viewModule}` : 'PDF PAGE'}</span>
+              <button type="button" aria-label="上一页" disabled={!run || currentPage <= 1} onClick={() => changePage(currentPage - 1)}>▲</button>
+              <input
+                aria-label="跳转到页码"
+                inputMode="numeric"
+                value={run ? currentPage : ''}
+                onChange={(event) => {
+                  const typed = Number(event.target.value);
+                  if (event.target.value && Number.isInteger(typed)) changePage(typed);
+                }}
+              />
+              <strong>/ {run?.total_pages || '—'}</strong>
+              <button type="button" aria-label="下一页" disabled={!run || currentPage >= (run.total_pages || 1)} onClick={() => changePage(currentPage + 1)}>▼</button>
+            </div>
             {run && <div className="progress-summary">
-              <span>模块 <b>{progress?.stage1_module_count ?? 0}</b></span>
-              <span>FAI <b>{progress?.candidate_count ?? 0}</b></span>
-              <span>REFINED <b>{progress?.refined_count ?? 0}</b></span>
-              <span className="progress-percent"><i style={{ width: `${progress?.percent ?? 0}%` }} /><b>{progress?.percent ?? 0}%</b></span>
-              <button type="button" onClick={() => { setViewPage(run.current_page || 1); setViewMode('overview'); }}>查看进度</button>
+              <span>模块 <b>{currentPageModuleCount}</b></span>
+              <span>FAI <b>{currentPageCandidateCount}</b></span>
+              <span>REFINED <b>{currentPageRefinedCount}</b></span>
+              <span>处理中模块 <b>{run.current_module ? `${run.current_module}/${currentPageModuleCount || '—'}` : `—/${currentPageModuleCount || '—'}`}</b></span>
+              <span className="progress-percent"><i style={{ width: `${currentPagePercent}%` }} /><b>{currentPagePercent}%</b></span>
+              <button type="button" onClick={() => { setViewModule(null); setViewMode('overview'); }}>查看进度</button>
               {viewMode !== 'page' && <button type="button" onClick={() => setViewMode('page')}>返回原图</button>}
             </div>}
           </div>
@@ -397,7 +487,7 @@ export default function ScanPage() {
           {!run ? (
             <button className="pdf-dropzone" type="button" onClick={() => inputRef.current?.click()}><span className="dropzone-symbol">＋</span><strong>拖拽 PDF 到这里</strong><small>或从本地目录选择工程图纸</small></button>
           ) : run.status === 'rendering' && !run.total_pages ? (
-            <div className="viewer-message"><span className="loader-ring" /><strong>正在渲染 PDF 页面</strong></div>
+            <div className="viewer-message"><span className="loader-ring" /><strong>正在处理 PDF 文件并传入模型</strong></div>
           ) : (
             <div className="drawing-scroll">
               {viewMode === 'overview' && progressPage?.has_overview ? (
@@ -413,6 +503,16 @@ export default function ScanPage() {
                   selectionLabel={activeRecord ? `FAI ${activeRecord.fai ?? '—'}` : undefined}
                   overlays={clusterOverlays}
                   onSave={activeRecord && moduleSelection ? async (local) => saveRecord(activeRecord, [local[0] + activeModule.module_bbox_full_image[0], local[1] + activeModule.module_bbox_full_image[1], local[2] + activeModule.module_bbox_full_image[0], local[3] + activeModule.module_bbox_full_image[1]]) : undefined}
+                />
+              ) : viewMode === 'module' && activeStage1Module?.crop_url ? (
+                <InteractiveDrawing
+                  key={`module-source-${viewPage}-${viewModule}`}
+                  imageUrl={apiUrl(activeStage1Module.crop_url)}
+                  alt={`模块 ${viewModule} FAI 检测准备中`}
+                  coordinateWidth={Math.max(1, activeStage1Module.bbox_pixels[2] - activeStage1Module.bbox_pixels[0])}
+                  coordinateHeight={Math.max(1, activeStage1Module.bbox_pixels[3] - activeStage1Module.bbox_pixels[1])}
+                  selection={null}
+                  overlays={[]}
                 />
               ) : (
                 <InteractiveDrawing

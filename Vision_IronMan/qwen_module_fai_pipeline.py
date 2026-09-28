@@ -9,6 +9,7 @@ import json
 import os
 import re
 import sys
+import threading
 import time
 from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
@@ -216,14 +217,24 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-def append_jsonl(path: Path | None, value: dict[str, Any]) -> None:
+def append_jsonl(
+    path: Path | None,
+    value: dict[str, Any],
+    lock: threading.Lock | None = None,
+) -> None:
     """Append one UI-facing event after its referenced artifacts exist."""
     if path is None:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(value, ensure_ascii=False) + "\n")
-        handle.flush()
+    if lock is None:
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(value, ensure_ascii=False) + "\n")
+            handle.flush()
+        return
+    with lock:
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(value, ensure_ascii=False) + "\n")
+            handle.flush()
 
 
 def local_box_to_global(
@@ -916,6 +927,7 @@ def run(args: argparse.Namespace) -> int:
     events_file = (
         Path(args.events_file).expanduser().resolve() if args.events_file else None
     )
+    events_lock = threading.Lock()
 
     module_detector = load_module_detector()
     with Image.open(image_path) as loaded:
@@ -984,6 +996,7 @@ def run(args: argparse.Namespace) -> int:
             "modules": stage1_result.get("valid_modules", []),
             "visualization_path": str((output_dir / "visualization.jpg").resolve()),
         },
+        lock=events_lock,
     )
 
     total = len(module_paths)
@@ -1018,9 +1031,48 @@ def run(args: argparse.Namespace) -> int:
             )
             recovery_futures[future] = candidate
 
+            def publish_when_finished(done: Future[dict[str, Any]]) -> None:
+                """Publish a valid refined artifact as soon as its worker returns."""
+                try:
+                    result = done.result()
+                except Exception:
+                    return
+                refined_relative = result.get("refined_crop_path")
+                refined_exists = bool(
+                    refined_relative and (output_dir / refined_relative).is_file()
+                )
+                if result.get("valid") is True and refined_exists:
+                    append_jsonl(
+                        events_file,
+                        {
+                            "type": "refined_crop_ready",
+                            "page_index": args.page_index,
+                            "page_total": args.page_total,
+                            "output_dir": str(output_dir),
+                            "page_image": str(image_path),
+                            "page_width": large_image.width,
+                            "page_height": large_image.height,
+                            **result,
+                        },
+                        lock=events_lock,
+                    )
+
+            future.add_done_callback(publish_when_finished)
+
         for index, (module, module_path) in enumerate(
             zip(modules, module_paths), start=1
         ):
+            append_jsonl(
+                events_file,
+                {
+                    "type": "stage2_module_started",
+                    "page_index": args.page_index,
+                    "page_total": args.page_total,
+                    "module_index": index,
+                    "module_total": total,
+                },
+                lock=events_lock,
+            )
             with Image.open(module_path) as loaded:
                 module_image = loaded.convert("RGB")
             module_result = stage2_detect_fai_for_module(
@@ -1060,6 +1112,7 @@ def run(args: argparse.Namespace) -> int:
                         else None
                     ),
                 },
+                lock=events_lock,
             )
 
         log(
@@ -1071,24 +1124,6 @@ def run(args: argparse.Namespace) -> int:
             try:
                 result = future.result()
                 recovery_results.append(result)
-                refined_relative = result.get("refined_crop_path")
-                refined_exists = bool(
-                    refined_relative and (output_dir / refined_relative).is_file()
-                )
-                if result.get("valid") is True and refined_exists:
-                    append_jsonl(
-                        events_file,
-                        {
-                            "type": "refined_crop_ready",
-                            "page_index": args.page_index,
-                            "page_total": args.page_total,
-                            "output_dir": str(output_dir),
-                            "page_image": str(image_path),
-                            "page_width": large_image.width,
-                            "page_height": large_image.height,
-                            **result,
-                        },
-                    )
             except Exception as exc:
                 error_result = {
                     "status": "error",

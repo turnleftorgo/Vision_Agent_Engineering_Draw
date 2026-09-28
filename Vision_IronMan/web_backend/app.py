@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from PIL import Image
 
-from .orchestrator import process_pdf_run
+from .orchestrator import process_pdf_run, run_log
 from .store import ScanStore
 
 
@@ -74,6 +74,7 @@ def create_run(pdf: UploadFile = File(...)) -> dict[str, Any]:
         name=f"scan-{run_id[:8]}",
         daemon=True,
     ).start()
+    run_log(run_id, f"frontend uploaded PDF: {pdf.filename}", component="API")
     return {"run_id": run_id, "status": "queued"}
 
 
@@ -89,6 +90,11 @@ def get_run(run_id: str) -> dict[str, Any]:
     for page in progress["pages"]:
         page_index = page["page_index"]
         page["overview_url"] = f"/api/runs/{run_id}/progress/{page_index}/overview"
+        for module_index, stage1_module in enumerate(page["stage1_modules"], start=1):
+            stage1_module["crop_url"] = (
+                f"/api/runs/{run_id}/progress/{page_index}/modules/"
+                f"{module_index}/source"
+            )
         for module in page["stage2_modules"].values():
             module["visualization_url"] = (
                 f"/api/runs/{run_id}/progress/{page_index}/modules/"
@@ -97,6 +103,30 @@ def get_run(run_id: str) -> dict[str, Any]:
             module.pop("visualization_path", None)
     run["progress"] = progress
     return run
+
+
+@app.get("/api/runs/{run_id}/progress/{page_index}/modules/{module_index}/source")
+def get_stage1_module_crop(run_id: str, page_index: int, module_index: int) -> FileResponse:
+    """Return the Stage 1 module crop even before Stage 2 FAI detection finishes."""
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    with STORE.connect() as db:
+        row = db.execute(
+            """SELECT stage1_modules FROM page_progress
+            WHERE run_id = ? AND page_index = ?""",
+            (run_id, page_index),
+        ).fetchone()
+    modules = json.loads(row[0]) if row else []
+    if module_index < 1 or module_index > len(modules):
+        raise HTTPException(status_code=404, detail="模块不存在")
+    crop_path = modules[module_index - 1].get("crop_path")
+    if not crop_path:
+        raise HTTPException(status_code=404, detail="模块截图尚未生成")
+    path = (Path(run["run_dir"]) / "pipeline" / f"page_{page_index:04d}" / crop_path).resolve()
+    if Path(run["run_dir"]).resolve() not in path.parents or not path.is_file():
+        raise HTTPException(status_code=404, detail="模块截图不存在")
+    return FileResponse(path, media_type="image/png")
 
 
 @app.get("/api/runs/{run_id}/pages/{page_index}")
@@ -190,10 +220,21 @@ def update_crop(run_id: str, record_id: str, request: CropUpdate) -> dict[str, A
         image.convert("RGB").crop((x1, y1, x2, y2)).save(crop_path)
     STORE.save_user_crop(record_id, [x1, y1, x2, y2], crop_path)
     updated = STORE.get_record(run_id, record_id)
+    run_log(
+        run_id,
+        f"frontend saved crop override: record={record_id}, bbox={[x1, y1, x2, y2]}",
+        component="API",
+    )
     return public_record(updated) if updated else {}
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("web_backend.app:app", host="127.0.0.1", port=8002, reload=True)
+    uvicorn.run(
+        "web_backend.app:app",
+        host="127.0.0.1",
+        port=8002,
+        reload=True,
+        access_log=False,
+    )

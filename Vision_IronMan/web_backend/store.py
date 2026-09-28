@@ -37,6 +37,7 @@ class ScanStore:
                     status TEXT NOT NULL,
                     total_pages INTEGER NOT NULL DEFAULT 0,
                     current_page INTEGER NOT NULL DEFAULT 0,
+                    current_module INTEGER NOT NULL DEFAULT 0,
                     error TEXT,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
@@ -102,6 +103,13 @@ class ScanStore:
             }
             if "module_index" not in record_columns:
                 db.execute("ALTER TABLE records ADD COLUMN module_index INTEGER")
+            run_columns = {
+                row[1] for row in db.execute("PRAGMA table_info(runs)").fetchall()
+            }
+            if "current_module" not in run_columns:
+                db.execute(
+                    "ALTER TABLE runs ADD COLUMN current_module INTEGER NOT NULL DEFAULT 0"
+                )
 
     def create_run(self, run_id: str, pdf_name: str, pdf_path: Path, run_dir: Path) -> None:
         now = utc_now()
@@ -114,7 +122,13 @@ class ScanStore:
             )
 
     def update_run(self, run_id: str, **fields: Any) -> None:
-        allowed = {"status", "total_pages", "current_page", "error"}
+        allowed = {
+            "status",
+            "total_pages",
+            "current_page",
+            "current_module",
+            "error",
+        }
         values = {key: value for key, value in fields.items() if key in allowed}
         values["updated_at"] = utc_now()
         assignments = ", ".join(f"{key} = ?" for key in values)

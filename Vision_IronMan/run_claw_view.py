@@ -13,7 +13,18 @@ PROJECT_DIR = Path(__file__).resolve().parent
 def main() -> int:
     processes = [
         subprocess.Popen(
-            [sys.executable, "-m", "uvicorn", "web_backend.app:app", "--host", "127.0.0.1", "--port", "8002", "--reload"],
+            [
+                sys.executable,
+                "-m",
+                "uvicorn",
+                "web_backend.app:app",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                "8002",
+                "--reload",
+                "--no-access-log",
+            ],
             cwd=PROJECT_DIR,
         ),
         subprocess.Popen(
@@ -46,4 +57,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
