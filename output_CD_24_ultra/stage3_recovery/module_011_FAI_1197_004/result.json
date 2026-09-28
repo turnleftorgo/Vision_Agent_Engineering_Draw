@@ -1,0 +1,175 @@
+{
+  "status": "finished",
+  "valid": true,
+  "candidate_key": "module_011_FAI_1197_004",
+  "module_index": 11,
+  "cluster_index": 4,
+  "fai_number": "1197",
+  "model": "Qwen3.8-27B-MLX-8bit",
+  "source_crop_path": "crop2/module_011_FAI_1197_004.png",
+  "refined_crop_path": "crop2_refined/module_011_FAI_1197_004.png",
+  "initial_bbox_full_image": [
+    2857,
+    5782,
+    3231,
+    5982
+  ],
+  "marker_bbox_full_image": [
+    3011,
+    5875,
+    3077,
+    5939
+  ],
+  "final_bbox_full_image": [
+    2857,
+    5720,
+    3231,
+    6032
+  ],
+  "round_count": 3,
+  "elapsed_seconds": 19.828,
+  "rounds": [
+    {
+      "round": 1,
+      "crop_before": [
+        2857,
+        5782,
+        3231,
+        5982
+      ],
+      "context_bbox": [
+        2670,
+        5682,
+        3418,
+        6082
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "down"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 5.673459167126566,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"down\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 24,
+            "prompt_tokens": 1510,
+            "total_tokens": 1534,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1510,
+            "output_tokens": 24,
+            "total_time": 5.66
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        2857,
+        5782,
+        3231,
+        6032
+      ]
+    },
+    {
+      "round": 2,
+      "crop_before": [
+        2857,
+        5782,
+        3231,
+        6032
+      ],
+      "context_bbox": [
+        2670,
+        5657,
+        3418,
+        6157
+      ],
+      "decision": {
+        "action": "expand",
+        "expand_sides": [
+          "up"
+        ],
+        "reason": "target_clipped",
+        "confidence": 0.95,
+        "elapsed_seconds": 7.1497173751704395,
+        "raw_response": "{\"action\": \"expand\", \"expand_sides\": [\"up\"], \"reason\": \"target_clipped\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 41,
+            "prompt_tokens": 1602,
+            "total_tokens": 1643,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1602,
+            "output_tokens": 41,
+            "total_time": 7.13
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        2857,
+        5720,
+        3231,
+        6032
+      ]
+    },
+    {
+      "round": 3,
+      "crop_before": [
+        2857,
+        5720,
+        3231,
+        6032
+      ],
+      "context_bbox": [
+        2670,
+        5564,
+        3418,
+        6188
+      ],
+      "decision": {
+        "action": "finish",
+        "expand_sides": [],
+        "reason": "complete",
+        "confidence": 0.95,
+        "elapsed_seconds": 6.8130510409828275,
+        "raw_response": "{\"action\": \"finish\", \"expand_sides\": [], \"reason\": \"complete\", \"confidence\": 0.95}",
+        "metadata": {
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 33,
+            "prompt_tokens": 1694,
+            "total_tokens": 1727,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0
+            },
+            "input_tokens": 1694,
+            "output_tokens": 33,
+            "total_time": 6.79
+          }
+        },
+        "error": null
+      },
+      "crop_after": [
+        2857,
+        5720,
+        3231,
+        6032
+      ]
+    }
+  ]
+}

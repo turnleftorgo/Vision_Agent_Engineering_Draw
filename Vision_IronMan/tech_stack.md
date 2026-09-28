@@ -42,6 +42,13 @@ client.chat.completions.create(...)
 
 因此需要支持 `OpenAI` client 类和 Chat Completions 接口的 SDK 版本。
 
+### `httpx`（可选 API 代理）
+
+`qwen_module_blind_test V2.py` 可通过 `--proxy` 或 `MODEL_API_PROXY` 为单次
+OpenAI-compatible API 请求配置 HTTP、HTTPS 或 SOCKS5 代理。代理仅绑定到该脚本
+创建的 HTTP client，不修改系统全局代理；写入 `run_config.json` 前会隐藏代理用户名
+和密码。SOCKS5 代理需要安装 `httpx[socks]`。
+
 ### `Pillow`
 
 导入名称为 `PIL`，用途包括：

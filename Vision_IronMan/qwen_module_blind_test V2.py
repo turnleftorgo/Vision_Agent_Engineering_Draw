@@ -20,14 +20,23 @@ import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit, urlunsplit
 
+import httpx
 from openai import OpenAI
 from PIL import Image, ImageDraw
 
 
-DEFAULT_ENDPOINT = "http://127.0.0.1:8001/v1"
-DEFAULT_MODEL = "Qwen3.8-27B-MLX-8bit"
-DEFAULT_API_KEY = "anything"
+DEFAULT_ENDPOINT = os.environ.get("MODEL_API_ENDPOINT", "https://api.xiaomimimo.com/v1")
+DEFAULT_MODEL = os.environ.get("MODEL_API_MODEL", "mimo-v2.5")
+DEFAULT_API_KEY = os.environ.get(
+    "MODEL_API_KEY",
+    os.environ.get("VLM_API_KEY", "sk-cgayvs8vn3jre59ttn1eulvgbw0j5uzjd8knfnvywfxffni2"),
+)
+DEFAULT_PROXY = os.environ.get("MODEL_API_PROXY")
+
+# Dify chat apps require an arbitrary stable end-user identifier per request.
+DIFY_USER_ID = "blind-test-user"
 
 SYSTEM_PROMPT = """你是一个图像区域分析器。
 
@@ -250,8 +259,118 @@ def call_qwen(
     return (response.choices[0].message.content or "").strip()
 
 
+def call_dify(
+    endpoint: str,
+    api_key: str,
+    image: Image.Image,
+    proxy: str | None,
+    timeout: float,
+) -> str:
+    """Call a Dify advanced-chat app: upload the image, then send one message.
+
+    A Dify app is not a raw model API, so the full prompt travels inside the
+    user message (query) and the image is attached through the file-upload
+    flow.  The model name is fixed by the app itself and ignored here.
+    """
+
+    base = endpoint.rstrip("/")
+    headers = {"Authorization": f"Bearer {api_key}"}
+    client_kwargs: dict[str, Any] = {"timeout": timeout, "follow_redirects": True}
+    if proxy:
+        client_kwargs["proxy"] = proxy
+        client_kwargs["trust_env"] = False
+    client = httpx.Client(**client_kwargs)
+
+    with client:
+        buffer = io.BytesIO()
+        image.convert("RGB").save(buffer, format="PNG")
+        upload = client.post(
+            f"{base}/files/upload",
+            headers=headers,
+            files={"file": ("blind_test.png", buffer.getvalue(), "image/png")},
+            data={"user": DIFY_USER_ID},
+        )
+        if upload.status_code != 200:
+            raise RuntimeError(
+                f"Dify file upload failed ({upload.status_code}): {upload.text}"
+            )
+        upload_id = upload.json()["id"]
+
+        payload = {
+            "inputs": {},
+            "query": f"{SYSTEM_PROMPT}\n\n{USER_PROMPT}",
+            "response_mode": "blocking",
+            "user": DIFY_USER_ID,
+            "files": [
+                {
+                    "type": "image",
+                    "transfer_method": "local_file",
+                    "upload_file_id": upload_id,
+                }
+            ],
+        }
+        response = client.post(
+            f"{base}/chat-messages",
+            headers={**headers, "Content-Type": "application/json"},
+            json=payload,
+        )
+        if response.status_code != 200:
+            raise RuntimeError(
+                f"Dify chat request failed ({response.status_code}): {response.text}"
+            )
+        return (response.json().get("answer") or "").strip()
+
+
 def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def sanitized_proxy_url(proxy: str | None) -> str | None:
+    """Remove proxy credentials before saving the run configuration."""
+
+    if not proxy:
+        return None
+    parsed = urlsplit(proxy)
+    if not parsed.hostname:
+        return proxy
+    host = parsed.hostname
+    if ":" in host and not host.startswith("["):
+        host = f"[{host}]"
+    netloc = host
+    if parsed.port is not None:
+        netloc = f"{netloc}:{parsed.port}"
+    if parsed.username is not None or parsed.password is not None:
+        netloc = f"***:***@{netloc}"
+    return urlunsplit((parsed.scheme, netloc, parsed.path, parsed.query, parsed.fragment))
+
+
+def build_api_client(
+    *,
+    endpoint: str,
+    api_key: str,
+    timeout: float,
+    proxy: str | None,
+) -> OpenAI:
+    """Create an OpenAI-compatible client with an optional per-run proxy."""
+
+    if proxy:
+        http_client = httpx.Client(
+            proxy=proxy,
+            timeout=timeout,
+            follow_redirects=True,
+            trust_env=False,
+        )
+        return OpenAI(
+            base_url=endpoint,
+            api_key=api_key,
+            timeout=timeout,
+            http_client=http_client,
+        )
+    return OpenAI(
+        base_url=endpoint,
+        api_key=api_key,
+        timeout=timeout,
+    )
 
 
 def run(args: argparse.Namespace) -> int:
@@ -274,8 +393,11 @@ def run(args: argparse.Namespace) -> int:
             "input_image": str(image_path),
             "image_width": width,
             "image_height": height,
+            "api_style": args.api_style,
             "endpoint": args.endpoint,
-            "model": args.model,
+            "model": args.model if args.api_style == "openai" else None,
+            "proxy_enabled": bool(args.proxy),
+            "proxy": sanitized_proxy_url(args.proxy),
             "max_tokens": args.max_tokens,
             "temperature": args.temperature,
             "coordinate_system": "normalized 0..1000",
@@ -284,20 +406,32 @@ def run(args: argparse.Namespace) -> int:
         },
     )
 
-    client = OpenAI(
-        base_url=args.endpoint,
-        api_key=args.api_key,
-        timeout=args.timeout,
-    )
-
     started = time.perf_counter()
-    raw_response = call_qwen(
-        client,
-        args.model,
-        image,
-        max_tokens=args.max_tokens,
-        temperature=args.temperature,
-    )
+    if args.api_style == "dify":
+        raw_response = call_dify(
+            endpoint=args.endpoint,
+            api_key=args.api_key,
+            image=image,
+            proxy=args.proxy,
+            timeout=args.timeout,
+        )
+    else:
+        client = build_api_client(
+            endpoint=args.endpoint,
+            api_key=args.api_key,
+            timeout=args.timeout,
+            proxy=args.proxy,
+        )
+        try:
+            raw_response = call_qwen(
+                client,
+                args.model,
+                image,
+                max_tokens=args.max_tokens,
+                temperature=args.temperature,
+            )
+        finally:
+            client.close()
     elapsed = time.perf_counter() - started
     (output_dir / "raw_response.txt").write_text(raw_response, encoding="utf-8")
 
@@ -381,12 +515,40 @@ def build_parser() -> argparse.ArgumentParser:
         default="output_module_blind_test",
         help="Output directory (default: output_module_blind_test)",
     )
-    parser.add_argument("--endpoint", default=DEFAULT_ENDPOINT)
+    parser.add_argument(
+        "--endpoint",
+        default=DEFAULT_ENDPOINT,
+        help="OpenAI-compatible API base URL (or MODEL_API_ENDPOINT)",
+    )
     parser.add_argument(
         "--api-key",
-        default=os.environ.get("LOCAL_VLM_API_KEY", DEFAULT_API_KEY),
+        default=DEFAULT_API_KEY,
+        help="API key (or MODEL_API_KEY / LOCAL_VLM_API_KEY)",
     )
-    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument(
+        "--model",
+        default=DEFAULT_MODEL,
+        help="Remote model name (or MODEL_API_MODEL)",
+    )
+    parser.add_argument(
+        "--proxy",
+        default=DEFAULT_PROXY,
+        help=(
+            "Per-run HTTP/HTTPS/SOCKS5 proxy URL; credentials may be embedded "
+            "in the URL (or set MODEL_API_PROXY)"
+        ),
+    )
+    parser.add_argument(
+        "--api-style",
+        choices=["openai", "dify"],
+        default="openai",
+        help=(
+            "openai: OpenAI-compatible chat completions (default). "
+            "dify: Dify advanced-chat app; --endpoint must be the Dify base URL "
+            "(e.g. http://host:8080/v1), the image is uploaded via /files/upload, "
+            "and --model/--max-tokens/--temperature are ignored (fixed by the app)"
+        ),
+    )
     parser.add_argument("--max-tokens", type=int, default=8192)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--timeout", type=float, default=300.0)
