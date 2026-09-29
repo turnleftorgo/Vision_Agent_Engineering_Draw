@@ -196,3 +196,51 @@ python Vision_IronMan/qwen_module_blind_test.py input.png \
 export LOCAL_VLM_API_KEY="your-key"
 python Vision_IronMan/qwen_module_blind_test.py input.png
 ```
+
+
+## Claw View 工作台新增功能技术栈
+
+### 字段编辑和持久化
+
+- 前端：React 19 client component，受控单元格输入，调用现有 FastAPI 服务。
+- API：FastAPI `PATCH` 记录字段接口，Pydantic 请求校验与字段白名单。
+- 存储：SQLite 现有 `records` 表保存行级字段；`runs` 表保存 Project、Revision、Author、Date 默认值，保证扫描中后续产生的记录也继承图纸资料。不新增编辑副本表。
+
+### Excel 文件生成
+
+- `openpyxl` 用于在后端生成 `.xlsx`、设置单元格样式和嵌入 PNG 截图。
+- FastAPI `StreamingResponse` 返回内存中的工作簿；文件名按 PDF 名称安全化。
+- 新增 Python 依赖：`openpyxl>=3.1`。
+
+### 面板与滚动
+
+- CSS Grid、React pointer events 管理可拖分隔线。
+- CSS `overflow-y` 分别管理左右滚动容器；默认弱化/隐藏滚动条，在分隔线 hover/focus 时显示。
+- 表格采用固定布局和列宽策略，避免横向滚动；长文本换行，截图按单元格约束缩放。
+- 不增加前端 UI 或 Excel 导出依赖。
+
+## 精修框与局部放大实现
+
+- React 19 负责唯一选中框状态及框内的放大镜/返回控件。
+- 精修框数据仅由 FastAPI 返回的 `records` 提供；大图使用记录的有效全页 bbox，部件图从记录 bbox 和模块原点换算局部 bbox。
+- Canvas 2D 在当前图像像素上提取带上下文的焦点窗口；不新增图片处理依赖或后端截图接口。
+- 焦点视图坐标经窗口原点偏移还原至全图坐标后复用现有 crop 更新 API。
+- 只读部件全览继续使用后端生成的 Stage 1 overview JPEG；它与精修记录 overlay 分开渲染，不进入精修框编辑/放大交互。
+- 全览图上的透明绝对定位按钮复用 `stage1_modules[].bbox_pixels` 作为命中区域，切换到相应的原始 module crop 视图；按钮本身不成为检验框。
+- 大图 overlay 不从全部 `records` 生成；用独立表格选中标记控制单条 selected record 的 bbox，避免表格外选择或普通全图浏览触发整页框群。
+
+## 任务恢复与后端实例隔离
+
+- FastAPI 进程以 UUID 生成 `backend_instance_id`；健康检查和任务创建响应提供实例 ID。
+- SQLite `runs` 表保存任务所属实例；服务启动时将旧实例未完成任务标记为 `interrupted`。
+- 所有任务详情、记录编辑、图片资源和 Excel 导出路由处理前校验 run 所属实例；不匹配时返回 HTTP 410。
+- 浏览器 `localStorage` 保存 `{run_id, backend_instance_id}`；重新挂载后先请求 health，再恢复任务和轮询。
+- 网络错误只暂停轮询并触发指数退避，不清除任务；明确发现实例变化/旧任务中断后才清理本地任务状态。
+- 使用 Python `uuid`、SQLite 迁移及浏览器原生存储/Fetch API，不新增依赖。
+
+## SPC 预览浮层与取景
+
+- 使用 React 19 的 `createPortal` 将截图浮层挂到 `document.body`，避开左侧表格的 overflow 裁剪；通过 DOM `getBoundingClientRect` 定位。
+- 浮层直接读取现有 `crop_url` PNG，CSS `object-fit: contain` 保证完整显示，并用 `updated_at` 进行缓存版本控制；不新增后端接口或依赖。
+- 右侧继续使用现有 Canvas 和原图坐标系，仅将焦点窗口宽高系数调整为 3.0；局部框拖动/保存协议不变。
+- 浮层垂直布局依赖当前 `<tr>` 的 `getBoundingClientRect().top` 和截图区域的动态 `max-height`；图片以 `object-fit: contain` 缩到上方可用空间，避免浮层进入当前行。

@@ -1,17 +1,23 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import threading
 import uuid
+from io import BytesIO
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
 from PIL import Image
+from openpyxl import Workbook
+from openpyxl.drawing.image import Image as ExcelImage
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 from .orchestrator import process_pdf_run, run_log
 from .store import ScanStore
@@ -20,7 +26,8 @@ from .store import ScanStore
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_DIR / "web_data"
 RUNS_DIR = DATA_DIR / "runs"
-STORE = ScanStore(DATA_DIR / "claw_view.sqlite3")
+BACKEND_INSTANCE_ID = uuid.uuid4().hex
+STORE = ScanStore(DATA_DIR / "claw_view.sqlite3", BACKEND_INSTANCE_ID)
 
 app = FastAPI(title="Claw View local scan API")
 app.add_middleware(
@@ -32,8 +39,32 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def reject_runs_from_previous_backend(request, call_next):
+    path_parts = request.url.path.strip("/").split("/")
+    if len(path_parts) >= 3 and path_parts[:2] == ["api", "runs"]:
+        run_id = path_parts[2]
+        run = STORE.get_run(run_id)
+        if run and run.get("backend_instance_id") != BACKEND_INSTANCE_ID:
+            return JSONResponse(
+                status_code=410,
+                content={"detail": "该任务属于已停止的后端进程，无法恢复"},
+            )
+    return await call_next(request)
+
+
 class CropUpdate(BaseModel):
     bbox: list[int]
+
+
+class RecordFieldUpdate(BaseModel):
+    field: str
+    value: str | None
+
+
+class MetadataUpdate(BaseModel):
+    field: str
+    value: str | None
 
 
 def public_record(record: dict[str, Any]) -> dict[str, Any]:
@@ -48,7 +79,7 @@ def public_record(record: dict[str, Any]) -> dict[str, Any]:
 
 @app.get("/api/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "backend_instance_id": BACKEND_INSTANCE_ID}
 
 
 @app.post("/api/runs")
@@ -75,7 +106,11 @@ def create_run(pdf: UploadFile = File(...)) -> dict[str, Any]:
         daemon=True,
     ).start()
     run_log(run_id, f"frontend uploaded PDF: {pdf.filename}", component="API")
-    return {"run_id": run_id, "status": "queued"}
+    return {
+        "run_id": run_id,
+        "status": "queued",
+        "backend_instance_id": BACKEND_INSTANCE_ID,
+    }
 
 
 @app.get("/api/runs/{run_id}")
@@ -103,6 +138,87 @@ def get_run(run_id: str) -> dict[str, Any]:
             module.pop("visualization_path", None)
     run["progress"] = progress
     return run
+
+
+@app.patch("/api/runs/{run_id}/records/{record_id}")
+def update_record(run_id: str, record_id: str, request: RecordFieldUpdate) -> dict[str, Any]:
+    if not STORE.get_record(run_id, record_id):
+        raise HTTPException(status_code=404, detail="检验记录不存在")
+    try:
+        record = STORE.update_record_fields(run_id, record_id, {request.field: request.value})
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return public_record(record) if record else {}
+
+
+@app.patch("/api/runs/{run_id}/metadata")
+def update_metadata(run_id: str, request: MetadataUpdate) -> dict[str, str]:
+    if not STORE.get_run(run_id):
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    try:
+        STORE.update_run_metadata(run_id, request.field, request.value)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return {"status": "ok"}
+
+
+@app.get("/api/runs/{run_id}/export.xlsx")
+def export_run_xlsx(run_id: str) -> StreamingResponse:
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    records = STORE.list_records(run_id)
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Inspection"
+    headers = [
+        "No.", "Project", "Revision", "Author", "Date", "Module", "Page",
+        "FAI", "SPC", "Description", "Nominal", "USL", "LSL", "100%",
+        "DC", "Points", "SPC截图",
+    ]
+    sheet.append(headers)
+    header_fill = PatternFill("solid", fgColor="A8C7E4")
+    thin = Side(style="thin", color="222222")
+    for cell in sheet[1]:
+        cell.fill = header_fill
+        cell.font = Font(bold=True, size=10)
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.border = Border(left=thin, right=thin, top=thin, bottom=thin)
+    widths = [7, 18, 14, 18, 13, 24, 9, 9, 12, 34, 14, 10, 10, 10, 10, 22, 38]
+    for index, width in enumerate(widths, start=1):
+        sheet.column_dimensions[chr(64 + index)].width = width
+    for number, record in enumerate(records, start=1):
+        row = number + 1
+        sheet.append([
+            number, record.get("project"), record.get("revision"), record.get("author"),
+            record.get("drawing_date"), record.get("module"), f"page {record['page_index']}",
+            record.get("fai"), record.get("spc"), record.get("description"),
+            record.get("nominal"), record.get("usl"), record.get("lsl"),
+            record.get("hundred_percent"), record.get("dc"), record.get("points"), None,
+        ])
+        sheet.row_dimensions[row].height = 52
+        for cell in sheet[row]:
+            cell.alignment = Alignment(vertical="center", wrap_text=True)
+            cell.border = Border(left=thin, right=thin, top=thin, bottom=thin)
+        image_path = Path(record["effective_crop_path"])
+        if image_path.is_file():
+            image = ExcelImage(str(image_path))
+            scale = min(250 / image.width, 48 / image.height)
+            image.width *= scale
+            image.height *= scale
+            sheet.add_image(image, f"Q{row}")
+    sheet.freeze_panes = "A2"
+    sheet.auto_filter.ref = sheet.dimensions
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+    base_name = re.sub(r"[^A-Za-z0-9._-]+", "_", Path(run["pdf_name"]).stem).strip("._") or "inspection"
+    filename = f"{base_name}_inspection.xlsx"
+    return StreamingResponse(
+        output,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename={filename}; filename*=UTF-8''{quote(filename)}"},
+    )
 
 
 @app.get("/api/runs/{run_id}/progress/{page_index}/modules/{module_index}/source")

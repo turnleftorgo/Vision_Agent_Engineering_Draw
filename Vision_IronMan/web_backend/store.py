@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -14,8 +15,9 @@ def utc_now() -> str:
 class ScanStore:
     """SQLite persistence with nullable columns reserved for future extraction."""
 
-    def __init__(self, database_path: Path) -> None:
+    def __init__(self, database_path: Path, backend_instance_id: str | None = None) -> None:
         self.database_path = database_path
+        self.backend_instance_id = backend_instance_id or uuid.uuid4().hex
         database_path.parent.mkdir(parents=True, exist_ok=True)
         self._initialize()
 
@@ -39,6 +41,10 @@ class ScanStore:
                     current_page INTEGER NOT NULL DEFAULT 0,
                     current_module INTEGER NOT NULL DEFAULT 0,
                     error TEXT,
+                    project TEXT,
+                    revision TEXT,
+                    author TEXT,
+                    drawing_date TEXT,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
                 );
@@ -110,15 +116,28 @@ class ScanStore:
                 db.execute(
                     "ALTER TABLE runs ADD COLUMN current_module INTEGER NOT NULL DEFAULT 0"
                 )
+            for column in ("project", "revision", "author", "drawing_date"):
+                if column not in run_columns:
+                    db.execute(f"ALTER TABLE runs ADD COLUMN {column} TEXT")
+            if "backend_instance_id" not in run_columns:
+                db.execute("ALTER TABLE runs ADD COLUMN backend_instance_id TEXT")
+            db.execute(
+                """UPDATE runs SET status = 'interrupted',
+                    error = 'Backend process restarted; this task cannot be resumed.',
+                    updated_at = ?
+                WHERE status IN ('queued', 'rendering', 'processing')
+                  AND (backend_instance_id IS NULL OR backend_instance_id != ?)""",
+                (utc_now(), self.backend_instance_id),
+            )
 
     def create_run(self, run_id: str, pdf_name: str, pdf_path: Path, run_dir: Path) -> None:
         now = utc_now()
         with self.connect() as db:
             db.execute(
                 """INSERT INTO runs
-                (id, pdf_name, pdf_path, run_dir, status, created_at, updated_at)
-                VALUES (?, ?, ?, ?, 'queued', ?, ?)""",
-                (run_id, pdf_name, str(pdf_path), str(run_dir), now, now),
+                (id, pdf_name, pdf_path, run_dir, status, backend_instance_id, created_at, updated_at)
+                VALUES (?, ?, ?, ?, 'queued', ?, ?, ?)""",
+                (run_id, pdf_name, str(pdf_path), str(run_dir), self.backend_instance_id, now, now),
             )
 
     def update_run(self, run_id: str, **fields: Any) -> None:
@@ -147,6 +166,10 @@ class ScanStore:
         record_id = f"{run_id}-p{event['page_index']}-{event['candidate_key']}"
         now = utc_now()
         with self.connect() as db:
+            metadata = db.execute(
+                "SELECT project, revision, author, drawing_date FROM runs WHERE id = ?",
+                (run_id,),
+            ).fetchone()
             sequence = db.execute(
                 "SELECT COUNT(*) FROM records WHERE run_id = ?", (run_id,)
             ).fetchone()[0] + 1
@@ -160,7 +183,7 @@ class ScanStore:
                     marker_bbox, source_page_path, created_at, updated_at
                 ) VALUES (
                     ?, ?, ?, ?,
-                    NULL, NULL, NULL, NULL, NULL, ?,
+                    ?, ?, ?, ?, NULL, ?,
                     ?, ?, ?, ?,
                     NULL, NULL, NULL, NULL, NULL, NULL,
                     ?, ?, ?, ?, ?, ?, ?, ?
@@ -183,6 +206,7 @@ class ScanStore:
                     run_id,
                     event["candidate_key"],
                     sequence,
+                    *(tuple(metadata) if metadata else (None, None, None, None)),
                     int(event.get("module_index") or 0),
                     int(event["page_index"]),
                     event.get("fai_number"),
@@ -324,6 +348,38 @@ class ScanStore:
                 (run_id, record_id),
             ).fetchone()
         return self._serialize_record(dict(row)) if row else None
+
+    def update_record_fields(self, run_id: str, record_id: str, fields: dict[str, Any]) -> dict[str, Any] | None:
+        allowed = {
+            "project", "revision", "author", "drawing_date", "module", "fai",
+            "spc", "description", "nominal", "usl", "lsl", "hundred_percent",
+            "dc", "points",
+        }
+        values = {key: value for key, value in fields.items() if key in allowed}
+        if not values:
+            raise ValueError("没有可更新的检验字段")
+        values["updated_at"] = utc_now()
+        assignments = ", ".join(f"{key} = ?" for key in values)
+        with self.connect() as db:
+            db.execute(
+                f"UPDATE records SET {assignments} WHERE run_id = ? AND id = ?",
+                (*values.values(), run_id, record_id),
+            )
+        return self.get_record(run_id, record_id)
+
+    def update_run_metadata(self, run_id: str, field: str, value: str | None) -> None:
+        allowed = {"project", "revision", "author", "drawing_date"}
+        if field not in allowed:
+            raise ValueError("不允许修改该图纸资料字段")
+        with self.connect() as db:
+            db.execute(
+                f"UPDATE runs SET {field} = ? WHERE id = ?",
+                (value, run_id),
+            )
+            db.execute(
+                f"UPDATE records SET {field} = ?, updated_at = ? WHERE run_id = ?",
+                (value, utc_now(), run_id),
+            )
 
     def save_user_crop(
         self, record_id: str, bbox: list[int], crop_path: Path
