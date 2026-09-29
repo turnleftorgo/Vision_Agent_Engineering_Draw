@@ -31,6 +31,55 @@ DEFAULT_MODEL = "Qwen3.8-27B-MLX-8bit"
 DEFAULT_RECOVERY_MODEL = "Qwen3.8-27B-MLX-8bit"
 DEFAULT_API_KEY = "anything"
 
+PAGE_ONE_METADATA_PROMPT = """
+
+【仅 PDF 第 1 页：图纸元数据补充识别】
+在完成当前 module 的原有 FAI 检测任务时，同时检查当前输入的 module 图像中是否能直接看到以下图纸级信息：
+- Project：定位图纸标题栏内标有 “METRIC, Inc.” / “TITLE” 的信息表，在该表格内部最底下一行读取 Project 对应的值。不要用表格外的大标题或相邻字段替代。
+- Revision、Author、Date：定位修订历史表，找到最新且有效的一条修订记录，并从同一行的 REV、AUTHOR、DATE 三列分别读取这三个值。三项必须来自同一行；不要把图纸编号当作 Revision，也不要把修订表的行号、其他行的作者或日期拼进来。
+- 如果修订历史没有明显的最新有效记录，或不能确认 REV、AUTHOR、DATE 属于同一行，这三项都标记为 ambiguous，不要猜选。
+
+本次只允许使用当前 module 图像中实际可见的信息。不要推断当前裁图之外的标题栏或修订历史内容；其他 module 和页面也不是当前字段的证据。并非每个 module 都包含这些信息：未出现时 value=null/status=not_found；可见但无法读清时 value=null/status=unreadable；有多个候选且无法判断时 value=null/status=ambiguous。禁止猜测、补全或自行转换日期格式，保留图纸原文。
+
+在原有 JSON 根对象中增加 page_metadata，不改变 fai_clusters 的结构：
+"page_metadata": {
+  "project": {"value": null, "status": "not_found", "evidence": ""},
+  "revision": {"value": null, "status": "not_found", "evidence": ""},
+  "author": {"value": null, "status": "not_found", "evidence": ""},
+  "date": {"value": null, "status": "not_found", "evidence": ""}
+}
+
+每项 status 只能是 found、not_found、unreadable、ambiguous。只有 status=found 且 value 有直接视觉证据时才填写非空 value；evidence 简短指出当前 module 图像中的依据。"""
+
+PAGE_METADATA_FIELDS = ("project", "revision", "author", "date")
+PAGE_METADATA_STATUSES = {"found", "not_found", "unreadable", "ambiguous"}
+
+
+def normalize_page_metadata(value: Any) -> dict[str, dict[str, str | None]]:
+    """Validate optional page-level metadata without invalidating FAI results."""
+    result: dict[str, dict[str, str | None]] = {}
+    source = value if isinstance(value, dict) else {}
+    for field in PAGE_METADATA_FIELDS:
+        item = source.get(field)
+        if not isinstance(item, dict):
+            result[field] = {"value": None, "status": "not_found", "evidence": ""}
+            continue
+        status = item.get("status")
+        candidate = item.get("value")
+        evidence = item.get("evidence")
+        if status not in PAGE_METADATA_STATUSES:
+            status = "not_found"
+        if not isinstance(candidate, str) or not candidate.strip() or status != "found":
+            candidate = None
+        else:
+            candidate = candidate.strip()[:500]
+        result[field] = {
+            "value": candidate,
+            "status": status,
+            "evidence": evidence.strip()[:500] if isinstance(evidence, str) else "",
+        }
+    return result
+
 RECOVERY_ACTIONS = {"finish", "expand"}
 RECOVERY_SIDES = {"left", "right", "up", "down"}
 RECOVERY_REASONS = {
@@ -507,6 +556,7 @@ def recover_crop_candidate(
     context_fraction: float,
     max_image_edge: int,
     step_norm: int,
+    on_progress: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     """Run at most max_rounds single-agent decisions for one crop2 candidate."""
     started = time.perf_counter()
@@ -531,6 +581,14 @@ def recover_crop_candidate(
             candidate.marker_box,
         )
         observation.save(round_dir / "observation.png")
+        if on_progress and round_number == 1:
+            # Only mark this crop as active when its worker is about to send
+            # it to the recovery model; queued candidates stay invisible.
+            on_progress({
+                "type": "refinement_started",
+                "round": 0,
+                "bbox": current.to_list(),
+            })
         decision = request_recovery_decision(
             client,
             model,
@@ -565,6 +623,14 @@ def recover_crop_candidate(
         }
         rounds.append(round_record)
         write_json(round_dir / "decision_result.json", round_record)
+        if on_progress:
+            on_progress({
+                "type": "refinement_round",
+                "round": round_number,
+                "bbox": current.to_list(),
+                "action": decision.action,
+                "expand_sides": decision.expand_sides,
+            })
         side_text = "+".join(decision.expand_sides)
         action_text = (
             f"expand({side_text})" if decision.action == "expand" else decision.action
@@ -796,6 +862,7 @@ def stage2_detect_fai_for_module(
     module_bbox: Iterable[int | float],
     module_index: int,
     module_total: int,
+    page_index: int,
     output_dir: Path,
     max_tokens: int,
     temperature: float,
@@ -809,8 +876,14 @@ def stage2_detect_fai_for_module(
     visualization_dir.mkdir(parents=True, exist_ok=True)
     crop2_dir.mkdir(parents=True, exist_ok=True)
 
-    (detail_dir / "system_prompt.txt").write_text(fai.SYSTEM_PROMPT, encoding="utf-8")
-    (detail_dir / "user_prompt.txt").write_text(fai.USER_PROMPT, encoding="utf-8")
+    metadata_enabled = page_index == 1
+    system_prompt = fai.SYSTEM_PROMPT + XRAY_PROMPT_APPENDIX
+    user_prompt = fai.USER_PROMPT
+    if metadata_enabled:
+        system_prompt += PAGE_ONE_METADATA_PROMPT
+        user_prompt += " 当前是 PDF 第 1 页；按附加规则检查当前 module 图像中的图纸元数据。"
+    (detail_dir / "system_prompt.txt").write_text(system_prompt, encoding="utf-8")
+    (detail_dir / "user_prompt.txt").write_text(user_prompt, encoding="utf-8")
     log(
         f"[Stage 2/3][{module_index}/{module_total}] 27B detecting FAI clusters in "
         f"{module_path.name} ({module_image.width}x{module_image.height}) ..."
@@ -825,7 +898,7 @@ def stage2_detect_fai_for_module(
         xray_json_path = detail_dir / "xray.json"
         save_xray_result(xray, xray_path, xray_json_path)
         xray_elapsed = time.perf_counter() - xray_started
-        xray_system_prompt = fai.SYSTEM_PROMPT + XRAY_PROMPT_APPENDIX
+        xray_system_prompt = system_prompt
         (detail_dir / "system_prompt_xray.txt").write_text(
             xray_system_prompt, encoding="utf-8"
         )
@@ -837,7 +910,7 @@ def stage2_detect_fai_for_module(
             client,
             model,
             xray_system_prompt,
-            fai.USER_PROMPT,
+            user_prompt,
             xray.image,
             max_tokens,
             temperature,
@@ -852,6 +925,11 @@ def stage2_detect_fai_for_module(
 
         parsed = fai.parse_response(raw)
         write_json(detail_dir / "parsed_response.json", parsed)
+        page_metadata = (
+            normalize_page_metadata(parsed.get("page_metadata"))
+            if metadata_enabled
+            else None
+        )
         clusters, invalid = fai.validate_clusters(
             parsed, module_image.width, module_image.height
         )
@@ -891,6 +969,7 @@ def stage2_detect_fai_for_module(
             "invalid_cluster_count": len(invalid),
             "valid_clusters": serialized,
             "invalid_clusters": invalid,
+            "page_metadata": page_metadata,
             "visualization_path": str(visualization_path.relative_to(output_dir)),
         }
         write_json(detail_dir / "results.json", result)
@@ -1015,6 +1094,21 @@ def run(args: argparse.Namespace) -> int:
                 f"[Stage 3][{candidate.key}] crop2 arrived; submitting immediate "
                 "single-agent multi-side recovery"
             )
+            def publish_refinement(payload: dict[str, Any]) -> None:
+                append_jsonl(
+                    events_file,
+                    {
+                        "page_index": args.page_index,
+                        "page_width": large_image.width,
+                        "page_height": large_image.height,
+                        "candidate_key": candidate.key,
+                        "module_index": candidate.module_index,
+                        "fai_number": candidate.fai_number,
+                        **payload,
+                    },
+                    lock=events_lock,
+                )
+
             future = recovery_executor.submit(
                 recover_crop_candidate,
                 client=recovery_client,
@@ -1028,6 +1122,7 @@ def run(args: argparse.Namespace) -> int:
                 context_fraction=args.recovery_context_fraction,
                 max_image_edge=args.recovery_max_image_edge,
                 step_norm=args.recovery_step_norm,
+                on_progress=publish_refinement,
             )
             recovery_futures[future] = candidate
 
@@ -1036,6 +1131,7 @@ def run(args: argparse.Namespace) -> int:
                 try:
                     result = done.result()
                 except Exception:
+                    publish_refinement({"type": "refinement_finished", "status": "error"})
                     return
                 refined_relative = result.get("refined_crop_path")
                 refined_exists = bool(
@@ -1056,6 +1152,10 @@ def run(args: argparse.Namespace) -> int:
                         },
                         lock=events_lock,
                     )
+                publish_refinement({
+                    "type": "refinement_finished",
+                    "status": result.get("status", "error"),
+                })
 
             future.add_done_callback(publish_when_finished)
 
@@ -1083,6 +1183,7 @@ def run(args: argparse.Namespace) -> int:
                 module_bbox=module.bbox_pixels,
                 module_index=index,
                 module_total=total,
+                page_index=args.page_index,
                 output_dir=output_dir,
                 max_tokens=args.fai_max_tokens,
                 temperature=args.temperature,
@@ -1101,11 +1202,13 @@ def run(args: argparse.Namespace) -> int:
                     "page_width": large_image.width,
                     "page_height": large_image.height,
                     "module_index": index,
+                    "module_total": total,
                     "module_bbox_full_image": list(module.bbox_pixels),
                     "module_width": module_image.width,
                     "module_height": module_image.height,
                     "valid_cluster_count": module_result.get("valid_cluster_count", 0),
                     "valid_clusters": module_result.get("valid_clusters", []),
+                    "page_metadata": module_result.get("page_metadata"),
                     "visualization_path": (
                         str((output_dir / module_visualization).resolve())
                         if module_visualization

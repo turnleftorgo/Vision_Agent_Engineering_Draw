@@ -116,6 +116,7 @@ def consume_new_events(
     store: ScanStore,
     run_id: str,
     logger: Callable[[str], None] | None = None,
+    on_record_ready: Callable[[str, str], None] | None = None,
 ) -> int:
     if not events_file.exists():
         return offset
@@ -143,6 +144,18 @@ def consume_new_events(
                     )
             elif event_type == "stage2_module_complete":
                 store.save_stage2_progress(run_id, event)
+                if int(event.get("page_index") or 0) == 1:
+                    metadata_result = store.consolidate_page1_metadata(
+                        run_id, int(event.get("module_total") or 0)
+                    )
+                    if logger and metadata_result.get("status") == "complete":
+                        logger(
+                            "page 1 metadata consolidated: filled=%s conflicts=%s"
+                            % (
+                                metadata_result.get("filled", []),
+                                metadata_result.get("conflicts", []),
+                            )
+                        )
                 store.update_run(
                     run_id,
                     current_module=int(event.get("module_index", 0)),
@@ -155,12 +168,16 @@ def consume_new_events(
                             event.get("valid_cluster_count", 0),
                         )
                     )
+            elif event_type in {"refinement_started", "refinement_round", "refinement_finished"}:
+                store.update_refinement(run_id, event)
             elif event_type == "refined_crop_ready":
                 refined_path = Path(event["output_dir"]) / event["refined_crop_path"]
                 if not refined_path.is_file():
                     continue
                 event["refined_crop_path_absolute"] = str(refined_path.resolve())
-                store.upsert_refined_record(run_id, event)
+                record_id = store.upsert_refined_record(run_id, event)
+                if on_record_ready:
+                    on_record_ready(run_id, record_id)
                 if logger:
                     logger(
                         "refined ready: FAI %s (%s)"
@@ -169,7 +186,11 @@ def consume_new_events(
         return handle.tell()
 
 
-def process_pdf_run(store: ScanStore, run_id: str) -> None:
+def process_pdf_run(
+    store: ScanStore,
+    run_id: str,
+    on_record_ready: Callable[[str, str], None] | None = None,
+) -> None:
     run = store.get_run(run_id)
     if not run:
         return
@@ -224,10 +245,14 @@ def process_pdf_run(store: ScanStore, run_id: str) -> None:
                 output_thread.start()
                 offset = 0
                 while process.poll() is None:
-                    offset = consume_new_events(events_file, offset, store, run_id, log)
+                    offset = consume_new_events(
+                        events_file, offset, store, run_id, log, on_record_ready
+                    )
                     time.sleep(0.5)
                 output_thread.join(timeout=5)
-                consume_new_events(events_file, offset, store, run_id, log)
+                consume_new_events(
+                    events_file, offset, store, run_id, log, on_record_ready
+                )
                 run_log(run_id, f"page {page_index}/{len(pages)} pipeline exited with code {process.returncode}")
             # A partial pipeline result still yields valid refined rows. Continue pages.
 

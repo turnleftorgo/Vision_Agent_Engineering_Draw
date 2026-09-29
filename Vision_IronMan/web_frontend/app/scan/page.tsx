@@ -45,6 +45,8 @@ type InspectionRecord = {
   crop_url: string;
   page_url: string;
   updated_at: string;
+  extraction_status: 'not_started' | 'queued' | 'processing' | 'completed' | 'needs_review' | 'failed';
+  extraction_error: string | null;
 };
 
 type Stage1Module = {
@@ -77,6 +79,7 @@ type ProgressPage = {
   overview_url: string;
   stage1_modules: Stage1Module[];
   stage2_modules: Record<string, Stage2Module>;
+  active_refinements: { candidate_key: string; module_index: number; fai_number: string | null; round_number: number; bbox: Box }[];
 };
 
 type ScanProgress = {
@@ -275,6 +278,7 @@ function InteractiveDrawing({
   selection,
   selectionLabel,
   overlays,
+  refiningFrames,
   onSave,
   scopeKey,
   focusRequest,
@@ -288,6 +292,7 @@ function InteractiveDrawing({
   selection: Box | null;
   selectionLabel?: string;
   overlays?: Overlay[];
+  refiningFrames?: { key: string; box: Box }[];
   onSave?: (box: Box) => Promise<void>;
   scopeKey: string;
   focusRequest: FocusRequest | null;
@@ -403,6 +408,9 @@ function InteractiveDrawing({
       <img ref={imageRef} className={focusBounds ? 'drawing-source-image is-hidden' : 'drawing-source-image'} src={imageUrl} alt={alt} draggable={false} onLoad={() => setImageReady(true)} />
       {focusBounds && <canvas ref={canvasRef} className="drawing-focus-canvas" aria-label={`${alt} 局部放大`} />}
       {focusBounds && <button type="button" className="focus-return" onClick={() => { setFocusBounds(null); onClearFocus(); }}>返回全图</button>}
+      {refiningFrames?.map((frame) => (
+        <div key={frame.key} className="refinement-frame" style={percentStyle(frame.box)} aria-hidden="true" />
+      ))}
       {overlays?.map((overlay) => (
         <div
           key={overlay.key}
@@ -538,7 +546,10 @@ export default function ScanPage() {
   }, [refreshRun]);
 
   useEffect(() => {
-    if (isRestoring || !run || run.status === 'completed' || run.status === 'failed' || run.status === 'interrupted') return;
+    if (isRestoring || !run || run.status === 'interrupted') return;
+    const extractionActive = run.records.some((record) => record.extraction_status === 'queued' || record.extraction_status === 'processing');
+    const refinementActive = run.progress.pages.some((page) => page.active_refinements?.length);
+    if ((run.status === 'completed' || run.status === 'failed') && !extractionActive && !refinementActive) return;
     let cancelled = false;
     let timer = 0;
     let delay = 900;
@@ -722,6 +733,21 @@ export default function ScanPage() {
   const moduleWidth = moduleOrigin ? Math.max(1, moduleOrigin[2] - moduleOrigin[0]) : 1;
   const moduleHeight = moduleOrigin ? Math.max(1, moduleOrigin[3] - moduleOrigin[1]) : 1;
   const moduleScopeKey = `module-${currentPage}-${viewModule}`;
+  const pageRefiningFrames = (progressPage?.active_refinements ?? []).map((item) => ({
+    key: item.candidate_key,
+    box: item.bbox,
+  }));
+  const moduleRefiningFrames = moduleOrigin
+    ? (progressPage?.active_refinements ?? [])
+        .filter((item) => item.module_index === viewModule)
+        .map((item) => ({
+          key: item.candidate_key,
+          box: [
+            item.bbox[0] - moduleOrigin[0], item.bbox[1] - moduleOrigin[1],
+            item.bbox[2] - moduleOrigin[0], item.bbox[3] - moduleOrigin[1],
+          ] as Box,
+        }))
+    : [];
   const overviewModuleOverlays: Overlay[] = progressPage?.stage1_modules.map((module, index) => ({
     key: `overview-module-${index + 1}`,
     box: module.bbox_pixels,
@@ -814,7 +840,7 @@ export default function ScanPage() {
             <thead><tr><th>No.</th><th>Module</th><th>Page</th><th>FAI</th><th>SPC</th><th>Description</th><th>Nominal</th><th>USL</th><th>LSL</th><th>SPC截图</th><th>100%</th><th>DC</th><th>Points</th></tr></thead>
             <tbody>
               {run?.records.map((record, index) => (
-                <tr key={record.id} className={selectedId === record.id ? 'is-selected' : ''} onClick={() => selectRecord(record, 'page', true)}>
+                <tr key={record.id} className={`${selectedId === record.id ? 'is-selected ' : ''}${record.extraction_status === 'queued' || record.extraction_status === 'processing' ? 'is-ai-filling' : ''}`} onClick={() => selectRecord(record, 'page', true)}>
                   <td>{index + 1}</td>
                   <td><EditableCell value={record.module} onSave={(value) => updateRecordField(record.id, 'module', value)} /></td>
                   <td>page {record.page_index}</td>
@@ -839,7 +865,6 @@ export default function ScanPage() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={`${apiUrl(record.crop_url)}?v=${encodeURIComponent(record.updated_at)}`} alt={`FAI ${record.fai ?? ''} 截图`} />
                     </button>
-                    {record.user_override && <span>已修改</span>}
                   </td>
                   <td><EditableCell value={record.hundred_percent} onSave={(value) => updateRecordField(record.id, 'hundred_percent', value)} /></td>
                   <td><EditableCell value={record.dc} onSave={(value) => updateRecordField(record.id, 'dc', value)} /></td>
@@ -938,6 +963,7 @@ export default function ScanPage() {
                   selection={moduleSelection}
                   selectionLabel={selectedModuleRecord ? `FAI ${selectedModuleRecord.fai ?? '—'}` : undefined}
                   overlays={moduleOverlays}
+                  refiningFrames={moduleRefiningFrames}
                   onSave={selectedModuleRecord && moduleSelection ? async (local) => saveRecord(selectedModuleRecord, [local[0] + moduleOrigin[0], local[1] + moduleOrigin[1], local[2] + moduleOrigin[0], local[3] + moduleOrigin[1]]) : undefined}
                   scopeKey={moduleScopeKey}
                   focusRequest={focusRequest}
@@ -954,6 +980,7 @@ export default function ScanPage() {
                   selection={pageFrameRequested && selectedRecord?.page_index === currentPage ? selectedRecord.effective_bbox : null}
                   selectionLabel={pageFrameRequested && selectedRecord?.page_index === currentPage ? `FAI ${selectedRecord.fai ?? '—'}` : undefined}
                   overlays={[]}
+                  refiningFrames={pageRefiningFrames}
                   onSave={pageFrameRequested && selectedRecord?.page_index === currentPage ? async (box) => saveRecord(selectedRecord, box) : undefined}
                   scopeKey={pageScopeKey}
                   focusRequest={focusRequest}

@@ -14,12 +14,13 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
-from PIL import Image
+from PIL import Image, ImageDraw
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 from .orchestrator import process_pdf_run, run_log
+from .extraction import queue_record_extraction
 from .store import ScanStore
 
 
@@ -101,7 +102,7 @@ def create_run(pdf: UploadFile = File(...)) -> dict[str, Any]:
     STORE.create_run(run_id, pdf.filename, pdf_path, run_dir)
     threading.Thread(
         target=process_pdf_run,
-        args=(STORE, run_id),
+        args=(STORE, run_id, _queue_extraction_safely),
         name=f"scan-{run_id[:8]}",
         daemon=True,
     ).start()
@@ -324,6 +325,22 @@ def update_crop(run_id: str, record_id: str, request: CropUpdate) -> dict[str, A
     if x2 - x1 < 8 or y2 - y1 < 8:
         raise HTTPException(status_code=422, detail="截图区域过小")
 
+    # Keep the Stage 2 FAI marker in every user-adjusted crop so its red frame
+    # and identity context remain available to both the user and Qwen.
+    marker_bbox = record.get("marker_bbox")
+    marker_rect: tuple[int, int, int, int] | None = None
+    if isinstance(marker_bbox, list) and len(marker_bbox) == 4:
+        mx1, my1, mx2, my2 = (
+            max(0, min(width, round(float(value)))) for value in marker_bbox
+        )
+        if mx1 < mx2 and my1 < my2:
+            marker_rect = (mx1, my1, mx2, my2)
+            marker_pad = max(3, round(max(mx2 - mx1, my2 - my1) * 0.08))
+            x1 = max(0, min(x1, mx1 - marker_pad))
+            y1 = max(0, min(y1, my1 - marker_pad))
+            x2 = min(width, max(x2, mx2 + marker_pad))
+            y2 = min(height, max(y2, my2 + marker_pad))
+
     source_path = Path(record["source_page_path"])
     run = STORE.get_run(run_id)
     if not run or not source_path.is_file():
@@ -333,15 +350,51 @@ def update_crop(run_id: str, record_id: str, request: CropUpdate) -> dict[str, A
     existing = len(list(revision_dir.glob(f"{record_id}-*.png")))
     crop_path = revision_dir / f"{record_id}-{existing + 1:03d}.png"
     with Image.open(source_path) as image:
-        image.convert("RGB").crop((x1, y1, x2, y2)).save(crop_path)
+        crop = image.convert("RGB").crop((x1, y1, x2, y2))
+        if marker_rect is not None:
+            mx1, my1, mx2, my2 = marker_rect
+            marker_pad = max(3, round(max(mx2 - mx1, my2 - my1) * 0.08))
+            left = max(0, mx1 - x1 - marker_pad)
+            top = max(0, my1 - y1 - marker_pad)
+            right = min(crop.width - 1, mx2 - x1 + marker_pad)
+            bottom = min(crop.height - 1, my2 - y1 + marker_pad)
+            if left < right and top < bottom:
+                stroke = max(2, round(min(crop.size) * 0.004))
+                ImageDraw.Draw(crop).rectangle(
+                    (left, top, right, bottom), outline=(220, 0, 0), width=stroke
+                )
+        crop.save(crop_path)
     STORE.save_user_crop(record_id, [x1, y1, x2, y2], crop_path)
+    queued = _queue_extraction_safely(run_id, record_id)
     updated = STORE.get_record(run_id, record_id)
     run_log(
         run_id,
         f"frontend saved crop override: record={record_id}, bbox={[x1, y1, x2, y2]}",
         component="API",
     )
+    if queued:
+        run_log(run_id, f"Qwen extraction queued after crop save: record={record_id}", component="API")
     return public_record(updated) if updated else {}
+
+
+def _queue_extraction_safely(run_id: str, record_id: str) -> bool:
+    try:
+        return queue_record_extraction(STORE, run_id, record_id)
+    except Exception as exc:
+        record = STORE.get_record(run_id, record_id)
+        if record:
+            STORE.set_extraction_status(
+                record_id,
+                int(record.get("crop_version") or 0),
+                "failed",
+                error=f"{type(exc).__name__}: {exc}",
+            )
+        run_log(
+            run_id,
+            f"Qwen extraction could not be queued for {record_id}: {type(exc).__name__}: {exc}",
+            component="API",
+        )
+        return False
 
 
 if __name__ == "__main__":
