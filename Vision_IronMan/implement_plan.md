@@ -723,3 +723,143 @@ output/
 - 第 1 行、第 8 行及更靠下的记录预览都位于各自表格行上方，不覆盖当前行编辑控件；窗口缩放/滚动后位置仍正确，外部点击和 Esc 可关闭。
 - 连续选择不同截图时无旧图闪现，人工重截后预览跟随有效截图更新。
 - 框靠近图片边界时取景不会越界，拖动、缩放后的保存坐标仍正确。
+
+
+# Claw View 审核模式实施补充
+
+## 高层方案
+
+审核模式作为 `scan/page.tsx` 的独立视图状态实现，普通模式的现有检验表和右侧图纸流程保持原样。模式开启时，左侧表格替换为审核面板；右侧当前页绘制所有可审核记录的 FAI 圆圈。所有框编辑继续使用页面像素坐标系，避免引入第二套持久化协议。
+
+## 组件与函数职责
+
+1. **审核模式状态与切换处理**
+   - 在扫描页增加 `auditMode` 状态，以及 `hoveredRecordId`、`lockedRecordId` 和当前临时 bbox 状态。
+   - `toggleAuditMode()` 负责切换布局、关闭旧的截图浮层/临时焦点，并在退出审核模式时保留扫描任务、页码和已保存记录。
+   - `getActiveAuditRecord()` 按“悬停记录优先，否则点击锁定记录”的规则返回当前审核记录；悬停离开时回退到锁定项。
+
+2. **FAI 圆圈 overlay 生成**
+   - `buildAuditOverlays(records, pageIndex)` 只选择当前页可审核的 `run.records`，依据每条记录的 `effective_bbox` 计算圆心和标签。
+   - 扩展 `Overlay` 支持圆形标记、`onMouseEnter`、`onMouseLeave` 与现有 `onClick`；悬停只切换临时预览，点击更新锁定记录。
+   - 将选中圆圈绘制为强调态。保持 Stage 1 全览和现有普通模式的 overlay 规则独立。
+
+3. **审核信息面板**
+   - 新建 `AuditPanel`（可放在 `web_frontend/app/scan/` 下），接收当前记录、临时 bbox、指针拖动回调和保存状态。
+   - 顶部字段复用 `EditableCell` 与现有字段更新函数；底部左右两图分别呈现完整 FAI 截图和 3 倍局部视图。
+   - 未选择记录时显示空状态；没有截图或正在保存时分别显示对应状态，不隐藏错误反馈。
+
+4. **双图实时 bbox 同步**
+   - 扩展 `InteractiveDrawing` 的选框移动/缩放逻辑，增加 `onDraftChange(bbox)` 回调，在每次 pointer move 后报告未提交 bbox；仍由组件内部约束 bbox 不越出图像边界。
+   - 将现有 pointer 坐标换算逻辑复用到审核视图。若右侧编辑图是局部窗口，先加窗口原点偏移，再换算回整页坐标；临时 bbox 始终用整页像素坐标保存。
+   - 完整截图预览按临时 bbox 即时绘制当前框/新 crop 范围；Canvas 2D 用同一 bbox 和现有 `focusWindow()` 生成约 3 倍取景。两图共享状态，避免分别维护造成不同步。
+   - pointer move 只更新本地草稿，不请求后端；pointer up 时调用现有 `saveRecord(record, finalBbox)` 一次提交。保存失败时保留草稿及选中记录，成功后以服务端返回记录替换旧记录并通过 `updated_at` 刷新截图缓存。
+
+5. **布局与样式**
+   - `scan/page.tsx` 根据 `auditMode` 条件渲染原检验表或 `AuditPanel`，右侧图纸沿用现有页码导航和绘图容器。
+   - 在 `globals.css` 增加审核面板字段布局、双图响应式布局、圆圈默认/悬停/锁定样式、选框手柄和保存状态样式。
+   - 窄屏下两张截图改为纵向排列；保留可操作的点击锁定，不依赖 hover 才能审核。
+
+## 数据与接口边界
+
+- 不新增 Python 包、npm 包、API 路由或 SQLite 表。
+- 字段编辑沿用现有字段更新接口；框保存沿用 `saveRecord` 和现有 crop PUT。
+- 截图仍由现有后端从源 PDF 页面重截；模型 bbox 与人工 bbox 的优先级、裁剪历史和 AI 字段提取触发规则不变。
+- 现有普通模式仅单条显式选中框的规则继续有效；审核模式的“显示当前页全部 FAI 圆圈”是独立的只读定位层，只有当前审核项的编辑框可拖动或缩放。
+
+## 高层验收检查
+
+- 普通模式进出审核模式后布局及任务状态正确；右侧页码变化后只显示对应页的 FAI 圆圈。
+- 鼠标悬停可预览，点击可锁定；鼠标离开后保持点击项，点击另一标记后切换。
+- 编辑局部截图框时两张图随临时 bbox 同步变化；仅 pointer up 触发一次保存。
+- 保存成功后完整图、局部图和表格缩略图均使用新版本；失败保留草稿且可重试。
+- 无截图、空记录、窄窗口、触控/无 hover 输入等状态都有可用界面反馈。
+
+# 审核模式扩展：部件图、手动画框与模型字段并发
+
+本节是在既有审核模式实施思路上的增量，不替换前面已经记录的悬停/锁定和双截图联动方案。
+
+## 高层实现思路
+
+### 1. 锁定记录时切换到部件图
+
+- 在 `scan/page.tsx` 继续用当前页 `run.records` 生成 FAI 圆圈；将圆心从 `effective_bbox` 中心改为优先使用 `marker_bbox` 中心，缺失时才回退。
+- 悬停态只更新左侧预览；点击态设置 `lockedAuditId` 并进入部件审核视图。悬停离开后仍恢复锁定项。
+- 增加 `AuditComponentView`，读取锁定记录的 `module_index`，复用 `progressPage.stage1_modules[module_index - 1]` 的原始部件图和尺寸。
+- 计算唯一选中框时把全页 `effective_bbox` 减去模块原点，转换为部件局部坐标。部件视图的 overlay 列表只传当前锁定记录，避免把同部件的其他 FAI 框绘出。
+- 增加 `AuditFaiSelector`，从当前页记录生成 FAI 小圆圈按钮；点击后更新锁定记录、部件图、框和左侧面板。若记录所属模块不同，自动加载新模块图。
+
+### 2. 复用绘图组件支持新建矩形
+
+- 扩展 `InteractiveDrawing` 的 props，增加 `drawMode` 和 `onDrawComplete(box)`。已有框的 move/resize 行为保留；画框模式下在空白图面 pointer down 时记录起点，pointer move 更新临时矩形，pointer up 后 clamp 到图像边界并回调最终框。
+- 页面图的框直接是全页像素坐标；部件图的回调通过模块原点转换成全页坐标。新建、保存和模型返回结果均使用全页像素坐标，避免持久化两套坐标格式。
+- `AuditPanel` 和 `AuditComponentView` 下方分别提供画框按钮。画框完成后前端立即建立 provisional audit record，显示手绘选区的小圆圈、顶部字段状态、截图和 3× 局部放大预览。
+
+### 3. 手绘框交给 Stage 2 判断 FAI
+
+- 新增后端请求模型 `ManualAuditDetectRequest`，载荷包含 `page_index`、全页 bbox、来源视图/模块信息。
+- 新增 `POST /api/runs/{run_id}/pages/{page_index}/audit/detect`，校验任务、页面、框大小与坐标；从源页面按选框取上下文图像，并明确标注用户选区是目标种子。
+- 在 `qwen_module_fai_pipeline.py` 抽出可复用的 Stage 2 focused-detection helper，调用现有 `call_vision_once`、`fai.parse_response` 和 `fai.validate_clusters`。用户选区只限制本次识别目标，不改变正常整模块扫描的 Stage 2 行为。
+- 将有效 cluster 的整体 bbox 与 marker bbox 从模型输入局部坐标映射回全页坐标；用模型返回的 FAI 编号、SPC 和描述创建正式审核记录，并返回记录及截图 URL。随后复用截图 extraction 队列填写公差、Points 等字段。若模型结果缺失/无效，保留 provisional 框并返回可人工确认的状态。
+- 复用 `_queue_extraction_safely` 处理新截图中的字段提取，避免再造另一条字段识别队列。新建记录需有稳定的 `candidate_key`，保证重试不会重复创建记录。
+
+### 4. 字段处理状态和人工编辑保护
+
+- 前端按字段状态给正在自动填写的单元格添加蓝色光效；识别状态在提交手绘框后立即开始，字段提取状态沿用 `extraction_status`。
+- 扩展 records 表的 SQLite 迁移，增加已由用户明确编辑的字段集合。`update_record_fields` 每次写字段时同步登记来源。
+- 修改 `ScanStore.apply_extraction`：模型结果只允许写入没有被用户锁定的字段；其他字段照常合并。即使用户明确清空字段，后续识别也不覆盖它。
+- API 返回每字段的模型/用户/空值状态，前端按该状态决定蓝光、显示值及完成态，不能只依赖整条记录的单一 extraction 状态。
+
+## 计划新增或调整的函数
+
+| 文件 | 函数/组件 | 职责 |
+| --- | --- | --- |
+| `web_frontend/app/scan/page.tsx` | `InteractiveDrawing` 新增 draw props | 绘制临时框并回调全图坐标 |
+| `web_frontend/app/scan/page.tsx` | `AuditComponentView` | 展示锁定记录所属部件和唯一选中框 |
+| `web_frontend/app/scan/page.tsx` | `AuditFaiSelector` | 切换当前页锁定 FAI |
+| `web_frontend/app/scan/page.tsx` | `submitManualAuditBox` | 建立 provisional UI、提交后端并替换正式结果 |
+| `web_backend/app.py` | `detect_manual_audit_record` | 校验请求、调用 focused Stage 2 并返回新记录 |
+| `qwen_module_fai_pipeline.py` | `detect_fai_in_user_region` | 复用 Stage 2 模型调用/解析/校验，返回局部坐标 cluster |
+| `web_backend/store.py` | `create_manual_record` | 幂等写入手动画框识别出的新记录 |
+| `web_backend/store.py` | `update_record_fields` / `apply_extraction` | 记录用户字段来源并阻止模型覆盖 |
+
+## 验收检查
+
+- 点击锁定后右侧为当前记录的 Stage 1 部件图，只有该记录的框可见；切换下方 FAI 按钮后所有视图同步更新。
+- 两处画框工具都能创建矩形；部件图选框换算到整页后位置正确，重载后记录框仍对齐。
+- 完成手绘后 provisional 框和左右截图立即出现；Stage 2 返回的 FAI 编号、marker bbox 和字段更新同一审核项，不产生重复项。
+- 模型定位失败时保留手绘框并进入人工确认状态；请求失败可重试。
+- 字段模型处理中有蓝色光效；模型返回前后用户改过的字段均保持用户值，其他字段仍能由模型补全。
+- 普通扫描、已有记录的 crop PUT、Stage 3 recovery 和非审核模式视图不受手动识别链路影响。
+
+# 审核模式增量：即时待识别圈与部件内 FAI 列表
+
+本节仅补充两个审核交互细节，沿用上文的 provisional record、圆圈 overlay、模块坐标和 FAI 选择器设计。
+
+## 高层实现
+
+- 在 `submitManualAuditBox()` 创建临时记录并提交网络请求前，继续同步设置 `manualPendingRecord`、`lockedAuditId` 和 `auditDraft`；将该 provisional record 合并进当前页 `auditDisplayRecords`，让 overlay 在本地状态更新后立即渲染，无需等待 Stage 2 响应。
+- provisional marker 的中心使用临时 `effective_bbox` 中心，`fai` 未识别时标签显示“—”。等待期间保持黑色未选中样式；服务端返回后，以正式 record 更新当前记录和圆圈，不保留重复临时圈。失败时保留临时圈与选框，支持原有重试操作。
+- 页面全图的 audit overlay 可以显示当前页所有正式圆圈及 provisional 圆圈；部件图 overlay 仅加入当前 `module_index` 匹配的 provisional 圈，继续保持部件图只显示当前审核框的约束。
+- 将选择器的数据源限制为当前页且 `module_index` 等于锁定记录/当前部件的 records，并包含该模块内的 provisional record。锁定项切换或模块切换时重新计算列表；不同模块的 FAI 不出现在当前部件的列表中。
+
+## 涉及函数与验收
+
+- 调整 `auditDisplayRecords`、`auditOverlays` 和部件临时 overlay 生成逻辑；保持 `submitManualAuditBox()` 的立即本地更新和成功替换顺序。
+- 调整 `auditSelectorRecords`：基于锁定记录的 `module_index` 过滤，而不是直接使用当前页全部记录。
+- 更新 `AuditFaiSelector` 的未知编号占位显示为“—”。无需增加后端接口、数据库字段、模型调用或第三方依赖。
+- 验证手动画框后响应未返回时页面/部件可见黑色“—”圆圈；Stage 2 返回后更新为编号且不重复；失败重试时临时圈保留。
+- 验证部件选择器只显示当前模块 FAI，跨模块切换后成员变化；全页图仍显示当前页全部正式 FAI 标记。
+
+# 审核部件图选框同步修复
+
+## 实现
+
+- 在部件图的 `InteractiveDrawing` 调用上启用已有 `syncSelection` prop。切换 FAI 时，父组件传入的新 `selection` 被同步到部件图内部的 `draft`，橙色编辑框随锁定记录更新。
+- 保留稳定的 `key={page + module}`，不把选中记录 ID 加入 key，避免切换 FAI 时卸载图片组件。
+- 复用 `InteractiveDrawing` 已有同步 effect：若当前正拖动/缩放审核框，则暂不覆盖 `draft`；完成手动画框使用独立的 `drawStartRef` 和 `drawBox`，选框同步不触碰这份手绘草稿。
+
+## 验收
+
+- 在同一部件图下连续点击不同 FAI 圆圈，选中态、左侧字段和部件图上的编辑框都切换到对应记录。
+- 切换 FAI 不触发部件图重新加载；手动画框过程中其它待识别请求返回，不清除正在绘制的临时框。
+- 当前审核框拖动时，外部 props 更新不会打断本次拖动；拖动结束后仍可切换到其他 FAI。

@@ -87,6 +87,7 @@ class ScanStore:
                     extraction_error TEXT,
                     extraction_result TEXT,
                     extraction_model TEXT,
+                    user_edited_fields TEXT NOT NULL DEFAULT '[]',
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL,
                     UNIQUE(run_id, page_index, candidate_key),
@@ -138,6 +139,7 @@ class ScanStore:
                 ("extraction_error", "TEXT"),
                 ("extraction_result", "TEXT"),
                 ("extraction_model", "TEXT"),
+                ("user_edited_fields", "TEXT NOT NULL DEFAULT '[]'"),
             ):
                 if column not in record_columns:
                     db.execute(f"ALTER TABLE records ADD COLUMN {column} {declaration}")
@@ -432,6 +434,48 @@ class ScanStore:
             ).fetchone()
         return self._serialize_record(dict(row)) if row else None
 
+    def create_manual_record(self, run_id: str, event: dict[str, Any]) -> str:
+        """Persist a user-selected region recognized by a focused Stage 2 call."""
+        candidate_key = str(event["candidate_key"])
+        record_id = f"{run_id}-p{int(event['page_index'])}-{candidate_key}"
+        now = utc_now()
+        with self.connect() as db:
+            run = db.execute(
+                "SELECT project, revision, author, drawing_date FROM runs WHERE id = ?",
+                (run_id,),
+            ).fetchone()
+            sequence = db.execute(
+                "SELECT COUNT(*) FROM records WHERE run_id = ?", (run_id,)
+            ).fetchone()[0] + 1
+            db.execute(
+                """INSERT INTO records (
+                    id, run_id, candidate_key, sequence,
+                    project, revision, author, drawing_date, module, module_index,
+                    page_index, fai, spc, description, nominal, usl, lsl,
+                    hundred_percent, dc, points, page_width, page_height,
+                    model_bbox, model_crop_path, marker_bbox, source_page_path,
+                    created_at, updated_at
+                ) VALUES (
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                    ?, ?, ?, ?, ?, ?, ?, ?
+                )
+                ON CONFLICT(run_id, page_index, candidate_key) DO NOTHING""",
+                (
+                    record_id, run_id, candidate_key, sequence,
+                    *(tuple(run) if run else (None, None, None, None)),
+                    event.get("module"), int(event.get("module_index") or 0),
+                    int(event["page_index"]), event.get("fai"), event.get("spc"),
+                    event.get("description"), event.get("nominal"), event.get("usl"),
+                    event.get("lsl"), event.get("hundred_percent"), event.get("dc"),
+                    event.get("points"), int(event["page_width"]),
+                    int(event["page_height"]), json.dumps(event["bbox"]),
+                    str(event["crop_path"]),
+                    json.dumps(event.get("marker_bbox")) if event.get("marker_bbox") else None,
+                    str(event["source_page_path"]), now, now,
+                ),
+            )
+        return record_id
+
     def update_record_fields(self, run_id: str, record_id: str, fields: dict[str, Any]) -> dict[str, Any] | None:
         allowed = {
             "project", "revision", "author", "drawing_date", "module", "fai",
@@ -441,9 +485,18 @@ class ScanStore:
         values = {key: value for key, value in fields.items() if key in allowed}
         if not values:
             raise ValueError("没有可更新的检验字段")
-        values["updated_at"] = utc_now()
-        assignments = ", ".join(f"{key} = ?" for key in values)
         with self.connect() as db:
+            row = db.execute(
+                "SELECT user_edited_fields FROM records WHERE run_id = ? AND id = ?",
+                (run_id, record_id),
+            ).fetchone()
+            if not row:
+                return None
+            edited = set(json.loads(row[0] or "[]"))
+            edited.update(values)
+            values["user_edited_fields"] = json.dumps(sorted(edited))
+            values["updated_at"] = utc_now()
+            assignments = ", ".join(f"{key} = ?" for key in values)
             db.execute(
                 f"UPDATE records SET {assignments} WHERE run_id = ? AND id = ?",
                 (*values.values(), run_id, record_id),
@@ -661,7 +714,10 @@ class ScanStore:
             ).fetchone()
             updates = {
                 key: value for key, value in fields.items()
-                if key in allowed and value and not current[key]
+                if key in allowed
+                and key not in set(json.loads(current["user_edited_fields"] or "[]"))
+                and value
+                and not current[key]
             }
             assignments = [f"{key} = ?" for key in updates]
             assignments.extend([
@@ -690,4 +746,5 @@ class ScanStore:
                 row["extraction_result"] = json.loads(row["extraction_result"])
             except json.JSONDecodeError:
                 row["extraction_result"] = None
+        row["user_edited_fields"] = json.loads(row.get("user_edited_fields") or "[]")
         return row

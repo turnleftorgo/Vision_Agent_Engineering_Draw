@@ -21,7 +21,9 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 from .orchestrator import process_pdf_run, run_log
 from .extraction import queue_record_extraction
+from .model_settings import PROXY_ENABLED, PROXY_URL
 from .store import ScanStore
+from qwen_module_fai_pipeline import detect_fai_in_user_region
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
@@ -56,6 +58,12 @@ async def reject_runs_from_previous_backend(request, call_next):
 
 class CropUpdate(BaseModel):
     bbox: list[int]
+
+
+class ManualAuditDetectRequest(BaseModel):
+    bbox: list[int]
+    module_index: int | None = None
+    candidate_key: str | None = None
 
 
 class RecordFieldUpdate(BaseModel):
@@ -149,6 +157,106 @@ def update_record(run_id: str, record_id: str, request: RecordFieldUpdate) -> di
         record = STORE.update_record_fields(run_id, record_id, {request.field: request.value})
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return public_record(record) if record else {}
+
+
+@app.post("/api/runs/{run_id}/pages/{page_index}/audit/detect")
+def detect_manual_audit_record(
+    run_id: str, page_index: int, request: ManualAuditDetectRequest
+) -> dict[str, Any]:
+    run = STORE.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    if len(request.bbox) != 4:
+        raise HTTPException(status_code=422, detail="bbox 必须有四个整数")
+    pages = sorted(
+        (Path(run["run_dir"]) / "pages").glob("page-*.png"),
+        key=lambda path: int(path.stem.rsplit("-", 1)[-1]),
+    )
+    if page_index < 1 or page_index > len(pages):
+        raise HTTPException(status_code=404, detail="PDF 页面不存在")
+    page_path = pages[page_index - 1]
+    with Image.open(page_path) as loaded:
+        page = loaded.convert("RGB")
+    width, height = page.size
+    x1, y1, x2, y2 = [round(float(value)) for value in request.bbox]
+    x1, x2 = sorted((max(0, min(width, x1)), max(0, min(width, x2))))
+    y1, y2 = sorted((max(0, min(height, y1)), max(0, min(height, y2))))
+    if x2 - x1 < 12 or y2 - y1 < 12:
+        raise HTTPException(status_code=422, detail="手动画框区域过小")
+
+    # Keep visual context around the hand-drawn seed so Stage 2 can associate
+    # the selected feature with the FAI callout and its annotation.
+    pad = max(160, (x2 - x1), (y2 - y1))
+    cx1, cy1 = max(0, x1 - pad), max(0, y1 - pad)
+    cx2, cy2 = min(width, x2 + pad), min(height, y2 + pad)
+    context = page.crop((cx1, cy1, cx2, cy2))
+    try:
+        cluster = detect_fai_in_user_region(
+            context,
+            [x1 - cx1, y1 - cy1, x2 - cx1, y2 - cy1],
+            proxy_url=PROXY_URL if PROXY_ENABLED else "",
+        )
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except Exception as exc:
+        run_log(run_id, f"manual Stage 2 detection failed: {type(exc).__name__}: {exc}", component="API")
+        raise HTTPException(status_code=502, detail="Stage 2 FAI 识别失败，请保留选框后重试") from exc
+
+    bx1, by1, bx2, by2 = [round(value) for value in cluster.bbox_pixels]
+    bbox = [max(0, cx1 + bx1), max(0, cy1 + by1), min(width, cx1 + bx2), min(height, cy1 + by2)]
+    marker_bbox = None
+    if cluster.marker_bbox_pixels:
+        mx1, my1, mx2, my2 = [round(value) for value in cluster.marker_bbox_pixels]
+        marker_bbox = [max(0, cx1 + mx1), max(0, cy1 + my1), min(width, cx1 + mx2), min(height, cy1 + my2)]
+
+    progress = STORE.get_progress(run_id)
+    page_progress = next((item for item in progress["pages"] if item["page_index"] == page_index), None)
+    modules = page_progress["stage1_modules"] if page_progress else []
+    module_index = request.module_index if request.module_index and 1 <= request.module_index <= len(modules) else 0
+    if not module_index:
+        best_overlap = 0
+        for index, module in enumerate(modules, start=1):
+            box = module.get("bbox_pixels")
+            if not isinstance(box, list) or len(box) != 4:
+                continue
+            overlap = max(0, min(bbox[2], box[2]) - max(bbox[0], box[0])) * max(
+                0, min(bbox[3], box[3]) - max(bbox[1], box[1])
+            )
+            if overlap > best_overlap:
+                best_overlap, module_index = overlap, index
+
+    candidate_key = request.candidate_key or f"manual_{uuid.uuid4().hex}"
+    candidate_key = re.sub(r"[^A-Za-z0-9_-]+", "_", candidate_key)[:100] or f"manual_{uuid.uuid4().hex}"
+    crop_path = Path(run["run_dir"]) / "manual_crops" / f"{candidate_key}.png"
+    crop_path.parent.mkdir(parents=True, exist_ok=True)
+    crop = page.crop(tuple(bbox))
+    if marker_bbox:
+        mx1, my1, mx2, my2 = marker_bbox
+        pad_marker = max(3, round(max(mx2 - mx1, my2 - my1) * 0.08))
+        ImageDraw.Draw(crop).rectangle(
+            (max(0, mx1 - bbox[0] - pad_marker), max(0, my1 - bbox[1] - pad_marker),
+             min(crop.width - 1, mx2 - bbox[0] + pad_marker), min(crop.height - 1, my2 - bbox[1] + pad_marker)),
+            outline=(220, 0, 0), width=max(2, round(min(crop.size) * 0.004)),
+        )
+    crop.save(crop_path)
+    record_id = STORE.create_manual_record(run_id, {
+        "candidate_key": candidate_key,
+        "page_index": page_index,
+        "module_index": module_index,
+        "module": f"MODULE {module_index}" if module_index else None,
+        "page_width": width,
+        "page_height": height,
+        "bbox": bbox,
+        "marker_bbox": marker_bbox,
+        "fai": cluster.fai_number,
+        "spc": cluster.spc_code,
+        "description": cluster.description or None,
+        "crop_path": str(crop_path.resolve()),
+        "source_page_path": str(page_path.resolve()),
+    })
+    _queue_extraction_safely(run_id, record_id)
+    record = STORE.get_record(run_id, record_id)
     return public_record(record) if record else {}
 
 
@@ -403,7 +511,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "web_backend.app:app",
         host="127.0.0.1",
-        port=8002,
+        port=8003,
         reload=True,
         access_log=False,
     )

@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .store import ScanStore
+from .model_settings import get_enabled_proxy_url
 
 
 DEFAULT_ENDPOINT = "http://127.0.0.1:8001/v1"
@@ -108,7 +109,10 @@ def _parse_response(content: str) -> tuple[dict[str, str], dict[str, Any], bool]
     return cleaned, normalized, needs_review
 
 
-def _call_model(image_path: Path, endpoint: str, model: str, api_key: str) -> str:
+def _call_model(
+    image_path: Path, endpoint: str, model: str, api_key: str,
+    proxy_url: str | None = None,
+) -> str:
     encoded = base64.b64encode(image_path.read_bytes()).decode("ascii")
     request_body = json.dumps(
         {
@@ -147,7 +151,11 @@ def _call_model(image_path: Path, endpoint: str, model: str, api_key: str) -> st
     )
     timeout = float(os.environ.get("CLAW_VIEW_EXTRACTION_TIMEOUT", "180"))
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
+        opener = urllib.request.build_opener(
+            urllib.request.ProxyHandler({"http": proxy_url, "https": proxy_url})
+            if proxy_url else urllib.request.ProxyHandler({})
+        )
+        with opener.open(request, timeout=timeout) as response:
             result = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         detail = exc.read(1000).decode("utf-8", errors="replace")
@@ -166,6 +174,7 @@ def _call_model(image_path: Path, endpoint: str, model: str, api_key: str) -> st
 def _run_extraction(
     store: ScanStore, record: dict[str, Any], record_id: str,
     endpoint: str, model: str, api_key: str,
+    proxy_url: str | None,
 ) -> None:
     version = int(record["crop_version"])
     digest = str(record["crop_sha256"])
@@ -173,7 +182,7 @@ def _run_extraction(
         return
     try:
         image_path = Path(record["effective_crop_path"])
-        content = _call_model(image_path, endpoint, model, api_key)
+        content = _call_model(image_path, endpoint, model, api_key, proxy_url)
         fields, normalized, needs_review = _parse_response(content)
         result = {
             "model": model,
@@ -207,6 +216,7 @@ _FUTURES: set[Future[Any]] = set()
 
 def queue_record_extraction(store: ScanStore, run_id: str, record_id: str) -> bool:
     endpoint, model, api_key = _model_config()
+    proxy_url = get_enabled_proxy_url()
     record = store.get_record(run_id, record_id)
     if not record:
         return False
@@ -222,7 +232,7 @@ def queue_record_extraction(store: ScanStore, run_id: str, record_id: str) -> bo
     if prepared is None:
         return False
     future = _EXECUTOR.submit(
-        _run_extraction, store, prepared, record_id, endpoint, model, api_key
+        _run_extraction, store, prepared, record_id, endpoint, model, api_key, proxy_url
     )
     _FUTURES.add(future)
     future.add_done_callback(_FUTURES.discard)

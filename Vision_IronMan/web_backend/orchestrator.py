@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Callable
 
 from .store import ScanStore
+from .model_settings import get_enabled_proxy_url
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
@@ -231,6 +232,10 @@ def process_pdf_run(
                 process = subprocess.Popen(
                     command,
                     cwd=PROJECT_DIR,
+                    env={
+                        **os.environ,
+                        "CLAW_VIEW_PROXY_URL": get_enabled_proxy_url() or "",
+                    },
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,

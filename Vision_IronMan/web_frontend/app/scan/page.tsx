@@ -40,6 +40,7 @@ type InspectionRecord = {
   page_width: number;
   page_height: number;
   model_bbox: Box;
+  marker_bbox: Box | null;
   effective_bbox: Box;
   user_override: boolean;
   crop_url: string;
@@ -47,6 +48,7 @@ type InspectionRecord = {
   updated_at: string;
   extraction_status: 'not_started' | 'queued' | 'processing' | 'completed' | 'needs_review' | 'failed';
   extraction_error: string | null;
+  user_edited_fields?: string[];
 };
 
 type Stage1Module = {
@@ -106,14 +108,19 @@ type Overlay = {
   key: string;
   box: Box;
   label: string;
+  point?: [number, number];
+  kind?: 'box' | 'circle';
+  selected?: boolean;
   onClick: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   onZoom?: () => void;
   hitboxOnly?: boolean;
 };
 
 type FocusRequest = { scopeKey: string; box: Box };
 
-const API_BASE = process.env.NEXT_PUBLIC_CLAW_VIEW_API ?? 'http://127.0.0.1:8002';
+const API_BASE = process.env.NEXT_PUBLIC_CLAW_VIEW_API ?? 'http://127.0.0.1:8003';
 const ACTIVE_RUN_STORAGE_KEY = 'claw-view.active-run.v1';
 const apiUrl = (path: string) => `${API_BASE}${path}`;
 const emptyCell = (value: string | number | null | undefined) => value ?? '';
@@ -284,6 +291,12 @@ function InteractiveDrawing({
   focusRequest,
   onRequestFocus,
   onClearFocus,
+  onDraftChange,
+  onSaveError,
+  hideFocusControls = false,
+  syncSelection = false,
+  drawMode = false,
+  onDrawComplete,
 }: {
   imageUrl: string;
   alt: string;
@@ -298,6 +311,12 @@ function InteractiveDrawing({
   focusRequest: FocusRequest | null;
   onRequestFocus: (box: Box, scopeKey: string) => void;
   onClearFocus: () => void;
+  onDraftChange?: (box: Box) => void;
+  onSaveError?: (error: unknown) => void;
+  hideFocusControls?: boolean;
+  syncSelection?: boolean;
+  drawMode?: boolean;
+  onDrawComplete?: (box: Box) => void;
 }) {
   const layerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -313,6 +332,15 @@ function InteractiveDrawing({
   const [saving, setSaving] = useState(false);
   const [focusBounds, setFocusBounds] = useState<Box | null>(() => focusRequest?.scopeKey === scopeKey ? focusWindow(focusRequest.box, coordinateWidth, coordinateHeight) : null);
   const [imageReady, setImageReady] = useState(false);
+  const [drawBox, setDrawBox] = useState<Box | null>(null);
+  const drawStartRef = useRef<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (!syncSelection) return;
+    if (dragRef.current) return;
+    draftRef.current = selection;
+    setDraft(selection);
+  }, [selection, syncSelection]);
 
   const displayBounds = useMemo<Box>(
     () => focusBounds ?? [0, 0, coordinateWidth, coordinateHeight],
@@ -341,6 +369,7 @@ function InteractiveDrawing({
   const setDraftValue = (box: Box) => {
     draftRef.current = box;
     setDraft(box);
+    onDraftChange?.(box);
   };
 
   const beginDrag = (
@@ -385,6 +414,9 @@ function InteractiveDrawing({
     setSaving(true);
     try {
       await onSave(next);
+    } catch (error) {
+      if (onSaveError) onSaveError(error);
+      else throw error;
     } finally {
       setSaving(false);
     }
@@ -397,33 +429,87 @@ function InteractiveDrawing({
     height: `${(box[3] - box[1]) / displayHeight * 100}%`,
   });
 
+  const pointStyle = (point: [number, number]) => ({
+    left: `${(point[0] - displayBounds[0]) / displayWidth * 100}%`,
+    top: `${(point[1] - displayBounds[1]) / displayHeight * 100}%`,
+  });
+
+  const pointerToImage = (event: ReactPointerEvent<HTMLDivElement>): [number, number] => {
+    const rect = layerRef.current?.getBoundingClientRect();
+    if (!rect) return [0, 0];
+    return [
+      displayBounds[0] + (event.clientX - rect.left) / rect.width * displayWidth,
+      displayBounds[1] + (event.clientY - rect.top) / rect.height * displayHeight,
+    ];
+  };
+  const beginDraw = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!drawMode || !onDrawComplete || (event.target as HTMLElement).closest('button, .inline-crop-box')) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    const point = pointerToImage(event);
+    drawStartRef.current = point;
+    setDrawBox([point[0], point[1], point[0], point[1]]);
+  };
+  const moveDraw = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!drawStartRef.current) return;
+    const [sx, sy] = drawStartRef.current;
+    const [x, y] = pointerToImage(event);
+    setDrawBox([Math.min(sx, x), Math.min(sy, y), Math.max(sx, x), Math.max(sy, y)]);
+  };
+  const finishDraw = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!drawStartRef.current) return;
+    const [sx, sy] = drawStartRef.current;
+    const [x, y] = pointerToImage(event);
+    drawStartRef.current = null;
+    const next = clampBox([Math.min(sx, x), Math.min(sy, y), Math.max(sx, x), Math.max(sy, y)], coordinateWidth, coordinateHeight);
+    setDrawBox(null);
+    if (next[2] - next[0] >= 8 && next[3] - next[1] >= 8) onDrawComplete?.(next);
+  };
+
   const openFocus = (box: Box) => {
     setFocusBounds(focusWindow(box, coordinateWidth, coordinateHeight));
     onRequestFocus(box, scopeKey);
   };
 
   return (
-    <div ref={layerRef} className={`drawing-image-layer ${focusBounds ? 'is-focused' : ''}`}>
+    <div ref={layerRef} className={`drawing-image-layer ${focusBounds ? 'is-focused' : ''} ${drawMode ? 'is-drawing' : ''}`} onPointerDown={beginDraw} onPointerMove={moveDraw} onPointerUp={finishDraw} onPointerCancel={() => { drawStartRef.current = null; setDrawBox(null); }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img ref={imageRef} className={focusBounds ? 'drawing-source-image is-hidden' : 'drawing-source-image'} src={imageUrl} alt={alt} draggable={false} onLoad={() => setImageReady(true)} />
       {focusBounds && <canvas ref={canvasRef} className="drawing-focus-canvas" aria-label={`${alt} 局部放大`} />}
-      {focusBounds && <button type="button" className="focus-return" onClick={() => { setFocusBounds(null); onClearFocus(); }}>返回全图</button>}
+      {focusBounds && !hideFocusControls && <button type="button" className="focus-return" onClick={() => { setFocusBounds(null); onClearFocus(); }}>返回全图</button>}
       {refiningFrames?.map((frame) => (
         <div key={frame.key} className="refinement-frame" style={percentStyle(frame.box)} aria-hidden="true" />
       ))}
       {overlays?.map((overlay) => (
-        <div
-          key={overlay.key}
-          className={`progress-overlay ${overlay.hitboxOnly ? 'overview-module-hitbox' : ''}`}
-          style={percentStyle(overlay.box)}
-        >
-          <button type="button" className={`progress-click-box ${overlay.hitboxOnly ? 'overview-hitbox' : ''}`} aria-label={overlay.hitboxOnly ? `打开 ${overlay.label}` : `选择 ${overlay.label}`} title={overlay.hitboxOnly ? `打开 ${overlay.label}` : undefined} onClick={overlay.onClick}>
-            <span>{overlay.label}</span>
-          </button>
-          {!focusBounds && !overlay.hitboxOnly && <button type="button" className="frame-magnifier" aria-label={`放大 ${overlay.label}`} title="放大框选区域" onClick={(event) => { event.stopPropagation(); overlay.onZoom?.(); }}>⌕</button>}
-        </div>
+        overlay.kind === 'circle' && overlay.point ? (
+          <div key={overlay.key} className="audit-marker-position" style={pointStyle(overlay.point)}>
+            <button
+              type="button"
+              className={`audit-marker ${overlay.selected ? 'is-selected' : ''}`}
+              aria-label={`审核 FAI ${overlay.label}`}
+              aria-pressed={overlay.selected}
+              onMouseEnter={overlay.onMouseEnter}
+              onMouseLeave={overlay.onMouseLeave}
+              onFocus={overlay.onMouseEnter}
+              onBlur={overlay.onMouseLeave}
+              onClick={overlay.onClick}
+            >{overlay.label}</button>
+          </div>
+        ) : (
+          <div
+            key={overlay.key}
+            className={`progress-overlay ${overlay.hitboxOnly ? 'overview-module-hitbox' : ''}`}
+            style={percentStyle(overlay.box)}
+          >
+            <button type="button" className={`progress-click-box ${overlay.hitboxOnly ? 'overview-hitbox' : ''}`} aria-label={overlay.hitboxOnly ? `打开 ${overlay.label}` : `选择 ${overlay.label}`} title={overlay.hitboxOnly ? `打开 ${overlay.label}` : undefined} onClick={overlay.onClick}>
+              <span>{overlay.label}</span>
+            </button>
+            {!focusBounds && !overlay.hitboxOnly && <button type="button" className="frame-magnifier" aria-label={`放大 ${overlay.label}`} title="放大框选区域" onClick={(event) => { event.stopPropagation(); overlay.onZoom?.(); }}>⌕</button>}
+          </div>
+        )
       ))}
-      {draft && (
+      {drawBox && <div className="audit-new-box" style={percentStyle(drawBox)} aria-label="手动画框预览" />}
+      {draft && !drawMode && (
         <div
           className={`inline-crop-box ${saving ? 'is-saving' : ''}`}
           style={percentStyle(draft)}
@@ -432,7 +518,7 @@ function InteractiveDrawing({
           onPointerUp={() => void endDrag()}
         >
           <span className="inline-crop-label">{saving ? '正在保存…' : `${selectionLabel ?? '截图'} · 拖动调整`}</span>
-          {!focusBounds && <button type="button" className="frame-magnifier selected-frame-magnifier" aria-label="放大当前截图框" title="放大框选区域" onPointerDown={(event) => event.stopPropagation()} onClick={(event) => { event.stopPropagation(); openFocus(draft); }}>⌕</button>}
+          {!focusBounds && !hideFocusControls && <button type="button" className="frame-magnifier selected-frame-magnifier" aria-label="放大当前截图框" title="放大框选区域" onPointerDown={(event) => event.stopPropagation()} onClick={(event) => { event.stopPropagation(); openFocus(draft); }}>⌕</button>}
           {(['nw', 'ne', 'sw', 'se'] as const).map((corner) => (
             <span key={corner} className={`crop-handle crop-handle-${corner}`} onPointerDown={(event) => beginDrag(event, corner)} />
           ))}
@@ -442,11 +528,172 @@ function InteractiveDrawing({
   );
 }
 
+function AuditCropCanvas({ imageUrl, bbox, markerBox, pageWidth, pageHeight, label }: {
+  imageUrl: string;
+  bbox: Box;
+  markerBox: Box | null;
+  pageWidth: number;
+  pageHeight: number;
+  label: string;
+}) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [imageReady, setImageReady] = useState(false);
+
+  useEffect(() => {
+    const image = imageRef.current;
+    const canvas = canvasRef.current;
+    if (!imageReady || !image?.naturalWidth || !canvas) return;
+    const [x1, y1, x2, y2] = clampBox(bbox, pageWidth, pageHeight);
+    const cropWidth = x2 - x1;
+    const cropHeight = y2 - y1;
+    const scale = Math.min(1, 1600 / cropWidth, 1100 / cropHeight);
+    canvas.width = Math.max(1, Math.round(cropWidth * scale));
+    canvas.height = Math.max(1, Math.round(cropHeight * scale));
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, x1, y1, cropWidth, cropHeight, 0, 0, canvas.width, canvas.height);
+    if (markerBox) {
+      const [mx1, my1, mx2, my2] = clampBox(markerBox, pageWidth, pageHeight);
+      const markerPad = Math.max(3, Math.round(Math.max(mx2 - mx1, my2 - my1) * 0.08));
+      const left = Math.max(0, mx1 - x1 - markerPad);
+      const top = Math.max(0, my1 - y1 - markerPad);
+      const right = Math.min(cropWidth, mx2 - x1 + markerPad);
+      const bottom = Math.min(cropHeight, my2 - y1 + markerPad);
+      if (left < right && top < bottom) {
+        context.strokeStyle = 'rgb(220, 0, 0)';
+        context.lineWidth = Math.max(2, Math.round(Math.min(cropWidth, cropHeight) * 0.004)) * scale;
+        context.strokeRect(left * scale, top * scale, (right - left) * scale, (bottom - top) * scale);
+      }
+    }
+  }, [bbox, imageReady, markerBox, pageHeight, pageWidth]);
+
+  return (
+    <div className="audit-crop-canvas-wrap">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img ref={imageRef} className="audit-crop-source" src={imageUrl} alt="" aria-hidden="true" draggable={false} onLoad={() => setImageReady(true)} />
+      <canvas ref={canvasRef} className="audit-crop-canvas" aria-label={label} />
+    </div>
+  );
+}
+
+function AuditPanel({
+  record,
+  pageImageUrl,
+  bbox,
+  onDraftChange,
+  onSave,
+  onSaveError,
+  onUpdateField,
+  error,
+}: {
+  record: InspectionRecord;
+  pageImageUrl: string;
+  bbox: Box;
+  onDraftChange: (bbox: Box) => void;
+  onSave: (bbox: Box) => Promise<void>;
+  onSaveError: (error: unknown) => void;
+  onUpdateField: (field: EditableField, value: string) => Promise<void>;
+  error: string;
+}) {
+  const auditScopeKey = `audit-${record.id}`;
+  const fields: { label: string; field: EditableField | null; value: string | null }[] = [
+    { label: 'MODULE', field: 'module', value: record.module },
+    { label: 'PAGE', field: null, value: `page ${record.page_index}` },
+    { label: 'FAI', field: 'fai', value: record.fai },
+    { label: 'SPC', field: 'spc', value: record.spc },
+    { label: 'DESCRIPTION', field: 'description', value: record.description },
+    { label: 'NOMINAL', field: 'nominal', value: record.nominal },
+    { label: 'USL', field: 'usl', value: record.usl },
+    { label: 'LSL', field: 'lsl', value: record.lsl },
+    { label: '100%', field: 'hundred_percent', value: record.hundred_percent },
+    { label: 'DC', field: 'dc', value: record.dc },
+    { label: 'POINTS', field: 'points', value: record.points },
+  ];
+
+  return (
+    <div className="audit-panel">
+      <div className="audit-record-header">
+        <div><span className="panel-kicker">AUDIT MODE · PAGE {record.page_index}</span><h1>FAI {record.fai ?? '—'}</h1></div>
+        <span className={`audit-save-state ${error ? 'has-error' : ''}`}>{error || (record.user_override ? '人工截图' : '模型截图')}</span>
+      </div>
+      <div className="audit-fields" aria-label={`FAI ${record.fai ?? '—'} 检验字段`}>
+        {fields.map(({ label, field, value }) => {
+          const modelFilling = Boolean(field && record.extraction_status === 'processing' && !value && !record.user_edited_fields?.includes(field));
+          return <div key={label} className={`audit-field audit-field-${field ?? 'page'} ${modelFilling ? 'is-model-filling' : ''}`}>
+            <span>{label}</span>
+            {field
+              ? <EditableCell value={value} onSave={(next) => onUpdateField(field, next)} />
+              : <strong>{value}</strong>}
+          </div>;
+        })}
+      </div>
+      <div className="audit-images">
+        <section className="audit-image-card">
+          <header><strong>FAI 截图</strong><span>完整选区 · 拖动右图框实时更新</span></header>
+          <AuditCropCanvas imageUrl={pageImageUrl} bbox={bbox} markerBox={record.marker_bbox} pageWidth={record.page_width} pageHeight={record.page_height} label={`FAI ${record.fai ?? '—'} 当前截图`} />
+        </section>
+        <section className="audit-image-card audit-zoom-card">
+          <header><strong>3× 局部放大</strong><span>拖动边框或四角调整截图</span></header>
+          <div className="audit-zoom-editor">
+            <InteractiveDrawing
+              key={`audit-editor-${record.id}`}
+              imageUrl={pageImageUrl}
+              alt={`FAI ${record.fai ?? '—'} 局部放大截图编辑`}
+              coordinateWidth={record.page_width}
+              coordinateHeight={record.page_height}
+              selection={bbox}
+              selectionLabel={`FAI ${record.fai ?? '—'}`}
+              overlays={[]}
+              onSave={onSave}
+              onDraftChange={onDraftChange}
+              onSaveError={onSaveError}
+              syncSelection
+              scopeKey={auditScopeKey}
+              focusRequest={{ scopeKey: auditScopeKey, box: record.effective_bbox }}
+              onRequestFocus={() => undefined}
+              onClearFocus={() => undefined}
+              hideFocusControls
+            />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function AuditFaiSelector({ records, selectedId, onSelect }: {
+  records: InspectionRecord[];
+  selectedId: string;
+  onSelect: (record: InspectionRecord) => void;
+}) {
+  return <div className="audit-fai-selector" aria-label="切换审核 FAI">
+    {records.map((record) => <button
+      key={record.id}
+      type="button"
+      className={record.id === selectedId ? 'is-selected' : ''}
+      aria-pressed={record.id === selectedId}
+      onClick={() => onSelect(record)}
+    >{record.fai ?? '—'}</button>)}
+  </div>;
+}
+
 export default function ScanPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const activeRunIdRef = useRef<string | null>(null);
   const [run, setRun] = useState<ScanRun | null>(null);
   const [isRestoring, setIsRestoring] = useState(true);
+  const [auditMode, setAuditMode] = useState(false);
+  const [hoveredAuditId, setHoveredAuditId] = useState<string | null>(null);
+  const [lockedAuditId, setLockedAuditId] = useState<string | null>(null);
+  const lockedAuditIdRef = useRef<string | null>(null);
+  const [auditDraft, setAuditDraft] = useState<{ recordId: string; bbox: Box } | null>(null);
+  const [manualPendingRecords, setManualPendingRecords] = useState<InspectionRecord[]>([]);
+  const [manualDrawMode, setManualDrawMode] = useState<'page' | 'module' | null>(null);
+  const manualEditsRef = useRef<Record<string, Partial<InspectionRecord>>>({});
+  const manualCounterRef = useRef(0);
+  const [auditError, setAuditError] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [previewRecordId, setPreviewRecordId] = useState<string | null>(null);
   const [previewAnchor, setPreviewAnchor] = useState<HTMLElement | null>(null);
@@ -462,6 +709,7 @@ export default function ScanPage() {
   const [editError, setEditError] = useState('');
   const [leftWidth, setLeftWidth] = useState(60);
   const resizeRef = useRef<{ startX: number; startWidth: number } | null>(null);
+  useEffect(() => { lockedAuditIdRef.current = lockedAuditId; }, [lockedAuditId]);
   const closePreview = useCallback(() => {
     setPreviewRecordId(null);
     setPreviewAnchor(null);
@@ -584,6 +832,12 @@ export default function ScanPage() {
     setUploading(true);
     setError('');
     closePreview();
+    setAuditMode(false);
+    setHoveredAuditId(null);
+    lockedAuditIdRef.current = null;
+    setLockedAuditId(null);
+    setAuditDraft(null);
+    setAuditError('');
     setSelectedId(null);
     setPageFrameRequested(false);
     setViewMode('page');
@@ -608,6 +862,15 @@ export default function ScanPage() {
 
   const updateRecordField = async (recordId: string, field: EditableField, value: string) => {
     if (!run) return;
+    if (manualPendingRecords.some((record) => record.id === recordId)) {
+      manualEditsRef.current[recordId] = { ...manualEditsRef.current[recordId], [field]: value || null };
+      setManualPendingRecords((current) => current.map((record) => record.id === recordId ? {
+        ...record,
+        [field]: value || null,
+        user_edited_fields: [...new Set([...(record.user_edited_fields ?? []), field])],
+      } : record));
+      return;
+    }
     const response = await fetch(apiUrl(`/api/runs/${run.id}/records/${recordId}`), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -681,8 +944,8 @@ export default function ScanPage() {
     ? progressPage.stage1_modules[viewModule - 1] ?? null
     : null;
 
-  const saveRecord = useCallback(async (record: InspectionRecord, bbox: Box) => {
-    if (!run) return;
+  const saveRecord = useCallback(async (record: InspectionRecord, bbox: Box): Promise<InspectionRecord | null> => {
+    if (!run) return null;
     const response = await fetch(apiUrl(`/api/runs/${run.id}/records/${record.id}/crop`), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -694,6 +957,7 @@ export default function ScanPage() {
       ...current,
       records: current.records.map((item) => item.id === updated.id ? updated : item),
     } : current);
+    return updated;
   }, [run]);
 
   const selectRecord = (record: InspectionRecord, mode: ViewMode = 'page', fromTable = false) => {
@@ -720,6 +984,11 @@ export default function ScanPage() {
     if (!run || !Number.isFinite(requested)) return;
     const next = Math.max(1, Math.min(run.total_pages || 1, Math.round(requested)));
     closePreview();
+    setHoveredAuditId(null);
+    lockedAuditIdRef.current = null;
+    setLockedAuditId(null);
+    setAuditDraft(null);
+    setAuditError('');
     setSelectedId(null);
     setPageFrameRequested(false);
     setFocusRequest(null);
@@ -780,6 +1049,190 @@ export default function ScanPage() {
         };
       })
     : [];
+  const auditPageRecords = run?.records.filter((record) => record.page_index === currentPage) ?? [];
+  const pageManualPendingRecords = manualPendingRecords.filter((record) => record.page_index === currentPage);
+  const auditDisplayRecords = [...auditPageRecords, ...pageManualPendingRecords];
+  const hoveredAuditRecord = auditDisplayRecords.find((record) => record.id === hoveredAuditId) ?? null;
+  const lockedAuditRecord = auditDisplayRecords.find((record) => record.id === lockedAuditId) ?? null;
+  const auditSelectorModuleIndex = lockedAuditRecord?.module_index || viewModule;
+  const auditSelectorRecords = auditSelectorModuleIndex
+    ? auditDisplayRecords.filter((record) => record.module_index === auditSelectorModuleIndex)
+    : [];
+  const lockedManualPendingRecord = manualPendingRecords.find((record) => record.id === lockedAuditRecord?.id) ?? null;
+  const activeAuditRecord = auditMode ? hoveredAuditRecord ?? lockedAuditRecord : null;
+  const activeAuditBox = activeAuditRecord
+    ? auditDraft?.recordId === activeAuditRecord.id ? auditDraft.bbox : activeAuditRecord.effective_bbox
+    : null;
+  const auditOverlays: Overlay[] = auditMode ? auditDisplayRecords.map<Overlay>((record) => ({
+    key: `audit-${record.id}`,
+    box: record.effective_bbox,
+    point: record.marker_bbox
+      ? [(record.marker_bbox[0] + record.marker_bbox[2]) / 2, (record.marker_bbox[1] + record.marker_bbox[3]) / 2]
+      : [(record.effective_bbox[0] + record.effective_bbox[2]) / 2, (record.effective_bbox[1] + record.effective_bbox[3]) / 2],
+    kind: 'circle',
+    label: record.fai ?? '—',
+    // Keep the provisional hand-drawn marker black until Stage 2 resolves it.
+    selected: !pageManualPendingRecords.some((pending) => pending.id === record.id) && activeAuditRecord?.id === record.id,
+    onMouseEnter: () => {
+      setHoveredAuditId(record.id);
+      setAuditDraft({ recordId: record.id, bbox: record.effective_bbox });
+      setAuditError('');
+    },
+    onMouseLeave: () => setHoveredAuditId((current) => current === record.id ? null : current),
+    onClick: () => {
+      setLockedAuditId(record.id);
+      setHoveredAuditId(null);
+      setSelectedId(record.id);
+      setPageFrameRequested(false);
+      setAuditDraft({ recordId: record.id, bbox: record.effective_bbox });
+      if (record.module_index > 0) {
+        setViewModule(record.module_index);
+        setViewMode('module');
+      } else {
+        setViewModule(null);
+        setViewMode('page');
+      }
+      setAuditError('');
+    },
+  })) : [];
+  const pendingComponentOverlay: Overlay[] = auditMode && moduleOrigin
+    ? pageManualPendingRecords.filter((record) => record.module_index > 0 && record.module_index === viewModule).map((record) => ({
+        key: `audit-${record.id}`,
+        box: [
+          record.effective_bbox[0] - moduleOrigin[0], record.effective_bbox[1] - moduleOrigin[1],
+          record.effective_bbox[2] - moduleOrigin[0], record.effective_bbox[3] - moduleOrigin[1],
+        ] as Box,
+        point: [
+          (record.effective_bbox[0] + record.effective_bbox[2]) / 2 - moduleOrigin[0],
+          (record.effective_bbox[1] + record.effective_bbox[3]) / 2 - moduleOrigin[1],
+        ] as [number, number],
+        kind: 'circle' as const, label: '—', selected: false,
+        onClick: () => { setLockedAuditId(record.id); setHoveredAuditId(null); },
+      }))
+    : [];
+  const toggleAuditMode = () => {
+    const entering = !auditMode;
+    closePreview();
+    setFocusRequest(null);
+    setViewMode('page');
+    setViewModule(null);
+    setPageFrameRequested(false);
+    setHoveredAuditId(null);
+    setAuditError('');
+    if (entering) {
+      const initialRecord = selectedRecord?.page_index === currentPage ? selectedRecord : null;
+      lockedAuditIdRef.current = initialRecord?.id ?? null;
+      setLockedAuditId(initialRecord?.id ?? null);
+      setAuditDraft(initialRecord ? { recordId: initialRecord.id, bbox: initialRecord.effective_bbox } : null);
+    } else {
+      lockedAuditIdRef.current = null;
+      setLockedAuditId(null);
+      setAuditDraft(null);
+    }
+    setAuditMode(entering);
+  };
+  const saveAuditCrop = async (bbox: Box) => {
+    if (!activeAuditRecord) return;
+    if (manualPendingRecords.some((record) => record.id === activeAuditRecord.id)) {
+      setAuditDraft({ recordId: activeAuditRecord.id, bbox });
+      setManualPendingRecords((current) => current.map((record) => record.id === activeAuditRecord.id
+        ? { ...record, effective_bbox: bbox, model_bbox: bbox }
+        : record));
+      return;
+    }
+    setAuditError('');
+    const updated = await saveRecord(activeAuditRecord, bbox);
+    setAuditDraft({ recordId: activeAuditRecord.id, bbox: updated?.effective_bbox ?? bbox });
+  };
+  const handleAuditSaveError = (saveError: unknown) => {
+    setAuditError(saveError instanceof Error ? saveError.message : '截图保存失败，请重试');
+  };
+
+  const submitManualAuditBox = async (sourceBox: Box, source: 'page' | 'module', retryId?: string) => {
+    if (!run) return;
+    const retryRecord = retryId ? manualPendingRecords.find((record) => record.id === retryId) : null;
+    const pageBox: Box = retryRecord
+      ? sourceBox
+      : source === 'module' && moduleOrigin
+      ? [sourceBox[0] + moduleOrigin[0], sourceBox[1] + moduleOrigin[1], sourceBox[2] + moduleOrigin[0], sourceBox[3] + moduleOrigin[1]]
+      : sourceBox;
+    const pageWidth = progressPage?.page_width ?? 1;
+    const pageHeight = progressPage?.page_height ?? 1;
+    manualCounterRef.current += 1;
+    const tempId = retryRecord?.id ?? `manual-pending-${manualCounterRef.current}`;
+    const carriedEdits = manualEditsRef.current[tempId] ?? {};
+    const pending: InspectionRecord = retryRecord ? {
+      ...retryRecord,
+      model_bbox: pageBox,
+      effective_bbox: pageBox,
+      extraction_status: 'processing',
+      extraction_error: null,
+    } : {
+      id: tempId, candidate_key: tempId,
+      sequence: Math.max(0, ...run.records.map((record) => record.sequence), ...manualPendingRecords.map((record) => record.sequence)) + 1,
+      project: documentRecord?.project ?? null, revision: documentRecord?.revision ?? null,
+      author: documentRecord?.author ?? null, drawing_date: documentRecord?.drawing_date ?? null,
+      module: source === 'module' && viewModule ? `MODULE ${viewModule}` : null,
+      module_index: source === 'module' ? viewModule ?? 0 : 0, page_index: currentPage,
+      fai: null, spc: null, description: null, nominal: null, usl: null, lsl: null,
+      hundred_percent: null, dc: null, points: null, page_width: pageWidth, page_height: pageHeight,
+      model_bbox: pageBox, marker_bbox: null, effective_bbox: pageBox, user_override: false,
+      crop_url: '', page_url: apiUrl(`/api/runs/${run.id}/pages/${currentPage}`), updated_at: new Date().toISOString(),
+      extraction_status: 'processing', extraction_error: null,
+      ...carriedEdits,
+      user_edited_fields: Object.keys(carriedEdits),
+    };
+    manualEditsRef.current[tempId] = { ...carriedEdits };
+    setManualPendingRecords((current) => retryRecord
+      ? current.map((record) => record.id === tempId ? pending : record)
+      : [...current, pending]);
+    lockedAuditIdRef.current = tempId;
+    setLockedAuditId(tempId);
+    setHoveredAuditId(null);
+    setAuditDraft({ recordId: tempId, bbox: pageBox });
+    setAuditError('');
+    setManualDrawMode(null);
+    try {
+      const response = await fetch(apiUrl(`/api/runs/${run.id}/pages/${currentPage}/audit/detect`), {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bbox: pageBox.map(Math.round), module_index: pending.module_index || null, candidate_key: pending.candidate_key }),
+      });
+      if (!response.ok) throw new Error(await response.text());
+      let record = await response.json() as InspectionRecord;
+      const edits = manualEditsRef.current[tempId] ?? {};
+      for (const [field, value] of Object.entries(edits)) {
+        const update = await fetch(apiUrl(`/api/runs/${run.id}/records/${record.id}`), {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ field, value }),
+        });
+        if (update.ok) record = await update.json() as InspectionRecord;
+      }
+      delete manualEditsRef.current[tempId];
+      setRun((current) => current ? {
+        ...current,
+        records: current.records.some((item) => item.id === record.id)
+          ? current.records.map((item) => item.id === record.id ? record : item)
+          : [...current.records, record],
+      } : current);
+      setManualPendingRecords((current) => current.filter((item) => item.id !== tempId));
+      setAuditDraft((current) => current?.recordId === tempId
+        ? { recordId: record.id, bbox: record.effective_bbox }
+        : current);
+      if (lockedAuditIdRef.current === tempId) {
+        lockedAuditIdRef.current = record.id;
+        setLockedAuditId(record.id);
+        if (record.module_index > 0) setViewModule(record.module_index);
+        else { setViewModule(null); setViewMode('page'); }
+        setAuditError('');
+      }
+    } catch (detectError) {
+      const message = detectError instanceof Error ? detectError.message : 'FAI 识别失败；手动画框已保留';
+      setManualPendingRecords((current) => current.map((record) => record.id === tempId
+        ? { ...record, extraction_status: 'failed', extraction_error: message }
+        : record));
+      if (lockedAuditIdRef.current === tempId) setAuditError(message);
+    }
+  };
   const selectedModuleRecord = selectedRecord && selectedRecord.page_index === currentPage && selectedRecord.module_index === viewModule
     ? selectedRecord
     : null;
@@ -820,21 +1273,39 @@ export default function ScanPage() {
           <span className={`status-dot status-${run?.status ?? 'idle'}`} />
           {isRestoring ? <strong>正在恢复任务…</strong> : run ? <><strong>{run.status === 'completed' ? '处理完成' : run.status === 'failed' ? '处理失败' : run.status === 'interrupted' ? '任务已中断' : '正在处理'}</strong><span>第 {run.current_page || 0}/{run.total_pages || '—'} 页</span><span className="progress-file">{run.pdf_name}</span></> : <span>等待 PDF</span>}
         </div>
-        <button className="upload-compact" type="button" disabled={uploading || isRestoring} onClick={() => inputRef.current?.click()}>{uploading ? '上传中…' : isRestoring ? '恢复中…' : '选择 PDF'}</button>
+        <div className="scan-header-actions">
+          <button className={`audit-mode-toggle ${auditMode ? 'is-active' : ''}`} type="button" aria-pressed={auditMode} disabled={!run || uploading || isRestoring} onClick={toggleAuditMode}>{auditMode ? '退出审核模式' : '审核模式'}</button>
+          <button className="upload-compact" type="button" disabled={uploading || isRestoring} onClick={() => inputRef.current?.click()}>{uploading ? '上传中…' : isRestoring ? '恢复中…' : '选择 PDF'}</button>
+        </div>
         <input ref={inputRef} className="visually-hidden" type="file" accept="application/pdf,.pdf" onChange={(event: ChangeEvent<HTMLInputElement>) => void uploadPdf(event.target.files?.[0])} />
       </header>
-
       <section
         className="scan-workspace"
         style={{ gridTemplateColumns: `${leftWidth}% 8px minmax(0, 1fr)` }}
       >
-        <aside className="inspection-panel">
+        <aside className={`inspection-panel ${auditMode ? 'is-audit-mode' : ''}`}>
           <div className="inspection-metadata" aria-label="图纸资料">
             <div><span>PROJECT</span><EditableCell value={documentRecord?.project} onSave={(value) => updateMetadata('project', value)} /></div>
             <div><span>REVISION</span><EditableCell value={documentRecord?.revision} onSave={(value) => updateMetadata('revision', value)} /></div>
             <div><span>AUTHOR</span><EditableCell value={documentRecord?.author} onSave={(value) => updateMetadata('author', value)} /></div>
             <div><span>DATE</span><EditableCell value={documentRecord?.drawing_date} onSave={(value) => updateMetadata('drawing_date', value)} /></div>
           </div>
+          {auditMode ? (
+            activeAuditRecord && activeAuditBox && run ? (
+              <AuditPanel
+                record={activeAuditRecord}
+                pageImageUrl={apiUrl(`/api/runs/${run.id}/pages/${activeAuditRecord.page_index}`)}
+                bbox={activeAuditBox}
+                onDraftChange={(bbox) => setAuditDraft({ recordId: activeAuditRecord.id, bbox })}
+                onSave={saveAuditCrop}
+                onSaveError={handleAuditSaveError}
+                onUpdateField={(field, value) => updateRecordField(activeAuditRecord.id, field, value)}
+                error={auditError}
+              />
+            ) : (
+              <div className="audit-empty-state"><span className="audit-empty-mark">◎</span><strong>选择一个 FAI 开始审核</strong><small>将鼠标悬停在右侧圆圈上预览，点击即可锁定</small></div>
+            )
+          ) : <>
           <div className="panel-heading"><div><span className="panel-kicker">INSPECTION INDEX</span><h1>检验信息</h1></div><span className="record-count">{run?.records.length ?? 0} 条</span></div>
           <div className="inspection-table-wrap"><div className="inspection-table-scroll"><table className="inspection-table">
             <thead><tr><th>No.</th><th>Module</th><th>Page</th><th>FAI</th><th>SPC</th><th>Description</th><th>Nominal</th><th>USL</th><th>LSL</th><th>SPC截图</th><th>100%</th><th>DC</th><th>Points</th></tr></thead>
@@ -874,12 +1345,13 @@ export default function ScanPage() {
               {!run?.records.length && <tr className="empty-table-row"><td colSpan={13}>crop2_refined 完成后，结果会按 FAI 从小到大出现在这里</td></tr>}
             </tbody>
           </table></div><div className="inspection-table-actions"><span>{editError}</span><button type="button" disabled={!run?.records.length || exporting} onClick={() => void exportExcel()}>{exporting ? '正在导出…' : '导出 Excel'}</button></div></div>
+          </>}
         </aside>
 
         <div
           className="resize-divider"
           role="separator"
-          aria-label="调整表格与图纸宽度"
+          aria-label={auditMode ? '调整审核面板与图纸宽度' : '调整表格与图纸宽度'}
           aria-orientation="vertical"
           aria-valuemin={30}
           aria-valuemax={75}
@@ -926,7 +1398,7 @@ export default function ScanPage() {
               <span>REFINED <b>{currentPageRefinedCount}</b></span>
               <span>处理中模块 <b>{run.current_module ? `${run.current_module}/${currentPageModuleCount || '—'}` : `—/${currentPageModuleCount || '—'}`}</b></span>
               <span className="progress-percent"><i style={{ width: `${currentPagePercent}%` }} /><b>{currentPagePercent}%</b></span>
-              <button type="button" onClick={() => { setFocusRequest(null); setSelectedId(null); setPageFrameRequested(false); setViewModule(null); setViewMode('overview'); }}>查看部件全览</button>
+              {!auditMode && <button type="button" onClick={() => { setFocusRequest(null); setSelectedId(null); setPageFrameRequested(false); setViewModule(null); setViewMode('overview'); }}>查看部件全览</button>}
               {viewMode !== 'page' && <button type="button" onClick={() => { setFocusRequest(null); setViewMode('page'); }}>返回原图</button>}
             </div>}
           </div>
@@ -939,7 +1411,45 @@ export default function ScanPage() {
             <div className="viewer-message"><span className="loader-ring" /><strong>正在处理 PDF 文件并传入模型</strong></div>
           ) : (
             <div className="drawing-scroll">
-              {viewMode === 'overview' && progressPage?.has_overview ? (
+              {auditMode && viewMode === 'module' && lockedAuditRecord && activeAuditBox && activeStage1Module?.crop_url && moduleOrigin ? (
+                <>
+                  <InteractiveDrawing
+                    key={`audit-component-${currentPage}-${viewModule}`}
+                    imageUrl={apiUrl(activeStage1Module.crop_url)}
+                    alt={`FAI ${lockedAuditRecord.fai ?? '—'} 所属部件`}
+                    coordinateWidth={moduleWidth}
+                    coordinateHeight={moduleHeight}
+                    selection={[
+                      activeAuditBox[0] - moduleOrigin[0], activeAuditBox[1] - moduleOrigin[1],
+                      activeAuditBox[2] - moduleOrigin[0], activeAuditBox[3] - moduleOrigin[1],
+                    ]}
+                    selectionLabel={`FAI ${lockedAuditRecord.fai ?? '—'}`}
+                    syncSelection
+                    overlays={pendingComponentOverlay}
+                    onSave={async (local) => { await saveAuditCrop([
+                      local[0] + moduleOrigin[0], local[1] + moduleOrigin[1],
+                      local[2] + moduleOrigin[0], local[3] + moduleOrigin[1],
+                    ]); }}
+                    drawMode={manualDrawMode === 'module'}
+                    onDrawComplete={(box) => void submitManualAuditBox(box, 'module')}
+                    scopeKey={`audit-component-${currentPage}-${viewModule}`}
+                    focusRequest={null}
+                    onRequestFocus={() => undefined}
+                    onClearFocus={() => undefined}
+                    hideFocusControls
+                  />
+                  <div className="audit-right-controls">
+                    <AuditFaiSelector records={auditSelectorRecords} selectedId={lockedAuditRecord.id} onSelect={(record) => {
+                      setLockedAuditId(record.id); setHoveredAuditId(null); setSelectedId(record.id);
+                      setAuditDraft({ recordId: record.id, bbox: record.effective_bbox });
+                      if (record.module_index > 0) setViewModule(record.module_index);
+                      else { setViewModule(null); setViewMode('page'); }
+                    }} />
+                    {lockedManualPendingRecord?.extraction_status === 'failed' && activeAuditBox && <button type="button" className="audit-draw-toggle" onClick={() => void submitManualAuditBox(activeAuditBox, 'page', lockedManualPendingRecord.id)}>重新识别</button>}
+                    <button type="button" className={`audit-draw-toggle ${manualDrawMode === 'module' ? 'is-active' : ''}`} onClick={() => setManualDrawMode((mode) => mode === 'module' ? null : 'module')}>⌖ 在部件图框选 FAI</button>
+                  </div>
+                </>
+              ) : viewMode === 'overview' && progressPage?.has_overview ? (
                 <InteractiveDrawing
                   key={`overview-${currentPage}`}
                   imageUrl={apiUrl(progressPage.overview_url)}
@@ -964,7 +1474,7 @@ export default function ScanPage() {
                   selectionLabel={selectedModuleRecord ? `FAI ${selectedModuleRecord.fai ?? '—'}` : undefined}
                   overlays={moduleOverlays}
                   refiningFrames={moduleRefiningFrames}
-                  onSave={selectedModuleRecord && moduleSelection ? async (local) => saveRecord(selectedModuleRecord, [local[0] + moduleOrigin[0], local[1] + moduleOrigin[1], local[2] + moduleOrigin[0], local[3] + moduleOrigin[1]]) : undefined}
+                  onSave={selectedModuleRecord && moduleSelection ? async (local) => { await saveRecord(selectedModuleRecord, [local[0] + moduleOrigin[0], local[1] + moduleOrigin[1], local[2] + moduleOrigin[0], local[3] + moduleOrigin[1]]); } : undefined}
                   scopeKey={moduleScopeKey}
                   focusRequest={focusRequest}
                   onRequestFocus={(box, scope) => setFocusRequest({ scopeKey: scope, box })}
@@ -972,22 +1482,28 @@ export default function ScanPage() {
                 />
               ) : (
                 <InteractiveDrawing
-                  key={`page-${currentPage}-${viewMode}-${selectedId ?? 'none'}-${pageFrameRequested ? 'selected' : 'clean'}`}
+                  key={auditMode ? `audit-page-${currentPage}` : `page-${currentPage}-${viewMode}-${selectedId ?? 'none'}-${pageFrameRequested ? 'selected' : 'clean'}`}
                   imageUrl={apiUrl(`/api/runs/${run.id}/pages/${currentPage}`)}
                   alt={`PDF 第 ${currentPage} 页`}
                   coordinateWidth={progressPage?.page_width ?? activeRecord?.page_width ?? 1}
                   coordinateHeight={progressPage?.page_height ?? activeRecord?.page_height ?? 1}
-                  selection={pageFrameRequested && selectedRecord?.page_index === currentPage ? selectedRecord.effective_bbox : null}
-                  selectionLabel={pageFrameRequested && selectedRecord?.page_index === currentPage ? `FAI ${selectedRecord.fai ?? '—'}` : undefined}
-                  overlays={[]}
-                  refiningFrames={pageRefiningFrames}
-                  onSave={pageFrameRequested && selectedRecord?.page_index === currentPage ? async (box) => saveRecord(selectedRecord, box) : undefined}
+                  selection={auditMode && lockedAuditRecord ? activeAuditBox : pageFrameRequested && selectedRecord?.page_index === currentPage ? selectedRecord.effective_bbox : null}
+                  selectionLabel={auditMode && lockedAuditRecord ? `FAI ${lockedAuditRecord.fai ?? '—'}` : pageFrameRequested && selectedRecord?.page_index === currentPage ? `FAI ${selectedRecord.fai ?? '—'}` : undefined}
+                  overlays={auditMode ? auditOverlays : []}
+                  refiningFrames={auditMode ? [] : pageRefiningFrames}
+                  onSave={auditMode && lockedAuditRecord ? saveAuditCrop : pageFrameRequested && selectedRecord?.page_index === currentPage ? async (box) => { await saveRecord(selectedRecord, box); } : undefined}
+                  drawMode={auditMode && manualDrawMode === 'page'}
+                  onDrawComplete={auditMode ? (box) => void submitManualAuditBox(box, 'page') : undefined}
                   scopeKey={pageScopeKey}
                   focusRequest={focusRequest}
                   onRequestFocus={(box, scope) => setFocusRequest({ scopeKey: scope, box })}
                   onClearFocus={() => setFocusRequest(null)}
                 />
               )}
+              {auditMode && !(viewMode === 'module' && lockedAuditRecord && activeStage1Module?.crop_url && moduleOrigin) && <div className="audit-right-controls">
+                {lockedManualPendingRecord?.extraction_status === 'failed' && activeAuditBox && <button type="button" className="audit-draw-toggle" onClick={() => void submitManualAuditBox(activeAuditBox, 'page', lockedManualPendingRecord.id)}>重新识别</button>}
+                <button type="button" className={`audit-draw-toggle ${manualDrawMode === 'page' ? 'is-active' : ''}`} onClick={() => setManualDrawMode((mode) => mode === 'page' ? null : 'page')}>⌖ 在整页图框选 FAI</button>
+              </div>}
             </div>
           )}
           {draggingFile && <div className="drop-overlay">松开以开始扫描 PDF</div>}

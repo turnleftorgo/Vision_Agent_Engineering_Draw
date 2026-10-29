@@ -17,7 +17,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, Callable, Iterable
 
-from openai import OpenAI
+from openai import DefaultHttpxClient, OpenAI
 from PIL import Image, ImageDraw
 
 import qwen_fai_cluster_detector as fai
@@ -26,10 +26,10 @@ from fai_xray import XRAY_PROMPT_APPENDIX, build_fai_xray, save_xray_result
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 MODULE_DETECTOR_PATH = SCRIPT_DIR / "qwen_module_blind_test V2.py"
-DEFAULT_ENDPOINT = "http://127.0.0.1:8001/v1"
-DEFAULT_MODEL = "Qwen3.8-27B-MLX-8bit"
-DEFAULT_RECOVERY_MODEL = "Qwen3.8-27B-MLX-8bit"
-DEFAULT_API_KEY = "anything"
+DEFAULT_ENDPOINT = "http://10.244.231.87:8111/v1"
+DEFAULT_MODEL = "MCEG-DeepSeek-R1"
+DEFAULT_RECOVERY_MODEL = "MCEG-DeepSeek-R1"
+DEFAULT_API_KEY = "sk-anything"
 
 PAGE_ONE_METADATA_PROMPT = """
 
@@ -97,7 +97,7 @@ RECOVERY_DECISION_SCHEMA: dict[str, Any] = {
                 "type": "string",
                 "enum": ["left", "right", "up", "down"],
             },
-            "uniqueItems": True,
+            #"uniqueItems": True,
         },
         "reason": {
             "type": "string",
@@ -411,7 +411,7 @@ def parse_recovery_decision(
         if (
             not isinstance(expand_sides, list)
             or not all(isinstance(side, str) and side in RECOVERY_SIDES for side in expand_sides)
-            or len(expand_sides) != len(set(expand_sides))
+            # or len(expand_sides) != len(set(expand_sides))
         ):
             raise ValueError("expand_sides must contain unique valid sides")
         if not isinstance(reason, str) or reason not in RECOVERY_REASONS:
@@ -475,11 +475,28 @@ def call_recovery_agent(
             ],
             max_tokens=max_tokens,
             temperature=temperature,
+            top_p=0.95,
+            presence_penalty=0,
+            frequency_penalty=0,
+            reasoning_effort="xhigh",
+            extra_body={
+                "top_k": 20,
+                "chat_template_kwargs": {"enable_thinking": True, "reasoning_effort": "xhigh"},
+                "thinking_token_budget": 1024,
+            },
             response_format=RECOVERY_RESPONSE_FORMAT,
         )
-        raw = (response.choices[0].message.content or "").strip()
+        message = response.choices[0].message
+        raw = (message.content or "").strip()
+        metadata = response_metadata(response)
+        message_dump = message.model_dump()
+        for field in ("reasoning_content", "reasoning", "refusal"):
+            extra = getattr(message, field, None)
+            if extra is not None:
+                message_dump.setdefault(field, extra)
+        metadata["message"] = message_dump
         elapsed = time.perf_counter() - started
-        return parse_recovery_decision(raw, elapsed, response_metadata(response))
+        return parse_recovery_decision(raw, elapsed, metadata)
     except Exception as exc:
         return RecoveryDecision(
             action=None,
@@ -603,6 +620,16 @@ def recover_crop_candidate(
             decision.raw_response, encoding="utf-8"
         )
         write_json(round_dir / "decision.json", decision.to_dict())
+        write_json(
+            round_dir / "model_response.json",
+            {
+                "error": decision.error,
+                "finish_reason": decision.metadata.get("finish_reason"),
+                "usage": decision.metadata.get("usage"),
+                "message": decision.metadata.get("message"),
+                "raw_response": decision.raw_response,
+            },
+        )
 
         before = current
         if decision.action == "finish":
@@ -635,6 +662,18 @@ def recover_crop_candidate(
         action_text = (
             f"expand({side_text})" if decision.action == "expand" else decision.action
         )
+        if decision.action is None:
+            debug_details = {
+                "error": decision.error,
+                "finish_reason": decision.metadata.get("finish_reason"),
+                "usage": decision.metadata.get("usage"),
+                "message": decision.metadata.get("message"),
+                "raw_response": decision.raw_response,
+            }
+            log(
+                f"[Stage 3][{candidate.key}][DEBUG] invalid response: "
+                f"{json.dumps(debug_details, ensure_ascii=False)}"
+            )
         log(
             f"[Stage 3][{candidate.key}] round {round_number}/{max_rounds}: "
             f"{action_text or 'invalid; retry'}"
@@ -695,6 +734,16 @@ def response_metadata(response: Any) -> dict[str, Any]:
     }
 
 
+def create_openai_client(*, base_url: str, api_key: str, timeout: float | None = None) -> OpenAI:
+    """Create an OpenAI-compatible client using the optional app proxy."""
+    proxy_url = os.environ.get("CLAW_VIEW_PROXY_URL")
+    kwargs: dict[str, Any] = {"base_url": base_url, "api_key": api_key}
+    if timeout is not None:
+        kwargs["timeout"] = timeout
+    kwargs["http_client"] = DefaultHttpxClient(proxy=proxy_url or None, trust_env=False)
+    return OpenAI(**kwargs)
+
+
 def call_vision_once(
     client: OpenAI,
     model: str,
@@ -721,8 +770,81 @@ def call_vision_once(
         ],
         max_tokens=max_tokens,
         temperature=temperature,
+        reasoning_effort="xhigh",
+        extra_body={"chat_template_kwargs": {"enable_thinking": True, "reasoning_effort": "xhigh"}},
     )
     return (response.choices[0].message.content or "").strip(), response_metadata(response)
+
+
+def detect_fai_in_user_region(
+    image: Image.Image,
+    focus_box: Iterable[int | float],
+    *,
+    endpoint: str | None = None,
+    model: str | None = None,
+    api_key: str | None = None,
+    proxy_url: str | None = None,
+) -> fai.FAICluster:
+    """Use the existing Stage 2 model/schema to identify a manually selected FAI."""
+    x1, y1, x2, y2 = [round(float(value)) for value in focus_box]
+    x1, x2 = sorted((max(0, min(image.width, x1)), max(0, min(image.width, x2))))
+    y1, y2 = sorted((max(0, min(image.height, y1)), max(0, min(image.height, y2))))
+    if x2 - x1 < 8 or y2 - y1 < 8:
+        raise ValueError("手动画框区域过小")
+
+    highlighted = image.convert("RGB").copy()
+    draw = ImageDraw.Draw(highlighted)
+    stroke = max(3, round(max(image.size) / 900))
+    draw.rectangle((x1, y1, x2, y2), outline=(255, 120, 0), width=stroke)
+    system_prompt = fai.SYSTEM_PROMPT + """
+
+【用户手动画框的聚焦识别模式】
+橙色矩形是用户明确选中的目标提示。只返回与该区域直接对应的 FAI 集群，不要返回画面中的其他 FAI。先检查该区域附近是否有明确 FAI 圆形标记，并按图上证据读取 FAI 编号。marker_bbox 必须框住真实的 FAI 标记，而不是用户橙框。若无法确认该区域对应的 FAI，请返回空 fai_clusters；不得猜编号或把无关 FAI 关联过来。bbox 仍应覆盖目标 FAI 集群及相关内容。
+"""
+    user_prompt = (
+        "请识别橙色框选区域对应的唯一 FAI 集群，并按规定 JSON 返回。"
+        "如果框内/附近没有可确认的 FAI 标记，返回空数组。"
+    )
+    resolved_endpoint = endpoint or os.environ.get("CLAW_VIEW_ENDPOINT", DEFAULT_ENDPOINT)
+    resolved_model = model or os.environ.get("CLAW_VIEW_MODEL", DEFAULT_MODEL)
+    resolved_key = api_key or os.environ.get("CLAW_VIEW_API_KEY", DEFAULT_API_KEY)
+    selected_proxy = proxy_url if proxy_url is not None else os.environ.get("CLAW_VIEW_PROXY_URL")
+    client_kwargs: dict[str, Any] = {
+        "base_url": resolved_endpoint.rstrip("/"),
+        "api_key": resolved_key,
+    }
+    client_kwargs["http_client"] = DefaultHttpxClient(
+        proxy=selected_proxy or None, trust_env=False
+    )
+    client = OpenAI(**client_kwargs)
+    raw, _metadata = call_vision_once(
+        client, resolved_model, system_prompt, user_prompt, highlighted,
+        max_tokens=4096, temperature=0.0,
+    )
+    parsed = fai.parse_response(raw)
+    clusters, invalid = fai.validate_clusters(parsed, image.width, image.height)
+    if not clusters:
+        detail = f"（{len(invalid)} 个模型结果未通过格式校验）" if invalid else ""
+        raise ValueError(f"Stage 2 未能确认该选区对应的 FAI{detail}")
+    def overlap_area(box: list[int] | None) -> int:
+        if not box or len(box) != 4:
+            return 0
+        left, top = max(x1, box[0]), max(y1, box[1])
+        right, bottom = min(x2, box[2]), min(y2, box[3])
+        return max(0, right - left) * max(0, bottom - top)
+
+    clusters.sort(
+        key=lambda cluster: (
+            overlap_area(cluster.marker_bbox_pixels) > 0,
+            overlap_area(cluster.marker_bbox_pixels),
+            overlap_area(cluster.bbox_pixels),
+        ),
+        reverse=True,
+    )
+    chosen = clusters[0]
+    if overlap_area(chosen.marker_bbox_pixels) == 0 and overlap_area(chosen.bbox_pixels) == 0:
+        raise ValueError("Stage 2 返回的 FAI 与手动画框区域不相交")
+    return chosen
 
 
 def save_jpeg(image: Image.Image, path: Path) -> None:
@@ -1040,12 +1162,10 @@ def run(args: argparse.Namespace) -> int:
         },
     )
 
-    front_client = OpenAI(
-        base_url=args.endpoint,
-        api_key=args.api_key,
-        timeout=args.timeout,
+    front_client = create_openai_client(
+        base_url=args.endpoint, api_key=args.api_key, timeout=args.timeout
     )
-    recovery_client = OpenAI(
+    recovery_client = create_openai_client(
         base_url=args.recovery_endpoint or args.endpoint,
         api_key=args.api_key,
         timeout=args.timeout,
@@ -1324,8 +1444,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--fai-max-tokens", type=int, default=8192)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--recovery-max-rounds", type=int, default=6)
-    parser.add_argument("--recovery-max-tokens", type=int, default=2048)
-    parser.add_argument("--recovery-temperature", type=float, default=0.1)
+    parser.add_argument("--recovery-max-tokens", type=int, default=4096)
+    parser.add_argument("--recovery-temperature", type=float, default=1.0)
     parser.add_argument("--recovery-context-fraction", type=float, default=0.5)
     parser.add_argument("--recovery-max-image-edge", type=int, default=2400)
     parser.add_argument("--recovery-step-norm", type=int, default=250)

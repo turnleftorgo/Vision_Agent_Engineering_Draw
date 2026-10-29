@@ -9,7 +9,7 @@
 - 人工重截：Pillow 从 PDF 渲染页按像素 bbox 生成 PNG；
 - pipeline 联动：子进程 + 追加式 JSONL `refined_crop_ready` 事件；
 - 本地页面地址：`http://127.0.0.1:4173/scan`；
-- 本地 API 地址：`http://127.0.0.1:8002`。
+- 本地 API 地址：`http://127.0.0.1:8003`。
 - 检验截图字段识别：FastAPI 后台线程池 + OpenAI-compatible Chat Completions 多模态 API；默认识别模型为 `Qwen3.6-35B-A3B-MLX-8bit`，默认 endpoint 为 `http://127.0.0.1:8001/v1`。
 - 字段识别在 `refined_crop_ready` 截图落盘、或用户保存新的人工裁剪后触发；按截图 SHA-256 幂等，运行结果和状态保存在 SQLite。
 - 模型只填入有截图证据且当前为空的行字段。未出现、不可读或有歧义的信息留空；人工已有内容不覆盖。`No.`、Project、Revision、Author、Date 不从单条检验截图推断，Page/Module 使用可用的后端上下文。
@@ -269,3 +269,38 @@ python Vision_IronMan/qwen_module_blind_test.py input.png
 - 对照 production JSON mode、无 `response_format` 和 JSON mode + `enable_thinking=false`；逐次记录 request/response 元数据、原始文本、finish_reason、usage、耗时及解析诊断。
 - 输出放入 `test_output/qwen35b_diagnostics/<timestamp>/`，请求日志仅记录图片尺寸、SHA-256 和 base64 已省略标记；不向 SQLite 回写。
 - 可在项目根目录通过 `python3 tests/diagnose_qwen35b_extraction.py` 启动；使用 `--help` 查看参数。
+
+
+## Claw View 审核模式
+
+- **新增依赖：无。** 继续使用现有 Next.js 16、React 19、TypeScript、CSS、浏览器原生 Pointer Events 和 Canvas 2D。
+- React 组件状态负责审核模式、悬停预览记录、点击锁定记录及临时 bbox；一份临时 bbox 同时驱动完整截图选区和 3 倍局部视图。
+- 沿用现有 `run.records`、`effective_bbox`、`crop_url` 和字段编辑接口提供记录与截图数据。FAI 圆圈由当前页记录 bbox 的中心位置计算。
+- 局部图继续用 Canvas 2D 从已加载页面/截图像素生成带上下文的约 3 倍视图；指针坐标先转换为显示图像局部坐标，再反算为 PDF 页面坐标。
+- 框编辑期间只在前端更新临时预览，不为每个 pointer move 发请求；指针释放后复用现有 `PUT /api/runs/{run_id}/records/{record_id}/crop` 保存最终 bbox。
+- FastAPI 继续用 Pillow 从源 PDF 页面生成用户截图并写入现有记录/裁剪历史；响应中的 `updated_at` 用于刷新 `crop_url` 缓存。无需新增 API、数据库表或图片处理依赖。
+- 审核面板可复用已有 `EditableCell`、`saveRecord` 和截图缓存版本逻辑；新增的主要是 FAI 圆圈样式、双图布局和临时 bbox 同步回调。
+
+## 审核模式扩展：部件切换、手动画框与字段优先级
+
+- **新增第三方依赖：无。** 画框交互使用 React 19、浏览器原生 Pointer Events、DOM Canvas 2D 与现有 CSS；服务端继续使用现有 FastAPI、Pillow、SQLite 和 OpenAI-compatible 模型客户端。
+- 前端复用 `InteractiveDrawing` 的图像坐标映射、框状态和拖动能力，增加“新建框”指针状态；`AuditPanel` 继续展示字段、完整截图和局部放大图。
+- 部件图复用现有 Stage 1 module crop 与模块原点。部件坐标通过模块原点偏移转换为页面像素坐标；记录中 `marker_bbox` 优先确定 FAI 圆圈位置，当前记录 `effective_bbox` 只作为缺少 marker 框时的回退。
+- 锁定某条记录后加载对应 Stage 1 部件原图，只叠加当前记录的有效框；部件图下方的 FAI 选择器从当前页 `run.records` 构建，切换记录时同步部件、框和审核面板。
+- 手动画框新增一个 FastAPI 请求，用页面像素坐标提交选区及其图像来源。后端从原始页面提取选区和上下文，复用 Stage 2 的模型调用、响应解析与 `validate_clusters`；Stage 2 负责 FAI 编号/集群/marker 框，局部模型坐标转换为页面坐标后写入现有检验记录数据流，其他截图字段继续由既有 extraction 队列读取。无需新模型 SDK 或图像处理包。
+- 手动画框项先以临时状态显示于前端；Stage 2 成功后替换为服务端正式记录。识别状态与字段提取状态分别表达，避免把“FAI 定位中”和“字段提取中”混为一个状态。
+- 字段蓝光由记录的处理中状态和字段状态驱动。为可靠保护人工编辑，在 SQLite records 增加字段级用户编辑标记（例如 JSON 字段集合），并在 `update_record_fields` 写入、`apply_extraction` 合并模型结果时检查标记；这属于现有数据库的向前兼容迁移，不引入额外依赖。
+- 指针移动仅更新前端草稿；框选结束后才发一次识别请求。已有记录的框拖动仍使用当前 crop PUT 接口，只有创建新审核记录时才走新增的手动识别接口。
+
+## 审核模式补充：临时标记和部件筛选
+
+- **不新增依赖。** 临时待识别项继续由 React 状态管理，复用 `InteractiveDrawing` 的页面/部件坐标映射及现有 audit marker DOM/CSS。
+- 将前端 provisional record 合并到当前页审核 overlay 数据源；用其手动画框中心即时绘制黑色圆圈，FAI 未返回时标签为“—”。Stage 2 完成后，现有正式记录替换 provisional record，marker 在原审核流程内更新。
+- 部件 FAI 选择器按锁定记录的 `module_index` 筛选当前页记录；切换锁定项后从新模块索引重算。页面级大图仍可显示该页的全部 FAI 圆圈。
+- 部件图只叠加属于当前模块的临时 marker，避免将整页其它模块的圆圈带入局部部件视图。
+
+## 审核部件图选框同步修复
+
+- 部件图的 `InteractiveDrawing` 保持以页码和模块编号作为稳定 `key`，不因选中 FAI 变化而卸载/重建图像组件。
+- 部件图调用启用已有 `syncSelection` prop；现有同步 effect 在选框拖动期间不覆盖本地拖动草稿，并在新的 `selection` 到达后更新显示框。
+- 手动画框仍由独立的 `drawBox` / `drawStartRef` 管理；审核选框同步不修改手绘草稿、画框模式、待识别记录或图像状态。无需新增依赖。

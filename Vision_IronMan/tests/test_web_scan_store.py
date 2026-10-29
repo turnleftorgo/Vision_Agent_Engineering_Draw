@@ -57,6 +57,54 @@ def test_user_crop_overrides_model_without_deleting_it(tmp_path: Path) -> None:
     assert record["user_override"] is True
 
 
+def test_manual_field_edits_are_protected_from_late_extraction(tmp_path: Path) -> None:
+    store = ScanStore(tmp_path / "scan.sqlite3")
+    store.create_run("run", "drawing.pdf", tmp_path / "drawing.pdf", tmp_path)
+    record_id = store.upsert_refined_record(
+        "run", refined_event(tmp_path, key="manual-race", fai="449")
+    )
+    store.update_record_fields("run", record_id, {"description": "user value", "nominal": None})
+
+    applied = store.apply_extraction(
+        record_id,
+        0,
+        None,
+        {"description": "late model value", "nominal": "0.80", "usl": "+0.05"},
+        {"fields": {}},
+        "completed",
+    )
+
+    assert applied is True
+    record = store.get_record("run", record_id)
+    assert record is not None
+    assert record["description"] == "user value"
+    assert record["nominal"] is None
+    assert record["usl"] == "+0.05"
+    assert set(record["user_edited_fields"]) == {"description", "nominal"}
+
+
+def test_manual_detection_creates_persisted_record(tmp_path: Path) -> None:
+    store = ScanStore(tmp_path / "scan.sqlite3")
+    store.create_run("run", "drawing.pdf", tmp_path / "drawing.pdf", tmp_path)
+    page = tmp_path / "page.png"
+    crop = tmp_path / "manual.png"
+    page.touch()
+    crop.touch()
+    record_id = store.create_manual_record("run", {
+        "candidate_key": "manual-1", "page_index": 1, "module_index": 2,
+        "module": "MODULE 2", "page_width": 1000, "page_height": 800,
+        "bbox": [100, 200, 400, 500], "marker_bbox": [120, 210, 160, 250],
+        "fai": "230", "spc": "C", "description": "section width",
+        "crop_path": str(crop), "source_page_path": str(page),
+    })
+    record = store.get_record("run", record_id)
+    assert record is not None
+    assert record["fai"] == "230"
+    assert record["module_index"] == 2
+    assert record["model_bbox"] == [100, 200, 400, 500]
+    assert record["marker_bbox"] == [120, 210, 160, 250]
+
+
 def test_progress_uses_discovered_fai_candidates_as_denominator(tmp_path: Path) -> None:
     store = ScanStore(tmp_path / "scan.sqlite3")
     store.create_run("run", "drawing.pdf", tmp_path / "drawing.pdf", tmp_path)

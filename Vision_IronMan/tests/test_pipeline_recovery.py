@@ -249,7 +249,8 @@ class RecoveryUnitTests(unittest.TestCase):
                             "reason": "complete",
                             "confidence": 0.9,
                         }
-                    )
+                    ),
+                    model_dump=lambda: {"content": "recovery decision"},
                 )
                 choice = SimpleNamespace(message=message, finish_reason="stop")
                 return SimpleNamespace(choices=[choice], usage=None)
@@ -273,12 +274,22 @@ class RecoveryUnitTests(unittest.TestCase):
             client.chat.completions.last_kwargs["response_format"],
             pipeline.RECOVERY_RESPONSE_FORMAT,
         )
+        self.assertEqual(client.chat.completions.last_kwargs["temperature"], 0.1)
+        self.assertEqual(client.chat.completions.last_kwargs["top_p"], 0.95)
+        self.assertEqual(client.chat.completions.last_kwargs["presence_penalty"], 0)
+        self.assertEqual(client.chat.completions.last_kwargs["frequency_penalty"], 0)
+        self.assertEqual(client.chat.completions.last_kwargs["reasoning_effort"], "xhigh")
+        self.assertEqual(
+            client.chat.completions.last_kwargs["extra_body"],
+            {"top_k": 20, "chat_template_kwargs": {"enable_thinking": True, "reasoning_effort": "xhigh"}, "thinking_token_budget": 1024}
+        )
         user_content = client.chat.completions.last_kwargs["messages"][1]["content"]
         self.assertIn("25 percent", user_content[0]["text"])
 
-    def test_recovery_default_max_tokens_is_2048(self) -> None:
+    def test_recovery_default_max_tokens_is_4096(self) -> None:
         args = pipeline.build_parser().parse_args(["drawing.png"])
-        self.assertEqual(args.recovery_max_tokens, 2048)
+        self.assertEqual(args.recovery_max_tokens, 4096)
+        self.assertEqual(args.recovery_temperature, 1.0)
         self.assertEqual(args.recovery_step_norm, 250)
 
 
